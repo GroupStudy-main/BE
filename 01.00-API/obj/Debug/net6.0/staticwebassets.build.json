@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "Hash": "TwIQAM8R5IFztYb3fWZw+kgJzhgVyi1ZZYfZUQXMQl0=",
+  "Source": "01.00-API",
+  "BasePath": "_content/01.00-API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "01.00-API\\wwwroot",
+      "Source": "01.00-API",
+      "ContentRoot": "D:\\MinhKhoiSave\\FPT\\23.2SU\\Capstone\\Project\\BE\\01.00-API\\wwwroot\\",
+      "BasePath": "_content/01.00-API",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "D:\\MinhKhoiSave\\FPT\\23.2SU\\Capstone\\Project\\BE\\01.00-API\\wwwroot\\googleSwaggerUi.js",
+      "SourceId": "01.00-API",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\MinhKhoiSave\\FPT\\23.2SU\\Capstone\\Project\\BE\\01.00-API\\wwwroot\\",
+      "BasePath": "_content/01.00-API",
+      "RelativePath": "googleSwaggerUi.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\googleSwaggerUi.js"
+    }
+  ]
+}
