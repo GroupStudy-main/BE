@@ -33,7 +33,7 @@ namespace RepositoryLayer.ClassImplement
         {
             return await dbContext.Accounts
                 .Include(a => a.Role)
-                .SingleOrDefaultAsync(a => a.Username == email);
+                .SingleOrDefaultAsync(a => a.Email == email);
         }
 
         public async Task<Account> GetByUsernameOrEmailAndPassword(string usernameOrEmail, string password)

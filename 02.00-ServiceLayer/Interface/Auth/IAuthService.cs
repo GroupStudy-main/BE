@@ -22,6 +22,6 @@ namespace ServiceLayer.Interface.Auth
         /// <param name="googleIdToken"></param>
         /// <returns>jwtToken: String</returns>
         public Task<Account> LoginWithGoogle(string googleIdToken);
-        public Task<string> GenerateJwt(Account logined, bool rememberMe=true);
+        public Task<string> GenerateJwtAsync(Account logined, bool rememberMe=true);
     }
 }

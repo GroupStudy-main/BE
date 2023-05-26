@@ -29,5 +29,24 @@ namespace APIExtension.HttpContext
             return payload.Email;
 
         }
+        public static string GetGoogleIdToken(this Microsoft.AspNetCore.Http.HttpContext context)
+        {
+            JwtSecurityTokenHandler _tokenHandler = new JwtSecurityTokenHandler();
+            if (!context.Request.Headers.ContainsKey("Authorization"))
+            {
+                throw new Exception("Token missing");
+            }
+            string? token = context.Request.Headers.First(x => x.Key == "Authorization").Value;
+            token = token.Replace("Bearer ", "");
+            if (!_tokenHandler.CanReadToken(token))
+            {
+                throw new Exception("Invalidated token");
+            }
+
+
+            return token;
+
+        }
+
     }
 }

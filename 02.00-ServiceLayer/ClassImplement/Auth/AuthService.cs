@@ -46,7 +46,7 @@ namespace ServiceLayer.ClassImplement.Auth
             return repos.Accounts.GetByUsername(payload.Email);
         }
 
-        public async Task<string> GenerateJwt(Account logined, bool rememberMe)
+        public async Task<string> GenerateJwtAsync(Account logined, bool rememberMe)
         {
             List<Claim> claims = new List<Claim>
             {

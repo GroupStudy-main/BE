@@ -16,6 +16,7 @@ namespace DataLayer.DBContext
             
         }
         public virtual DbSet<Account> Accounts { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -35,36 +36,41 @@ namespace DataLayer.DBContext
                     }
                     ) ;
                 modelBuilder.Entity<Account>().HasData(
-                    new Account {
+                    new Account
+                    {
                         Id = 1,
-                        Usename = "student1",
+                        Username = "student1",
                         Email = "trankhaiminhkhoi10a3@gmail.com",
-                        Password = "123456789"   ,
-                        RoleId=2
+                        Password = "123456789",
+                        Phone = "0123456789",
+                        RoleId = 2
                     },
                     new Account
                     {
                         Id = 2,
-                        Usename = "student2",
+                        Username = "student2",
                         Email = "@gmail.com",
-                        Password = "123456789"  ,
-                        RoleId=2
+                        Password = "123456789",
+                        Phone = "0123456789",
+                        RoleId = 2
                     },
                     new Account
                     {
                         Id = 3,
-                        Usename = "student4",
+                        Username = "student4",
                         Email = "@gmail.com",
                         Password = "123456789",
-                        RoleId=2
+                        Phone = "0123456789",
+                        RoleId = 2
                     },
                     new Account
                     {
                         Id = 4,
-                        Usename = "parent1",
+                        Username = "parent1",
                         Email = "trankhaiminhkhoi@gmail.com",
-                        Password = "123456789" ,
-                        RoleId=1
+                        Password = "123456789",
+                        Phone = "0123456789",
+                        RoleId = 1
                     }
                 );
             }

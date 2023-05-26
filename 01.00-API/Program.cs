@@ -2,7 +2,12 @@ using API;
 using APIExtension.Auth;
 using DataLayer.DBContext;
 using Google.Apis.Auth.OAuth2;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using RepositoryLayer.ClassImplement;
+using RepositoryLayer.Interface;
+using ServiceLayer.ClassImplement;
+using ServiceLayer.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 IConfiguration configuration = builder.Configuration;
@@ -16,8 +21,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<GroupStudyContext>(options =>
 {
     options.EnableSensitiveDataLogging();
-    //options.UseSqlServer(configuration.GetConnectionString("Default"));
-    options.UseInMemoryDatabase("GroupStudy");
+    options.UseSqlServer(configuration.GetConnectionString("Default"));
+    //options.UseInMemoryDatabase("GroupStudy");
 });
 //Use for scaffolding api controller. remove later
 //builder.Services.AddDbContext<TempContext>(options =>
@@ -25,6 +30,10 @@ builder.Services.AddDbContext<GroupStudyContext>(options =>
 //    //options.UseSqlServer(configuration.GetConnectionString("Default"));
 //    options.UseInMemoryDatabase("GroupStudy");
 //});
+#endregion
+#region service and repo
+builder.Services.AddScoped<IRepoWrapper, RepoWrapper>();
+builder.Services.AddScoped<IServiceWrapper, ServiceWrapper>();
 #endregion
 #region auth
 builder.Services.AddJwtAuthService(configuration);
@@ -47,10 +56,12 @@ app.UseSwaggerUI(options =>
     options.SetGoogleAuthUi(configuration);
     #endregion
 });
+app.UseStaticFiles();
 
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
