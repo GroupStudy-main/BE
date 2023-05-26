@@ -52,7 +52,9 @@ namespace ServiceLayer.ClassImplement.Auth
             {
                 new Claim(ClaimTypes.NameIdentifier, logined.Id.ToString()),
                 new Claim(ClaimTypes.Email, logined.Email),
-                new Claim(ClaimTypes.Role, logined.Role.Name)
+                new Claim(ClaimTypes.Role, logined.Role.Name),
+                //new Claim("Email", logined.Email),
+                //new Claim("Role", logined.Role.Name)
             };
             var issuerSigningKey = new SymmetricSecurityKey(
                          Encoding.UTF8.GetBytes(configuration["Authentication:JwtToken:TokenKey"]));

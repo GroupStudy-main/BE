@@ -44,7 +44,7 @@ namespace API.Controllers
             {
                 return Unauthorized("Username or password is wrong");
             }
-            return Ok(services.Auth.GenerateJwtAsync(logined, rememberMe));
+            return Ok(await services.Auth.GenerateJwtAsync(logined, rememberMe));
         }
         [HttpGet("TestAuth/Tokens")]
         public async Task<IActionResult> GetToken()
@@ -89,7 +89,7 @@ namespace API.Controllers
         }
 
         [Authorize(Roles = "Parent")]
-        [HttpGet("TestAuth/User")]
+        [HttpGet("TestAuth/Parent")]
         public async Task<IActionResult> GetUserData()
         {
             return Ok("You're a parent ");

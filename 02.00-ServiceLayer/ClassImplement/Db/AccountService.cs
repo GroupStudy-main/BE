@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ServiceLayer.ClassImplement
+namespace ServiceLayer.ClassImplement.Db
 {
     public class AccountService : IAccountService
     {

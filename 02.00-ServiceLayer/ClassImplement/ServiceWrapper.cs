@@ -4,6 +4,7 @@ using ServiceLayer.Interface.Auth;
 using ServiceLayer.Interface.Db;
 using ServiceLayer.ClassImplement.Auth;
 using Microsoft.Extensions.Configuration;
+using ServiceLayer.ClassImplement.Db;
 
 namespace ServiceLayer.ClassImplement
 {
