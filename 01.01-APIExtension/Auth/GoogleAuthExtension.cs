@@ -23,13 +23,16 @@ namespace APIExtension.Auth
                 {
                     Implicit = new OpenApiOAuthFlow()
                     {
-                        AuthorizationUrl = new Uri(configuration["Authentication:Google:Web:auth_uri"]/*"https://accounts.google.com/o/oauth2/v2/auth"*/),
+                        AuthorizationUrl = new Uri(configuration["Authentication:Google:Web:auth_uri"]??"https://accounts.google.com/o/oauth2/v2/auth"),
                         Scopes = new Dictionary<string, string> {
-                    { "openid", "Allow this app to get some basic account info" },
+                    //{ "openid", "Allow this app to get some basic account info" },
                     { "email", "email" },
-                    { "profile", "profile" }
-                },
+                    { "profile", "profile" } ,
+                    { "https://www.googleapis.com/auth/userinfo.email", "email2" } ,
+                    { "https://www.googleapis.com/auth/userinfo.profile", "profile2" }
 
+                },
+                         
                         TokenUrl = new Uri(configuration["Authentication:Google:Web:token_uri"])
                     }
                 },
@@ -50,7 +53,7 @@ namespace APIExtension.Auth
                             Id = SecurityId
                         }
                     },
-                    new List<string> {"openid", "email", "profile"}
+                    new List<string> {/*"openid",*/ "email", "profile", "https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile" }
                 }
             });
             return options;
@@ -68,7 +71,8 @@ namespace APIExtension.Auth
             #endregion
             #region google access token
             options.OAuthClientId(configuration["Authentication:Google:Web:client_id"]);
-            options.InjectJavascript("/googleSwaggerUi.js");
+    options.OAuthClientSecret(configuration["Authentication:Google:Web:client_secret"]);
+            //options.InjectJavascript("/googleSwaggerUi.js");
             #endregion
             return options;
         }

@@ -257,7 +257,7 @@ namespace DataLayer.Migrations
                         .IsRequired();
 
                     b.HasOne("DataLayer.DBObject.Meeting", "Meeting")
-                        .WithMany("Connections")
+                        .WithMany("Groups")
                         .HasForeignKey("MeetingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -322,7 +322,7 @@ namespace DataLayer.Migrations
 
             modelBuilder.Entity("DataLayer.DBObject.Meeting", b =>
                 {
-                    b.Navigation("Connections");
+                    b.Navigation("Groups");
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.MeetingRoom", b =>

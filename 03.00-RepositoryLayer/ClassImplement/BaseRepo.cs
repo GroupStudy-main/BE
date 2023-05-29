@@ -11,7 +11,7 @@ namespace RepositoryLayer.ClassImplement
 {
     public abstract class BaseRepo<T, K> : IBaseRepo<T, K> where T: class
     {
-        private readonly GroupStudyContext dbContext;
+        protected readonly GroupStudyContext dbContext;
 
         public BaseRepo(GroupStudyContext dbContext)
         {

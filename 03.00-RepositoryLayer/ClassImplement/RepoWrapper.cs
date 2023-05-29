@@ -1,4 +1,5 @@
-﻿using DataLayer.DBContext;
+﻿using AutoMapper;
+using DataLayer.DBContext;
 using RepositoryLayer.Interface;
 using System;
 using System.Collections.Generic;
@@ -10,11 +11,13 @@ namespace RepositoryLayer.ClassImplement
 {
     public class RepoWrapper : IRepoWrapper
     {
+        private readonly IMapper mapper;
         private readonly GroupStudyContext dbContext;
 
-        public RepoWrapper(GroupStudyContext dbContext)
+        public RepoWrapper(GroupStudyContext dbContext, IMapper mapper)
         {
             this.dbContext = dbContext;
+            this.mapper = mapper;
         }
 
         private IAccountRepo users;
@@ -28,5 +31,33 @@ namespace RepositoryLayer.ClassImplement
                 return users; 
             } 
         }
+
+        private IMeetingRoomRepository meetingRooms;
+        public IMeetingRoomRepository MeetingRooms
+        {
+            get
+            {
+                if (meetingRooms is null)
+                {
+                    meetingRooms = new MeetingRoomRepository(dbContext, mapper);
+                }
+                return meetingRooms;
+            }
+        }
+
+        private IMeetingRepository meeting;
+
+        public IMeetingRepository Meetings
+        {
+            get
+            {
+                if (meeting is null)
+                {
+                    meeting = new MeetingRepository(dbContext);
+                }
+                return meeting;
+            }
+        }
+        
     }
 }

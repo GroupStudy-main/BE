@@ -9,6 +9,7 @@ namespace DataLayer.DBObject
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string Name { get; set; }
+        public int CountMember { get; set; }
         #region Group
         [ForeignKey("GroupId")]
         public int GroupId { get; set; }

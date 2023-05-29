@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Google.Apis.Auth" Version="1.60.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\03.00-RepositoryLayer\03.00-RepositoryLayer.csproj" />
   </ItemGroup>
 

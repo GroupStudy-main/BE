@@ -20,6 +20,8 @@ namespace DataLayer.DBObject
         #region Student
         [ForeignKey("AccountId")]
         public int AccountId { get; set; }
+        public string UserName { get; set; }
+
         public virtual Account Account { get; set; }
         #endregion
     }

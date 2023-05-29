@@ -1,4 +1,5 @@
 using API;
+using API.SignalRHub;
 using APIExtension.Auth;
 using DataLayer.DBContext;
 using Google.Apis.Auth.OAuth2;
@@ -65,5 +66,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<PresenceHub>("hubs/presence");
+app.MapHub<ChatHub>("hubs/chathub");
 
 app.Run();
