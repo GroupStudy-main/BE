@@ -57,7 +57,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Accounts");
+                    b.ToTable("Accounts", (string)null);
 
                     b.HasData(
                         new
@@ -193,7 +193,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("MeetingId");
 
-                    b.ToTable("Connections");
+                    b.ToTable("Connections", (string)null);
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Group", b =>
@@ -210,7 +210,7 @@ namespace DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Groups");
+                    b.ToTable("Groups", (string)null);
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.GroupMember", b =>
@@ -236,7 +236,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("GroupMembers");
+                    b.ToTable("GroupMembers", (string)null);
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Meeting", b =>
@@ -266,7 +266,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("MeetingRoomId");
 
-                    b.ToTable("Meetings");
+                    b.ToTable("Meetings", (string)null);
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.MeetingRoom", b =>
@@ -291,7 +291,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("MeetingRooms");
+                    b.ToTable("MeetingRooms", (string)null);
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Role", b =>
@@ -308,7 +308,7 @@ namespace DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
 
                     b.HasData(
                         new

@@ -14,33 +14,33 @@ namespace API.Controllers
     [ApiController]
     public class GroupsController : ControllerBase
     {
-        private readonly TempContext _context;
+        private readonly TempContext dbContext;
 
         public GroupsController(TempContext context)
         {
-            _context = context;
+            dbContext = context;
         }
 
         // GET: api/Groups
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Group>>> GetGroups()
         {
-          if (_context.Groups == null)
+          if (dbContext.Groups == null)
           {
               return NotFound();
           }
-            return await _context.Groups.ToListAsync();
+            return await dbContext.Groups.ToListAsync();
         }
 
         // GET: api/Groups/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Group>> GetGroup(int id)
         {
-          if (_context.Groups == null)
+          if (dbContext.Groups == null)
           {
               return NotFound();
           }
-            var @group = await _context.Groups.FindAsync(id);
+            var @group = await dbContext.Groups.FindAsync(id);
 
             if (@group == null)
             {
@@ -60,11 +60,11 @@ namespace API.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(@group).State = EntityState.Modified;
+            dbContext.Entry(@group).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await dbContext.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -86,12 +86,12 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<Group>> PostGroup(Group @group)
         {
-          if (_context.Groups == null)
+          if (dbContext.Groups == null)
           {
               return Problem("Entity set 'TempContext.Groups'  is null.");
           }
-            _context.Groups.Add(@group);
-            await _context.SaveChangesAsync();
+            dbContext.Groups.Add(@group);
+            await dbContext.SaveChangesAsync();
 
             return CreatedAtAction("GetGroup", new { id = @group.Id }, @group);
         }
@@ -100,25 +100,25 @@ namespace API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteGroup(int id)
         {
-            if (_context.Groups == null)
+            if (dbContext.Groups == null)
             {
                 return NotFound();
             }
-            var @group = await _context.Groups.FindAsync(id);
+            var @group = await dbContext.Groups.FindAsync(id);
             if (@group == null)
             {
                 return NotFound();
             }
 
-            _context.Groups.Remove(@group);
-            await _context.SaveChangesAsync();
+            dbContext.Groups.Remove(@group);
+            await dbContext.SaveChangesAsync();
 
             return NoContent();
         }
 
         private bool GroupExists(int id)
         {
-            return (_context.Groups?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (dbContext.Groups?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

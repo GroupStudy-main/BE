@@ -20,7 +20,7 @@ namespace DataLayer.DBObject
         public string Password { get; set; }
         public string FullName { get; set; }
         public string Phone { get; set; }
-
+        
         //Role
         [ForeignKey("RoleId")]
         public int RoleId { get; set; }
@@ -30,4 +30,5 @@ namespace DataLayer.DBObject
         public virtual ICollection<GroupMember> GroupMember { get; set; }
 
     }
+   
 }

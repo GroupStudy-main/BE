@@ -140,7 +140,7 @@ namespace API.Controllers
         //    Console.WriteLine("4.         " + new String('~', 50));
         //    Console.WriteLine("4.         Repo/User: GetUserByIdAsync(id)");
         //    FunctionTracker.Instance().AddRepoFunc("Repo/Room: GetRoomById(id)");
-        //    return await _context.Users.FindAsync(id);
+        //    return await dbContext.Users.FindAsync(id);
         //}
 
         //public async Task<AppUser> GetUserByUsernameAsync(string username)
@@ -148,7 +148,7 @@ namespace API.Controllers
         //    Console.WriteLine("4.         " + new String('~', 50));
         //    Console.WriteLine("4.         Repo/User: GetUserByUsernameAsync(username)");
         //    FunctionTracker.Instance().AddRepoFunc("Repo/User: GetUserByUsernameAsync(username)");
-        //    return await _context.Users.SingleOrDefaultAsync(u => u.UserName == username);
+        //    return await dbContext.Users.SingleOrDefaultAsync(u => u.UserName == username);
         //}
 
         //public async Task<MemberDto> GetMemberAsync(string username)
@@ -156,7 +156,7 @@ namespace API.Controllers
         //    Console.WriteLine("4.         " + new String('~', 50));
         //    Console.WriteLine("4.         Repo/User: GetMemberAsync(username)");
         //    FunctionTracker.Instance().AddRepoFunc("Repo/User: GetMemberAsync(username)");
-        //    return await _context.Users.Where(x => x.UserName == username)
+        //    return await dbContext.Users.Where(x => x.UserName == username)
         //        .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)//add CreateMap<AppUser, MemberDto>(); in AutoMapperProfiles
         //        .SingleOrDefaultAsync();
         //}
@@ -169,7 +169,7 @@ namespace API.Controllers
         //    var listUserOnline = new List<MemberDto>();
         //    foreach (var u in userOnlines)
         //    {
-        //        var user = await _context.Users.Where(x => x.UserName == u.UserName)
+        //        var user = await dbContext.Users.Where(x => x.UserName == u.UserName)
         //        .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
         //        .SingleOrDefaultAsync();
 
@@ -184,7 +184,7 @@ namespace API.Controllers
         //    Console.WriteLine("4.         " + new String('~', 50));
         //    Console.WriteLine("4.         Repo/User: GetMembersAsync(UserParams)");
         //    FunctionTracker.Instance().AddRepoFunc("Repo/User: GetMembersAsync(UserParams)");
-        //    var query = _context.Users.AsQueryable();
+        //    var query = dbContext.Users.AsQueryable();
         //    query = query.Where(u => u.UserName != userParams.CurrentUsername).OrderByDescending(u => u.LastActive);
 
         //    return await PagedList<MemberDto>.CreateAsync(query.ProjectTo<MemberDto>(_mapper.ConfigurationProvider).AsNoTracking(), userParams.PageNumber, userParams.PageSize);
@@ -195,7 +195,7 @@ namespace API.Controllers
         //    Console.WriteLine("4.         " + new String('~', 50));
         //    Console.WriteLine("4.         Repo/User: SearchMemberAsync(name)");
         //    FunctionTracker.Instance().AddRepoFunc("Repo/User: SearchMemberAsync(name)");
-        //    return await _context.Users.Where(u => u.DisplayName.ToLower().Contains(displayname.ToLower()))
+        //    return await dbContext.Users.Where(u => u.DisplayName.ToLower().Contains(displayname.ToLower()))
         //        .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
         //        .ToListAsync();
         //}
@@ -205,7 +205,7 @@ namespace API.Controllers
         //    Console.WriteLine("4.         " + new String('~', 50));
         //    Console.WriteLine("4.         Repo/User: UpdateLocked(username)");
         //    FunctionTracker.Instance().AddRepoFunc("Repo/User: UpdateLocked(username)");
-        //    var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == username);
+        //    var user = await dbContext.Users.SingleOrDefaultAsync(x => x.UserName == username);
         //    if (user != null)
         //    {
         //        user.Locked = !user.Locked;
