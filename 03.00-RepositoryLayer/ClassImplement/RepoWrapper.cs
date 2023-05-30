@@ -33,7 +33,7 @@ namespace RepositoryLayer.ClassImplement
         }
 
         private IMeetingRoomRepository meetingRooms;
-        public IMeetingRoomRepository MeetingRooms
+        public IMeetingRoomRepository Rooms
         {
             get
             {
@@ -58,6 +58,18 @@ namespace RepositoryLayer.ClassImplement
                 return meeting;
             }
         }
-        
+
+        private IGroupRepository groups;
+        public IGroupRepository Groups
+        {
+            get
+            {
+                if (groups is null)
+                {
+                    groups = new GroupRepository(dbContext);
+                }
+                return groups;
+            }
+        }
     }
 }

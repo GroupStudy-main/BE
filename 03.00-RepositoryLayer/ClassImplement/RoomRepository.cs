@@ -4,7 +4,7 @@ using RepositoryLayer.Interface;
 using ShareResource;
 using DataLayer.DBContext;
 using Microsoft.EntityFrameworkCore;
-using ShareResource.DTO.Room;
+using ShareResource.DTO;
 using AutoMapper.QueryableExtensions;
 using ShareResource.FilterParams;
 
@@ -89,7 +89,7 @@ namespace RepositoryLayer.ClassImplement
         //{
         //    //Console.WriteLine("4.         " + new String('~', 50));
         //    //Console.WriteLine("4.         Repo/MeetingRoom: DeleteAllMeetingRoom()");
-        //    var list = await _context.MeetingRooms.ToListAsync();
+        //    var list = await _context.Rooms.ToListAsync();
         //    _context.RemoveRange(list);
         //    await _context.SaveChangesAsync();
         //}

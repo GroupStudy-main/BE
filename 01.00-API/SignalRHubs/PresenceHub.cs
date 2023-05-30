@@ -6,6 +6,9 @@ using ShareResource.DTO.Connection;
 
 namespace API.SignalRHub
 {
+    /// <summary>
+    /// Use to count number of ppl in rooms
+    /// </summary>
     [Authorize]
     public class PresenceHub : Hub
     {

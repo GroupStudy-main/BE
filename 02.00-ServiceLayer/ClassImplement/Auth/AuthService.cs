@@ -29,7 +29,7 @@ namespace ServiceLayer.ClassImplement.Auth
 
         public async Task<Account> LoginAsync(LoginModel loginModel)
         {
-            return await repos.Accounts.GetByUsernameOrEmailAndPassword(loginModel.UsernameOrEmail, loginModel.Password);
+            return await repos.Accounts.GetByUsernameOrEmailAndPasswordAsync(loginModel.UsernameOrEmail, loginModel.Password);
         }
 
         public Task<Account> LoginWithGoogle(string googleIdToken)
@@ -43,7 +43,7 @@ namespace ServiceLayer.ClassImplement.Auth
 
 
             var payload = GoogleJsonWebSignature.ValidateAsync(googleIdToken, new GoogleJsonWebSignature.ValidationSettings()).Result;
-            return repos.Accounts.GetByUsername(payload.Email);
+            return repos.Accounts.GetByUsernameAsync(payload.Email);
         }
 
         public async Task<string> GenerateJwtAsync(Account logined, bool rememberMe)

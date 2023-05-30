@@ -1,6 +1,6 @@
 ﻿using DataLayer.DBObject;
 using ShareResource;
-using ShareResource.DTO.Room;
+using ShareResource.DTO;
 using ShareResource.FilterParams;
 
 namespace RepositoryLayer.Interface

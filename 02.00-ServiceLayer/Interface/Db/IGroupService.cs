@@ -7,19 +7,18 @@ using System.Threading.Tasks;
 
 namespace ServiceLayer.Interface.Db
 {
-    public interface IAccountService 
+    public interface IGroupService
     {
-        public IQueryable<Account> GetList();
-        public Task<Account> GetByIdAsync(int id);
+        public IQueryable<Group> GetList();
+        public Task<Group> GetByIdAsync(int id);
         /// <summary>
         /// Create a group and add group leader
         /// </summary>
-        /// <param name="account"></param>
+        /// <param name="group"></param>
         /// <param name="creatorId">id of creator account id</param>
         /// <returns></returns>
-        public Task CreateAsync(Account account);
-        public Task UpdateAsync(Account account);
+        public Task CreateAsync(Group group, int creatorId);
+        public Task UpdateAsync(Group group);
         public Task RemoveAsync(int id);
-        public Task<Account> GetAccountByUserNameAsync(string userName);
     }
 }

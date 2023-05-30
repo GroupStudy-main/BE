@@ -9,7 +9,8 @@ namespace RepositoryLayer.Interface
     public interface IRepoWrapper
     {
         public IAccountRepo Accounts { get; }
-        public IMeetingRoomRepository MeetingRooms { get; }
+        public IMeetingRoomRepository Rooms { get; }
         public IMeetingRepository Meetings { get; }
+        public IGroupRepository Groups { get; }
     }
 }

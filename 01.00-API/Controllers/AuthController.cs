@@ -33,9 +33,9 @@ namespace API.Controllers
             }
             return Ok(await services.Auth.GenerateJwtAsync(logined, loginModel.RememberMe));
         }
-        [CustomGoogleIdTokenAuthFilter2]
-        [HttpPost("Login/Google")]
-        public async Task<IActionResult> LoginWithGoogleAsync(bool rememberMe=true)
+        [CustomGoogleIdTokenAuthFilter]
+        [HttpPost("Login/Google/Id-Token")]
+        public async Task<IActionResult> LoginWithGoogleIdTokenAsync(bool rememberMe=true)
         {
             //var idToken = await HttpContext.GetTokenAsync("access_token");
             var idToken = HttpContext.GetGoogleIdToken();
