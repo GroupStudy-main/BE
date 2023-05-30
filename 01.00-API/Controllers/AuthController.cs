@@ -1,5 +1,6 @@
 ﻿using APIExtension.Auth;
 using APIExtension.HttpContext;
+using AutoMapper;
 using DataLayer.DBObject;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -7,6 +8,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ServiceLayer.Interface;
 using ShareResource.APIModel;
+using ShareResource.DTO;
+using ShareResource.Enums;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -17,12 +20,35 @@ namespace API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private IServiceWrapper services;
-        public AuthController(IServiceWrapper services)
+        private readonly IServiceWrapper services;
+        private readonly IMapper mapper;
+        public AuthController(IServiceWrapper services, IMapper mapper)
         {
             this.services = services;
+            this.mapper = mapper;
         }
-
+        [HttpPost("Register/Student")] 
+        public async Task<IActionResult> StudentRegister(AccountRegisterDto dto)
+        {
+            if(dto.Password!=dto.ConfirmPassword)
+            {
+                return BadRequest("Xác nhận password không thành công");
+            }
+            Account register = mapper.Map<Account>(dto);
+            await services.Auth.Register(register, RoleNameEnum.Student);
+            return Ok(await services.Accounts.GetAccountByUserNameAsync(dto.Username));
+        }
+        [HttpPost("Register/Parent")]
+        public async Task<IActionResult> ParentRegister(AccountRegisterDto dto)
+        {
+            if (dto.Password != dto.ConfirmPassword)
+            {
+                return BadRequest("Xác nhận password không thành công");
+            }
+            Account register = mapper.Map<Account>(dto);
+            await services.Auth.Register(register, RoleNameEnum.Student);
+            return Ok(await services.Accounts.GetAccountByUserNameAsync(dto.Username));
+        }
         [HttpPost("Login")]
         public async Task<IActionResult> LoginAsync(LoginModel loginModel)
         {

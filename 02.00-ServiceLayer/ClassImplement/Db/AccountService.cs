@@ -31,7 +31,8 @@ namespace ServiceLayer.ClassImplement.Db
 
         public async Task<Account> GetAccountByUserNameAsync(string userName)
         {
-            return await repos.Accounts.GetByUsernameAsync(userName);
+            Account account = await repos.Accounts.GetByUsernameAsync(userName);
+            return account;
         }
         public async Task CreateAsync(Account entity)
         {

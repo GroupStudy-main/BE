@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using API;
 using DataLayer.DBObject;
+using DataLayer.DBContext;
 
 namespace API.Controllers
 {
@@ -14,9 +15,9 @@ namespace API.Controllers
     [ApiController]
     public class GroupsController : ControllerBase
     {
-        private readonly TempContext dbContext;
+        private readonly GroupStudyContext dbContext;
 
-        public GroupsController(TempContext context)
+        public GroupsController(GroupStudyContext context)
         {
             dbContext = context;
         }

@@ -29,6 +29,11 @@ namespace DataLayer.DBContext
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Account>()
+                .HasIndex(a => a.Username).IsUnique();
+            modelBuilder.Entity<Account>()
+                .HasIndex(a => a.Email).IsUnique();
+
             Seed();
             void Seed()
             {

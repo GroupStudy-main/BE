@@ -1,5 +1,6 @@
 ﻿using DataLayer.DBObject;
 using ShareResource.APIModel;
+using ShareResource.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,5 +24,6 @@ namespace ServiceLayer.Interface.Auth
         /// <returns>jwtToken: String</returns>
         public Task<Account> LoginWithGoogle(string googleIdToken);
         public Task<string> GenerateJwtAsync(Account logined, bool rememberMe=true);
+        public Task Register(Account register, RoleNameEnum role);
     }
 }

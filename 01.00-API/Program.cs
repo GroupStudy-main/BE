@@ -34,6 +34,9 @@ builder.Services.AddDbContext<TempContext>(options =>
 });
 #endregion
 
+#region SignalR
+builder.Services.AddSignalR();
+#endregion
 #region AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 #endregion

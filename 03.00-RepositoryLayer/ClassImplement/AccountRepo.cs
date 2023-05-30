@@ -29,11 +29,11 @@ namespace RepositoryLayer.ClassImplement
             return base.GetByIdAsync(id);
         }
 
-        public async Task<Account> GetByUsernameAsync(string email)
+        public async Task<Account> GetByUsernameAsync(string username)
         {
             return await dbContext.Accounts
                 .Include(a => a.Role)
-                .SingleOrDefaultAsync(a => a.Email == email);
+                .SingleOrDefaultAsync(a => a.Username == username);
         }
 
         public async Task<Account> GetByUsernameOrEmailAndPasswordAsync(string usernameOrEmail, string password)
