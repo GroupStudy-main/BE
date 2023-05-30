@@ -8,6 +8,7 @@ namespace DataLayer.DBObject
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        public bool IsLeader { get; set; }
         //Group
         [ForeignKey("GroupId")]
         public int GroupId { get; set; }

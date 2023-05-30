@@ -11,6 +11,21 @@ namespace RepositoryLayer.ClassImplement
         {
         }
 
+        public override Task CreateAsync(Meeting entity)
+        {
+            return base.CreateAsync(entity);
+        }
+
+        public override Task<Meeting> GetByIdAsync(int id)
+        {
+            return base.GetByIdAsync(id);
+        }
+
+        public override IQueryable<Meeting> GetList()
+        {
+            return base.GetList();
+        }
+
         public async Task<Meeting> GetMeetingForConnection(string connectionId)
         {
             //Console.WriteLine("4.         " + new String('~', 50));
@@ -19,6 +34,16 @@ namespace RepositoryLayer.ClassImplement
                 .Include(x => x.Meeting)
                 .SingleOrDefaultAsync(x => x.Id == connectionId))
                 .Meeting;
+        }
+
+        public override Task RemoveAsync(int id)
+        {
+            return base.RemoveAsync(id);
+        }
+
+        public override Task UpdateAsync(Meeting entity)
+        {
+            return base.UpdateAsync(entity);
         }
     }
 }

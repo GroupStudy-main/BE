@@ -18,6 +18,7 @@ IWebHostEnvironment environment = builder.Environment;
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
 #region dbContext
 builder.Services.AddDbContext<GroupStudyContext>(options =>
 {
@@ -26,16 +27,25 @@ builder.Services.AddDbContext<GroupStudyContext>(options =>
     //options.UseInMemoryDatabase("GroupStudy");
 });
 //Use for scaffolding api controller. remove later
-//builder.Services.AddDbContext<TempContext>(options =>
-//{
-//    //options.UseSqlServer(configuration.GetConnectionString("Default"));
-//    options.UseInMemoryDatabase("GroupStudy");
-//});
+builder.Services.AddDbContext<TempContext>(options =>
+{
+    options.UseSqlServer(configuration.GetConnectionString("Default"));
+    //options.UseInMemoryDatabase("GroupStudy");
+});
 #endregion
+
+#region SignalR
+builder.Services.AddSignalR();
+#endregion
+#region AutoMapper
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+#endregion
+
 #region service and repo
 builder.Services.AddScoped<IRepoWrapper, RepoWrapper>();
 builder.Services.AddScoped<IServiceWrapper, ServiceWrapper>();
 #endregion
+
 #region auth
 builder.Services.AddJwtAuthService(configuration);
 builder.Services.AddSwaggerGen(options =>

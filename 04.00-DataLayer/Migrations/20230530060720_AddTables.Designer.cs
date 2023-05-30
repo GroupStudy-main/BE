@@ -4,6 +4,7 @@ using DataLayer.DBContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(GroupStudyContext))]
-    partial class GroupStudyContextModelSnapshot : ModelSnapshot
+    [Migration("20230530060720_AddTables")]
+    partial class AddTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,7 +34,7 @@ namespace DataLayer.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FullName")
                         .IsRequired()
@@ -51,17 +53,11 @@ namespace DataLayer.Migrations
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Email")
-                        .IsUnique();
-
                     b.HasIndex("RoleId");
-
-                    b.HasIndex("Username")
-                        .IsUnique();
 
                     b.ToTable("Accounts");
 
@@ -178,59 +174,6 @@ namespace DataLayer.Migrations
                         });
                 });
 
-            modelBuilder.Entity("DataLayer.DBObject.Class", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("Name")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Classes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 6,
-                            Name = 6
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = 7
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = 8
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Name = 9
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Name = 10
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Name = 11
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Name = 12
-                        });
-                });
-
             modelBuilder.Entity("DataLayer.DBObject.Connection", b =>
                 {
                     b.Property<string>("Id")
@@ -263,16 +206,11 @@ namespace DataLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("ClassId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ClassId");
 
                     b.ToTable("Groups");
                 });
@@ -301,24 +239,6 @@ namespace DataLayer.Migrations
                     b.HasIndex("GroupId");
 
                     b.ToTable("GroupMembers");
-                });
-
-            modelBuilder.Entity("DataLayer.DBObject.GroupSubject", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("GroupId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GroupId");
-
-                    b.ToTable("GroupSubjects");
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Meeting", b =>
@@ -405,90 +325,6 @@ namespace DataLayer.Migrations
                         });
                 });
 
-            modelBuilder.Entity("DataLayer.DBObject.Subject", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Subjects");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Toán"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Lí"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Hóa"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Văn"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Sử"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Địa"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Sinh"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = "Anh"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Name = "Giáo dục công dân"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Name = "Công nghệ"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Name = "Quốc phòng"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Name = "Thể dục"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            Name = "Tin"
-                        });
-                });
-
             modelBuilder.Entity("DataLayer.DBObject.Account", b =>
                 {
                     b.HasOne("DataLayer.DBObject.Role", "Role")
@@ -519,17 +355,6 @@ namespace DataLayer.Migrations
                     b.Navigation("Meeting");
                 });
 
-            modelBuilder.Entity("DataLayer.DBObject.Group", b =>
-                {
-                    b.HasOne("DataLayer.DBObject.Class", "Class")
-                        .WithMany()
-                        .HasForeignKey("ClassId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Class");
-                });
-
             modelBuilder.Entity("DataLayer.DBObject.GroupMember", b =>
                 {
                     b.HasOne("DataLayer.DBObject.Account", "Account")
@@ -545,17 +370,6 @@ namespace DataLayer.Migrations
                         .IsRequired();
 
                     b.Navigation("Account");
-
-                    b.Navigation("Group");
-                });
-
-            modelBuilder.Entity("DataLayer.DBObject.GroupSubject", b =>
-                {
-                    b.HasOne("DataLayer.DBObject.Group", "Group")
-                        .WithMany("GroupSubjects")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("Group");
                 });
@@ -590,8 +404,6 @@ namespace DataLayer.Migrations
             modelBuilder.Entity("DataLayer.DBObject.Group", b =>
                 {
                     b.Navigation("GroupMembers");
-
-                    b.Navigation("GroupSubjects");
 
                     b.Navigation("MeetingRooms");
                 });

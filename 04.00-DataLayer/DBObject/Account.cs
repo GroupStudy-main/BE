@@ -1,14 +1,18 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Net.Mail;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DataLayer.DBObject
 {
+    [Index(nameof(Username), IsUnique = true)]
+    [Index(nameof(Email), IsUnique = true)]
     public class Account
     {
         [Key]
@@ -20,7 +24,7 @@ namespace DataLayer.DBObject
         public string Password { get; set; }
         public string FullName { get; set; }
         public string Phone { get; set; }
-
+        
         //Role
         [ForeignKey("RoleId")]
         public int RoleId { get; set; }
@@ -30,4 +34,5 @@ namespace DataLayer.DBObject
         public virtual ICollection<GroupMember> GroupMember { get; set; }
 
     }
+   
 }

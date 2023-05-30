@@ -11,13 +11,13 @@ using Microsoft.AspNetCore.Authentication;
 
 namespace APIExtension.Auth
 {
-    public class CustomGoogleIdTokenAuthFilter2 : Attribute, IAuthorizationFilter
+    public class CustomGoogleIdTokenAuthFilter : Attribute, IAuthorizationFilter
     {
         //private readonly string[] AcceptedRoles;
         private readonly JwtSecurityTokenHandler _tokenHandler;
 
 
-        public CustomGoogleIdTokenAuthFilter2(params string[] acceptedRoles)
+        public CustomGoogleIdTokenAuthFilter(params string[] acceptedRoles)
         {
             //AcceptedRoles = acceptedRoles;
             _tokenHandler = new JwtSecurityTokenHandler();
@@ -25,6 +25,7 @@ namespace APIExtension.Auth
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
+            
             string? token = context.HttpContext.GetTokenAsync("access_token").Result ?? context.HttpContext.Request.Headers.SingleOrDefault(x => x.Key == "Authorization").Value;
 
             bool isLogined = false;

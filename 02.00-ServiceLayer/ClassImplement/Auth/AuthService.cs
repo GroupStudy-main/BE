@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using RepositoryLayer.Interface;
 using ServiceLayer.Interface.Auth;
 using ShareResource.APIModel;
+using ShareResource.Enums;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -29,7 +30,7 @@ namespace ServiceLayer.ClassImplement.Auth
 
         public async Task<Account> LoginAsync(LoginModel loginModel)
         {
-            return await repos.Accounts.GetByUsernameOrEmailAndPassword(loginModel.UsernameOrEmail, loginModel.Password);
+            return await repos.Accounts.GetByUsernameOrEmailAndPasswordAsync(loginModel.UsernameOrEmail, loginModel.Password);
         }
 
         public Task<Account> LoginWithGoogle(string googleIdToken)
@@ -43,7 +44,7 @@ namespace ServiceLayer.ClassImplement.Auth
 
 
             var payload = GoogleJsonWebSignature.ValidateAsync(googleIdToken, new GoogleJsonWebSignature.ValidationSettings()).Result;
-            return repos.Accounts.GetByUsername(payload.Email);
+            return repos.Accounts.GetByUsernameAsync(payload.Email);
         }
 
         public async Task<string> GenerateJwtAsync(Account logined, bool rememberMe)
@@ -68,6 +69,12 @@ namespace ServiceLayer.ClassImplement.Auth
                 signingCredentials: credential
             );
             return jwtHandler.WriteToken(jwtSecurityToken);
+        }
+
+        public async Task Register(Account register, RoleNameEnum role)
+        {
+            register.RoleId = (int)role;
+            await repos.Accounts.CreateAsync(register);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace ServiceLayer.ClassImplement.Db
         }
         public IQueryable<Account> GetList()
         {
-            throw new NotImplementedException();
+            return repos.Accounts.GetList();
         }
 
 
@@ -29,9 +29,10 @@ namespace ServiceLayer.ClassImplement.Db
         }
 
 
-        public Task<Account> GetAccountByUserNameAsync(string userName)
+        public async Task<Account> GetAccountByUserNameAsync(string userName)
         {
-            throw new NotImplementedException();
+            Account account = await repos.Accounts.GetByUsernameAsync(userName);
+            return account;
         }
         public async Task CreateAsync(Account entity)
         {
