@@ -15,6 +15,12 @@ using RepositoryLayer.Interface;
 using ShareResource.DTO.Connection;
 using ShareResource.DTO;
 using ShareResource;
+using Microsoft.AspNetCore.Authorization;
+using ServiceLayer.Interface;
+using ShareResource.Enums;
+using System.Reflection;
+using APIExtension.ClaimsPrinciple;
+using APIExtension.UpdateApi;
 
 namespace API.Controllers
 {
@@ -22,13 +28,14 @@ namespace API.Controllers
     [ApiController]
     public class AccountsController : ControllerBase
     {
-        private readonly GroupStudyContext context;
+        private const string FAIL_CONFIRM_PASSWORD_MSG = "Fail to confirm password";
+        private readonly IServiceWrapper services;
         private readonly IRepoWrapper unitOfWork;
         private readonly IHubContext<PresenceHub> presenceHub;
         private readonly PresenceTracker presenceTracker;
-        public AccountsController(GroupStudyContext context, IRepoWrapper unitOfWork, IHubContext<PresenceHub> presenceHub, PresenceTracker presenceTracker)
+        public AccountsController(IServiceWrapper services, IRepoWrapper unitOfWork, IHubContext<PresenceHub> presenceHub, PresenceTracker presenceTracker)
         {
-            this.context = context;
+            this.services = services;
             this.unitOfWork = unitOfWork;
             this.presenceHub = presenceHub;
             this.presenceTracker = presenceTracker;
@@ -36,24 +43,32 @@ namespace API.Controllers
 
         // GET: api/Accounts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Account>>> GetUser()
+        public async Task<IActionResult> GetAccount()
         {
-          if (context.Accounts == null)
-          {
-              return NotFound();
-          }
-            return await context.Accounts.ToListAsync();
+            IQueryable<Account> list = services.Accounts.GetList();
+            if (list == null || !list.Any())
+            {
+                return NotFound();
+            }
+            return Ok(list);
+        }
+        // GET: api/Accounts/Student
+        [HttpGet("Student")]
+        public async Task<IActionResult> GetStudent()
+        {
+            IQueryable<Account> list = services.Accounts.GetList().Where(e => e.RoleId == (int)RoleNameEnum.Student);
+            if (list == null || !list.Any())
+            {
+                return NotFound();
+            }
+            return Ok(list);
         }
 
         // GET: api/Accounts/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Account>> GetUser(int id)
         {
-          if (context.Accounts == null)
-          {
-              return NotFound();
-          }
-            var user = await context.Accounts.FindAsync(id);
+            var user = await services.Accounts.GetByIdAsync(id);
 
             if (user == null)
             {
@@ -65,21 +80,31 @@ namespace API.Controllers
 
         // PUT: api/Accounts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "Student")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, Account user)
+        public async Task<IActionResult> UpdateProfile(int id, AccountUpdateDto dto)
         {
-            if (id != user.Id)
+            if(id != HttpContext.User.GetUserId())
+            {
+                return Unauthorized("You can't update other's profile");
+            }
+            if (id != dto.Id)
             {
                 return BadRequest();
             }
 
-            context.Entry(user).State = EntityState.Modified;
-
+            var account = await services.Accounts.GetByIdAsync(id);
+            if (account == null)
+            {
+                return NotFound();
+            }
             try
             {
-                await context.SaveChangesAsync();
+                account.PatchUpdate<Account, AccountUpdateDto>(dto);
+                await services.Accounts.UpdateAsync(account);
+                return Ok(account);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
                 if (!UserExists(id))
                 {
@@ -90,48 +115,90 @@ namespace API.Controllers
                     throw;
                 }
             }
+        } 
 
-            return NoContent();
-        }
-
-        // POST: api/Accounts
+        // PUT: api/Accounts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Account>> PostUser(Account user)
+        [Authorize(Roles = "Student")]
+        [HttpPut("{id}/Password")]
+        public async Task<IActionResult> PutUser(int id, AccountChangePasswordDto dto)
         {
-          if (context.Accounts == null)
-          {
-              return Problem("Entity set 'TempContext.User'  is null.");
-          }
-            context.Accounts.Add(user);
-            await context.SaveChangesAsync();
+            if (id != HttpContext.User.GetUserId())
+            {
+                return Unauthorized("You can't update other's profile");
+            }
+            if (id != dto.Id)
+            {
+                return BadRequest();
+            }
+            if(dto.Password!=dto.ConfirmPassword)
+            {
+                return BadRequest(FAIL_CONFIRM_PASSWORD_MSG);
+            }
 
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
-        }
-
-        // DELETE: api/Accounts/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
-        {
-            if (context.Accounts == null)
+            var account = await services.Accounts.GetByIdAsync(id);
+            if (account == null)
             {
                 return NotFound();
             }
-            var user = await context.Accounts.FindAsync(id);
-            if (user == null)
+            try
             {
-                return NotFound();
+                account.PatchUpdate<Account, AccountChangePasswordDto>( dto);
+                await services.Accounts.UpdateAsync(account);
+                return Ok(account);
             }
-
-            context.Accounts.Remove(user);
-            await context.SaveChangesAsync();
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                if (!UserExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
         }
+
+        //// POST: api/Accounts
+        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[HttpPost]
+        //public async Task<ActionResult<Account>> PostUser(Account dto)
+        //{
+        //  if (services.Accounts == null)
+        //  {
+        //      return Problem("Entity set 'TempContext.User'  is null.");
+        //  }
+        //    services.Accounts.Add(dto);
+        //    await services.SaveChangesAsync();
+
+        //    return CreatedAtAction("GetAccount", new { id = dto.Id }, dto);
+        //}
+
+        //// DELETE: api/Accounts/5
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteUser(int id)
+        //{
+        //    if (services.Accounts == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    var dto = await services.Accounts.FindAsync(id);
+        //    if (dto == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    services.Accounts.Remove(dto);
+        //    await services.SaveChangesAsync();
+
+        //    return NoContent();
+        //}
 
         private bool UserExists(int id)
         {
-            return (context.Accounts?.Any(e => e.Id == id)).GetValueOrDefault();
+            //return (services.Accounts?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (services.Accounts?.GetByIdAsync(id) is not null);
         }
 
         ////code yt
@@ -169,11 +236,11 @@ namespace API.Controllers
         //    var listUserOnline = new List<MemberDto>();
         //    foreach (var u in userOnlines)
         //    {
-        //        var user = await dbContext.Users.Where(x => x.UserName == u.UserName)
+        //        var dto = await dbContext.Users.Where(x => x.UserName == u.UserName)
         //        .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
         //        .SingleOrDefaultAsync();
 
-        //        listUserOnline.Add(user);
+        //        listUserOnline.Add(dto);
         //    }
         //    //return await Task.Run(() => listUserOnline.ToList());
         //    return await Task.FromResult(listUserOnline.ToList());
@@ -205,12 +272,14 @@ namespace API.Controllers
         //    Console.WriteLine("4.         " + new String('~', 50));
         //    Console.WriteLine("4.         Repo/User: UpdateLocked(username)");
         //    FunctionTracker.Instance().AddRepoFunc("Repo/User: UpdateLocked(username)");
-        //    var user = await dbContext.Users.SingleOrDefaultAsync(x => x.UserName == username);
-        //    if (user != null)
+        //    var dto = await dbContext.Users.SingleOrDefaultAsync(x => x.UserName == username);
+        //    if (dto != null)
         //    {
-        //        user.Locked = !user.Locked;
+        //        dto.Locked = !dto.Locked;
         //    }
-        //    return user;
+        //    return dto;
         //}
+       
     }
+
 }

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using ShareResource.Enums;
 
 namespace DataLayer.DBObject
 {
@@ -9,6 +10,7 @@ namespace DataLayer.DBObject
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public bool IsLeader { get; set; }
+        public GroupMemberState State { get; set; }  
         //Group
         [ForeignKey("GroupId")]
         public int GroupId { get; set; }

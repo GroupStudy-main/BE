@@ -1,5 +1,6 @@
 using API;
 using API.SignalRHub;
+using API.SignalRHub.Tracker;
 using APIExtension.Auth;
 using DataLayer.DBContext;
 using Google.Apis.Auth.OAuth2;
@@ -42,6 +43,8 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 #endregion
 
 #region service and repo
+builder.Services.AddSingleton<PresenceTracker>();
+builder.Services.AddSingleton<ShareScreenTracker>();
 builder.Services.AddScoped<IRepoWrapper, RepoWrapper>();
 builder.Services.AddScoped<IServiceWrapper, ServiceWrapper>();
 #endregion

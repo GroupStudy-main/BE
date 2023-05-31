@@ -12,8 +12,16 @@ namespace ShareResource.DTO
     {
         [Key]
         public int Id { get; set; }
-        public string FullName { get; set; }
+        public string? FullName { get; set; }
+        public string? Phone { get; set; }
 
-     
+    }
+    public class AccountChangePasswordDto : BaseUpdateDto
+    {
+        [Key]
+        public int Id { get; set; }
+        public string Password { get; set; }
+        public string ConfirmPassword { get; set; }
+
     }
 }
