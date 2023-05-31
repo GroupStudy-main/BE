@@ -21,6 +21,7 @@ using ShareResource.Enums;
 using System.Reflection;
 using APIExtension.ClaimsPrinciple;
 using APIExtension.UpdateApi;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace API.Controllers
 {
@@ -42,6 +43,10 @@ namespace API.Controllers
         }
 
         // GET: api/Accounts
+        [SwaggerOperation(
+            Summary = "Login for student with username or email. Return JWT Token", 
+            Description = "Login for student with username or email. Return JWT Token if successfull"
+            )]
         [HttpGet]
         public async Task<IActionResult> GetAccount()
         {
