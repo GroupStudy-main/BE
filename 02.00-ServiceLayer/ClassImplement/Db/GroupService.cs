@@ -1,4 +1,5 @@
 ﻿using DataLayer.DBObject;
+using Microsoft.EntityFrameworkCore;
 using RepositoryLayer.Interface;
 using ServiceLayer.Interface.Db;
 using ShareResource.Enums;
@@ -23,6 +24,22 @@ namespace ServiceLayer.ClassImplement.Db
             return repos.Groups.GetList();
         }
 
+        public async Task<IQueryable<Group>> GetGroupsJoinedByStudentAsync(int studentId)
+        {
+            var list = repos.GroupMembers.GetList()
+                .Include(e => e.Group).ThenInclude(e => e.GroupMembers)
+                .Where(e => e.AccountId == studentId && e.State == GroupMemberState.Member);
+            var list2=list.Select(e=>e.Group);
+            return list2;
+        }
+
+        public async Task<IQueryable<Group>> GetGroupsLeadByStudentAsync(int studentId)
+        {
+            return repos.GroupMembers.GetList()
+                .Include(e => e.Group).ThenInclude(e=>e.GroupMembers)
+                .Where(e => e.AccountId == studentId && e.State == GroupMemberState.Leader)
+                .Select(e => e.Group);
+        }
 
         public async Task<Group> GetByIdAsync(int id)
         {
@@ -30,10 +47,6 @@ namespace ServiceLayer.ClassImplement.Db
         }
 
 
-        public Task<Group> GetGroupByUserNameAsync(string userName)
-        {
-            throw new NotImplementedException();
-        }
         public async Task CreateAsync(Group entity, int creatorId)
         {
             entity.GroupMembers.Add(new GroupMember { 
@@ -52,5 +65,6 @@ namespace ServiceLayer.ClassImplement.Db
         {
             await repos.Groups.UpdateAsync(entity);
         }
+
     }
 }

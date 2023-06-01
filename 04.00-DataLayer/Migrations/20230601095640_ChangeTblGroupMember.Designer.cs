@@ -4,6 +4,7 @@ using DataLayer.DBContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(GroupStudyContext))]
-    partial class GroupStudyContextModelSnapshot : ModelSnapshot
+    [Migration("20230601095640_ChangeTblGroupMember")]
+    partial class ChangeTblGroupMember
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -275,26 +277,6 @@ namespace DataLayer.Migrations
                     b.HasIndex("ClassId");
 
                     b.ToTable("Groups");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ClassId = 7,
-                            Name = "Nhóm 1 của học sinh 1"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ClassId = 7,
-                            Name = "Nhóm 2 của học sinh 1"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ClassId = 8,
-                            Name = "Nhóm 1 của học sinh 2"
-                        });
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.GroupMember", b =>
@@ -327,109 +309,6 @@ namespace DataLayer.Migrations
                     b.HasIndex("GroupId");
 
                     b.ToTable("GroupMembers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AccountId = 1,
-                            GroupId = 1,
-                            State = 0
-                        },
-                        new
-                        {
-                            Id = 2,
-                            AccountId = 2,
-                            GroupId = 1,
-                            InviteMessage = "Nhóm của mình rất hay. Bạn vô nha",
-                            State = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            AccountId = 3,
-                            GroupId = 1,
-                            InviteMessage = "Nhóm của mình rất hay. Bạn vô nha",
-                            State = 2
-                        },
-                        new
-                        {
-                            Id = 4,
-                            AccountId = 4,
-                            GroupId = 1,
-                            RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha",
-                            State = 3
-                        },
-                        new
-                        {
-                            Id = 5,
-                            AccountId = 5,
-                            GroupId = 1,
-                            RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha",
-                            State = 4
-                        },
-                        new
-                        {
-                            Id = 6,
-                            AccountId = 1,
-                            GroupId = 2,
-                            State = 0
-                        },
-                        new
-                        {
-                            Id = 7,
-                            AccountId = 2,
-                            GroupId = 2,
-                            InviteMessage = "Nhóm của mình rất hay. Bạn vô nha",
-                            State = 1
-                        },
-                        new
-                        {
-                            Id = 8,
-                            AccountId = 3,
-                            GroupId = 2,
-                            InviteMessage = "Nhóm của mình rất hay. Bạn vô nha",
-                            State = 2
-                        },
-                        new
-                        {
-                            Id = 9,
-                            AccountId = 4,
-                            GroupId = 2,
-                            RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha",
-                            State = 3
-                        },
-                        new
-                        {
-                            Id = 10,
-                            AccountId = 1,
-                            GroupId = 3,
-                            State = 0
-                        },
-                        new
-                        {
-                            Id = 11,
-                            AccountId = 2,
-                            GroupId = 3,
-                            InviteMessage = "Nhóm của mình rất hay. Bạn vô nha",
-                            State = 1
-                        },
-                        new
-                        {
-                            Id = 12,
-                            AccountId = 3,
-                            GroupId = 3,
-                            InviteMessage = "Nhóm của mình rất hay. Bạn vô nha",
-                            State = 2
-                        },
-                        new
-                        {
-                            Id = 13,
-                            AccountId = 4,
-                            GroupId = 3,
-                            RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha",
-                            State = 3
-                        });
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.GroupSubject", b =>
@@ -453,62 +332,6 @@ namespace DataLayer.Migrations
                     b.HasIndex("SubjectId");
 
                     b.ToTable("GroupSubjects");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            GroupId = 1,
-                            SubjectId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            GroupId = 1,
-                            SubjectId = 4
-                        },
-                        new
-                        {
-                            Id = 3,
-                            GroupId = 1,
-                            SubjectId = 8
-                        },
-                        new
-                        {
-                            Id = 4,
-                            GroupId = 2,
-                            SubjectId = 1
-                        },
-                        new
-                        {
-                            Id = 5,
-                            GroupId = 2,
-                            SubjectId = 2
-                        },
-                        new
-                        {
-                            Id = 6,
-                            GroupId = 2,
-                            SubjectId = 3
-                        },
-                        new
-                        {
-                            Id = 7,
-                            GroupId = 3,
-                            SubjectId = 5
-                        },
-                        new
-                        {
-                            Id = 8,
-                            GroupId = 3,
-                            SubjectId = 6
-                        },
-                        new
-                        {
-                            Id = 9,
-                            GroupId = 3,
-                            SubjectId = 9
-                        });
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Meeting", b =>
@@ -723,7 +546,7 @@ namespace DataLayer.Migrations
             modelBuilder.Entity("DataLayer.DBObject.GroupMember", b =>
                 {
                     b.HasOne("DataLayer.DBObject.Account", "Account")
-                        .WithMany("GroupMembers")
+                        .WithMany("GroupMember")
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -782,7 +605,7 @@ namespace DataLayer.Migrations
 
             modelBuilder.Entity("DataLayer.DBObject.Account", b =>
                 {
-                    b.Navigation("GroupMembers");
+                    b.Navigation("GroupMember");
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Group", b =>

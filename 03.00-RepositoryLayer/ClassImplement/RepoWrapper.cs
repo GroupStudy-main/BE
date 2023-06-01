@@ -71,5 +71,18 @@ namespace RepositoryLayer.ClassImplement
                 return groups;
             }
         }
+
+        private IGroupMemberReposity groupMembers;
+        public IGroupMemberReposity GroupMembers
+        {
+            get
+            {
+                if (groupMembers is null)
+                {
+                    groupMembers = new GroupMemberReposity(dbContext);
+                }
+                return groupMembers;
+            }
+        }
     }
 }

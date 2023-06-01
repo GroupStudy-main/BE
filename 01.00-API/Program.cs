@@ -10,13 +10,19 @@ using RepositoryLayer.ClassImplement;
 using RepositoryLayer.Interface;
 using ServiceLayer.ClassImplement;
 using ServiceLayer.Interface;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 IConfiguration configuration = builder.Configuration;
 IWebHostEnvironment environment = builder.Environment;
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
@@ -24,8 +30,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<GroupStudyContext>(options =>
 {
     options.EnableSensitiveDataLogging();
-    options.UseSqlServer(configuration.GetConnectionString("Default"));
-    //options.UseInMemoryDatabase("GroupStudy");
+    //options.EnableRetryOnFailure
+    //options.UseSqlServer(configuration.GetConnectionString("Default"));
+    options.UseInMemoryDatabase("GroupStudy");
 });
 //Use for scaffolding api controller. remove later
 builder.Services.AddDbContext<TempContext>(options =>
@@ -59,6 +66,7 @@ builder.Services.AddSwaggerGen(options =>
     options.AddGoogleAuthUi(configuration);
 #endregion
 });
+
 
 var app = builder.Build();
 

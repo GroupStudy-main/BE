@@ -10,6 +10,13 @@ using DataLayer.DBObject;
 using DataLayer.DBContext;
 using Swashbuckle.AspNetCore.Annotations;
 using APIExtension.Const;
+using ServiceLayer.Interface;
+using Microsoft.AspNetCore.Authorization;
+using APIExtension.ClaimsPrinciple;
+using APIExtension.UpdateApiExtension;
+using ShareResource.DTO;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 
 namespace API.Controllers
 {
@@ -17,95 +24,126 @@ namespace API.Controllers
     [ApiController]
     public class GroupsController : ControllerBase
     {
-        private readonly GroupStudyContext dbContext;
+        private readonly IServiceWrapper services;
+        private readonly IMapper mapper;
 
-        public GroupsController(GroupStudyContext context)
+        public GroupsController(IServiceWrapper services, IMapper mapper)
         {
-            dbContext = context;
+            this.services = services;
+            this.mapper = mapper;
         }
 
         // GET: api/Groups
         [SwaggerOperation(
            Summary = $"[{Actor.Test}/{Finnished.False}]Get list of group",
-           Description = "[Not finneshed/Test]Get list of group"
+           Description = $"[{Actor.Test}/{Finnished.False}]Get list of group"
        )]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Group>>> GetGroups()
+        public async Task<IActionResult> GetGroups()
         {
-          if (dbContext.Groups == null)
+            IQueryable<Group> list = services.Groups.GetList();
+            if (list == null|| !list.Any())
           {
               return NotFound();
           }
-            return await dbContext.Groups.ToListAsync();
+            var mapped = list.ProjectTo<GroupGetListDto>(mapper.ConfigurationProvider);
+            return Ok(mapped);
         }
 
         // GET: api/Groups/Join
         [SwaggerOperation(
-           Summary = "[Student/Not finneshed]Get list of group you joined",
-           Description = "[Student/Not finneshed]Get list of group you joined"
+           Summary = $"[{Actor.Student}/{Finnished.False}]Get list of group you joined",
+           Description = "Get list of group you joined"
        )]
+        [Authorize(Roles =Actor.Student)]
         [HttpGet("Join")]
-        public async Task<ActionResult<IEnumerable<Group>>> GetJoinedGroups()
+        public async Task<IActionResult> GetJoinedGroups()
         {
-            if (dbContext.Groups == null)
+            int studentId = HttpContext.User.GetUserId();
+            IQueryable<Group> list = await services.Groups.GetGroupsJoinedByStudentAsync(studentId);
+            if (list == null || !list.Any())
             {
                 return NotFound();
             }
-            return await dbContext.Groups.ToListAsync();
+            var mapped = list.ProjectTo<GroupGetListDto>(mapper.ConfigurationProvider);
+            return Ok(mapped);
         }
 
         // GET: api/Groups/Lead
         [SwaggerOperation(
-           Summary = "[Leader/Not finneshed]Get list of group you lead",
-           Description = "[Leader/Not finneshed]Get list of group you lead"
+           Summary = $"[{Actor.Leader}/{Finnished.False}] Get list of dto you lead",
+           Description = "Get list of dto you lead"
        )]
+        [Authorize(Roles =Actor.Student)]
         [HttpGet("Lead")]
-        public async Task<ActionResult<IEnumerable<Group>>> GetLeadGroups()
+        public async Task<IActionResult> GetLeadGroups()
         {
-            if (dbContext.Groups == null)
+            int studentId = HttpContext.User.GetUserId();
+            IQueryable<Group> list = await services.Groups.GetGroupsLeadByStudentAsync(studentId);
+            if (list == null || !list.Any())
             {
                 return NotFound();
             }
-            return await dbContext.Groups.ToListAsync();
+            return Ok(list);
         }
 
+        [SwaggerOperation(
+          Summary = $"[{Actor.Test}/{Finnished.False}] Get dto by Id",
+          Description = "Get dto by Id"
+      )]
         // GET: api/Groups/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Group>> GetGroup(int id)
         {
-          if (dbContext.Groups == null)
-          {
-              return NotFound();
-          }
-            var @group = await dbContext.Groups.FindAsync(id);
+            Group group = await services.Groups.GetByIdAsync(id);
 
-            if (@group == null)
+            if (group == null)
             {
                 return NotFound();
             }
 
-            return @group;
+            return Ok(group);
+        }
+        // POST: api/Groups
+        [Authorize(Roles =Actor.Student)]
+        [HttpPost]
+        public async Task<ActionResult<Group>> CreateGroup(GroupCreateDto dto)
+        {
+            int creatorId = HttpContext.User.GetUserId();
+            Group group = mapper.Map<Group>(dto);
+            await services.Groups.CreateAsync(group, creatorId);
+
+            return Ok(mapper);
         }
 
         // PUT: api/Groups/5
-        
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateGroup(int id, Group @group)
+        public async Task<IActionResult> UpdateGroup(int id, GroupUpdateDto dto)
         {
-            if (id != @group.Id)
+            if (id != HttpContext.User.GetUserId())
+            {
+                return Unauthorized("You can't update other's profile");
+            }
+            if (id != dto.Id)
             {
                 return BadRequest();
             }
 
-            dbContext.Entry(@group).State = EntityState.Modified;
-
+            var group = await services.Groups.GetByIdAsync(id);
+            if (group == null)
+            {
+                return NotFound();
+            }
             try
             {
-                await dbContext.SaveChangesAsync();
+                group.PatchUpdate<Group, GroupUpdateDto>(dto);
+                await services.Groups.UpdateAsync(group);
+                return Ok(group);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!GroupExists(id))
+                if (!await GroupExists(id))
                 {
                     return NotFound();
                 }
@@ -114,48 +152,33 @@ namespace API.Controllers
                     throw;
                 }
             }
-
-            return NoContent();
         }
 
-        // POST: api/Groups
         
-        [HttpPost]
-        public async Task<ActionResult<Group>> PostGroup(Group @group)
+
+        //// DELETE: api/Groups/5
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteGroup(int id)
+        //{
+        //    if (services.Groups == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    var @dto = await services.Groups.FindAsync(id);
+        //    if (@dto == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    services.Groups.Remove(@dto);
+        //    await services.SaveChangesAsync();
+
+        //    return NoContent();
+        //}
+
+        private async Task<bool> GroupExists(int id)
         {
-          if (dbContext.Groups == null)
-          {
-              return Problem("Entity set 'TempContext.Groups'  is null.");
-          }
-            dbContext.Groups.Add(@group);
-            await dbContext.SaveChangesAsync();
-
-            return CreatedAtAction("GetGroup", new { id = @group.Id }, @group);
-        }
-
-        // DELETE: api/Groups/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteGroup(int id)
-        {
-            if (dbContext.Groups == null)
-            {
-                return NotFound();
-            }
-            var @group = await dbContext.Groups.FindAsync(id);
-            if (@group == null)
-            {
-                return NotFound();
-            }
-
-            dbContext.Groups.Remove(@group);
-            await dbContext.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool GroupExists(int id)
-        {
-            return (dbContext.Groups?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (await services.Groups.GetByIdAsync(id)) is not null;
         }
     }
 }

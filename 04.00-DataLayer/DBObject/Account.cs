@@ -31,7 +31,7 @@ namespace DataLayer.DBObject
         public virtual Role Role { get; set; }
 
         // Group Member
-        public virtual ICollection<GroupMember> GroupMember { get; set; }
+        public virtual ICollection<GroupMember> GroupMembers { get; set; }
 
     }
    

@@ -10,7 +10,7 @@ namespace ShareResource.Enums
     {
         Leader,
         Member,
-        Invited,
+        Inviting,
         Requesting,
         Banned
     }

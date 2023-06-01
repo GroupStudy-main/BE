@@ -7,5 +7,6 @@ namespace ServiceLayer.Interface
     {
         public IAccountService Accounts { get; }
         public IAuthService Auth { get; }
+        public IGroupService Groups { get; }
     }
 }

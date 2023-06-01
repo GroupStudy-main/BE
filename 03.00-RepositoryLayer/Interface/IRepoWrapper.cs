@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataLayer.DBObject;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,5 +13,6 @@ namespace RepositoryLayer.Interface
         public IMeetingRoomRepository Rooms { get; }
         public IMeetingRepository Meetings { get; }
         public IGroupRepository Groups { get; }
+        public IGroupMemberReposity GroupMembers { get; }
     }
 }

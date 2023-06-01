@@ -44,5 +44,18 @@ namespace ServiceLayer.ClassImplement
                 return auth;
             }
         }
+
+        private IGroupService groups;
+        public IGroupService Groups
+        {
+            get
+            {
+                if (groups is null)
+                {
+                    groups = new GroupService(repos);
+                }
+                return groups;
+            }
+        }
     }
 }
