@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using API;
 using DataLayer.DBObject;
 using DataLayer.DBContext;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace API.Controllers
 {
@@ -23,6 +24,10 @@ namespace API.Controllers
         }
 
         // GET: api/Groups
+        [SwaggerOperation(
+           Summary = "[Not finneshed/Test]Get list of group",
+           Description = "[Not finneshed/Test]Get list of group"
+       )]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Group>>> GetGroups()
         {
@@ -30,6 +35,36 @@ namespace API.Controllers
           {
               return NotFound();
           }
+            return await dbContext.Groups.ToListAsync();
+        }
+
+        // GET: api/Groups/Join
+        [SwaggerOperation(
+           Summary = "[Student/Not finneshed]Get list of group you joined",
+           Description = "[Student/Not finneshed]Get list of group you joined"
+       )]
+        [HttpGet("Join")]
+        public async Task<ActionResult<IEnumerable<Group>>> GetJoinedGroups()
+        {
+            if (dbContext.Groups == null)
+            {
+                return NotFound();
+            }
+            return await dbContext.Groups.ToListAsync();
+        }
+
+        // GET: api/Groups/Lead
+        [SwaggerOperation(
+           Summary = "[Leader/Not finneshed]Get list of group you lead",
+           Description = "[Leader/Not finneshed]Get list of group you lead"
+       )]
+        [HttpGet("Lead")]
+        public async Task<ActionResult<IEnumerable<Group>>> GetLeadGroups()
+        {
+            if (dbContext.Groups == null)
+            {
+                return NotFound();
+            }
             return await dbContext.Groups.ToListAsync();
         }
 
@@ -54,7 +89,7 @@ namespace API.Controllers
         // PUT: api/Groups/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutGroup(int id, Group @group)
+        public async Task<IActionResult> UpdateGroup(int id, Group @group)
         {
             if (id != @group.Id)
             {

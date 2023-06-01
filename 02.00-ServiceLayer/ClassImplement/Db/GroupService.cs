@@ -1,6 +1,7 @@
 ﻿using DataLayer.DBObject;
 using RepositoryLayer.Interface;
 using ServiceLayer.Interface.Db;
+using ShareResource.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,7 +38,7 @@ namespace ServiceLayer.ClassImplement.Db
         {
             entity.GroupMembers.Add(new GroupMember { 
                 AccountId = creatorId,
-                IsLeader = true,
+                State=GroupMemberState.Leader
             });
             await repos.Groups.CreateAsync(entity);
         }

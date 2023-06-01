@@ -1,22 +1,22 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using ShareResource.Enums;
 
 namespace DataLayer.DBObject
 {
-    public class GroupMember
+    public class GroupSubject
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public GroupMemberState State { get; set; }  
-        //Group
+
+        //Subject
         [ForeignKey("GroupId")]
         public int GroupId { get; set; }
-        public virtual Group Group { get; set; }
-        //Student
-        [ForeignKey("AccountId")]
-        public int AccountId { get; set; }
-        public virtual Account Account { get; set; }
+        public Group Group { get; set; }
+
+        //Subject
+        [ForeignKey("SubjectId")]
+        public int SubjectId { get; set; }
+        public Subject Subject { get; set; }
     }
 }

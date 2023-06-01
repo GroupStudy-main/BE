@@ -42,11 +42,10 @@ namespace API.Controllers
             this.presenceTracker = presenceTracker;
         }
 
-        // GET: api/Accounts
         [SwaggerOperation(
-            Summary = "Login for student with username or email. Return JWT Token", 
-            Description = "Login for student with username or email. Return JWT Token if successfull"
-            )]
+          Summary = "[Test/Swagger]Get all the token sent in the header of the swagger request"
+      )]
+        // GET: api/Accounts
         [HttpGet]
         public async Task<IActionResult> GetAccount()
         {
@@ -57,11 +56,30 @@ namespace API.Controllers
             }
             return Ok(list);
         }
+
         // GET: api/Accounts/Student
+        [SwaggerOperation(
+          Summary = "Get all the student account"
+      )]
         [HttpGet("Student")]
-        public async Task<IActionResult> GetStudent()
+        public async Task<IActionResult> GetStudents()
         {
             IQueryable<Account> list = services.Accounts.GetList().Where(e => e.RoleId == (int)RoleNameEnum.Student);
+            if (list == null || !list.Any())
+            {
+                return NotFound();
+            }
+            return Ok(list);
+        }
+
+        // GET: api/Accounts/Student
+        [SwaggerOperation(
+          Summary = "Get all the student account"
+        )]
+        [HttpGet("Parent")]
+        public async Task<IActionResult> GetParents()
+        {
+            IQueryable<Account> list = services.Accounts.GetList().Where(e => e.RoleId == (int)RoleNameEnum.Parent);
             if (list == null || !list.Any())
             {
                 return NotFound();
@@ -89,7 +107,7 @@ namespace API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProfile(int id, AccountUpdateDto dto)
         {
-            if(id != HttpContext.User.GetUserId())
+            if (id != HttpContext.User.GetUserId())
             {
                 return Unauthorized("You can't update other's profile");
             }
@@ -120,7 +138,7 @@ namespace API.Controllers
                     throw;
                 }
             }
-        } 
+        }
 
         // PUT: api/Accounts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -136,7 +154,7 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-            if(dto.Password!=dto.ConfirmPassword)
+            if (dto.Password != dto.ConfirmPassword)
             {
                 return BadRequest(FAIL_CONFIRM_PASSWORD_MSG);
             }
@@ -148,7 +166,7 @@ namespace API.Controllers
             }
             try
             {
-                account.PatchUpdate<Account, AccountChangePasswordDto>( dto);
+                account.PatchUpdate<Account, AccountChangePasswordDto>(dto);
                 await services.Accounts.UpdateAsync(account);
                 return Ok(account);
             }
@@ -284,7 +302,7 @@ namespace API.Controllers
         //    }
         //    return dto;
         //}
-       
+
     }
 
 }
