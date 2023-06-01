@@ -49,15 +49,16 @@ builder.Services.AddScoped<IRepoWrapper, RepoWrapper>();
 builder.Services.AddScoped<IServiceWrapper, ServiceWrapper>();
 #endregion
 
-#region auth
 builder.Services.AddJwtAuthService(configuration);
 builder.Services.AddSwaggerGen(options =>
 {
+    options.EnableAnnotations();
+#region auth
     options.AddJwtAuthUi();
     //options.AddGoogleAuthUi
     options.AddGoogleAuthUi(configuration);
-});
 #endregion
+});
 
 var app = builder.Build();
 

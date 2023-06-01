@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace APIExtension.UpdateApi
+namespace APIExtension.UpdateApiExtension
 {
     public static class PatchUpdateExtension
     {

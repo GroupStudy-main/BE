@@ -9,6 +9,7 @@ using API;
 using DataLayer.DBObject;
 using DataLayer.DBContext;
 using Swashbuckle.AspNetCore.Annotations;
+using APIExtension.Const;
 
 namespace API.Controllers
 {
@@ -25,7 +26,7 @@ namespace API.Controllers
 
         // GET: api/Groups
         [SwaggerOperation(
-           Summary = "[Not finneshed/Test]Get list of group",
+           Summary = $"[{Actor.Test}/{Finnished.False}]Get list of group",
            Description = "[Not finneshed/Test]Get list of group"
        )]
         [HttpGet]
@@ -87,7 +88,7 @@ namespace API.Controllers
         }
 
         // PUT: api/Groups/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateGroup(int id, Group @group)
         {
@@ -118,7 +119,7 @@ namespace API.Controllers
         }
 
         // POST: api/Groups
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        
         [HttpPost]
         public async Task<ActionResult<Group>> PostGroup(Group @group)
         {

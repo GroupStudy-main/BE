@@ -20,11 +20,13 @@ using ServiceLayer.Interface;
 using ShareResource.Enums;
 using System.Reflection;
 using APIExtension.ClaimsPrinciple;
-using APIExtension.UpdateApi;
+using APIExtension.UpdateApiExtension;
 using Swashbuckle.AspNetCore.Annotations;
+using APIExtension.Const;
 
 namespace API.Controllers
 {
+    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [Route("api/[controller]")]
     [ApiController]
     public class AccountsController : ControllerBase
@@ -43,7 +45,7 @@ namespace API.Controllers
         }
 
         [SwaggerOperation(
-          Summary = "[Test/Swagger]Get all the token sent in the header of the swagger request"
+          Summary = $"[{Actor.Test}/{Finnished.False}] Get all the account"
       )]
         // GET: api/Accounts
         [HttpGet]
@@ -59,7 +61,7 @@ namespace API.Controllers
 
         // GET: api/Accounts/Student
         [SwaggerOperation(
-          Summary = "Get all the student account"
+          Summary = $"[{Actor.Test}/{Finnished.False}] Get all the student account"
       )]
         [HttpGet("Student")]
         public async Task<IActionResult> GetStudents()
@@ -74,7 +76,7 @@ namespace API.Controllers
 
         // GET: api/Accounts/Student
         [SwaggerOperation(
-          Summary = "Get all the student account"
+          Summary = $"[{Actor.Test}/{Finnished.False}] Get all the parent account"
         )]
         [HttpGet("Parent")]
         public async Task<IActionResult> GetParents()
@@ -87,9 +89,12 @@ namespace API.Controllers
             return Ok(list);
         }
 
+        [SwaggerOperation(
+          Summary = $"[{Actor.Test}/{Finnished.False}] Get account info"
+        )]
         // GET: api/Accounts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Account>> GetUser(int id)
+        public async Task<IActionResult> GetUser(int id)
         {
             var user = await services.Accounts.GetByIdAsync(id);
 
@@ -98,12 +103,35 @@ namespace API.Controllers
                 return NotFound();
             }
 
-            return user;
+            return Ok(user);
         }
 
+
+        [SwaggerOperation(
+          Summary = $"[{Actor.Student_Parent}/{Finnished.No_Test}/{Auth.True}] Get the logined profile"
+        )]
+        // GET: api/Accounts/5
+        [Authorize(Roles ="Student, Parent")]
+        [HttpGet("profile")]
+        public async Task<IActionResult> GetProfile()
+        {
+            int id = HttpContext.User.GetUserId();
+            var user = await services.Accounts.GetByIdAsync(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
+        }
+
+        [SwaggerOperation(
+          Summary = $"[{Actor.Student_Parent}/{Finnished.No_Test}/{Auth.True}] Update logined profile"
+        )]
         // PUT: api/Accounts/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [Authorize(Roles = "Student")]
+        
+        [Authorize(Roles = "Student, Parent")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProfile(int id, AccountUpdateDto dto)
         {
@@ -140,11 +168,14 @@ namespace API.Controllers
             }
         }
 
+        [SwaggerOperation(
+          Summary = $"[{Actor.Student_Parent}/{Finnished.No_Test}/{Auth.True}] Update logined profile"
+        )]
         // PUT: api/Accounts/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [Authorize(Roles = "Student")]
+        
+        [Authorize(Roles = Actor.Student_Parent)]
         [HttpPut("{id}/Password")]
-        public async Task<IActionResult> PutUser(int id, AccountChangePasswordDto dto)
+        public async Task<IActionResult> ChangePassword(int id, AccountChangePasswordDto dto)
         {
             if (id != HttpContext.User.GetUserId())
             {
@@ -184,7 +215,7 @@ namespace API.Controllers
         }
 
         //// POST: api/Accounts
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //
         //[HttpPost]
         //public async Task<ActionResult<Account>> PostUser(Account dto)
         //{

@@ -1,4 +1,5 @@
 ﻿using APIExtension.Auth;
+using APIExtension.Const;
 using APIExtension.HttpContext;
 using AutoMapper;
 using DataLayer.DBObject;
@@ -28,6 +29,11 @@ namespace API.Controllers
             this.services = services;
             this.mapper = mapper;
         }
+
+        [SwaggerOperation(
+            Summary = $"[{Actor.Student}/{Finnished.True}] Register for student with form",
+            Description = "Login for student with form"
+        )]
         [HttpPost("Register/Student")] 
         public async Task<IActionResult> StudentRegister(AccountRegisterDto dto)
         {
@@ -39,6 +45,11 @@ namespace API.Controllers
             await services.Auth.Register(register, RoleNameEnum.Student);
             return Ok(await services.Accounts.GetAccountByUserNameAsync(dto.Username));
         }
+
+        [SwaggerOperation(
+            Summary = $"[{Actor.Guest}/{Finnished.True}] Register for student with form",
+            Description = "Login for student with form"
+        )]
         [HttpPost("Register/Parent")]
         public async Task<IActionResult> ParentRegister(AccountRegisterDto dto)
         {
@@ -52,7 +63,7 @@ namespace API.Controllers
         }
 
         [SwaggerOperation(
-            Summary = "Login for student with username or email. Return JWT Token",
+            Summary = $"[{Actor.Student_Parent}/{Finnished.True}] Login for student with username or email. Return JWT Token",
             Description = "Login for student with username or email. Return JWT Token if successfull"
         )]
         [HttpPost("Login")]
@@ -67,7 +78,7 @@ namespace API.Controllers
         }
 
         [SwaggerOperation(
-            Summary = "Login for student with googel id token. Return JWT Token",
+            Summary = $"[{Actor.Student_Parent}/{Finnished.False}/{Auth.GoogleId}] Login for student with googel id token. Return JWT Token",
             Description = "Login for student with googel id token in Header. Return JWT Token if successfull"
         )]
         [CustomGoogleIdTokenAuthFilter]
@@ -85,8 +96,8 @@ namespace API.Controllers
         }
 
         [SwaggerOperation(
-           Summary = "[Not finneshed]Login for student with googel access token. Return JWT Token",
-           Description = "[Not finneshed]Login for student with googel access token in Header. Return JWT Token if successfull"
+           Summary = $"[{Actor.Student_Parent}/{Finnished.False}/{Auth.GoogleAccess}] Login for student with googel access token. Return JWT Token",
+           Description = "Login for student with googel access token in Header. Return JWT Token if successfull"
        )]
         [CustomGoogleIdTokenAuthFilter]
         [HttpPost("Login/Google/Access-Token")]
@@ -104,7 +115,7 @@ namespace API.Controllers
         }
 
         [SwaggerOperation(
-           Summary = "[Test/Swagger]Get all the token sent in the header of the swagger request"
+           Summary = $"[{Actor.Test}/{Finnished.True}] Get all the token sent in the header of the swagger request"
        )]
         [HttpGet("TestAuth/Tokens")]
         public async Task<IActionResult> GetTokens()
@@ -121,7 +132,7 @@ namespace API.Controllers
         }
 
         [SwaggerOperation(
-          Summary = "[Test/Swagger]Get all the data of the account of the swagger request"
+          Summary = $"[{Actor.Test}/{Finnished.True}] Get all the data of the account of the swagger request"
       )]
         [Authorize]
         [HttpGet("TestAuth/LoginData")]
@@ -147,7 +158,7 @@ namespace API.Controllers
         }
 
         [SwaggerOperation(
-         Summary = "[Test/Swagger]Test if the account of the swagger request is a student"
+         Summary = $"[{Actor.Test}/{Finnished.True}] Test if the account of the swagger request is a student"
         )]
         [Authorize(Roles = "Student")]
         [HttpGet("TestAuth/Student")]
@@ -157,7 +168,7 @@ namespace API.Controllers
         }
 
         [SwaggerOperation(
-         Summary = "[Test/Swagger]Test if the account of the swagger request is a student"
+         Summary = $"[{Actor.Test}/{Finnished.True}] Test if the account of the swagger request is a student"
         )]
         [Authorize(Roles = "Parent")]
         [HttpGet("TestAuth/Parent")]
