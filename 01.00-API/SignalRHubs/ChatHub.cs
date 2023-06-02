@@ -43,8 +43,8 @@ namespace API.SignalRHub
             var meetingIdString = httpContext.Request.Query["meetingIdString"].ToString();
 
             var meetingIdInt = int.Parse(meetingIdString);
-            MeetingRoom room = await repos.Rooms.GetRoomForMeetingAsync(meetingIdInt);
-            var roomIdInt = room.Id;
+            Meeting meeting = await repos.Meetings.GetMeetingById(meetingIdInt);
+            var roomIdInt = meeting.Id;
             var contextUsername = Context.User.GetUsername();
 
             await presenceTracker.UserConnected(new UserConnectionDto(contextUsername, roomIdInt), Context.ConnectionId);
@@ -57,7 +57,7 @@ namespace API.SignalRHub
             await Clients.Group(meetingIdString).SendAsync("UserOnlineInGroup", currentUser);
 
             var usersInRoom = await presenceTracker.GetOnlineUsers(roomIdInt);
-            await repos.Rooms.UpdateCountMember(roomIdInt, usersInRoom.Length);
+            await repos.Meetings.UpdateCountMember(roomIdInt, usersInRoom.Length);
 
             var currentConnections = await presenceTracker.GetConnectionsForUser(new UserConnectionDto(contextUsername, roomIdInt));
             await presenceHubContext.Clients.AllExcept(currentConnections).SendAsync("CountMemberInGroup",
@@ -81,21 +81,21 @@ namespace API.SignalRHub
             FunctionTracker.Instance().AddHubFunc("Hub/Chat: OnDisconnectedAsync(Exception)");
             var username = Context.User.GetUsername();
             var meeting = await RemoveConnectionFromGroup();
-            var isOffline = await presenceTracker.UserDisconnected(new UserConnectionDto(username, meeting.MeetingRoomId), Context.ConnectionId);
+            var isOffline = await presenceTracker.UserDisconnected(new UserConnectionDto(username, meeting.Id), Context.ConnectionId);
 
             await shareScreenTracker.DisconnectedByUser(username, meeting.Id);
             if (isOffline)
             {
-                await Groups.RemoveFromGroupAsync(Context.ConnectionId, meeting.MeetingRoomId.ToString());
+                await Groups.RemoveFromGroupAsync(Context.ConnectionId, meeting.Id.ToString());
                 var temp = await repos.Accounts.GetByUsernameAsync(username);
                 await Clients.Group(meeting.Id.ToString()).SendAsync("UserOfflineInGroup", temp);
 
                 var currentUsers = await presenceTracker.GetOnlineUsers(meeting.Id);
 
-                await repos.Rooms.UpdateCountMember(meeting.Id, currentUsers.Length);
+                await repos.Meetings.UpdateCountMember(meeting.Id, currentUsers.Length);
 
                 await presenceHubContext.Clients.All.SendAsync("CountMemberInGroup",
-                       new { roomId = meeting.MeetingRoomId, countMember = currentUsers.Length });
+                       new { roomId = meeting.Id, countMember = currentUsers.Length });
             }
             await base.OnDisconnectedAsync(exception);
         }
@@ -122,7 +122,7 @@ namespace API.SignalRHub
                 //Luu message vao db
                 //code here
                 //send meaasge to meetingGroup
-                await Clients.Group(meetingGroup.MeetingRoomId.ToString()).SendAsync("NewMessage", message);
+                await Clients.Group(meetingGroup.Id.ToString()).SendAsync("NewMessage", message);
             }
         }
 
@@ -134,7 +134,7 @@ namespace API.SignalRHub
             var meetingGroup = await repos.Meetings.GetMeetingForConnection(Context.ConnectionId);
             if (meetingGroup != null)
             {
-                await Clients.Group(meetingGroup.MeetingRoomId.ToString()).SendAsync("OnMuteMicro", new { username = Context.User.GetUsername(), mute = muteMicro });
+                await Clients.Group(meetingGroup.Id.ToString()).SendAsync("OnMuteMicro", new { username = Context.User.GetUsername(), mute = muteMicro });
             }
             else
             {
@@ -150,7 +150,7 @@ namespace API.SignalRHub
             var meetingGroup = await repos.Meetings.GetMeetingForConnection(Context.ConnectionId);
             if (meetingGroup != null)
             {
-                await Clients.Group(meetingGroup.MeetingRoomId.ToString()).SendAsync("OnMuteCamera", new { username = Context.User.GetUsername(), mute = muteCamera });
+                await Clients.Group(meetingGroup.Id.ToString()).SendAsync("OnMuteCamera", new { username = Context.User.GetUsername(), mute = muteCamera });
             }
             else
             {
@@ -193,7 +193,7 @@ namespace API.SignalRHub
             FunctionTracker.Instance().AddHubFunc("Hub/Chat: RemoveConnectionFromGroup()");
             Meeting group = await repos.Meetings.GetMeetingForConnection(Context.ConnectionId);
             var connection = group.Connections.FirstOrDefault(x => x.Id == Context.ConnectionId);
-            repos.Rooms.RemoveConnection(connection);
+            repos.Meetings.RemoveConnection(connection);
 
            return group;
         }

@@ -23,7 +23,6 @@ namespace DataLayer.DBContext
         public virtual DbSet<GroupMember> GroupMembers { get; set; }
         public virtual DbSet<GroupSubject> GroupSubjects { get; set; }
         public virtual DbSet<Meeting> Meetings { get; set; }
-        public virtual DbSet<MeetingRoom> MeetingRooms { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Subject> Subjects { get; set; }
 

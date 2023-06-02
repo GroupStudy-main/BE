@@ -14,7 +14,7 @@ namespace ShareResource.Mapper
 
             MapGroup();
 
-            CreateMap<MeetingRoom, RoomDto>();
+            //CreateMap<MeetingRoom, MeetingDto>();
             //.ForMember(dest => dest.DisplayName, opt => opt.MapFrom(src => src.AppUser.DisplayName))
             //.ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.AppUser.UserName));
 

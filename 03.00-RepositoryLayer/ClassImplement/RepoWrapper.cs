@@ -32,18 +32,18 @@ namespace RepositoryLayer.ClassImplement
             } 
         }
 
-        private IMeetingRoomRepository meetingRooms;
-        public IMeetingRoomRepository Rooms
-        {
-            get
-            {
-                if (meetingRooms is null)
-                {
-                    meetingRooms = new MeetingRoomRepository(dbContext, mapper);
-                }
-                return meetingRooms;
-            }
-        }
+        //private IMeetingRepository meetingRooms;
+        //public IMeetingRepository Meetings
+        //{
+        //    get
+        //    {
+        //        if (meetingRooms is null)
+        //        {
+        //            meetingRooms = new MeetingRepository(dbContext, mapper);
+        //        }
+        //        return meetingRooms;
+        //    }
+        //}
 
         private IMeetingRepository meeting;
 
@@ -53,7 +53,7 @@ namespace RepositoryLayer.ClassImplement
             {
                 if (meeting is null)
                 {
-                    meeting = new MeetingRepository(dbContext);
+                    meeting = new MeetingRepository(dbContext, mapper);
                 }
                 return meeting;
             }

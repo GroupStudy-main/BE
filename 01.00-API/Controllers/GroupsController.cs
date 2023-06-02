@@ -119,7 +119,7 @@ namespace API.Controllers
             int studentId = HttpContext.User.GetUserId();
             List<int> leadGroupIds = (await services.Groups.GetLeaderGroupsIdAsync(studentId));
 
-            if (leadGroupsId)
+            if (!leadGroupIds.Contains(id))
             {
                 return Unauthorized("You can't update other's group");
             }
