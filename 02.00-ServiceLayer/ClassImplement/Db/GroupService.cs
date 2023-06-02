@@ -24,7 +24,7 @@ namespace ServiceLayer.ClassImplement.Db
             return repos.Groups.GetList();
         }
 
-        public async Task<IQueryable<Group>> GetGroupsJoinedByStudentAsync(int studentId)
+        public async Task<IQueryable<Group>> GetMemberGroupsAsync(int studentId)
         {
             var list = repos.GroupMembers.GetList()
                 .Include(e => e.Group).ThenInclude(e => e.GroupMembers)
@@ -33,7 +33,7 @@ namespace ServiceLayer.ClassImplement.Db
             return list2;
         }
 
-        public async Task<IQueryable<Group>> GetGroupsLeadByStudentAsync(int studentId)
+        public async Task<IQueryable<Group>> GetLeaderGroupsAsync(int studentId)
         {
             return repos.GroupMembers.GetList()
                 .Include(e => e.Group).ThenInclude(e=>e.GroupMembers)
@@ -66,5 +66,12 @@ namespace ServiceLayer.ClassImplement.Db
             await repos.Groups.UpdateAsync(entity);
         }
 
+        public async Task<List<int>> GetLeaderGroupsIdAsync(int studentId)
+        {
+            return repos.GroupMembers.GetList()
+                .Include(e => e.Group).ThenInclude(e => e.GroupMembers)
+                .Where(e => e.AccountId == studentId && e.State == GroupMemberState.Leader)
+                .Select(e => e.GroupId).ToList();
+        }
     }
 }

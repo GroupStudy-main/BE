@@ -20,7 +20,14 @@ namespace ServiceLayer.Interface.Db
         public Task CreateAsync(Group group, int creatorId);
         public Task UpdateAsync(Group group);
         public Task RemoveAsync(int id);
-        public Task<IQueryable<Group>> GetGroupsJoinedByStudentAsync(int studentId);
-        public Task<IQueryable<Group>> GetGroupsLeadByStudentAsync(int studentId);
+        /// <summary>
+        /// Get a list of groups student has joined
+        /// </summary>
+        /// <param name="studentId"></param>
+        /// <returns></returns>
+        public Task<IQueryable<Group>> GetMemberGroupsAsync(int studentId);
+
+        public Task<IQueryable<Group>> GetLeaderGroupsAsync(int leaderId);
+        public Task<List<int>> GetLeaderGroupsIdAsync(int leaderId);
     }
 }

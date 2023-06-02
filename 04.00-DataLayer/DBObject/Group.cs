@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
+using System.Collections.ObjectModel;
 
 namespace DataLayer.DBObject
 {
@@ -12,7 +13,7 @@ namespace DataLayer.DBObject
         public string Name { get; set; }
 
         #region Group Member
-        public virtual ICollection<GroupMember> GroupMembers { get; set; }
+        public virtual ICollection<GroupMember> GroupMembers { get; set; } = new Collection<GroupMember>();
         #endregion
         
         #region Meeting Room

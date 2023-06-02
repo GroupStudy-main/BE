@@ -33,34 +33,18 @@ namespace API.Controllers
             this.mapper = mapper;
         }
 
-        // GET: api/Groups
-        [SwaggerOperation(
-           Summary = $"[{Actor.Test}/{Finnished.False}]Get list of group",
-           Description = $"[{Actor.Test}/{Finnished.False}]Get list of group"
-       )]
-        [HttpGet]
-        public async Task<IActionResult> GetGroups()
-        {
-            IQueryable<Group> list = services.Groups.GetList();
-            if (list == null|| !list.Any())
-          {
-              return NotFound();
-          }
-            var mapped = list.ProjectTo<GroupGetListDto>(mapper.ConfigurationProvider);
-            return Ok(mapped);
-        }
 
         // GET: api/Groups/Join
         [SwaggerOperation(
-           Summary = $"[{Actor.Student}/{Finnished.False}]Get list of group you joined",
-           Description = "Get list of group you joined"
+           Summary = $"[{Actor.Student}/{Finnished.True}]Get list of groups student joined",
+           Description = "Get list of groups student joined"
        )]
         [Authorize(Roles =Actor.Student)]
         [HttpGet("Join")]
         public async Task<IActionResult> GetJoinedGroups()
         {
             int studentId = HttpContext.User.GetUserId();
-            IQueryable<Group> list = await services.Groups.GetGroupsJoinedByStudentAsync(studentId);
+            IQueryable<Group> list = await services.Groups.GetMemberGroupsAsync(studentId);
             if (list == null || !list.Any())
             {
                 return NotFound();
@@ -71,25 +55,42 @@ namespace API.Controllers
 
         // GET: api/Groups/Lead
         [SwaggerOperation(
-           Summary = $"[{Actor.Leader}/{Finnished.False}] Get list of dto you lead",
-           Description = "Get list of dto you lead"
+           Summary = $"[{Actor.Leader}/{Finnished.True}] Get list of groups where student is leader",
+           Description = "Get list of groups where student is leader"
        )]
         [Authorize(Roles =Actor.Student)]
         [HttpGet("Lead")]
         public async Task<IActionResult> GetLeadGroups()
         {
             int studentId = HttpContext.User.GetUserId();
-            IQueryable<Group> list = await services.Groups.GetGroupsLeadByStudentAsync(studentId);
+            IQueryable<Group> list = await services.Groups.GetLeaderGroupsAsync(studentId);
             if (list == null || !list.Any())
             {
                 return NotFound();
             }
-            return Ok(list);
+            var mapped = list.ProjectTo<GroupGetListDto>(mapper.ConfigurationProvider);
+            return Ok(mapped);
+        }
+
+        // POST: api/Groups
+        [SwaggerOperation(
+           Summary = $"[{Actor.Leader}/{Finnished.True}] create new group for leader",
+           Description = "create new group for leader"
+       )]
+        [Authorize(Roles = Actor.Student)]
+        [HttpPost]
+        public async Task<ActionResult<Group>> CreateGroup(GroupCreateDto dto)
+        {
+            int creatorId = HttpContext.User.GetUserId();
+            Group group = mapper.Map<Group>(dto);
+            await services.Groups.CreateAsync(group, creatorId);
+
+            return Ok();
         }
 
         [SwaggerOperation(
-          Summary = $"[{Actor.Test}/{Finnished.False}] Get dto by Id",
-          Description = "Get dto by Id"
+          Summary = $"[{Actor.Test}/{Finnished.False}] Get group by Id",
+          Description = "Get group by Id"
       )]
         // GET: api/Groups/5
         [HttpGet("{id}")]
@@ -104,30 +105,23 @@ namespace API.Controllers
 
             return Ok(group);
         }
-        // POST: api/Groups
-        [Authorize(Roles =Actor.Student)]
-        [HttpPost]
-        public async Task<ActionResult<Group>> CreateGroup(GroupCreateDto dto)
-        {
-            int creatorId = HttpContext.User.GetUserId();
-            Group group = mapper.Map<Group>(dto);
-            await services.Groups.CreateAsync(group, creatorId);
-
-            return Ok(mapper);
-        }
+        
 
         // PUT: api/Groups/5
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateGroup(int id, GroupUpdateDto dto)
         {
-            if (id != HttpContext.User.GetUserId())
-            {
-                return Unauthorized("You can't update other's profile");
-            }
             if (id != dto.Id)
             {
                 return BadRequest();
+            }
+            int studentId = HttpContext.User.GetUserId();
+            List<int> leadGroupIds = (await services.Groups.GetLeaderGroupsIdAsync(studentId));
+
+            if (leadGroupsId)
+            {
+                return Unauthorized("You can't update other's group");
             }
 
             var group = await services.Groups.GetByIdAsync(id);
@@ -154,7 +148,23 @@ namespace API.Controllers
             }
         }
 
-        
+        // GET: api/Groups
+        [SwaggerOperation(
+           Summary = $"[{Actor.Test}/{Finnished.True}]Get leadGroupIds of group",
+           Description = "Get leadGroupIds of group"
+       )]
+        [HttpGet]
+        public async Task<IActionResult> GetGroups()
+        {
+            IQueryable<Group> list = services.Groups.GetList();
+            if (list == null || !list.Any())
+            {
+                return NotFound();
+            }
+            var mapped = list.ProjectTo<GroupGetListDto>(mapper.ConfigurationProvider);
+            return Ok(mapped);
+        }
+
 
         //// DELETE: api/Groups/5
         //[HttpDelete("{id}")]

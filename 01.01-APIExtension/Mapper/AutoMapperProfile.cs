@@ -27,12 +27,12 @@ namespace ShareResource.Mapper
                     src => src.SubjectIds.Select(id => new GroupSubject { SubjectId = (int)id })
                 ));
             CreateMap<Group, GroupGetListDto>()
-                .PreserveReferences()
                 .ForMember(dest => dest.MemberCount, opt => opt.MapFrom<int>(
                     src => src.GroupMembers
                         .Where(e => e.State == GroupMemberState.Leader|| e.State == GroupMemberState.Member)
-                        .Count()
-                ));
+                        .Count()))
+                .PreserveReferences()
+                ;
         }
 
         private void MapAccount()

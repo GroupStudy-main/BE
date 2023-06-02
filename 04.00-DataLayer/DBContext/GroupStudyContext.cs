@@ -387,6 +387,7 @@ namespace DataLayer.DBContext
                 #endregion
                 );
                 #endregion
+                #region Seed GroupMembers
                 modelBuilder.Entity<GroupMember>().HasData(
                     #region Member Group 1
                     new GroupMember
@@ -497,10 +498,7 @@ namespace DataLayer.DBContext
                     #endregion
                );
                 #endregion
-
-
-
-
+                #endregion
             }
         }
     }
