@@ -2,6 +2,7 @@ using API;
 using API.SignalRHub;
 using API.SignalRHub.Tracker;
 using APIExtension.Auth;
+using APIExtension.ImMemorySeeding;
 using DataLayer.DBContext;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Builder;
@@ -16,6 +17,7 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 IConfiguration configuration = builder.Configuration;
 IWebHostEnvironment environment = builder.Environment;
+bool IsInMemory = configuration["ConnectionStrings:InMemory"].ToLower() == "true";
 // Add services to the container.
 
 builder.Services.AddControllers().AddJsonOptions(options =>
@@ -31,8 +33,14 @@ builder.Services.AddDbContext<GroupStudyContext>(options =>
 {
     options.EnableSensitiveDataLogging();
     //options.EnableRetryOnFailure
-    //options.UseSqlServer(configuration.GetConnectionString("Default"));
-    options.UseInMemoryDatabase("GroupStudy");
+    if (IsInMemory)
+    {
+        options.UseInMemoryDatabase("GroupStudy");
+    }
+    else
+    {
+        options.UseSqlServer(configuration.GetConnectionString("Default"));
+    }
 });
 //Use for scaffolding api controller. remove later
 builder.Services.AddDbContext<TempContext>(options =>
@@ -60,22 +68,24 @@ builder.Services.AddJwtAuthService(configuration);
 builder.Services.AddSwaggerGen(options =>
 {
     options.EnableAnnotations();
-#region auth
+    #region auth
     options.AddJwtAuthUi();
-    //options.AddGoogleAuthUi
     options.AddGoogleAuthUi(configuration);
-#endregion
+    #endregion
 });
 
 
 var app = builder.Build();
-
+if (IsInMemory)
+{
+    app.SeedInMemoryDb();
+}
 // Configure the HTTP request pipeline.
 
 app.UseSwagger();
 app.UseSwaggerUI(options =>
 {
-#region setGoogle loginPage
+    #region setGoogle loginPage
     options.SetGoogleAuthUi(configuration);
     #endregion
 });

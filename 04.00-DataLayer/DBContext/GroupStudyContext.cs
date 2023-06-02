@@ -384,59 +384,59 @@ namespace DataLayer.DBContext
                         GroupId = 3,
                         SubjectId = (int)SubjectEnum.Gdcd
                     }
-                      #endregion
+                #endregion
                 );
                 #endregion
                 modelBuilder.Entity<GroupMember>().HasData(
-                #region Member Group 1
-                   new GroupMember
-                   {
+                    #region Member Group 1
+                    new GroupMember
+                    {
                        Id = 1,
                        GroupId = 1,
                        AccountId = 1,
                        State = GroupMemberState.Leader
-                   },
-                   new GroupMember
-                   {
-                       Id = 2,
-                       GroupId = 1,
-                       AccountId = 2,
-                       State = GroupMemberState.Member,
-                       InviteMessage = "Nhóm của mình rất hay. Bạn vô nha"
-                   },
-                   new GroupMember
-                   {
-                       Id = 3,
-                       GroupId = 1,
-                       AccountId = 3,
-                       State = GroupMemberState.Inviting,
-                       InviteMessage = "Nhóm của mình rất hay. Bạn vô nha"
-                   },
-                   new GroupMember
-                   {
-                       Id = 4,
-                       GroupId = 1,
-                       AccountId = 4,
-                       State = GroupMemberState.Requesting,
-                       RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha"
-                   },
-                   new GroupMember
-                   {
-                       Id = 5,
-                       GroupId = 1,
-                       AccountId = 5,
-                       State = GroupMemberState.Banned,
-                       RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha"
-                   },
-                   #endregion
-                   #region Member group 2
-                   new GroupMember
-                   {
-                       Id = 6,
-                       GroupId = 2,
-                       AccountId = 1,
-                       State = GroupMemberState.Leader
-                   },
+                    },
+                    new GroupMember
+                    {
+                        Id = 2,
+                        GroupId = 1,
+                        AccountId = 2,
+                        State = GroupMemberState.Member,
+                        InviteMessage = "Nhóm của mình rất hay. Bạn vô nha"
+                    },
+                    new GroupMember
+                    {
+                        Id = 3,
+                        GroupId = 1,
+                        AccountId = 3,
+                        State = GroupMemberState.Inviting,
+                        InviteMessage = "Nhóm của mình rất hay. Bạn vô nha"
+                    },
+                    new GroupMember
+                    {
+                        Id = 4,
+                        GroupId = 1,
+                        AccountId = 4,
+                        State = GroupMemberState.Requesting,
+                        RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha"
+                    },
+                    new GroupMember
+                    {
+                        Id = 5,
+                        GroupId = 1,
+                        AccountId = 5,
+                        State = GroupMemberState.Banned,
+                        RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha"
+                    },
+                    #endregion
+                    #region Member group 2
+                    new GroupMember
+                    {
+                        Id = 6,
+                        GroupId = 2,
+                        AccountId = 1,
+                        State = GroupMemberState.Leader
+                    },
                     new GroupMember
                     {
                         Id = 7,
