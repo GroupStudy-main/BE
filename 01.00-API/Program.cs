@@ -50,6 +50,18 @@ builder.Services.AddDbContext<TempContext>(options =>
 });
 #endregion
 
+#region cors
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("signalr",builder => builder
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials()
+        .SetIsOriginAllowed(hostName => true));
+
+});
+#endregion
+
 #region SignalR
 builder.Services.AddSignalR();
 #endregion
@@ -91,6 +103,7 @@ app.UseSwaggerUI(options =>
 });
 app.UseStaticFiles();
 
+app.UseCors("signalr");
 
 app.UseHttpsRedirection();
 
