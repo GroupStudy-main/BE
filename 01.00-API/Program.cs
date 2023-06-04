@@ -112,6 +112,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapHub<PresenceHub>("hubs/presence");
-app.MapHub<ChatHub>("hubs/chathub");
+app.MapHub<MeetHub>("hubs/chathub");
 
 app.Run();

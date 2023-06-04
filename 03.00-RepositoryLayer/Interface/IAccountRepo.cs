@@ -6,5 +6,6 @@ namespace RepositoryLayer.Interface
     {
         Task<Account> GetByUsernameAsync(string email);
         Task<Account> GetByUsernameOrEmailAndPasswordAsync(string usernameOrEmail, string password);
+        Task<Account> GetProfileByIdAsync(int id);
     }
 }

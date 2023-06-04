@@ -1,4 +1,4 @@
-﻿alert("google Ui script worked 2");
+﻿alert("google Ui script worked");
 window.swaggerUiAuth = window.swaggerUiAuth || {};
 window.swaggerUiAuth.tokenName = 'id_token';
 if (!window.isOpenReplaced) {

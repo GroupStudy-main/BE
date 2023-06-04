@@ -29,6 +29,13 @@ namespace RepositoryLayer.ClassImplement
             return base.GetByIdAsync(id);
         }
 
+        public async Task<Account> GetProfileByIdAsync(int id)
+        {
+            return await dbContext.Accounts
+                 .Include(e => e.Role)
+                 .Include(e => e.GroupMembers).ThenInclude(e => e.Group)
+                 .SingleOrDefaultAsync(e => e.Id == id);
+        } 
         public async Task<Account> GetByUsernameAsync(string username)
         {
             return await dbContext.Accounts
@@ -47,6 +54,7 @@ namespace RepositoryLayer.ClassImplement
         {
             return base.GetList();
         }
+
 
         public override Task RemoveAsync(int id)
         {

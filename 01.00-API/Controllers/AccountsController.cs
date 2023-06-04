@@ -1,28 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using API;
+﻿using Microsoft.AspNetCore.Mvc;
 using DataLayer.DBObject;
-using DataLayer.DBContext;
 using API.SignalRHub.Tracker;
 using API.SignalRHub;
 using Microsoft.AspNetCore.SignalR;
 using RepositoryLayer.Interface;
-using ShareResource.DTO.Connection;
 using ShareResource.DTO;
-using ShareResource;
 using Microsoft.AspNetCore.Authorization;
 using ServiceLayer.Interface;
 using ShareResource.Enums;
-using System.Reflection;
 using APIExtension.ClaimsPrinciple;
 using APIExtension.UpdateApiExtension;
 using Swashbuckle.AspNetCore.Annotations;
 using APIExtension.Const;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using ShareResource.DTO.Account;
 
 namespace API.Controllers
 {
@@ -36,101 +28,60 @@ namespace API.Controllers
         private readonly IRepoWrapper unitOfWork;
         private readonly IHubContext<PresenceHub> presenceHub;
         private readonly PresenceTracker presenceTracker;
-        public AccountsController(IServiceWrapper services, IRepoWrapper unitOfWork, IHubContext<PresenceHub> presenceHub, PresenceTracker presenceTracker)
+        private readonly IMapper mapper;
+
+        public AccountsController(IServiceWrapper services, IRepoWrapper unitOfWork, IHubContext<PresenceHub> presenceHub, PresenceTracker presenceTracker, IMapper mapper)
         {
             this.services = services;
             this.unitOfWork = unitOfWork;
             this.presenceHub = presenceHub;
             this.presenceTracker = presenceTracker;
+            this.mapper = mapper;
         }
 
+        //Get: api/Accounts/search
         [SwaggerOperation(
-          Summary = $"[{Actor.Test}/{Finnished.False}] Get all the account"
-      )]
-        // GET: api/Accounts
-        [HttpGet]
-        public async Task<IActionResult> GetAccount()
+         Summary = $"[{Actor.Student_Parent}/{Finnished.False}/{Auth.True}] Search students by id, username, mail, Full Name"
+       )]
+        [Authorize(Roles = Actor.Student_Parent)]
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchStudent(string search)
         {
-            IQueryable<Account> list = services.Accounts.GetList();
-            if (list == null || !list.Any())
+            var list = services.Accounts.SearchStudents(search);
+
+            if (list == null)
             {
                 return NotFound();
             }
+            var mapped = list.ProjectTo<AccountProfileDto>(mapper.ConfigurationProvider);
             return Ok(list);
         }
 
-        // GET: api/Accounts/Student
-        [SwaggerOperation(
-          Summary = $"[{Actor.Test}/{Finnished.False}] Get all the student account"
-      )]
-        [HttpGet("Student")]
-        public async Task<IActionResult> GetStudents()
-        {
-            IQueryable<Account> list = services.Accounts.GetList().Where(e => e.RoleId == (int)RoleNameEnum.Student);
-            if (list == null || !list.Any())
-            {
-                return NotFound();
-            }
-            return Ok(list);
-        }
-
-        // GET: api/Accounts/Student
-        [SwaggerOperation(
-          Summary = $"[{Actor.Test}/{Finnished.False}] Get all the parent account"
-        )]
-        [HttpGet("Parent")]
-        public async Task<IActionResult> GetParents()
-        {
-            IQueryable<Account> list = services.Accounts.GetList().Where(e => e.RoleId == (int)RoleNameEnum.Parent);
-            if (list == null || !list.Any())
-            {
-                return NotFound();
-            }
-            return Ok(list);
-        }
-
-        [SwaggerOperation(
-          Summary = $"[{Actor.Test}/{Finnished.False}] Get account info"
-        )]
         // GET: api/Accounts/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetUser(int id)
-        {
-            var user = await services.Accounts.GetByIdAsync(id);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(user);
-        }
-
-
         [SwaggerOperation(
-          Summary = $"[{Actor.Student_Parent}/{Finnished.No_Test}/{Auth.True}] Get the logined profile"
+          Summary = $"[{Actor.Student_Parent}/{Finnished.True}/{Auth.True}] Get the self profile"
         )]
-        // GET: api/Accounts/5
-        [Authorize(Roles ="Student, Parent")]
+        [Authorize(Roles = Actor.Student_Parent)]
+        //[Authorize(Roles = "Student, Parent")]
         [HttpGet("profile")]
         public async Task<IActionResult> GetProfile()
         {
             int id = HttpContext.User.GetUserId();
-            var user = await services.Accounts.GetByIdAsync(id);
+            var user = await services.Accounts.GetProfileByIdAsync(id);
 
             if (user == null)
             {
                 return NotFound();
             }
-
+                  var mapped = mapper.Map<AccountProfileDto>(user);
             return Ok(user);
         }
 
-        [SwaggerOperation(
-          Summary = $"[{Actor.Student_Parent}/{Finnished.No_Test}/{Auth.True}] Update logined profile"
-        )]
+
         // PUT: api/Accounts/5
-        
+        [SwaggerOperation(
+          Summary = $"[{Actor.Student_Parent}/{Finnished.True}/{Auth.True}] Update logined profile"
+        )]
         [Authorize(Roles = "Student, Parent")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProfile(int id, AccountUpdateDto dto)
@@ -168,11 +119,10 @@ namespace API.Controllers
             }
         }
 
+        // PUT: api/Accounts/5/Password
         [SwaggerOperation(
-          Summary = $"[{Actor.Student_Parent}/{Finnished.No_Test}/{Auth.True}] Update logined profile"
+          Summary = $"[{Actor.Student_Parent}/{Finnished.No_Test}/{Auth.True}] Update account password"
         )]
-        // PUT: api/Accounts/5
-        
         [Authorize(Roles = Actor.Student_Parent)]
         [HttpPut("{id}/Password")]
         public async Task<IActionResult> ChangePassword(int id, AccountChangePasswordDto dto)
@@ -213,21 +163,68 @@ namespace API.Controllers
                 }
             }
         }
+        /// ///////////////////////////////////////////////////////////////////////////////////////////////
+        [SwaggerOperation(
+            Summary = $"[{Actor.Test}/{Finnished.False}] Get all the account"
+        )]
+        // GET: api/Accounts
+        [HttpGet]
+        public async Task<IActionResult> GetAccount()
+        {
+            IQueryable<Account> list = services.Accounts.GetList();
+            if (list == null || !list.Any())
+            {
+                return NotFound();
+            }
+            var mapped = list.ProjectTo<StudentGetDto>(mapper.ConfigurationProvider);
+            return Ok(mapped);
+        }
+        // GET: api/Accounts/Student
+        [SwaggerOperation(
+          Summary = $"[{Actor.Test}/{Finnished.False}] Get all the student account"
+      )]
+        [HttpGet("Student")]
+        public async Task<IActionResult> GetStudents()
+        {
+            IQueryable<Account> list = services.Accounts.GetList().Where(e => e.RoleId == (int)RoleNameEnum.Student);
+            if (list == null || !list.Any())
+            {
+                return NotFound();
+            }
+            var mapped = list.ProjectTo<StudentGetDto>(mapper.ConfigurationProvider);
+            return Ok(mapped);
+        }
 
-        //// POST: api/Accounts
-        //
-        //[HttpPost]
-        //public async Task<ActionResult<Account>> PostUser(Account dto)
-        //{
-        //  if (services.Accounts == null)
-        //  {
-        //      return Problem("Entity set 'TempContext.User'  is null.");
-        //  }
-        //    services.Accounts.Add(dto);
-        //    await services.SaveChangesAsync();
+        // GET: api/Accounts/Student
+        [SwaggerOperation(
+          Summary = $"[{Actor.Test}/{Finnished.False}] Get all the parent account"
+        )]
+        [HttpGet("Parent")]
+        public async Task<IActionResult> GetParents()
+        {
+            IQueryable<Account> list = services.Accounts.GetList().Where(e => e.RoleId == (int)RoleNameEnum.Parent);
+            if (list == null || !list.Any())
+            {
+                return NotFound();
+            }
+            return Ok(list);
+        }
+        [SwaggerOperation(
+          Summary = $"[{Actor.Test}/{Finnished.False}] Get account info"
+        )]
+        // GET: api/Accounts/5
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUser(int id)
+        {
+            var user = await services.Accounts.GetByIdAsync(id);
 
-        //    return CreatedAtAction("GetAccount", new { id = dto.Id }, dto);
-        //}
+            if (user == null)
+            {
+                return NotFound();
+            }
+            var mapped = mapper.Map<StudentGetDto>(user);
+            return Ok(mapped);
+        }
 
         //// DELETE: api/Accounts/5
         //[HttpDelete("{id}")]

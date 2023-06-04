@@ -17,6 +17,10 @@ namespace ServiceLayer.ClassImplement
         {
             this.repos = repos;
             this.configuration = configuration;
+            users = new AccountService(repos);
+            auth = new AuthService(repos, configuration);
+            classes = new ClassService(repos);
+            subjects = new SubjectService(repos);
         }
 
         private IAccountService users;
@@ -55,6 +59,32 @@ namespace ServiceLayer.ClassImplement
                     groups = new GroupService(repos);
                 }
                 return groups;
+            }
+        }
+
+        private IClassService classes;
+        public IClassService Classes
+        {
+            get
+            {
+                if (classes is null)
+                {
+                    classes = new ClassService(repos);
+                }
+                return classes;
+            }
+        }
+
+        private ISubjectService subjects;
+        public ISubjectService Subjects
+        {
+            get
+            {
+                if (subjects is null)
+                {
+                    subjects = new SubjectService(repos);
+                }
+                return subjects;
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DataLayer.DBObject;
 using ShareResource.DTO;
+using ShareResource.DTO.Account;
 using ShareResource.Enums;
 
 namespace ShareResource.Mapper
@@ -14,10 +15,17 @@ namespace ShareResource.Mapper
 
             MapGroup();
 
+            MapRole();
             //CreateMap<MeetingRoom, MeetingDto>();
             //.ForMember(dest => dest.DisplayName, opt => opt.MapFrom(src => src.AppUser.DisplayName))
             //.ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.AppUser.UserName));
 
+        }
+
+        private void MapRole()
+        {
+            CreateMap<Role, RoleGetDto>()
+                .PreserveReferences();
         }
 
         private void MapGroup()
@@ -37,8 +45,15 @@ namespace ShareResource.Mapper
 
         private void MapAccount()
         {
-            BasicMap<Account, AccountGetDto, AccountRegisterDto, AccountUpdateDto>();
+            BasicMap<Account, StudentGetDto, AccountRegisterDto, AccountUpdateDto>();
             CreateMap<Account, MemberDto>();
+            CreateMap<Account, AccountProfileDto>()
+                .ForMember(dest => dest.RoleName, opt => opt.MapFrom(
+                    src => src.Role.Name))
+                .ForMember(dest => dest.LeadGroups, opt => opt.MapFrom(
+                    src => src.GroupMembers.Where(e => e.State == GroupMemberState.Leader).Select(e => e.Group)))
+                .ForMember(dest => dest.JoinGroups, opt => opt.MapFrom(
+                    src => src.GroupMembers.Where(e => e.State == GroupMemberState.Member).Select(e => e.Group)));
         }
 
         private void BasicMap<TDbEntity, TGetDto, TCreateDto, TUpdateDto>()

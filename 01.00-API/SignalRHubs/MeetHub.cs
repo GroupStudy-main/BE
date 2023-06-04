@@ -10,7 +10,7 @@ using ShareResource.DTO.Connection;
 namespace API.SignalRHub
 {
     [Authorize]
-    public class ChatHub : Hub
+    public class MeetHub : Hub
     {
         //IMapper _mapper;
         IHubContext<PresenceHub> presenceHubContext;
@@ -18,7 +18,7 @@ namespace API.SignalRHub
         IRepoWrapper repos;
         ShareScreenTracker shareScreenTracker;
 
-        public ChatHub(IRepoWrapper repos, ShareScreenTracker shareScreenTracker, PresenceTracker presenceTracker, IHubContext<PresenceHub> presenceHubContext)
+        public MeetHub(IRepoWrapper repos, ShareScreenTracker shareScreenTracker, PresenceTracker presenceTracker, IHubContext<PresenceHub> presenceHubContext)
         {
             //Console.WriteLine("2.   " + new String('+', 50));
             //Console.WriteLine("2.   Hub/Chat: ctor(IUnitOfWork, UserShareScreenTracker, PresenceTracker, PresenceHub)");

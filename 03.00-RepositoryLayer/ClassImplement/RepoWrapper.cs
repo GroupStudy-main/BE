@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DataLayer.DBContext;
+using Microsoft.EntityFrameworkCore;
 using RepositoryLayer.Interface;
 using System;
 using System.Collections.Generic;
@@ -18,18 +19,24 @@ namespace RepositoryLayer.ClassImplement
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
+            users = new AccountRepo(dbContext);
+            meeting = new MeetingRepository(dbContext, mapper);
+            groupMembers = new GroupMemberReposity(dbContext);
+            classes = new ClassRepository(dbContext);
+            subjects = new SubjectRepository(dbContext);
         }
 
         private IAccountRepo users;
-        public IAccountRepo Accounts { 
-            get 
-            { 
-                if(users is null)
+        public IAccountRepo Accounts
+        {
+            get
+            {
+                if (users is null)
                 {
                     users = new AccountRepo(dbContext);
                 }
-                return users; 
-            } 
+                return users;
+            }
         }
 
         //private IMeetingRepository meetingRooms;
@@ -73,6 +80,7 @@ namespace RepositoryLayer.ClassImplement
         }
 
         private IGroupMemberReposity groupMembers;
+
         public IGroupMemberReposity GroupMembers
         {
             get
@@ -82,6 +90,33 @@ namespace RepositoryLayer.ClassImplement
                     groupMembers = new GroupMemberReposity(dbContext);
                 }
                 return groupMembers;
+            }
+        }
+
+        private IClassReposity classes;
+
+        public IClassReposity Classes
+        {
+            get
+            {
+                if (classes is null)
+                {
+                    classes = new ClassRepository(dbContext);
+                }
+                return classes;
+            }
+        }
+
+        private ISubjectRepository subjects;
+        public ISubjectRepository Subjects
+        {
+            get
+            {
+                if (subjects is null)
+                {
+                    subjects = new SubjectRepository(dbContext);
+                }
+                return subjects;
             }
         }
     }

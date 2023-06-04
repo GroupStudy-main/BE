@@ -54,7 +54,7 @@ namespace APIExtension.Auth
                         }
                     },
                     new List<string> {/*"openid",*/ "email", "profile", "https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile" }
-                }
+                }                                               
             });
             return options;
         }
@@ -72,7 +72,7 @@ namespace APIExtension.Auth
             #region google access token
             options.OAuthClientId(configuration["Authentication:Google:Web:client_id"]);
     options.OAuthClientSecret(configuration["Authentication:Google:Web:client_secret"]);
-            //options.InjectJavascript("/googleSwaggerUi.js");
+            options.InjectJavascript("/Swaggers/googleSwaggerUi.js");
             #endregion
             return options;
         }

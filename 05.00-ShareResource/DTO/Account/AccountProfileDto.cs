@@ -6,11 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShareResource.DTO
+namespace ShareResource.DTO.Account
 {
-    public class AccountGetDto  :BaseGetDto
+    public class AccountProfileDto
     {
-        [Key]
         public int Id { get; set; }
         public string Username { get; set; }
         [EmailAddress]
@@ -18,12 +17,10 @@ namespace ShareResource.DTO
         public string Phone { get; set; }
         public string FullName { get; set; }
 
-        //Role
-        [ForeignKey("RoleId")]
-        public int RoleId { get; set; }
-        public virtual RoleGetDto Role { get; set; }
+        public string RoleName { get; set; }
 
         // Group Member
-        public virtual ICollection<GroupMemberGetDto> GroupMember { get; set; }
+        public virtual ICollection<GroupGetListDto> LeadGroups { get; set; }
+        public virtual ICollection<GroupGetListDto> JoinGroups { get; set; }
     }
 }

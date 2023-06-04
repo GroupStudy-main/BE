@@ -20,6 +20,8 @@ namespace API
         //public DbSet<MeetingRoom> MeetingRooms { get; set; }
         public DbSet<Meeting> Meetings { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
+        public DbSet<DataLayer.DBObject.Class>? Class { get; set; }
+        public DbSet<DataLayer.DBObject.Subject>? Subject { get; set; }
 
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{

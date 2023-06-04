@@ -30,37 +30,7 @@ namespace API.Controllers
             this.mapper = mapper;
         }
 
-        [SwaggerOperation(
-            Summary = $"[{Actor.Student}/{Finnished.True}] Register for student with form",
-            Description = "Login for student with form"
-        )]
-        [HttpPost("Register/Student")] 
-        public async Task<IActionResult> StudentRegister(AccountRegisterDto dto)
-        {
-            if(dto.Password!=dto.ConfirmPassword)
-            {
-                return BadRequest("Xác nhận password không thành công");
-            }
-            Account register = mapper.Map<Account>(dto);
-            await services.Auth.Register(register, RoleNameEnum.Student);
-            return Ok(await services.Accounts.GetAccountByUserNameAsync(dto.Username));
-        }
-
-        [SwaggerOperation(
-            Summary = $"[{Actor.Guest}/{Finnished.True}] Register for student with form",
-            Description = "Login for student with form"
-        )]
-        [HttpPost("Register/Parent")]
-        public async Task<IActionResult> ParentRegister(AccountRegisterDto dto)
-        {
-            if (dto.Password != dto.ConfirmPassword)
-            {
-                return BadRequest("Xác nhận password không thành công");
-            }
-            Account register = mapper.Map<Account>(dto);
-            await services.Auth.Register(register, RoleNameEnum.Student);
-            return Ok(await services.Accounts.GetAccountByUserNameAsync(dto.Username));
-        }
+        
 
         [SwaggerOperation(
             Summary = $"[{Actor.Student_Parent}/{Finnished.True}] Login for student with username or email. Return JWT Token",
@@ -114,6 +84,73 @@ namespace API.Controllers
             return Ok(await services.Auth.GenerateJwtAsync(logined, rememberMe));
         }
 
+        [SwaggerOperation(
+            Summary = $"[{Actor.Student}/{Finnished.True}] Register for student with form",
+            Description = "Register for student with form"
+        )]
+        [HttpPost("Register/Student")]
+        public async Task<IActionResult> StudentRegister(AccountRegisterDto dto)
+        {
+            if (dto.Password != dto.ConfirmPassword)
+            {
+                return BadRequest("Xác nhận password không thành công");
+            }
+            Account register = mapper.Map<Account>(dto);
+            await services.Auth.Register(register, RoleNameEnum.Student);
+            return Ok(await services.Accounts.GetAccountByUserNameAsync(dto.Username));
+        }
+
+        [SwaggerOperation(
+            Summary = $"[{Actor.Guest}/{Finnished.True}] Register for parent with form",
+            Description = "Register for parent with form"
+        )]
+        [HttpPost("Register/Parent")]
+        public async Task<IActionResult> ParentRegister(AccountRegisterDto dto)
+        {
+            if (dto.Password != dto.ConfirmPassword)
+            {
+                return BadRequest("Xác nhận password không thành công");
+            }
+            Account register = mapper.Map<Account>(dto);
+            await services.Auth.Register(register, RoleNameEnum.Student);
+            return Ok(await services.Accounts.GetAccountByUserNameAsync(dto.Username));
+        }
+
+        [SwaggerOperation(
+           Summary = $"[{Actor.Student}/{Finnished.False}] Register for student with form",
+           Description = "Register for student with form"
+       )]
+        [HttpPost("Register/Student/Google")]
+        public async Task<IActionResult> StudentRegisterWithGgAccessToken()
+        {
+            //if (dto.Password != dto.ConfirmPassword)
+            //{
+            //    return BadRequest("Xác nhận password không thành công");
+            //}
+            //Account register = mapper.Map<Account>(dto);
+            //await services.Auth.Register(register, RoleNameEnum.Student);
+            //return Ok(await services.Accounts.GetAccountByUserNameAsync(dto.Username));
+            return BadRequest();
+        }
+
+        [SwaggerOperation(
+            Summary = $"[{Actor.Guest}/{Finnished.True}] Register for parent with form",
+            Description = "Register for parent with form"
+        )]
+        [HttpPost("Register/Parent/Google")]
+        public async Task<IActionResult> ParentRegisterWithGgAccessToken()
+        {
+            //if (dto.Password != dto.ConfirmPassword)
+            //{
+            //    return BadRequest("Xác nhận password không thành công");
+            //}
+            //Account register = mapper.Map<Account>(dto);
+            //await services.Auth.Register(register, RoleNameEnum.Student);
+            //return Ok(await services.Accounts.GetAccountByUserNameAsync(dto.Username));
+            return BadRequest();
+        }
+         /// ////////////////////////////////////////////////////////////////////////////////////////
+        
         [SwaggerOperation(
            Summary = $"[{Actor.Test}/{Finnished.True}] Get all the token sent in the header of the swagger request"
        )]
