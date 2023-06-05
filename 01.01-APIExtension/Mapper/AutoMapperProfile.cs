@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using DataLayer.DBObject;
 using ShareResource.DTO;
-using ShareResource.DTO.Account;
 using ShareResource.Enums;
 
 namespace ShareResource.Mapper
@@ -18,12 +17,30 @@ namespace ShareResource.Mapper
             MapRole();
 
             MapGroupMember();
+
+            MapMeeting();
             //CreateMap<MeetingRoom, MeetingDto>();
             //.ForMember(dest => dest.DisplayName, opt => opt.MapFrom(src => src.AppUser.DisplayName))
             //.ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.AppUser.UserName));
 
         }
-                                            
+
+        private void MapMeeting()
+        {
+            CreateMap<Meeting, ScheduleMeetingGetDto>()
+                .ForMember(dest => dest.GroupName, opt => opt.MapFrom(
+                    src => src.Group.Name))
+                .PreserveReferences();
+            CreateMap<Meeting, LiveMeetingGetDto>()
+                .ForMember(dest => dest.GroupName, opt => opt.MapFrom(
+                    src => src.Group.Name))
+                .PreserveReferences();
+            CreateMap<Meeting, HistoryMeetingGetDto>()
+                .ForMember(dest => dest.GroupName, opt => opt.MapFrom(
+                    src => src.Group.Name))
+                .PreserveReferences();
+        }
+
         private void MapGroupMember()
         {
             //Invite
@@ -31,7 +48,8 @@ namespace ShareResource.Mapper
                 .ForMember(dest => dest.GroupName, opt => opt.MapFrom(
                     src => src.Group.Name))
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(
-                    src => src.Account.Username));
+                    src => src.Account.Username))
+                .PreserveReferences();
             CreateMap<GroupMemberInviteCreateDto, GroupMember>()
                 .ForMember(dest => dest.State, opt => opt.MapFrom(src => GroupMemberState.Inviting));
             //Request
@@ -39,7 +57,8 @@ namespace ShareResource.Mapper
                 .ForMember(dest => dest.GroupName, opt => opt.MapFrom(
                     src => src.Group.Name))
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(
-                    src => src.Account.Username));
+                    src => src.Account.Username))
+                .PreserveReferences();
             CreateMap<GroupMemberRequestCreateDto, GroupMember>()
                 .ForMember(dest => dest.State, opt => opt.MapFrom(src => GroupMemberState.Requesting));
         }
@@ -61,8 +80,27 @@ namespace ShareResource.Mapper
                     src => src.GroupMembers
                         .Where(e => e.State == GroupMemberState.Leader|| e.State == GroupMemberState.Member)
                         .Count()))
-                .PreserveReferences()
-                ;
+                .PreserveReferences();
+
+            CreateMap<Group, GroupGetDetailForLeaderDto>()
+                .ForMember(dest => dest.Members, opt => opt.MapFrom(
+                    src => src.GroupMembers
+                        .Where(e => e.State == GroupMemberState.Leader || e.State == GroupMemberState.Member)
+                        .Select(e => e.Account)))
+                  .ForMember(dest => dest.JoinRequest, opt => opt.MapFrom(
+                    src => src.GroupMembers
+                        .Where(e => e.State == GroupMemberState.Requesting)))
+
+                  .ForMember(dest => dest.LiveMeetings, opt => opt.MapFrom(
+                    src => src.Meetings
+                        .Where(e => e.Start != null && e.End == null)))
+                  .ForMember(dest => dest.ScheduleMeetings, opt => opt.MapFrom(
+                    src => src.Meetings
+                        .Where(e => e.ScheduleStart != null && e.ScheduleStart.Value.Date >= DateTime.Today && e.End == null)))
+                  .ForMember(dest => dest.HistoryMeetings, opt => opt.MapFrom(
+                    src => src.Meetings
+                        .Where(e => e.End != null || (e.ScheduleStart != null && e.ScheduleStart.Value < DateTime.Today))))
+                  .PreserveReferences();
         }
 
         private void MapAccount()

@@ -55,8 +55,8 @@ namespace API.Controllers
 
         // GET: api/Groups/Join
         [SwaggerOperation(
-           Summary = $"[{Actor.Student}/{Finnished.True}]Get list of groups student joined",
-           Description = "Get list of groups student joined as leader or member"
+           Summary = $"[{Actor.Student}/{Finnished.True}]Get list of groups student joined as a member",
+           Description = "Get list of groups student joined as member"
        )]
         [Authorize(Roles = Actor.Student)]
         [HttpGet("Member")]

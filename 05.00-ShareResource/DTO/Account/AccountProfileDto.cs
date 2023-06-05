@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShareResource.DTO.Account
+namespace ShareResource.DTO
 {
     public class AccountProfileDto
     {

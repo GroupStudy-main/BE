@@ -18,6 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
 IConfiguration configuration = builder.Configuration;
 IWebHostEnvironment environment = builder.Environment;
 bool IsInMemory = configuration["ConnectionStrings:InMemory"].ToLower() == "true";
+
 // Add services to the container.
 
 builder.Services.AddControllers().AddJsonOptions(options =>

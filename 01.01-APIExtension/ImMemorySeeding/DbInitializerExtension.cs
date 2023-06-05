@@ -63,7 +63,7 @@ namespace APIExtension.ImMemorySeeding
                         {
                             Id = 1,
                             Username = "student1",
-                            FullName = "Nguyen Van A",
+                            FullName = "Tran Khai Minh Khoi InMemory",
                             Email = "trankhaiminhkhoi10a3@gmail.com",
                             Password = "123456789",
                             Phone = "0123456789",

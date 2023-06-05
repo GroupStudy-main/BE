@@ -14,7 +14,6 @@ using Swashbuckle.AspNetCore.Annotations;
 using APIExtension.Const;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using ShareResource.DTO.Account;
 
 namespace API.Controllers
 {
