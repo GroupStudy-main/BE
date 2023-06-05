@@ -28,7 +28,7 @@ namespace API.Controllers
 
         // GET: api/Classes
         [SwaggerOperation(
-            Summary = $"[{Actor.Student_Parent}/{Finnished.True}/{Auth.True}] Get list of subjects"
+            Summary = $"[{Actor.Student_Parent}/{Finnished.True}/{Auth.True}] Get list of classes"
         )]
         [Authorize(Roles = Actor.Student_Parent)]
         [HttpGet]

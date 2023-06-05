@@ -1,5 +1,6 @@
 ﻿using DataLayer.DBContext;
 using DataLayer.DBObject;
+using Microsoft.EntityFrameworkCore;
 using RepositoryLayer.Interface;
 using System;
 using System.Collections.Generic;
@@ -20,9 +21,13 @@ namespace RepositoryLayer.ClassImplement
             return base.CreateAsync(entity);
         }
 
-        public override Task<Group> GetByIdAsync(int id)
+        public override async Task<Group> GetByIdAsync(int id)
         {
-            return base.GetByIdAsync(id);
+            return await dbContext.Groups
+                .Include(e=>e.Class)
+                .Include(e=>e.GroupSubjects).ThenInclude(e=>e.Subject)
+                .Include(e=>e.Meetings)
+                .SingleOrDefaultAsync(e=>e.Id == id);
         }
 
         public override IQueryable<Group> GetList()

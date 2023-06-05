@@ -16,10 +16,32 @@ namespace ShareResource.Mapper
             MapGroup();
 
             MapRole();
+
+            MapGroupMember();
             //CreateMap<MeetingRoom, MeetingDto>();
             //.ForMember(dest => dest.DisplayName, opt => opt.MapFrom(src => src.AppUser.DisplayName))
             //.ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.AppUser.UserName));
 
+        }
+                                            
+        private void MapGroupMember()
+        {
+            //Invite
+            CreateMap<GroupMember, GroupMemberInviteGetDto>()
+                .ForMember(dest => dest.GroupName, opt => opt.MapFrom(
+                    src => src.Group.Name))
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(
+                    src => src.Account.Username));
+            CreateMap<GroupMemberInviteCreateDto, GroupMember>()
+                .ForMember(dest => dest.State, opt => opt.MapFrom(src => GroupMemberState.Inviting));
+            //Request
+            CreateMap<GroupMember, GroupMemberRequestGetDto>()
+                .ForMember(dest => dest.GroupName, opt => opt.MapFrom(
+                    src => src.Group.Name))
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(
+                    src => src.Account.Username));
+            CreateMap<GroupMemberRequestCreateDto, GroupMember>()
+                .ForMember(dest => dest.State, opt => opt.MapFrom(src => GroupMemberState.Requesting));
         }
 
         private void MapRole()

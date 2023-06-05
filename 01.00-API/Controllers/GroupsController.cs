@@ -13,7 +13,7 @@ using APIExtension.Const;
 using ServiceLayer.Interface;
 using Microsoft.AspNetCore.Authorization;
 using APIExtension.ClaimsPrinciple;
-using APIExtension.UpdateApiExtension;
+using ShareResource.UpdateApiExtension;
 using ShareResource.DTO;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -37,14 +37,33 @@ namespace API.Controllers
         // GET: api/Groups/Join
         [SwaggerOperation(
            Summary = $"[{Actor.Student}/{Finnished.True}]Get list of groups student joined",
-           Description = "Get list of groups student joined"
+           Description = "Get list of groups student joined as leader or member"
        )]
         [Authorize(Roles =Actor.Student)]
         [HttpGet("Join")]
         public async Task<IActionResult> GetJoinedGroups()
         {
             int studentId = HttpContext.User.GetUserId();
-            IQueryable<Group> list = await services.Groups.GetMemberGroupsAsync(studentId);
+            IQueryable<Group> list = await services.Groups.GetJoinGroupsOfStudentAsync(studentId);
+            if (list == null || !list.Any())
+            {
+                return NotFound();
+            }
+            var mapped = list.ProjectTo<GroupGetListDto>(mapper.ConfigurationProvider);
+            return Ok(mapped);
+        }
+
+        // GET: api/Groups/Join
+        [SwaggerOperation(
+           Summary = $"[{Actor.Student}/{Finnished.True}]Get list of groups student joined",
+           Description = "Get list of groups student joined as leader or member"
+       )]
+        [Authorize(Roles = Actor.Student)]
+        [HttpGet("Member")]
+        public async Task<IActionResult> GetMemberGroups()
+        {
+            int studentId = HttpContext.User.GetUserId();
+            IQueryable<Group> list = await services.Groups.GetMemberGroupsOfStudentAsync(studentId);
             if (list == null || !list.Any())
             {
                 return NotFound();
@@ -63,7 +82,7 @@ namespace API.Controllers
         public async Task<IActionResult> GetLeadGroups()
         {
             int studentId = HttpContext.User.GetUserId();
-            IQueryable<Group> list = await services.Groups.GetLeaderGroupsAsync(studentId);
+            IQueryable<Group> list = await services.Groups.GetLeaderGroupsOfStudentAsync(studentId);
             if (list == null || !list.Any())
             {
                 return NotFound();
@@ -105,10 +124,14 @@ namespace API.Controllers
 
             return Ok(group);
         }
-        
+
 
         // PUT: api/Groups/5
-
+        [SwaggerOperation(
+         Summary = $"[{Actor.Test}/{Finnished.False}] Get group by Id",
+         Description = "Get group by Id"
+        )]
+        [Authorize(Roles = Actor.Student)]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateGroup(int id, GroupUpdateDto dto)
         {
@@ -117,9 +140,9 @@ namespace API.Controllers
                 return BadRequest();
             }
             int studentId = HttpContext.User.GetUserId();
-            List<int> leadGroupIds = (await services.Groups.GetLeaderGroupsIdAsync(studentId));
+            //List<int> leadGroupIds = (await services.Groups.GetLeaderGroupsIdAsync(studentId));
 
-            if (!leadGroupIds.Contains(id))
+            if (!await services.Groups.IsStudentLeadingGroupAsync(studentId, id))
             {
                 return Unauthorized("You can't update other's group");
             }
@@ -131,8 +154,8 @@ namespace API.Controllers
             }
             try
             {
-                group.PatchUpdate<Group, GroupUpdateDto>(dto);
-                await services.Groups.UpdateAsync(group);
+                
+                await services.Groups.UpdateAsync(dto);
                 return Ok(group);
             }
             catch (Exception ex)

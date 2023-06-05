@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using ServiceLayer.Interface;
 using ShareResource.Enums;
 using APIExtension.ClaimsPrinciple;
-using APIExtension.UpdateApiExtension;
+using ShareResource.UpdateApiExtension;
 using Swashbuckle.AspNetCore.Annotations;
 using APIExtension.Const;
 using AutoMapper;

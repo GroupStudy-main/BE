@@ -2,7 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using RepositoryLayer.Interface;
 using ServiceLayer.Interface.Db;
+using ShareResource.DTO;
 using ShareResource.Enums;
+using ShareResource.UpdateApiExtension;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,16 +26,23 @@ namespace ServiceLayer.ClassImplement.Db
             return repos.Groups.GetList();
         }
 
-        public async Task<IQueryable<Group>> GetMemberGroupsAsync(int studentId)
+        public async Task<IQueryable<Group>> GetJoinGroupsOfStudentAsync(int studentId)
         {
-            var list = repos.GroupMembers.GetList()
+            return repos.GroupMembers.GetList()
                 .Include(e => e.Group).ThenInclude(e => e.GroupMembers)
-                .Where(e => e.AccountId == studentId && e.State == GroupMemberState.Member);
-            var list2=list.Select(e=>e.Group);
-            return list2;
+                .Where(e => e.AccountId == studentId && (e.State == GroupMemberState.Member || e.State == GroupMemberState.Leader))
+                .Select(e => e.Group);
         }
 
-        public async Task<IQueryable<Group>> GetLeaderGroupsAsync(int studentId)
+        public async Task<IQueryable<Group>> GetMemberGroupsOfStudentAsync(int studentId)
+        {
+            return repos.GroupMembers.GetList()
+                .Include(e => e.Group).ThenInclude(e => e.GroupMembers)
+                .Where(e => e.AccountId == studentId && e.State == GroupMemberState.Member)
+                .Select(e => e.Group);
+        }
+
+        public async Task<IQueryable<Group>> GetLeaderGroupsOfStudentAsync(int studentId)
         {
             return repos.GroupMembers.GetList()
                 .Include(e => e.Group).ThenInclude(e=>e.GroupMembers)
@@ -61,9 +70,37 @@ namespace ServiceLayer.ClassImplement.Db
             await repos.Groups.RemoveAsync(id);
         }
 
-        public async Task UpdateAsync(Group entity)
+        //public async Task UpdateAsync(Group entity)
+        //{
+        //    await repos.Groups.UpdateAsync(entity);
+        //}
+
+        public async Task UpdateAsync(GroupUpdateDto dto)
         {
-            await repos.Groups.UpdateAsync(entity);
+            var group = await repos.Groups.GetByIdAsync(dto.Id);
+            //Add new subject, nếu group ko có thì add
+            foreach (int subjectId in dto.SubjectIds)
+            {
+                 if(!group.GroupSubjects.Any(e=>e.SubjectId == subjectId))
+                {
+                    group.GroupSubjects.Add(new GroupSubject { GroupId = group.Id, SubjectId = subjectId });
+                }
+            }
+            //Remove subject, nếu dto ko có thì sẽ loại
+            foreach (GroupSubject groupSubject in group.GroupSubjects)
+            {
+                if (!dto.SubjectIds.Cast<int>().Contains(groupSubject.SubjectId))
+                {
+                    group.GroupSubjects.Remove(groupSubject);
+                }
+            }
+            //if (dto.())
+            //{
+            //    repos.G
+            //}
+                //group.GroupSubjects = dto.SubjectIds.Select(subId => new GroupSubject { GroupId = dto.Id, SubjectId = (int)subId }).ToList();
+            group.PatchUpdate<Group, GroupUpdateDto>(dto);
+            await repos.Groups.UpdateAsync(group);
         }
 
         public async Task<List<int>> GetLeaderGroupsIdAsync(int studentId)
@@ -72,6 +109,12 @@ namespace ServiceLayer.ClassImplement.Db
                 .Include(e => e.Group).ThenInclude(e => e.GroupMembers)
                 .Where(e => e.AccountId == studentId && e.State == GroupMemberState.Leader)
                 .Select(e => e.GroupId).ToList();
+        }
+
+        public async Task<bool> IsStudentLeadingGroupAsync(int studentId, int groupId)
+        {
+            return await repos.GroupMembers.GetList()
+                .AnyAsync(e=>e.AccountId==studentId && e.GroupId==groupId && e.State == GroupMemberState.Leader);
         }
     }
 }
