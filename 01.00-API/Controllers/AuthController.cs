@@ -97,7 +97,7 @@ namespace API.Controllers
             }
             Account register = mapper.Map<Account>(dto);
             await services.Auth.Register(register, RoleNameEnum.Student);
-            return Ok(await services.Accounts.GetAccountByUserNameAsync(dto.Username));
+            return Ok();
         }
 
         [SwaggerOperation(
@@ -113,7 +113,7 @@ namespace API.Controllers
             }
             Account register = mapper.Map<Account>(dto);
             await services.Auth.Register(register, RoleNameEnum.Student);
-            return Ok(await services.Accounts.GetAccountByUserNameAsync(dto.Username));
+            return Ok();
         }
 
         [SwaggerOperation(
