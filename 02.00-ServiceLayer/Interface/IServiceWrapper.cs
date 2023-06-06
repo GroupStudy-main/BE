@@ -10,5 +10,6 @@ namespace ServiceLayer.Interface
         public IGroupService Groups { get; }
         public IClassService Classes { get; }
         public ISubjectService Subjects { get; }
+        public IMettingService Meetings { get; }
     }
 }

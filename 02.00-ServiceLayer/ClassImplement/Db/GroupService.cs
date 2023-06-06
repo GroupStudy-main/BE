@@ -5,11 +5,6 @@ using ServiceLayer.Interface.Db;
 using ShareResource.DTO;
 using ShareResource.Enums;
 using ShareResource.UpdateApiExtension;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ServiceLayer.ClassImplement.Db
 {
@@ -115,6 +110,18 @@ namespace ServiceLayer.ClassImplement.Db
         {
             return await repos.GroupMembers.GetList()
                 .AnyAsync(e=>e.AccountId==studentId && e.GroupId==groupId && e.State == GroupMemberState.Leader);
+        }
+
+        public async Task<bool> IsStudentMemberGroupAsync(int studentId, int groupId)
+        {
+            return await repos.GroupMembers.GetList()
+                .AnyAsync(e => e.AccountId == studentId && e.GroupId == groupId && e.State == GroupMemberState.Member);
+        }
+
+        public async Task<bool> IsStudentJoiningGroupAsync(int studentId, int groupId)
+        {
+            return await repos.GroupMembers.GetList()
+               .AnyAsync(e => e.AccountId == studentId && e.GroupId == groupId && (e.State == GroupMemberState.Member || e.State == GroupMemberState.Leader));
         }
     }
 }

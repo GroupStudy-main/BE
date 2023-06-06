@@ -22,7 +22,7 @@ namespace API.Controllers
     [ApiController]
     public class AccountsController : ControllerBase
     {
-        private const string FAIL_CONFIRM_PASSWORD_MSG = "Fail to confirm password";
+        private const string FAIL_CONFIRM_PASSWORD_MSG = "Xác nhận mật khẩu thất bại";
         private readonly IServiceWrapper services;
         private readonly IRepoWrapper unitOfWork;
         private readonly IHubContext<PresenceHub> presenceHub;
@@ -73,7 +73,7 @@ namespace API.Controllers
                 return NotFound();
             }
                   var mapped = mapper.Map<AccountProfileDto>(user);
-            return Ok(user);
+            return Ok(mapped);
         }
 
 
@@ -87,7 +87,7 @@ namespace API.Controllers
         {
             if (id != HttpContext.User.GetUserId())
             {
-                return Unauthorized("You can't update other's profile");
+                return Unauthorized("Không thể thay đổi profile của người khác");
             }
             if (id != dto.Id)
             {
@@ -120,7 +120,7 @@ namespace API.Controllers
 
         // PUT: api/Accounts/5/Password
         [SwaggerOperation(
-          Summary = $"[{Actor.Student_Parent}/{Finnished.No_Test}/{Auth.True}] Update account password"
+          Summary = $"[{Actor.Student_Parent}/{Finnished.True}/{Auth.True}] Update account password"
         )]
         [Authorize(Roles = Actor.Student_Parent)]
         [HttpPut("{id}/Password")]
@@ -128,7 +128,7 @@ namespace API.Controllers
         {
             if (id != HttpContext.User.GetUserId())
             {
-                return Unauthorized("You can't update other's profile");
+                return Unauthorized("Không thể thay đổi mật khẩu của người khác");
             }
             if (id != dto.Id)
             {
@@ -143,6 +143,10 @@ namespace API.Controllers
             if (account == null)
             {
                 return NotFound();
+            }
+            if(dto.OldPassword != dto.Password)
+            {
+                return Unauthorized("Nhập mật khẩu cũ thất bại");
             }
             try
             {
@@ -209,7 +213,7 @@ namespace API.Controllers
             return Ok(list);
         }
         [SwaggerOperation(
-          Summary = $"[{Actor.Test}/{Finnished.False}] Get account info"
+          Summary = $"[{Actor.Test}/{Finnished.False}] Get account info "
         )]
         // GET: api/Accounts/5
         [HttpGet("{id}")]

@@ -97,9 +97,23 @@ namespace ShareResource.Mapper
                 .ForMember(dest => dest.ScheduleMeetings, opt => opt.MapFrom(
                     src => src.Meetings
                         .Where(e => e.ScheduleStart != null && e.ScheduleStart.Value.Date >= DateTime.Today && e.Start == null)))
-                .ForMember(dest => dest.HistoryMeetings, opt => opt.MapFrom(
+                .ForMember(dest => dest.PastMeetings, opt => opt.MapFrom(
                     src => src.Meetings
                         .Where(e => e.End != null || (e.ScheduleStart != null && e.ScheduleStart.Value.Date < DateTime.Today))))
+                .PreserveReferences();
+
+            CreateMap<Group, GroupGetDetailForMemberDto>()
+                .ForMember(dest => dest.Members, opt => opt.MapFrom(
+                    src => src.GroupMembers
+                        .Where(e => e.State == GroupMemberState.Leader || e.State == GroupMemberState.Member)
+                        .Select(e => e.Account)))
+
+                .ForMember(dest => dest.LiveMeetings, opt => opt.MapFrom(
+                    src => src.Meetings
+                        .Where(e => e.Start != null && e.End == null)))
+                .ForMember(dest => dest.ScheduleMeetings, opt => opt.MapFrom(
+                    src => src.Meetings
+                        .Where(e => e.ScheduleStart != null && e.ScheduleStart.Value.Date >= DateTime.Today && e.Start == null)))
                 .PreserveReferences();
         }
 
@@ -113,7 +127,8 @@ namespace ShareResource.Mapper
                 .ForMember(dest => dest.LeadGroups, opt => opt.MapFrom(
                     src => src.GroupMembers.Where(e => e.State == GroupMemberState.Leader).Select(e => e.Group)))
                 .ForMember(dest => dest.JoinGroups, opt => opt.MapFrom(
-                    src => src.GroupMembers.Where(e => e.State == GroupMemberState.Member).Select(e => e.Group)));
+                    src => src.GroupMembers.Where(e => e.State == GroupMemberState.Member).Select(e => e.Group)))
+                .PreserveReferences();
         }
 
         private void BasicMap<TDbEntity, TGetDto, TCreateDto, TUpdateDto>()

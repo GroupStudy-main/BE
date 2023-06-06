@@ -5,6 +5,7 @@ using ServiceLayer.Interface.Db;
 using ServiceLayer.ClassImplement.Auth;
 using Microsoft.Extensions.Configuration;
 using ServiceLayer.ClassImplement.Db;
+using AutoMapper;
 
 namespace ServiceLayer.ClassImplement
 {
@@ -12,27 +13,31 @@ namespace ServiceLayer.ClassImplement
     {
         private readonly IRepoWrapper repos;
         private readonly IConfiguration configuration;
+        private readonly IMapper mapper;
 
-        public ServiceWrapper(IRepoWrapper repos, IConfiguration configuration)
+        public ServiceWrapper(IRepoWrapper repos, IConfiguration configuration, IMapper mapper)
         {
             this.repos = repos;
             this.configuration = configuration;
-            users = new AccountService(repos);
+            this.mapper = mapper;
+            accounts = new AccountService(repos);
             auth = new AuthService(repos, configuration);
+            groups = new GroupService(repos);
             classes = new ClassService(repos);
             subjects = new SubjectService(repos);
+            meetings = new MeetingService(repos, mapper);
         }
 
-        private IAccountService users;
+        private IAccountService accounts;
         public IAccountService Accounts
         {
             get
             {
-                if (users is null)
+                if (accounts is null)
                 {
-                    users = new AccountService(repos);
+                    accounts = new AccountService(repos);
                 }
-                return users;
+                return accounts;
             }
         }
 
@@ -85,6 +90,19 @@ namespace ServiceLayer.ClassImplement
                     subjects = new SubjectService(repos);
                 }
                 return subjects;
+            }
+        }
+
+        private IMettingService meetings;
+        public IMettingService Meetings
+        {
+            get
+            {
+                if (meetings is null)
+                {
+                    meetings = new MeetingService(repos, mapper);
+                }
+                return meetings;
             }
         }
     }

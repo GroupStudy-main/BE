@@ -39,7 +39,7 @@ namespace API.Controllers
            Summary = $"[{Actor.Student}/{Finnished.True}]Get list of groups student joined",
            Description = "Get list of groups student joined as leader or member"
        )]
-        [Authorize(Roles =Actor.Student)]
+        [Authorize(Roles = Actor.Student)]
         [HttpGet("Join")]
         public async Task<IActionResult> GetJoinedGroups()
         {
@@ -53,7 +53,7 @@ namespace API.Controllers
             return Ok(mapped);
         }
 
-        // GET: api/Groups/Join
+        // GET: api/Groups/Member
         [SwaggerOperation(
            Summary = $"[{Actor.Student}/{Finnished.True}]Get list of groups student joined as a member",
            Description = "Get list of groups student joined as member"
@@ -70,6 +70,31 @@ namespace API.Controllers
             }
             var mapped = list.ProjectTo<GroupGetListDto>(mapper.ConfigurationProvider);
             return Ok(mapped);
+        }
+
+        // GET: api/Groups/Member
+        [SwaggerOperation(
+           Summary = $"[{Actor.Student}/{Finnished.True}]Get list of groups student joined as a member",
+           Description = "Get list of groups student joined as member"
+       )]
+        [Authorize(Roles = Actor.Student)]
+        [HttpGet("Member/{id}")]
+        public async Task<IActionResult> GetGroupDetailForMember(int id)
+        {
+            int studentId = HttpContext.User.GetUserId();
+            bool isLeader = await services.Groups.IsStudentMemberGroupAsync(studentId, id);
+            if (!isLeader)
+            {
+                return Unauthorized("Bạn không phải là thành viên nhóm này");
+            }
+            Group group = await services.Groups.GetFullByIdAsync(id);
+
+            if (group == null)
+            {
+                return NotFound();
+            }
+            GroupGetDetailForMemberDto dto = mapper.Map<GroupGetDetailForMemberDto>(group);
+            return Ok(dto);
         }
 
         // GET: api/Groups/Lead
@@ -91,6 +116,31 @@ namespace API.Controllers
             return Ok(mapped);
         }
 
+        // GET: api/Groups/Lead/5
+        [SwaggerOperation(
+            Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Get group detail for leader by Id",
+            Description = "Get group detail for leader by Id"
+        )]
+        [Authorize(Roles =Actor.Student)]
+        [HttpGet("Lead/{id}")]
+        public async Task<IActionResult> GetGroupDetailForLeader(int id)
+        {
+            int studentId = HttpContext.User.GetUserId();
+            bool isLeader = await services.Groups.IsStudentLeadingGroupAsync(studentId, id);
+            if (!isLeader)
+            {
+                 return Unauthorized("Bạn không phải nhóm trưởng của nhóm này");
+            }
+            Group group = await services.Groups.GetFullByIdAsync(id);
+
+            if (group == null)
+            {
+                return NotFound();
+            }
+            GroupGetDetailForLeaderDto dto = mapper.Map<GroupGetDetailForLeaderDto>(group);
+            return Ok(dto);
+        }
+
         // POST: api/Groups
         [SwaggerOperation(
            Summary = $"[{Actor.Leader}/{Finnished.True}] create new group for leader",
@@ -107,28 +157,12 @@ namespace API.Controllers
             return Ok();
         }
 
-        [SwaggerOperation(
-          Summary = $"[{Actor.Test}/{Finnished.True}] Get group by Id",
-          Description = "Get group by Id"
-      )]
-        // GET: api/Groups/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetGroup(int id)
-        {
-            Group group = await services.Groups.GetFullByIdAsync(id);
-
-            if (group == null)
-            {
-                return NotFound();
-            }
-            GroupGetDetailForLeaderDto dto = mapper.Map<GroupGetDetailForLeaderDto>(group);
-            return Ok(new {group = dto, meetingCount=group.Meetings.Count });
-        }
+      
 
 
         // PUT: api/Groups/5
         [SwaggerOperation(
-         Summary = $"[{Actor.Test}/{Finnished.False}] Get group by Id",
+         Summary = $"[{Actor.Leader}/{Finnished.True}] Update group for leader",
          Description = "Get group by Id"
         )]
         [Authorize(Roles = Actor.Student)]
@@ -173,7 +207,7 @@ namespace API.Controllers
 
         // GET: api/Groups
         [SwaggerOperation(
-           Summary = $"[{Actor.Test}/{Finnished.True}]Get leadGroupIds of group",
+           Summary = $"[{Actor.Test}/{Finnished.True}]Get list of groups",
            Description = "Get leadGroupIds of group"
        )]
         [HttpGet]
@@ -188,6 +222,23 @@ namespace API.Controllers
             return Ok(mapped);
         }
 
+        [SwaggerOperation(
+        Summary = $"[{Actor.Test}/{Finnished.True}] Get group by Id",
+        Description = "Get group by Id"
+    )]
+        // GET: api/Groups/5
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetGroup(int id)
+        {
+            Group group = await services.Groups.GetFullByIdAsync(id);
+
+            if (group == null)
+            {
+                return NotFound();
+            }
+            GroupGetDetailForLeaderDto dto = mapper.Map<GroupGetDetailForLeaderDto>(group);
+            return Ok(dto);
+        }
 
         //// DELETE: api/Groups/5
         //[HttpDelete("{id}")]

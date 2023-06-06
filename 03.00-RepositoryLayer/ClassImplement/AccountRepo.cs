@@ -33,7 +33,7 @@ namespace RepositoryLayer.ClassImplement
         {
             return await dbContext.Accounts
                  .Include(e => e.Role)
-                 .Include(e => e.GroupMembers).ThenInclude(e => e.Group)
+                 .Include(e => e.GroupMembers).ThenInclude(e => e.Group).ThenInclude(e=>e.GroupMembers)
                  .SingleOrDefaultAsync(e => e.Id == id);
         } 
         public async Task<Account> GetByUsernameAsync(string username)
@@ -47,7 +47,7 @@ namespace RepositoryLayer.ClassImplement
         {
             return await dbContext.Accounts
                 .Include(a=>a.Role)
-                .SingleOrDefaultAsync(a => a.Username == usernameOrEmail || a.Email == usernameOrEmail.ToLower() && a.Password == password); 
+                .SingleOrDefaultAsync(a => (a.Username == usernameOrEmail || a.Email == usernameOrEmail.ToLower()) && a.Password == password); 
         }
 
         public override IQueryable<Account> GetList()

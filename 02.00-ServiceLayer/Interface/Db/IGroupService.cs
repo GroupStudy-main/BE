@@ -21,17 +21,51 @@ namespace ServiceLayer.Interface.Db
         public Task CreateAsync(Group group, int creatorId);
         //public Task UpdateAsync(Group group);
         public Task UpdateAsync(GroupUpdateDto dto);
+        /// <summary>
+        /// DO NOT USE
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public Task RemoveAsync(int id);
         /// <summary>
-        /// Get a list of groups student has joined
+        /// Get all groups student (member) has joined
         /// </summary>
         /// <param name="studentId"></param>
         /// <returns></returns>
         public Task<IQueryable<Group>> GetMemberGroupsOfStudentAsync(int studentId);
-
+        /// <summary>
+        /// Get all groups leader has created
+        /// </summary>
+        /// <param name="studentId"></param>
+        /// <returns></returns>
         public Task<IQueryable<Group>> GetLeaderGroupsOfStudentAsync(int leaderId);
+        /// <summary>
+        /// Get all groups student (leader, member) has joined
+        /// </summary>
+        /// <param name="studentId"></param>
+        /// <returns></returns>
         public Task<IQueryable<Group>> GetJoinGroupsOfStudentAsync(int studentId);
         public Task<List<int>> GetLeaderGroupsIdAsync(int leaderId);
+        /// <summary>
+        /// Check if a student is a leader of a group
+        /// </summary>
+        /// <param name="studentId"></param>
+        /// <param name="groupId"></param>
+        /// <returns></returns>
         public Task<bool> IsStudentLeadingGroupAsync(int studentId, int groupId);
+        /// <summary>
+        /// Check if a student is a member (member only) of a group
+        /// </summary>
+        /// <param name="studentId"></param>
+        /// <param name="groupId"></param>
+        /// <returns></returns>
+        public Task<bool> IsStudentMemberGroupAsync(int studentId, int groupId);
+        /// <summary>
+        /// Check if a student (member, leader) join a group
+        /// </summary>
+        /// <param name="studentId"></param>
+        /// <param name="groupId"></param>
+        /// <returns></returns>
+        public Task<bool> IsStudentJoiningGroupAsync(int studentId, int groupId);
     }
 }
