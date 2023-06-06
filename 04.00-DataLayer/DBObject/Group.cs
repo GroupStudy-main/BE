@@ -17,7 +17,7 @@ namespace DataLayer.DBObject
         #endregion
         
         #region Meeting Room
-        public virtual ICollection<Meeting> Meetings { get; set; }
+        public virtual ICollection<Meeting> Meetings { get; set; } = new Collection<Meeting>();
         #endregion
 
         #region Class
@@ -28,7 +28,7 @@ namespace DataLayer.DBObject
         #endregion
 
         #region Subjects
-        public virtual ICollection<GroupSubject> GroupSubjects { get; set; }
+        public virtual ICollection<GroupSubject> GroupSubjects { get; set; } = new Collection<GroupSubject>();
         #endregion
     }
 }

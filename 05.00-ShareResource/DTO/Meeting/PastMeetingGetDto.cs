@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ShareResource.DTO
 {
-    public class HistoryMeetingGetDto
+    public class PastMeetingGetDto
     {
         public int Id { get; set; }
         public string Name { get; set; }

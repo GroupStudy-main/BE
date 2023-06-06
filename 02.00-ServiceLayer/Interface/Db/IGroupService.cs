@@ -11,7 +11,7 @@ namespace ServiceLayer.Interface.Db
     public interface IGroupService
     {
         public IQueryable<Group> GetList();
-        public Task<Group> GetByIdAsync(int id);
+        public Task<Group> GetFullByIdAsync(int id);
         /// <summary>
         /// Create a group and add group leader
         /// </summary>

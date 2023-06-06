@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.ObjectModel;
 
 namespace DataLayer.DBObject
 {
@@ -10,10 +11,10 @@ namespace DataLayer.DBObject
         public int Id { get; set; }
         public string Name { get; set; }
         public int CountMember { get; set; }
-        public DateTime? Start { get; set; }
-        public DateTime? End { get; set; }
-        public DateTime? ScheduleStart { get; set; }
-        public DateTime? ScheduleEnd { get; set; }
+        public DateTime? Start { get; set; } = null;
+        public DateTime? End { get; set; } = null;
+        public DateTime? ScheduleStart { get; set; } = null;
+        public DateTime? ScheduleEnd { get; set; } = null;
 
         #region  Group
         [ForeignKey("GroupId")]
@@ -22,7 +23,7 @@ namespace DataLayer.DBObject
         #endregion
 
         #region Connection
-        public virtual ICollection<Connection> Connections { get; set; }
+        public virtual ICollection<Connection> Connections { get; set; } = new Collection<Connection>();
         #endregion
     }
 }

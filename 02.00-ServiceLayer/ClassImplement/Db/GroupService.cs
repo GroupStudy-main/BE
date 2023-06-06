@@ -50,7 +50,7 @@ namespace ServiceLayer.ClassImplement.Db
                 .Select(e => e.Group);
         }
 
-        public async Task<Group> GetByIdAsync(int id)
+        public async Task<Group> GetFullByIdAsync(int id)
         {
             return await repos.Groups.GetByIdAsync(id);
         }

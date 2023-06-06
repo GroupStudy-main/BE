@@ -8,7 +8,7 @@
         public ICollection<GroupMemberRequestGetDto> JoinRequest { get; set; }
         public virtual ICollection<LiveMeetingGetDto> LiveMeetings { get; set; }
         public virtual ICollection<ScheduleMeetingGetDto> ScheduleMeetings { get; set; }
-        public virtual ICollection<HistoryMeetingGetDto> HistoryMeetings { get; set; }
+        public virtual ICollection<PastMeetingGetDto> HistoryMeetings { get; set; }
 
     }
 }

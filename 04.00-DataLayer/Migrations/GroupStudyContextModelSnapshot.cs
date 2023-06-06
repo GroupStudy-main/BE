@@ -63,7 +63,7 @@ namespace DataLayer.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("Accounts");
+                    b.ToTable("Accounts", (string)null);
 
                     b.HasData(
                         new
@@ -191,7 +191,7 @@ namespace DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Classes");
+                    b.ToTable("Classes", (string)null);
 
                     b.HasData(
                         new
@@ -252,7 +252,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("MeetingId");
 
-                    b.ToTable("Connections");
+                    b.ToTable("Connections", (string)null);
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Group", b =>
@@ -274,7 +274,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("ClassId");
 
-                    b.ToTable("Groups");
+                    b.ToTable("Groups", (string)null);
 
                     b.HasData(
                         new
@@ -326,7 +326,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("GroupMembers");
+                    b.ToTable("GroupMembers", (string)null);
 
                     b.HasData(
                         new
@@ -452,7 +452,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("GroupSubjects");
+                    b.ToTable("GroupSubjects", (string)null);
 
                     b.HasData(
                         new
@@ -545,7 +545,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("Meetings");
+                    b.ToTable("Meetings", (string)null);
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Role", b =>
@@ -562,7 +562,7 @@ namespace DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
 
                     b.HasData(
                         new
@@ -591,7 +591,7 @@ namespace DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Subjects");
+                    b.ToTable("Subjects", (string)null);
 
                     b.HasData(
                         new

@@ -108,21 +108,21 @@ namespace API.Controllers
         }
 
         [SwaggerOperation(
-          Summary = $"[{Actor.Test}/{Finnished.False}] Get group by Id",
+          Summary = $"[{Actor.Test}/{Finnished.True}] Get group by Id",
           Description = "Get group by Id"
       )]
         // GET: api/Groups/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Group>> GetGroup(int id)
+        public async Task<IActionResult> GetGroup(int id)
         {
-            Group group = await services.Groups.GetByIdAsync(id);
+            Group group = await services.Groups.GetFullByIdAsync(id);
 
             if (group == null)
             {
                 return NotFound();
             }
-
-            return Ok(group);
+            GroupGetDetailForLeaderDto dto = mapper.Map<GroupGetDetailForLeaderDto>(group);
+            return Ok(new {group = dto, meetingCount=group.Meetings.Count });
         }
 
 
@@ -147,7 +147,7 @@ namespace API.Controllers
                 return Unauthorized("You can't update other's group");
             }
 
-            var group = await services.Groups.GetByIdAsync(id);
+            var group = await services.Groups.GetFullByIdAsync(id);
             if (group == null)
             {
                 return NotFound();
@@ -211,7 +211,7 @@ namespace API.Controllers
 
         private async Task<bool> GroupExists(int id)
         {
-            return (await services.Groups.GetByIdAsync(id)) is not null;
+            return (await services.Groups.GetFullByIdAsync(id)) is not null;
         }
     }
 }

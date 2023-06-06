@@ -26,7 +26,7 @@ namespace APIExtension.ImMemorySeeding
             }
             catch (Exception ex)
             {
-
+                Console.WriteLine(ex.Message);
             }
 
             return app;
@@ -37,7 +37,7 @@ namespace APIExtension.ImMemorySeeding
             {
                 ArgumentNullException.ThrowIfNull(context, nameof(context));
                 context.Database.EnsureCreated();
-                #region Role
+                #region seed Role
                 if (!context.Roles.Any())
                 {
                     var roles = new Role[] {
@@ -55,7 +55,7 @@ namespace APIExtension.ImMemorySeeding
                 }
                 #endregion
 
-                #region Account
+                #region seed Account
                 if (!context.Accounts.Any())
                 {
                     var accounts = new Account[] {
@@ -174,7 +174,7 @@ namespace APIExtension.ImMemorySeeding
                 }
                 #endregion
 
-                #region class
+                #region seed class
                 if (!context.Classes.Any())
                 {
                     var classes = new Class[]
@@ -506,6 +506,77 @@ namespace APIExtension.ImMemorySeeding
                         #endregion
                     };
                     context.GroupSubjects.AddRange(groupSubjects);
+                }
+                #endregion
+
+                #region seed meeting
+                if (!context.Meetings.Any())
+                {
+                    Console.WriteLine("---------------------------------SeedMeeting");
+                    var meetings= new Meeting[] 
+                    {
+                        #region meeting for group 1
+                        //Forgoten meeting
+                        new Meeting
+                        {
+                            Id = 1,
+                            GroupId=1,
+                            Name="Forgoten past history",
+                            ScheduleStart = DateTime.Now.AddDays(-3),
+                            ScheduleEnd = DateTime.Now.AddDays(-3).AddHours(1),
+                        },
+                        //Ended schedule meeting
+                        new Meeting
+                        {
+                            Id = 2,
+                            GroupId=1,
+                            Name="Ended schedule past history",
+                            ScheduleStart = DateTime.Now.AddDays(-2).AddMinutes(15),
+                            ScheduleEnd = DateTime.Now.AddDays(-2).AddHours(1),
+                            Start = DateTime.Now.AddDays(-2).AddMinutes(30),
+                            End = DateTime.Now.AddDays(-2).AddHours(2),
+                        },
+                        //Ended instant meeting
+                        new Meeting
+                        {
+                            Id = 3,
+                            GroupId=1,
+                            Name="Ended instant past history",
+                            Start = DateTime.Now.AddDays(-2).AddMinutes(30),
+                            End = DateTime.Now.AddDays(-2).AddHours(2),
+                        },
+                        //Live schedule meeting
+                        new Meeting
+                        {
+                            Id = 4,
+                            GroupId=1,
+                            Name="Live schedule meeting",
+                            ScheduleStart = DateTime.Now.AddMinutes(15),
+                            ScheduleEnd = DateTime.Now.AddHours(1),
+                            Start = DateTime.Now.AddMinutes(30),
+                        },
+                        //Live Instant meeting
+                        new Meeting
+                        {
+                            Id = 5,
+                            GroupId=1,
+                            Name="Live Instant meeting",
+                            ScheduleStart = DateTime.Now.AddMinutes(15),
+                            ScheduleEnd = DateTime.Now.AddHours(1),
+                            Start = DateTime.Now.AddMinutes(30),
+                        },
+                        //Future Schedule meeting
+                        new Meeting
+                        {
+                            Id = 6,
+                            GroupId=1,
+                            Name="Future schedule meeting",
+                            ScheduleStart = DateTime.Now.AddMinutes(15),
+                            ScheduleEnd = DateTime.Now.AddHours(1),
+                        },
+                        #endregion
+                    };
+                    context.Meetings.AddRange(meetings);
                 }
                 #endregion
                 context.SaveChanges();

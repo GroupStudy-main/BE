@@ -27,6 +27,7 @@ namespace RepositoryLayer.ClassImplement
                 .Include(e=>e.Class)
                 .Include(e=>e.GroupSubjects).ThenInclude(e=>e.Subject)
                 .Include(e=>e.Meetings)
+                .Include(e=>e.GroupMembers).ThenInclude(e=>e.Account)
                 .SingleOrDefaultAsync(e=>e.Id == id);
         }
 
