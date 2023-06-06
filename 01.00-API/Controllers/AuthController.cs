@@ -30,7 +30,7 @@ namespace API.Controllers
             this.mapper = mapper;
         }
 
-        
+
 
         [SwaggerOperation(
             Summary = $"[{Actor.Student_Parent}/{Finnished.True}] Login for student with username or email. Return JWT Token",
@@ -44,7 +44,9 @@ namespace API.Controllers
             {
                 return Unauthorized("Username or password is wrong");
             }
-            return Ok(await services.Auth.GenerateJwtAsync(logined, loginModel.RememberMe));
+
+            string token = await services.Auth.GenerateJwtAsync(logined, loginModel.RememberMe);
+            return base.Ok(new {token=token, Id = logined.Id, Username=logined.Username, Email=logined.Email, Role=logined.Role.Name});
         }
 
         [SwaggerOperation(
@@ -62,7 +64,8 @@ namespace API.Controllers
             {
                 return Unauthorized("Username or password is wrong");
             }
-            return Ok(await services.Auth.GenerateJwtAsync(logined, rememberMe));
+            string token = await services.Auth.GenerateJwtAsync(logined, rememberMe);
+            return Ok(new { token = token, Id = logined.Id, Username = logined.Username, Email = logined.Email, Role = logined.Role.Name });
         }
 
         [SwaggerOperation(
