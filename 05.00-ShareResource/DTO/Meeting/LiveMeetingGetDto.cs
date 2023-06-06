@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ShareResource.DTO
 {
-    public class LiveMeetingGetDto
+    public class LiveMeetingGetDto : BaseGetDto
     {
         public int Id { get; set; }
         public string Name { get; set; }

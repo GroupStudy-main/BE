@@ -39,6 +39,11 @@ namespace ShareResource.Mapper
                 .ForMember(dest => dest.GroupName, opt => opt.MapFrom(
                     src => src.Group.Name))
                 .PreserveReferences();
+
+            CreateMap<ScheduleMeetingCreateDto, Meeting>();
+            CreateMap<InstantMeetingCreateDto, Meeting>()
+                .ForMember(dest => dest.Start, opt => opt.MapFrom(
+                    src => DateTime.Now));
         }
 
         private void MapGroupMember()
@@ -90,16 +95,18 @@ namespace ShareResource.Mapper
                 .ForMember(dest => dest.JoinRequest, opt => opt.MapFrom(
                     src => src.GroupMembers
                         .Where(e => e.State == GroupMemberState.Requesting)))
-
+                //Past
+                .ForMember(dest => dest.PastMeetings, opt => opt.MapFrom(
+                    src => src.Meetings
+                        .Where(e => (e.End != null || (e.ScheduleStart != null && e.ScheduleStart.Value.Date < DateTime.Today)))))
+                 //Live
                 .ForMember(dest => dest.LiveMeetings, opt => opt.MapFrom(
                     src => src.Meetings
                         .Where(e => e.Start != null && e.End == null)))
+                //Schedule
                 .ForMember(dest => dest.ScheduleMeetings, opt => opt.MapFrom(
                     src => src.Meetings
-                        .Where(e => e.ScheduleStart != null && e.ScheduleStart.Value.Date >= DateTime.Today && e.Start == null)))
-                .ForMember(dest => dest.PastMeetings, opt => opt.MapFrom(
-                    src => src.Meetings
-                        .Where(e => e.End != null || (e.ScheduleStart != null && e.ScheduleStart.Value.Date < DateTime.Today))))
+                        .Where(e => (e.ScheduleStart != null && e.ScheduleStart.Value.Date >= DateTime.Today && e.Start == null))))
                 .PreserveReferences();
 
             CreateMap<Group, GroupGetDetailForMemberDto>()

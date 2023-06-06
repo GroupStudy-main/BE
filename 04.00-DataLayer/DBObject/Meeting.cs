@@ -9,6 +9,7 @@ namespace DataLayer.DBObject
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        [MaxLength(50)]
         public string Name { get; set; }
         public int CountMember { get; set; }
         public DateTime? Start { get; set; } = null;

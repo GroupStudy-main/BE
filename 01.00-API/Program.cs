@@ -3,6 +3,7 @@ using API.SignalRHub;
 using API.SignalRHub.Tracker;
 using APIExtension.Auth;
 using APIExtension.ImMemorySeeding;
+using APIExtension.Validator;
 using DataLayer.DBContext;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Builder;
@@ -75,6 +76,10 @@ builder.Services.AddSingleton<PresenceTracker>();
 builder.Services.AddSingleton<ShareScreenTracker>();
 builder.Services.AddScoped<IRepoWrapper, RepoWrapper>();
 builder.Services.AddScoped<IServiceWrapper, ServiceWrapper>();
+#endregion
+
+#region validator
+builder.Services.AddScoped<IValidatorWrapper, ValidatorWrapper>();
 #endregion
 
 builder.Services.AddJwtAuthService(configuration);

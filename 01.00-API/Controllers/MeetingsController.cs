@@ -12,6 +12,9 @@ using APIExtension.Const;
 using Swashbuckle.AspNetCore.Annotations;
 using APIExtension.ClaimsPrinciple;
 using Microsoft.AspNetCore.Authorization;
+using ShareResource.DTO;
+using APIExtension.Validator;
+using AutoMapper;
 
 namespace API.Controllers
 {
@@ -20,10 +23,14 @@ namespace API.Controllers
     public class MeetingsController : ControllerBase
     {
         private readonly IServiceWrapper services;
+        private readonly IValidatorWrapper validators;
+        private readonly IMapper mapper;
 
-        public MeetingsController(IServiceWrapper services)
+        public MeetingsController(IServiceWrapper services, IValidatorWrapper validators, IMapper mapper)
         {
             this.services = services;
+            this.validators = validators;
+            this.mapper = mapper;
         }
 
         //GET: api/Meetings/Past/Group/id
@@ -79,6 +86,77 @@ namespace API.Controllers
             var mapped = services.Meetings.GetLiveMeetingsForGroup(groupId);
             return Ok(mapped);
         }
+
+        [SwaggerOperation(
+          Summary = $"[{Actor.Leader}/{Finnished.No_Test}/{Auth.True}] Create a new schedule meeting"
+      )]
+        [Authorize(Roles = Actor.Student)]
+        [HttpPost("Instant")]
+        public async Task<IActionResult> CreateInstantMeeting(InstantMeetingCreateDto dto)
+        {
+            int studentId = HttpContext.User.GetUserId();
+            bool isLeader = await services.Groups.IsStudentLeadingGroupAsync(studentId, dto.GroupId);
+            if (!isLeader)
+            {
+                return Unauthorized("Bạn không phải nhóm trưởng của nhóm này");
+            }
+            ValidatorResult valResult = await validators.Meetings.ValidateParams(dto, studentId);
+            if (!valResult.IsValid)
+            {
+                return BadRequest(valResult.Failures);
+            }
+            await services.Meetings.CreateInstantMeetingAsync(dto);
+            return Ok(dto);
+        }
+
+        [SwaggerOperation(
+           Summary = $"[{Actor.Leader}/{Finnished.No_Test}/{Auth.True}] Create a new schedule meeting"
+       )]
+        [Authorize(Roles = Actor.Student)]
+        [HttpPost("Schedule")]
+        public async Task<IActionResult> CreateScheduleMeeting(ScheduleMeetingCreateDto dto)
+        {
+            int studentId=HttpContext.User.GetUserId();
+            bool isLeader = await services.Groups.IsStudentLeadingGroupAsync(studentId, dto.GroupId);
+            if (!isLeader)
+            {
+                return Unauthorized("Bạn không phải nhóm trưởng của nhóm này");
+            }
+            ValidatorResult valResult = await validators.Meetings.ValidateParams(dto, studentId);
+            if (!valResult.IsValid)
+            {
+                return BadRequest(valResult.Failures);
+            }
+            await services.Meetings.CreateScheduleMeetingAsync(dto);
+            return Ok(dto);
+        }
+
+
+        [SwaggerOperation(
+           Summary = $"[{Actor.Leader}/{Finnished.No_Test}/{Auth.True}] Create a new schedule meeting"
+       )]
+        [Authorize(Roles = Actor.Student)]
+        [HttpPut("Schedule/{id}")]
+        public async Task<IActionResult> UpdateScheduleMeeting(int id, ScheduleMeetingUpdateDto dto)
+        {
+            int studentId = HttpContext.User.GetUserId();
+            var meeting = await services.Meetings.GetByIdAsync(id);
+            bool isLeader = await services.Groups.IsStudentLeadingGroupAsync(studentId, meeting.GroupId);
+            if (!isLeader)
+            {
+                return Unauthorized("Bạn không phải nhóm trưởng của nhóm này");
+            }
+            ValidatorResult valResult = await validators.Meetings.ValidateParams(dto, studentId);
+            if (!valResult.IsValid)
+            {
+                return BadRequest(valResult.Failures);
+            }
+            await services.Meetings.UpdateScheduleMeetingAsync(dto);
+            var updatedDto = mapper.Map<ScheduleMeetingGetDto>( await services.Meetings.GetByIdAsync(id));
+            return Ok(updatedDto);
+        }
+
+
 
         //// GET: api/Meetings
         //[HttpGet]
