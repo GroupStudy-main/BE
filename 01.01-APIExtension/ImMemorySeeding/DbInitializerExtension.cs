@@ -512,7 +512,6 @@ namespace APIExtension.ImMemorySeeding
                 #region seed meeting
                 if (!context.Meetings.Any())
                 {
-                    Console.WriteLine("---------------------------------SeedMeeting");
                     var meetings= new Meeting[] 
                     {
                         #region meeting for group 1
@@ -561,18 +560,32 @@ namespace APIExtension.ImMemorySeeding
                             Id = 5,
                             GroupId=1,
                             Name="Live Instant meeting",
-                            ScheduleStart = DateTime.Now.AddMinutes(15),
-                            ScheduleEnd = DateTime.Now.AddHours(1),
-                            Start = DateTime.Now.AddMinutes(30),
+                            Start = DateTime.Now.AddMinutes(-30),
                         },
                         //Future Schedule meeting
                         new Meeting
                         {
                             Id = 6,
                             GroupId=1,
-                            Name="Future schedule meeting",
+                            Name="Today late schedule meeting",
+                            ScheduleStart = DateTime.Now.AddMinutes(-15),
+                            ScheduleEnd = DateTime.Now.AddHours(1),
+                        },
+                        new Meeting
+                        {
+                            Id = 7,
+                            GroupId=1,
+                            Name="Today early schedule meeting",
                             ScheduleStart = DateTime.Now.AddMinutes(15),
                             ScheduleEnd = DateTime.Now.AddHours(1),
+                        },
+                        new Meeting
+                        {
+                            Id = 8,
+                            GroupId=1,
+                            Name="Future schedule meeting",
+                            ScheduleStart = DateTime.Now.AddDays(1).AddMinutes(15),
+                            ScheduleEnd = DateTime.Now.AddDays(1).AddHours(1),
                         },
                         #endregion
                     };

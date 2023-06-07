@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ShareResource.DTO
 {
-    public class ScheduleMeetingUpdateDto
+    public class ScheduleMeetingUpdateDto  : BaseUpdateDto
     {
         public int Id { get; set; }
         public string Name { get; set; }

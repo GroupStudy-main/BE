@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using RepositoryLayer.Interface;
 using ServiceLayer.Interface;
 using ShareResource.DTO;
+using ShareResource.UpdateApiExtension;
 
 namespace ServiceLayer.ClassImplement
 {
@@ -66,9 +67,21 @@ namespace ServiceLayer.ClassImplement
                 .ProjectTo<ScheduleMeetingGetDto>(mapper.ConfigurationProvider);
         }
 
-        public Task UpdateScheduleMeetingAsync(ScheduleMeetingUpdateDto dto)
+        public async Task UpdateScheduleMeetingAsync(ScheduleMeetingUpdateDto dto)
         {
-            throw new NotImplementedException();
+            Meeting meeting = await repos.Meetings.GetByIdAsync(dto.Id);
+            meeting.PatchUpdate(dto);
+            await repos.Meetings.UpdateAsync(meeting);
+        }
+
+        public async Task StartScheduleMeetingAsync(Meeting meeting)
+        {
+            await repos.Meetings.UpdateAsync(meeting);
+        }
+
+        public async Task DeleteScheduleMeetingAsync(Meeting meeting)
+        {
+            await repos.Meetings.RemoveAsync(meeting.Id);
         }
     }
 }

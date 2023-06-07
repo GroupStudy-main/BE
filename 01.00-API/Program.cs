@@ -96,7 +96,7 @@ builder.Services.AddSwaggerGen(options =>
 var app = builder.Build();
 if (IsInMemory)
 {
-    Console.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++InMemory");
+    Console.WriteLine("+++++++++++++++++++++++++++++++++++++InMemory+++++++++++++++++++++++++++++++++++");
     app.SeedInMemoryDb();
 }
 // Configure the HTTP request pipeline.

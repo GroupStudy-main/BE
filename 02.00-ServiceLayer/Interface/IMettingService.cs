@@ -13,5 +13,7 @@ namespace ServiceLayer.Interface
         public Task CreateScheduleMeetingAsync(ScheduleMeetingCreateDto dto);
         public Task CreateInstantMeetingAsync(InstantMeetingCreateDto dto);
         public Task UpdateScheduleMeetingAsync(ScheduleMeetingUpdateDto dto);
+        public Task StartScheduleMeetingAsync(Meeting meeting);
+        public Task DeleteScheduleMeetingAsync(Meeting meeting);
     }
 }

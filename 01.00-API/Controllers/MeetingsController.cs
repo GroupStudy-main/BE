@@ -131,8 +131,46 @@ namespace API.Controllers
             return Ok(dto);
         }
 
-
         [SwaggerOperation(
+           Summary = $"[{Actor.Leader}/{Finnished.No_Test}/{Auth.True}] Create a new schedule meeting"
+       )]
+        [Authorize(Roles = Actor.Student)]
+        [HttpPut("Schedule/{id}/Start")]
+        public async Task<IActionResult> StartSchdeuleMeeting(int id)
+        {
+            int studentId = HttpContext.User.GetUserId();
+            var meeting = await services.Meetings.GetByIdAsync(id);
+            bool isJoining = await services.Groups.IsStudentJoiningGroupAsync(studentId, meeting.GroupId);
+            if (!isJoining)
+            {
+                return Unauthorized("Bạn không phải nhóm trưởng của nhóm này");
+            }
+            if (meeting.End != null)
+            {
+                return BadRequest("Meeting đã kết thúc");
+            }
+            if (meeting.Start != null)
+            {
+                return BadRequest("Meeting đã bắt đầu");
+            }
+            bool isLeader = await services.Groups.IsStudentLeadingGroupAsync(studentId, meeting.GroupId);
+            //phải bắt đầu trong ngày schedule
+            if (meeting.ScheduleStart.Value.Date > DateTime.Today)
+            {
+                return BadRequest($"Meeting được hẹn vào ngày {meeting.ScheduleStart.Value.Date.ToString("dd/MM")} Nếu muốn bắt đầu vào ngày hôm nay, hãy {(isLeader?"cập nhật lại ngày hẹn": "yêu  cầu nhóm trưởng cập nhật lại ngày hẹn")}");
+            }
+            //Member ko dc bắt sớm hơn
+            if (meeting.ScheduleStart.Value > DateTime.Now && !isLeader)
+            {
+                return BadRequest($"Thành viên không thể bắt đầu meeting sớm hơn giờ hẹn. Nếu muốn bắt đầu ngay, hãy yêu  cầu nhóm trưởng bắt đầu cuộc họp");
+            }
+            meeting.Start= DateTime.Now;
+            await services.Meetings.StartScheduleMeetingAsync(meeting);
+            LiveMeetingGetDto dto = mapper.Map<LiveMeetingGetDto>(meeting);
+            return Ok(dto);
+        }
+
+            [SwaggerOperation(
            Summary = $"[{Actor.Leader}/{Finnished.No_Test}/{Auth.True}] Create a new schedule meeting"
        )]
         [Authorize(Roles = Actor.Student)]
@@ -144,7 +182,7 @@ namespace API.Controllers
             bool isLeader = await services.Groups.IsStudentLeadingGroupAsync(studentId, meeting.GroupId);
             if (!isLeader)
             {
-                return Unauthorized("Bạn không phải nhóm trưởng của nhóm này");
+                return Unauthorized("Bạn không phải thành viên của nhóm này");
             }
             ValidatorResult valResult = await validators.Meetings.ValidateParams(dto, studentId);
             if (!valResult.IsValid)
@@ -157,6 +195,36 @@ namespace API.Controllers
         }
 
 
+        [SwaggerOperation(
+           Summary = $"[{Actor.Leader}/{Finnished.No_Test}/{Auth.True}] Create a new schedule meeting"
+       )]
+        [Authorize(Roles = Actor.Student)]
+        [HttpDelete("Schedule/{id}")]
+        public async Task<IActionResult> DeleteSchdeuleMeeting(int id)
+        {
+            int studentId = HttpContext.User.GetUserId();
+            var meeting = await services.Meetings.GetByIdAsync(id);
+            bool isLeader = await services.Groups.IsStudentLeadingGroupAsync(studentId, meeting.GroupId);
+            if (!isLeader)
+            {
+                return Unauthorized("Bạn không phải nhóm trưởng của nhóm này");
+            }
+            if (meeting.End != null)
+            {
+                return BadRequest("Meeting đã kết thúc, không xóa được");
+            }
+            if (meeting.Start != null)
+            {
+                return BadRequest("Meeting đã bắt đầu, không xóa được");
+            }
+            //phải bắt đầu trong ngày schedule
+            if (meeting.ScheduleStart.Value.Date < DateTime.Today)
+            {
+                return BadRequest("Meeting đã qua, không xóa được");
+            }
+            await services.Meetings.DeleteScheduleMeetingAsync(meeting);
+            return Ok("Đã xóa meeting");
+        }
 
         //// GET: api/Meetings
         //[HttpGet]

@@ -10,6 +10,7 @@
         public const string Guest = "Guest";
         public const string Student_Parent = "Student, Parent";
         public const string Student = "Student";
+        public const string Leader_Member = "Leader, Member";
         public const string Leader = "Leader";
         public const string Member = "Member";
         public const string Parent = "Parent";
