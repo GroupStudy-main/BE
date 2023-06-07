@@ -71,5 +71,18 @@ namespace RepositoryLayer.ClassImplement
                 return groups;
             }
         }
+
+        private IMeetingRepository meetings;
+        public IMeetingRepository Meeting
+        {
+            get
+            {
+                if (meetings is null)
+                {
+                    meetings = new MeetingRepository(dbContext);
+                }
+                return meetings;
+            }
+        }
     }
 }

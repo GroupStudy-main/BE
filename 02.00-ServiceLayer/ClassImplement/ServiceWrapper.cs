@@ -44,5 +44,18 @@ namespace ServiceLayer.ClassImplement
                 return auth;
             }
         }
+        
+        private IMeetingService meetingService;
+        public IMeetingService Meeting
+        {
+            get
+            {
+                if (meetingService is null)
+                {
+                    meetingService = new MeetingService(repos);
+                }
+                return meetingService;
+            }
+        }
     }
 }

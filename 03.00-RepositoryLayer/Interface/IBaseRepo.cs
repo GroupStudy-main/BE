@@ -13,5 +13,7 @@ namespace RepositoryLayer.Interface
         public Task CreateAsync(T entity);
         public Task UpdateAsync(T entity);
         public Task RemoveAsync(K id);
+
+        public void Create(T entity);
     }
 }

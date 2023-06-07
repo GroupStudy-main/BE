@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using DataLayer.DBObject;
 using ShareResource.DTO;
+using ShareResource.DTO.Group;
+using ShareResource.DTO.Meeting;
+using ShareResource.DTO.MeetingRoom;
 
 namespace ShareResource.Mapper
 {
@@ -13,9 +16,15 @@ namespace ShareResource.Mapper
 
 
             CreateMap<MeetingRoom, RoomDto>();
+            
+            BasicMap<Meeting, MeetingGetDto, MeetingCreateDto, MeetingUpdateDto>();
+            CreateMap<Meeting, MeetingCreateDto>();
+            CreateMap<Meeting, MeetingGetDto>();
+
+            CreateMap<Group, GroupGetDto>();
             //.ForMember(dest => dest.DisplayName, opt => opt.MapFrom(src => src.AppUser.DisplayName))
             //.ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.AppUser.UserName));
-            
+
         }
         void BasicMap<TDbEntity, TGetDto, TCreateDto, TUpdateDto>()
             where TGetDto : BaseGetDto 

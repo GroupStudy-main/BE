@@ -12,5 +12,6 @@ namespace RepositoryLayer.Interface
         public IMeetingRoomRepository Rooms { get; }
         public IMeetingRepository Meetings { get; }
         public IGroupRepository Groups { get; }
+        
     }
 }
