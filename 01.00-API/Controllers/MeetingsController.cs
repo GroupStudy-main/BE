@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using DataLayer.DBObject;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServiceLayer.Interface;
 using ShareResource.DTO.Meeting;
@@ -18,48 +20,56 @@ public class MeetingsController : ControllerBase
         this._service = services;
         this._mapper = mapper;
     }
-    
-    [HttpPost("/create-meeting")] 
+
+    [HttpPost("/create-meeting")]
     public async Task<IActionResult> CreateMeeting(MeetingCreateDto dto)
     {
         if (null == dto.ScheduleStart || null == dto.ScheduleEnd)
         {
             return BadRequest("ScheduleTime must be not empty ");
         }
-        if (dto.ScheduleStart > DateTime.Now)
+
+        if (null == dto.ScheduleStart || dto.ScheduleStart > DateTime.Now)
         {
             return BadRequest("ScheduleStart must be after " + DateTime.Now);
         }
-        if (dto.ScheduleEnd < dto.ScheduleStart)
+
+        if (null == dto.ScheduleEnd || dto.ScheduleEnd < dto.ScheduleStart)
         {
             return BadRequest("ScheduleEnd must be after " + dto.ScheduleStart);
         }
+
         Meeting meeting = _mapper.Map<Meeting>(dto);
         await _service.Meeting.CreateMeeting(meeting);
         return Ok("Created Meeting");
     }
-    
+
     // GET: api/Meetings
     [HttpGet("/get-list")]
-    public async Task<ActionResult<MeetingGetDto>> GetMeeting()
+    public async Task<ActionResult<MeetingGetDto>> GetMeeting([FromQuery] string? type)
     {
-        var meetings = _service.Meeting.GetListMeeting().ToList();
+        if (String.IsNullOrEmpty(type))
+        {
+            type = "All";
+        }
+
+        var meetings = _service.Meeting.GetListMeeting(type).ToList();
         if (null == meetings || meetings.Count < 1)
         {
             return NotFound();
         }
 
         List<MeetingGetDto> result = new List<MeetingGetDto>();
-        
+
         foreach (var item in meetings)
         {
             result.Add(_mapper.Map<MeetingGetDto>(item));
         }
-        
+
         return Ok(result);
     }
-    
-    [HttpPut("/start")] 
+
+    [HttpPut("/start")]
     public async Task<IActionResult> StartMeeting(int id)
     {
         var meeting = _service.Meeting.GetById(id).Result;
@@ -72,8 +82,8 @@ public class MeetingsController : ControllerBase
         await _service.Meeting.UpdateMeeting(meeting);
         return Ok("Meeting started");
     }
-    
-    [HttpPut("/end")] 
+
+    [HttpPut("/end")]
     public async Task<IActionResult> EndMeeting(int id)
     {
         var meeting = _service.Meeting.GetById(id).Result;
