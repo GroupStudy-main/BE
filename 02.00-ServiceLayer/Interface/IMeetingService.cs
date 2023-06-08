@@ -3,7 +3,7 @@ using ShareResource.DTO;
 
 namespace ServiceLayer.Interface
 {
-    public interface IMettingService
+    public interface IMeetingService
     {
         public Task<bool> AnyAsync(int id);
         public IQueryable<PastMeetingGetDto> GetPastMeetingsForGroup(int groupId);

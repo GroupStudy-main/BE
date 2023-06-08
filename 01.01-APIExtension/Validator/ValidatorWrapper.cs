@@ -1,4 +1,5 @@
-﻿using ServiceLayer.Interface;
+﻿using DataLayer.DBObject;
+using ServiceLayer.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace APIExtension.Validator
     public interface IValidatorWrapper
     {
         IMeetingValidator Meetings { get; }
+        IGroupMemberValidator GroupMembers { get; }
     }
     public class ValidatorWrapper : IValidatorWrapper
     {
@@ -32,6 +34,19 @@ namespace APIExtension.Validator
                     meetings = new MeetingValidator(services);
                 }
                 return meetings;
+            }
+        }
+
+        private IGroupMemberValidator groupMembers;
+        public IGroupMemberValidator GroupMembers
+        {
+            get
+            {
+                if (groupMembers == null)
+                {
+                    groupMembers = new GroupMemberValidator(services);
+                }
+                return groupMembers;
             }
         }
     }

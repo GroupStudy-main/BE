@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace APIExtension.Validator
 {
+    /// <summary>
+    /// has validatorResult
+    /// </summary>
     public class BaseValidator
     {
         public BaseValidator()

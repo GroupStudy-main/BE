@@ -9,7 +9,7 @@ using ShareResource.UpdateApiExtension;
 
 namespace ServiceLayer.ClassImplement
 {
-    internal class MeetingService : IMettingService
+    internal class MeetingService : IMeetingService
     {
         private IRepoWrapper repos;
         private IMapper mapper;

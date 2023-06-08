@@ -35,7 +35,7 @@ namespace API.Controllers
 
         //GET: api/Meetings/Past/Group/id
         [SwaggerOperation(
-            Summary = $"[{Actor.Leader}/{Finnished.False}/{Auth.True}] Get all past meetings of group"
+            Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Get all past meetings of group"
         )]
         [Authorize(Roles =Actor.Student)]
         [HttpGet("Past/Group/{groupId}")]
@@ -53,7 +53,7 @@ namespace API.Controllers
 
         //GET: api/Meetings/Schedule/Group/id
         [SwaggerOperation(
-            Summary = $"[{Actor.Student}/{Finnished.False}/{Auth.True}] Get all Schedule meetings of group"
+            Summary = $"[{Actor.Student}/{Finnished.True}/{Auth.True}] Get all Schedule meetings of group"
         )]
         [Authorize(Roles =Actor.Student)]
         [HttpGet("Schedule/Group/{groupId}")]
@@ -71,7 +71,7 @@ namespace API.Controllers
 
         //GET: api/Meetings/Schedule/Group/id
         [SwaggerOperation(
-            Summary = $"[{Actor.Student}/{Finnished.False}/{Auth.True}] Get all Live meetings of group"
+            Summary = $"[{Actor.Student}/{Finnished.True}/{Auth.True}] Get all Live meetings of group"
         )]
         [Authorize(Roles = Actor.Student)]
         [HttpGet("Live/Group/{groupId}")]
@@ -88,8 +88,8 @@ namespace API.Controllers
         }
 
         [SwaggerOperation(
-          Summary = $"[{Actor.Leader}/{Finnished.No_Test}/{Auth.True}] Create a new schedule meeting"
-      )]
+          Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Create a new instant meeting"
+        )]
         [Authorize(Roles = Actor.Student)]
         [HttpPost("Instant")]
         public async Task<IActionResult> CreateInstantMeeting(InstantMeetingCreateDto dto)
@@ -110,7 +110,7 @@ namespace API.Controllers
         }
 
         [SwaggerOperation(
-           Summary = $"[{Actor.Leader}/{Finnished.No_Test}/{Auth.True}] Create a new schedule meeting"
+           Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Create a new schedule meeting"
        )]
         [Authorize(Roles = Actor.Student)]
         [HttpPost("Schedule")]
@@ -132,7 +132,7 @@ namespace API.Controllers
         }
 
         [SwaggerOperation(
-           Summary = $"[{Actor.Leader}/{Finnished.No_Test}/{Auth.True}] Create a new schedule meeting"
+           Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Start a schedule meeting"
        )]
         [Authorize(Roles = Actor.Student)]
         [HttpPut("Schedule/{id}/Start")]
@@ -170,9 +170,9 @@ namespace API.Controllers
             return Ok(dto);
         }
 
-            [SwaggerOperation(
-           Summary = $"[{Actor.Leader}/{Finnished.No_Test}/{Auth.True}] Create a new schedule meeting"
-       )]
+        [SwaggerOperation(
+           Summary = $"[{Actor.Leader}/{Finnished.No_Test}/{Auth.True}] Update a schedule meeting"
+        )]
         [Authorize(Roles = Actor.Student)]
         [HttpPut("Schedule/{id}")]
         public async Task<IActionResult> UpdateScheduleMeeting(int id, ScheduleMeetingUpdateDto dto)
@@ -196,7 +196,7 @@ namespace API.Controllers
 
 
         [SwaggerOperation(
-           Summary = $"[{Actor.Leader}/{Finnished.No_Test}/{Auth.True}] Create a new schedule meeting"
+           Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Remove a schedule meeting"
        )]
         [Authorize(Roles = Actor.Student)]
         [HttpDelete("Schedule/{id}")]

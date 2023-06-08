@@ -299,7 +299,7 @@ namespace APIExtension.ImMemorySeeding
                 {
                     var groups = new Group[]
                     {
-                          new Group
+                        new Group
                         {
                             Id = 1,
                             Name = "Nhóm 1 của học sinh 1",
@@ -316,7 +316,25 @@ namespace APIExtension.ImMemorySeeding
                             Id = 3,
                             Name = "Nhóm 1 của học sinh 2",
                             ClassId = 8,
-                        }
+                        } ,
+                        new Group
+                        {
+                            Id = 4,
+                            Name = "Nhóm 2 của học sinh 2",
+                            ClassId = 8,
+                        },
+                        new Group
+                        {
+                            Id = 5,
+                            Name = "Nhóm 1 của học sinh 3",
+                            ClassId = 8,
+                        },
+                        new Group
+                        {
+                            Id = 6,
+                            Name = "Nhóm 2 của học sinh 3",
+                            ClassId = 8,
+                        },
                     };
                     context.Groups.AddRange(groups);
                 }
@@ -364,7 +382,7 @@ namespace APIExtension.ImMemorySeeding
                             Id = 5,
                             GroupId = 1,
                             AccountId = 5,
-                            State = GroupMemberState.Banned,
+                            State = GroupMemberState.Declined,
                             RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha"
                         },
                         #endregion
@@ -389,7 +407,7 @@ namespace APIExtension.ImMemorySeeding
                             Id = 8,
                             GroupId = 2,
                             AccountId = 3,
-                            State = GroupMemberState.Inviting,
+                            State = GroupMemberState.Requesting,
                             InviteMessage = "Nhóm của mình rất hay. Bạn vô nha"
                         },
                         new GroupMember
@@ -397,7 +415,7 @@ namespace APIExtension.ImMemorySeeding
                             Id = 9,
                             GroupId = 2,
                             AccountId = 4,
-                            State = GroupMemberState.Requesting,
+                            State = GroupMemberState.Inviting,
                             RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha"
                         },
                         #endregion   
@@ -432,7 +450,82 @@ namespace APIExtension.ImMemorySeeding
                             AccountId = 4,
                             State = GroupMemberState.Requesting,
                             RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha"
-                        }
+                        },
+                        #endregion
+                        #region member group 4
+                        new GroupMember
+                        {
+                            Id = 14,
+                            GroupId = 4,
+                            AccountId = 2,
+                            State = GroupMemberState.Leader
+                        },
+                         new GroupMember
+                        {
+                            Id = 15,
+                            GroupId = 4,
+                            AccountId = 3,
+                            State = GroupMemberState.Inviting,
+                            InviteMessage = "Nhóm của mình rất hay. Bạn vô nha"
+                        },
+                        new GroupMember
+                        {
+                            Id = 16,
+                            GroupId = 4,
+                            AccountId = 4,
+                            State = GroupMemberState.Requesting,
+                            RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha"
+                        },
+                        #endregion
+                        #region member group 5
+                        new GroupMember
+                        {
+                            Id = 17,
+                            GroupId = 5,
+                            AccountId = 3,
+                            State = GroupMemberState.Leader
+                        },
+                         new GroupMember
+                        {
+                            Id = 18,
+                            GroupId = 5,
+                            AccountId = 3,
+                            State = GroupMemberState.Inviting,
+                            InviteMessage = "Nhóm của mình rất hay. Bạn vô nha"
+                        },
+                        new GroupMember
+                        {
+                            Id = 19,
+                            GroupId = 5,
+                            AccountId = 3,
+                            State = GroupMemberState.Requesting,
+                            RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha"
+                        },
+                        #endregion
+                        #region member group 6
+                        new GroupMember
+                        {
+                            Id = 20,
+                            GroupId = 6,
+                            AccountId = 3,
+                            State = GroupMemberState.Leader
+                        },
+                         new GroupMember
+                        {
+                            Id = 21,
+                            GroupId = 6,
+                            AccountId = 2,
+                            State = GroupMemberState.Inviting,
+                            InviteMessage = "Nhóm của mình rất hay. Bạn vô nha"
+                        },
+                        new GroupMember
+                        {
+                            Id = 22,
+                            GroupId = 6,
+                            AccountId = 1,
+                            State = GroupMemberState.Requesting,
+                            RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha"
+                        },
                         #endregion
                     };
                     context.GroupMembers.AddRange(groupMembers);

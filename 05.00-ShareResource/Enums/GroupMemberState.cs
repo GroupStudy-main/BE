@@ -12,6 +12,6 @@ namespace ShareResource.Enums
         Member,
         Inviting,
         Requesting,
-        Banned
+        Declined
     }
 }

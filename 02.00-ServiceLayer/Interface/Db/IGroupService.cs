@@ -67,5 +67,26 @@ namespace ServiceLayer.Interface.Db
         /// <param name="groupId"></param>
         /// <returns></returns>
         public Task<bool> IsStudentJoiningGroupAsync(int studentId, int groupId);
+        /// <summary>
+        /// Check if a student is requesting to join a group
+        /// </summary>
+        /// <param name="studentId"></param>
+        /// <param name="groupId"></param>
+        /// <returns></returns>
+        public Task<bool> IsStudentRequestingToGroupAsync(int studentId, int groupId);
+        /// <summary>
+        /// Check if a student is invited to join a group
+        /// </summary>
+        /// <param name="studentId"></param>
+        /// <param name="groupId"></param>
+        /// <returns></returns>
+        public Task<bool> IsStudentInvitedToGroupAsync(int studentId, int groupId);
+        /// <summary>
+        /// Check if a student is invited to join a group
+        /// </summary>
+        /// <param name="studentId"></param>
+        /// <param name="groupId"></param>
+        /// <returns></returns>
+        public Task<bool> IsStudentDeclinedToGroupAsync(int studentId, int groupId);
     }
 }

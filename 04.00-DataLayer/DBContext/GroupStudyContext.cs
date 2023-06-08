@@ -31,10 +31,12 @@ namespace DataLayer.DBContext
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Account>()
-                .HasIndex(a => a.Username).IsUnique();
-            modelBuilder.Entity<Account>()
-                .HasIndex(a => a.Email).IsUnique();
+            //modelBuilder.Entity<Account>()
+            //    .HasIndex(a => a.Username).IsUnique();
+            //modelBuilder.Entity<Account>()
+            //    .HasIndex(a => a.Email).IsUnique();
+            modelBuilder.Entity<GroupMember>()
+                .HasIndex(gm => new {  gm.AccountId, gm.GroupId }).IsUnique();
 
             Seed();
             void Seed()
@@ -427,7 +429,7 @@ namespace DataLayer.DBContext
                         Id = 5,
                         GroupId = 1,
                         AccountId = 5,
-                        State = GroupMemberState.Banned,
+                        State = GroupMemberState.Declined,
                         RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha"
                     },
                     #endregion

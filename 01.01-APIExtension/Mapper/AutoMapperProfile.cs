@@ -48,6 +48,12 @@ namespace ShareResource.Mapper
 
         private void MapGroupMember()
         {
+            CreateMap<GroupMember, GroupMemberGetDto>()
+                .ForMember(dest=>dest.GroupName, opt=>opt.MapFrom(
+                    src=>src.Group.Name))
+                .ForMember(dest=>dest.Username, opt=>opt.MapFrom(
+                    src=>src.Account.Username)) 
+                .PreserveReferences();
             //Invite
             CreateMap<GroupMember, GroupMemberInviteGetDto>()
                 .ForMember(dest => dest.GroupName, opt => opt.MapFrom(
@@ -95,6 +101,12 @@ namespace ShareResource.Mapper
                 .ForMember(dest => dest.JoinRequest, opt => opt.MapFrom(
                     src => src.GroupMembers
                         .Where(e => e.State == GroupMemberState.Requesting)))
+                .ForMember(dest => dest.JoinInvite, opt => opt.MapFrom(
+                    src => src.GroupMembers
+                        .Where(e => e.State == GroupMemberState.Inviting)))
+                .ForMember(dest => dest.DeclineRequest, opt => opt.MapFrom(
+                    src => src.GroupMembers
+                        .Where(e => e.State == GroupMemberState.Declined)))
                 //Past
                 .ForMember(dest => dest.PastMeetings, opt => opt.MapFrom(
                     src => src.Meetings

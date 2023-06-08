@@ -26,6 +26,7 @@ namespace ServiceLayer.ClassImplement
             classes = new ClassService(repos);
             subjects = new SubjectService(repos);
             meetings = new MeetingService(repos, mapper);
+            groupMembers = new GroupMemberSerivce(repos, mapper);
         }
 
         private IAccountService accounts;
@@ -93,8 +94,8 @@ namespace ServiceLayer.ClassImplement
             }
         }
 
-        private IMettingService meetings;
-        public IMettingService Meetings
+        private IMeetingService meetings;
+        public IMeetingService Meetings
         {
             get
             {
@@ -103,6 +104,19 @@ namespace ServiceLayer.ClassImplement
                     meetings = new MeetingService(repos, mapper);
                 }
                 return meetings;
+            }
+        }
+
+        private IGroupMemberSerivce groupMembers;
+        public IGroupMemberSerivce GroupMembers
+        {
+            get
+            {
+                if (groupMembers is null)
+                {
+                    groupMembers = new GroupMemberSerivce(repos, mapper);
+                }
+                return groupMembers;
             }
         }
     }
