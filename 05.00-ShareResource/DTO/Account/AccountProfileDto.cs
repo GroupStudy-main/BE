@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace ShareResource.DTO
 {
@@ -20,7 +21,7 @@ namespace ShareResource.DTO
         public string RoleName { get; set; }
 
         // Group Member
-        public virtual ICollection<GroupGetListDto> LeadGroups { get; set; }
-        public virtual ICollection<GroupGetListDto> JoinGroups { get; set; }
+        public virtual ICollection<GroupGetListDto> LeadGroups { get; set; }// = new Collection<GroupGetListDto>();
+        public virtual ICollection<GroupGetListDto> JoinGroups { get; set; }// = new Collection<GroupGetListDto>();
     }
 }

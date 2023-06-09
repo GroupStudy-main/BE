@@ -41,7 +41,7 @@ namespace API.Controllers
         )]
         [Authorize(Roles =Actor.Student)]
         [HttpGet("Group/{groupId}")]
-        public async Task<IActionResult> GetGroupMembersForGroup(int groupId)
+        public async Task<IActionResult> GetJoinMembersForGroup(int groupId)
         {
             int studentId = HttpContext.User.GetUserId();
             bool isJoined = await services.Groups.IsStudentJoiningGroupAsync(studentId, groupId);

@@ -22,6 +22,6 @@ namespace ServiceLayer.Interface.Db
         public Task RemoveAsync(int id);
         public Task<Account> GetAccountByUserNameAsync(string userName);
         public Task<Account> GetProfileByIdAsync(int id);
-        public IQueryable<Account> SearchStudents(string search);
+        public IQueryable<Account> SearchStudents(string search, int? groupId);
     }
 }

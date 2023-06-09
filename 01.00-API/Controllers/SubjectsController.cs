@@ -12,6 +12,9 @@ using APIExtension.Const;
 using Microsoft.AspNetCore.Authorization;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Data;
+using AutoMapper;
+using ShareResource.DTO;
+using AutoMapper.QueryableExtensions;
 
 namespace API.Controllers
 {
@@ -20,10 +23,12 @@ namespace API.Controllers
     public class SubjectsController : ControllerBase
     {
         private readonly IServiceWrapper services;
+        private readonly IMapper mapper;
 
-        public SubjectsController(IServiceWrapper services)
+        public SubjectsController(IServiceWrapper services, IMapper mapper)
         {
             this.services = services;
+            this.mapper = mapper;
         }
 
         // GET: api/Subjects
@@ -40,7 +45,7 @@ namespace API.Controllers
               return NotFound();
           }
 
-            return Ok(list);
+            return Ok(list.ProjectTo<SubjectGetDto>(mapper.ConfigurationProvider));
         }
 
         //// GET: api/Subjects/5

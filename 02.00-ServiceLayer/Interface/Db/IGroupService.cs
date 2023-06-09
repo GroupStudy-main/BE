@@ -88,5 +88,13 @@ namespace ServiceLayer.Interface.Db
         /// <param name="groupId"></param>
         /// <returns></returns>
         public Task<bool> IsStudentDeclinedToGroupAsync(int studentId, int groupId);
+        /// <summary>
+        /// search by name, class, subject
+        /// </summary>
+        /// <param name="search"></param>
+        /// <param name="studentId"></param>
+        /// <param name="newGroup"></param>
+        /// <returns></returns>
+        public Task<IQueryable<Group>> SearchGroups(string search, int studentId, bool newGroup);
     }
 }
