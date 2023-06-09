@@ -4,6 +4,7 @@ using RepositoryLayer.Interface;
 using ServiceLayer.Interface.Db;
 using ShareResource.DTO;
 using ShareResource.Enums;
+using ShareResource.Utils;
 using ShareResource.UpdateApiExtension;
 
 namespace ServiceLayer.ClassImplement.Db
@@ -19,6 +20,38 @@ namespace ServiceLayer.ClassImplement.Db
         public IQueryable<Group> GetList()
         {
             return repos.Groups.GetList();
+        }
+
+        public async Task<IQueryable<Group>> SearchGroups(string search, int studentId, bool newGroup)
+        {
+            string test = new string("Má mày").ConvertToUnsign().ToLower();
+            search=search.ConvertToUnsign().ToLower();
+            if (newGroup)
+            {
+                return repos.Groups.GetList()
+                    .Include(e => e.GroupMembers)
+                    .Include(e => e.GroupSubjects).ThenInclude(e => e.Subject)
+                    .Where(e =>
+                        !e.GroupMembers.Any(e => e.AccountId == studentId)
+                        && ((EF.Functions.Like(e.Id.ToString(), search + "%"))
+                        || e.Name.ConvertToUnsign().ToLower().Contains(search)
+                        || e.GroupSubjects.Any(gs => gs.Subject.Name.ConvertToUnsign().ToLower().Contains(search))));
+            }
+            return repos.Groups.GetList()
+                .Include(e => e.GroupMembers)
+                .Include(e => e.GroupSubjects).ThenInclude(e => e.Subject)
+                .Where(e=>
+                    (EF.Functions.Like(e.Id.ToString(), search + "%"))
+                    || e.Name.ConvertToUnsign().ToLower().Contains(search)
+                    || e.GroupSubjects.Any(gs=>gs.Subject.Name.ConvertToUnsign().ToLower().Contains(search)));
+            //return repos.Accounts.GetList().Include(e=>e.GroupMembers)
+            //    .Where(e =>
+            //        !e.GroupMembers.Any(e=>e.GroupId==groupId)
+            //        &&(EF.Functions.Like(e.Id.ToString(), search + "%")
+            //        || e.Email.ToLower().Contains(search)
+            //        || e.Username.ToLower().Contains(search)
+            //        || e.FullName.ToLower().Contains(search))
+            //    );
         }
 
         public async Task<IQueryable<Group>> GetJoinGroupsOfStudentAsync(int studentId)
@@ -141,6 +174,5 @@ namespace ServiceLayer.ClassImplement.Db
             return await repos.GroupMembers.GetList()
                 .AnyAsync(e => e.AccountId == studentId && e.GroupId == groupId && (e.State == GroupMemberState.Declined));
         }
-
     }
 }

@@ -17,10 +17,32 @@ namespace ServiceLayer.ClassImplement.Db
         {
             return repos.Accounts.GetList();
         }
-        public IQueryable<Account> SearchStudents(string search)
+        public IQueryable<Account> SearchStudents(string search, int? groupId)
         {
             search = search.ToLower().Trim();
+            if (groupId.HasValue)
+            {
+                //return repos.GroupMembers.GetList().Where(e=>e.GroupId!=groupId).Include(e => e.Account).Select(e=>e.Account)
+                //.Where(e =>
+                //    EF.Functions.Like(e.Id.ToString(), search + "%")
+                //    //e.Id.ToString().Contains(search)
+                //    //SqlFunctions.StringConvert((double)e.Id) 
+                //    || e.Email.ToLower().Contains(search)
+                //    || e.Username.ToLower().Contains(search)
+                //    || e.FullName.ToLower().Contains(search)
+                //);
+                return repos.Accounts.GetList()
+                .Include(e=>e.GroupMembers).ThenInclude(e=>e.Group)
+                .Where(e =>
+                    !e.GroupMembers.Any(e=>e.GroupId==groupId)
+                    &&(EF.Functions.Like(e.Id.ToString(), search + "%")
+                    || e.Email.ToLower().Contains(search)
+                    || e.Username.ToLower().Contains(search)
+                    || e.FullName.ToLower().Contains(search))
+                );
+            }
             return repos.Accounts.GetList()
+                .Include(e=>e.GroupMembers).ThenInclude(e=>e.Group)
                 .Where(e =>
                 EF.Functions.Like(e.Id.ToString(), search+"%")
                 //e.Id.ToString().Contains(search)

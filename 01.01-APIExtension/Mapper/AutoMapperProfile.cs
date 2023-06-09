@@ -19,10 +19,18 @@ namespace ShareResource.Mapper
             MapGroupMember();
 
             MapMeeting();
+
+            MapSubject();
             //CreateMap<MeetingRoom, MeetingDto>();
             //.ForMember(dest => dest.DisplayName, opt => opt.MapFrom(src => src.AppUser.DisplayName))
             //.ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.AppUser.UserName));
 
+        }
+
+        private void MapSubject()
+        {
+            CreateMap<Subject, SubjectGetDto>().PreserveReferences();
+            CreateMap<SubjectGetDto, Subject>().PreserveReferences();
         }
 
         private void MapMeeting()
@@ -91,6 +99,8 @@ namespace ShareResource.Mapper
                     src => src.GroupMembers
                         .Where(e => e.State == GroupMemberState.Leader|| e.State == GroupMemberState.Member)
                         .Count()))
+                .ForMember(dest => dest.Subjects, opt => opt.MapFrom(
+                    src => src.GroupSubjects.Select(gs => gs.Subject.Name)))
                 .PreserveReferences();
 
             CreateMap<Group, GroupGetDetailForLeaderDto>()

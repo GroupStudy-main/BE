@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 
 namespace ShareResource.DTO
 {
@@ -11,5 +7,7 @@ namespace ShareResource.DTO
         public int Id { get; set; }
         public string Name { get; set; }
         public string MemberCount { get; set; }
+        public int ClassId { get; set; }
+        public ICollection<string> Subjects { get; set; }=new Collection<string>();
     }
 }

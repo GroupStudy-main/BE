@@ -33,6 +33,24 @@ namespace API.Controllers
             this.mapper = mapper;
         }
 
+        // GET: api/Groups/Join
+        [SwaggerOperation(
+           Summary = $"[{Actor.Student}/{Finnished.True}]Get list of groups student joined",
+           Description = "Get list of groups student joined as leader or member"
+       )]
+        [Authorize(Roles = Actor.Student)]
+        [HttpGet("Search")]
+        public async Task<IActionResult> SearchGroup(string search, bool newGroup=true)
+        {
+            int studentId = HttpContext.User.GetUserId();
+            IQueryable<Group> list = await services.Groups.SearchGroups(search, studentId, newGroup);
+            if (list == null || !list.Any())
+            {
+                return NotFound();
+            }
+            var mapped = list.ProjectTo<GroupGetListDto>(mapper.ConfigurationProvider);
+            return Ok(mapped);
+        }
 
         // GET: api/Groups/Join
         [SwaggerOperation(
@@ -74,8 +92,8 @@ namespace API.Controllers
 
         // GET: api/Groups/Member
         [SwaggerOperation(
-           Summary = $"[{Actor.Student}/{Finnished.True}]Get list of groups student joined as a member",
-           Description = "Get list of groups student joined as member"
+           Summary = $"[{Actor.Student}/{Finnished.True}]Get group detail for a member",
+           Description = "Get group detail for a member"
        )]
         [Authorize(Roles = Actor.Student)]
         [HttpGet("Member/{id}")]

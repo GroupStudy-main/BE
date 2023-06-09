@@ -40,20 +40,23 @@ namespace API.Controllers
 
         //Get: api/Accounts/search
         [SwaggerOperation(
-         Summary = $"[{Actor.Student_Parent}/{Finnished.False}/{Auth.True}] Search students by id, username, mail, Full Name"
-       )]
+            Summary = $"[{Actor.Student_Parent}/{Finnished.False}/{Auth.True}] Search students by id, username, mail, Full Name",
+            Description = "Để search thêm thành viên mới cho group, thêm groupId để loại ra hết những student đã liên quan đến nhóm"
+        )]
         [Authorize(Roles = Actor.Student_Parent)]
         [HttpGet("search")]
-        public async Task<IActionResult> SearchStudent(string search)
+        public async Task<IActionResult> SearchStudent(string search, int? groupId)
         {
-            var list = services.Accounts.SearchStudents(search);
+            var list = services.Accounts.SearchStudents(search, groupId);//.ToList();
 
             if (list == null)
             {
                 return NotFound();
             }
+            //var test = list.FirstOrDefault();
             var mapped = list.ProjectTo<AccountProfileDto>(mapper.ConfigurationProvider);
-            return Ok(list);
+            //var mapped = mapper.Map<List<AccountProfileDto>>(list);
+            return Ok(mapped);
         }
 
         // GET: api/Accounts/5
