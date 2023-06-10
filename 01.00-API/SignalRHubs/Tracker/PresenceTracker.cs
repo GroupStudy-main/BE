@@ -43,7 +43,7 @@ namespace API.SignalRHub.Tracker
             bool isOnline = false;
             lock (OnlineUsers)
             {
-                KeyValuePair<UserConnectionSignalrDto, List<string>> temp = OnlineUsers.FirstOrDefault(x => x.Key.UserName == userMeetConnection.UserName && x.Key.RoomId == userMeetConnection.RoomId);
+                KeyValuePair<UserConnectionSignalrDto, List<string>> temp = OnlineUsers.FirstOrDefault(x => x.Key.Username == userMeetConnection.Username && x.Key.MeetingId == userMeetConnection.MeetingId);
 
                 if (temp.Key == null)//chua co online
                 {
@@ -97,7 +97,7 @@ namespace API.SignalRHub.Tracker
             bool isOffline = false;
             lock (OnlineUsers)
             {
-                KeyValuePair<UserConnectionSignalrDto, List<string>> userMeetingValue = OnlineUsers.FirstOrDefault(x => x.Key.UserName == userMeetConnection.UserName && x.Key.RoomId == userMeetConnection.RoomId);
+                KeyValuePair<UserConnectionSignalrDto, List<string>> userMeetingValue = OnlineUsers.FirstOrDefault(x => x.Key.Username == userMeetConnection.Username && x.Key.MeetingId == userMeetConnection.MeetingId);
                 if (userMeetingValue.Key == null)
                 {
                     return Task.FromResult(isOffline);
@@ -135,7 +135,7 @@ namespace API.SignalRHub.Tracker
             UserConnectionSignalrDto[] userInMeet;
             lock (OnlineUsers)
             {
-                userInMeet = OnlineUsers.Where(u => u.Key.RoomId == meetingId).Select(k => k.Key).ToArray();
+                userInMeet = OnlineUsers.Where(u => u.Key.MeetingId == meetingId).Select(k => k.Key).ToArray();
             }
 
             return Task.FromResult(userInMeet);
@@ -165,7 +165,7 @@ namespace API.SignalRHub.Tracker
             List<string> connectionIds = new List<string>();
             lock (OnlineUsers)
             {
-                var valuePair = OnlineUsers.SingleOrDefault(x => x.Key.UserName == user.UserName && x.Key.RoomId == user.RoomId);
+                KeyValuePair<UserConnectionSignalrDto, List<string>> valuePair = OnlineUsers.SingleOrDefault(x => x.Key.Username == userMeetConnection.Username && x.Key.MeetingId == userMeetConnection.MeetingId);
                 if (valuePair.Key != null)
                 {
                     connectionIds = OnlineUsers.GetValueOrDefault(valuePair.Key);
@@ -198,7 +198,7 @@ namespace API.SignalRHub.Tracker
             lock (OnlineUsers)
             {
                 // 1 user co nhieu lan kết nối vào hub
-                List<KeyValuePair<UserConnectionSignalrDto, List<string>>> userConnectionList = OnlineUsers.Where(x => x.Key.UserName == username).ToList();
+                List<KeyValuePair<UserConnectionSignalrDto, List<string>>> userConnectionList = OnlineUsers.Where(x => x.Key.Username == username).ToList();
                 if (userConnectionList.Count > 0)
                 {
                     foreach (KeyValuePair<UserConnectionSignalrDto, List<string>> userConnections in userConnectionList)

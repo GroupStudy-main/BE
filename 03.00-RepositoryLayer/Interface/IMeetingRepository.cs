@@ -18,7 +18,7 @@ namespace RepositoryLayer.Interface
         //Task<MeetingDto> GetRoomDtoById(int roomId);
         //Task UpdateCountMember(int roomId, int count);
         //Task<Meeting> GetRoomForMeetingAsync(int meetingIdInt);
-        Task<Meeting> GetMeetingByIdSignalr(int roomId);
+        Task<Meeting> GetMeetingByIdSignalr(int meetingId);
         Task<Meeting> GetMeetingForConnectionSignalr(string connectionId);
         void EndConnectionSignalr(Connection connection);
         Task UpdateCountMemberSignalr(int meetingId, int count);

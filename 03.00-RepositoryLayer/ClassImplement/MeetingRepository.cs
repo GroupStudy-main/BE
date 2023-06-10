@@ -25,13 +25,10 @@ namespace RepositoryLayer.ClassImplement
         {
             return base.CreateAsync(entity);
         }
-
-
         public override Task<Meeting> GetByIdAsync(int id)
         {
             return base.GetByIdAsync(id);
         }
-
         public override IQueryable<Meeting> GetList()
         {
             return base.GetList();
@@ -40,7 +37,6 @@ namespace RepositoryLayer.ClassImplement
         {
             return base.RemoveAsync(id);
         }
-
         public override Task UpdateAsync(Meeting entity)
         {
             return base.UpdateAsync(entity);
@@ -48,22 +44,33 @@ namespace RepositoryLayer.ClassImplement
 
         ///SignalR
         ////////////////////////////////////////////////////////////
-        public Task<Meeting> GetMeetingByIdSignalr(int roomId)
+        public async Task<Meeting> GetMeetingByIdSignalr(int meetingId)
         {
-            throw new NotImplementedException();
+            return await dbContext.Meetings.Include(x => x.Connections).FirstOrDefaultAsync(x => x.Id == meetingId);
         }
 
-        public Task<Meeting> GetMeetingForConnectionSignalr(string connectionId)
+        public async Task<Meeting> GetMeetingForConnectionSignalr(string connectionId)
         {
-            throw new NotImplementedException();
+            return await dbContext.Meetings.Include(x => x.Connections)
+                .Where(x => x.Connections.Any(c => c.Id == connectionId))
+                .FirstOrDefaultAsync();
         }
 
         public void EndConnectionSignalr(Connection connection)
         {
-            throw new NotImplementedException();
+            dbContext.Connections.Remove(connection);
+            dbContext.SaveChanges();
         }
 
-        
-
+        public async Task UpdateCountMemberSignalr(int roomId, int count)
+        {
+            var meeting = await dbContext.Meetings.FindAsync(roomId);
+            if (meeting != null)
+            {
+                meeting.CountMember = count;
+            }
+            dbContext.Meetings.Update(meeting);
+            await dbContext.SaveChangesAsync();
+        }
     }
 }

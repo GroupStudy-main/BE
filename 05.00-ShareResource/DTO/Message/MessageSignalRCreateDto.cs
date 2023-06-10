@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ShareResource.DTO
 {
-    public class MessageSignalRCreateDto
+    public class MessageSignalrCreateDto
     {
         public string Content { get; set; }
     }

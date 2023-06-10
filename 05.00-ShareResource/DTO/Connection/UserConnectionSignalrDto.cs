@@ -11,10 +11,10 @@ namespace ShareResource.DTO.Connection
         public UserConnectionSignalrDto() { }
         public UserConnectionSignalrDto(string userName, int roomId)
         {
-            UserName = userName;
-            RoomId = roomId;
+            Username = userName;
+            MeetingId = roomId;
         }
-        public string UserName { get; set; }
-        public int RoomId { get; set; }
+        public string Username { get; set; }
+        public int MeetingId { get; set; }
     }
 }
