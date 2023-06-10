@@ -11,6 +11,7 @@
         public virtual ICollection<PastMeetingGetDto> PastMeetings { get; set; }
         public virtual ICollection<LiveMeetingGetDto> LiveMeetings { get; set; }
         public virtual ICollection<ScheduleMeetingGetDto> ScheduleMeetings { get; set; }
+        public ICollection<SubjectGetDto> Subjects { get; set; }
 
     }
 }
