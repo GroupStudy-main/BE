@@ -118,7 +118,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapHub<PresenceHub>("hubs/presence");
-app.MapHub<MeetHub>("hubs/chathub");
+app.MapHub<GroupHub>("hubs/grouphub");
+app.MapHub<MeetingHub>("hubs/meetinghub");
 
 app.Run();

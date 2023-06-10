@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ShareResource.DTO
 {
-    public class MemberDto
+    public class MemberSignalrDto
     {
         public string UserName { get; set; }
         public string DisplayName { get; set; }

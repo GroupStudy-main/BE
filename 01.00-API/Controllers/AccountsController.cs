@@ -25,11 +25,11 @@ namespace API.Controllers
         private const string FAIL_CONFIRM_PASSWORD_MSG = "Xác nhận mật khẩu thất bại";
         private readonly IServiceWrapper services;
         private readonly IRepoWrapper unitOfWork;
-        private readonly IHubContext<PresenceHub> presenceHub;
+        private readonly IHubContext<GroupHub> presenceHub;
         private readonly PresenceTracker presenceTracker;
         private readonly IMapper mapper;
 
-        public AccountsController(IServiceWrapper services, IRepoWrapper unitOfWork, IHubContext<PresenceHub> presenceHub, PresenceTracker presenceTracker, IMapper mapper)
+        public AccountsController(IServiceWrapper services, IRepoWrapper unitOfWork, IHubContext<GroupHub> presenceHub, PresenceTracker presenceTracker, IMapper mapper)
         {
             this.services = services;
             this.unitOfWork = unitOfWork;

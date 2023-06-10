@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace ShareResource.DTO
 {
-    public class MessageDto
+    public class MessageSignalRCreateDto
     {
-        public string SenderDisplayName { get; set; }
-        public string SenderUsername { get; set; }
         public string Content { get; set; }
-        public DateTime MessageSent { get; set; }
     }
 }

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace ShareResource.DTO.Connection
 {
-    public class UserConnectionDto
+    public class UserConnectionSignalrDto
     {
-        public UserConnectionDto() { }
-        public UserConnectionDto(string userName, int roomId)
+        public UserConnectionSignalrDto() { }
+        public UserConnectionSignalrDto(string userName, int roomId)
         {
             UserName = userName;
             RoomId = roomId;
