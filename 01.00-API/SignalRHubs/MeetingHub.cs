@@ -41,6 +41,10 @@ namespace API.SignalRHub
         //BE SendAsync(OnShareScreenMsg, isShareScreen: bool)
         public static string OnShareScreenMsg => "OnShareScreen";
 
+        //BE SendAsync(OnConnectMeetHubSuccessfullyMsg, msg: string);
+
+        public static string OnConnectMeetHubSuccessfullyMsg => "OnConnectMeetHubSuccessfully";
+
         //IMapper _mapper;
         IHubContext<GroupHub> groupHub;
         PresenceTracker presenceTracker;
@@ -157,7 +161,7 @@ namespace API.SignalRHub
             await repos.Meetings.UpdateCountMemberSignalr(meetingIdInt, currentUsersInMeeting.Length);
 
             //Test
-            await Clients.Caller.SendAsync("OnConnectMeetHubSuccessfully", $"Connect meethub dc r! Fucck you! {username} vô dc r ae ơi!!!");
+            await Clients.Caller.SendAsync(OnConnectMeetHubSuccessfullyMsg, $"Connect meethub dc r! {username} vô dc r ae ơi!!!");
 
             // Step 6: Thông báo với groupHub.Group(groupId) số người ở trong phòng  
             List<string> currentConnectionIds = await presenceTracker.GetConnectionIdsForUser(new UserConnectionSignalrDto(username, meetingIdInt));
