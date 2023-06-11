@@ -24,6 +24,7 @@ namespace RepositoryLayer.ClassImplement
             groupMembers = new GroupMemberReposity(dbContext);
             classes = new ClassRepository(dbContext);
             subjects = new SubjectRepository(dbContext);
+            connections = new ConnectionRepository(dbContext);
         }
 
         private IAccountRepo users;
@@ -117,6 +118,18 @@ namespace RepositoryLayer.ClassImplement
                     subjects = new SubjectRepository(dbContext);
                 }
                 return subjects;
+            }
+        }
+        private IConnectionRepository connections;
+        public IConnectionRepository Connections
+        {
+            get
+            {
+                if (connections is null)
+                {
+                    connections = new ConnectionRepository(dbContext);
+                }
+                return connections;
             }
         }
     }

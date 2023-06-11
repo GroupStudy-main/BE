@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace RepositoryLayer.Interface
 {
@@ -15,5 +16,6 @@ namespace RepositoryLayer.Interface
         public IGroupMemberReposity GroupMembers { get; }
         public IClassReposity Classes { get; }
         public ISubjectRepository Subjects { get; }
+        public IConnectionRepository Connections { get; }
     }
 }

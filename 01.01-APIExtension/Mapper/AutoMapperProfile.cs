@@ -117,6 +117,9 @@ namespace ShareResource.Mapper
                 .ForMember(dest => dest.DeclineRequest, opt => opt.MapFrom(
                     src => src.GroupMembers
                         .Where(e => e.State == GroupMemberState.Declined)))
+                .ForMember(dest => dest.Subjects, opt => opt.MapFrom(
+                    src => src.GroupSubjects.Select(gs => gs.Subject)))
+
                 //Past
                 .ForMember(dest => dest.PastMeetings, opt => opt.MapFrom(
                     src => src.Meetings
@@ -136,10 +139,13 @@ namespace ShareResource.Mapper
                     src => src.GroupMembers
                         .Where(e => e.State == GroupMemberState.Leader || e.State == GroupMemberState.Member)
                         .Select(e => e.Account)))
-
+                .ForMember(dest => dest.Subjects, opt => opt.MapFrom(
+                    src => src.GroupSubjects.Select(gs => gs.Subject)))
+                //Live
                 .ForMember(dest => dest.LiveMeetings, opt => opt.MapFrom(
                     src => src.Meetings
                         .Where(e => e.Start != null && e.End == null)))
+                //Schedule
                 .ForMember(dest => dest.ScheduleMeetings, opt => opt.MapFrom(
                     src => src.Meetings
                         .Where(e => e.ScheduleStart != null && e.ScheduleStart.Value.Date >= DateTime.Today && e.Start == null)))
@@ -149,7 +155,7 @@ namespace ShareResource.Mapper
         private void MapAccount()
         {
             BasicMap<Account, StudentGetDto, AccountRegisterDto, AccountUpdateDto>();
-            CreateMap<Account, MemberDto>();
+            CreateMap<Account, MemberSignalrDto>();
             CreateMap<Account, AccountProfileDto>()
                 .ForMember(dest => dest.RoleName, opt => opt.MapFrom(
                     src => src.Role.Name))

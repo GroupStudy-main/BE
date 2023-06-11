@@ -1,7 +1,10 @@
-﻿using DataLayer.DBContext;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using DataLayer.DBContext;
 using DataLayer.DBObject;
 using Microsoft.EntityFrameworkCore;
 using RepositoryLayer.Interface;
+using ShareResource.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +16,7 @@ namespace RepositoryLayer.ClassImplement
     public class AccountRepo : BaseRepo<Account, int>, IAccountRepo
     {
         private readonly GroupStudyContext dbContext;
+        private IMapper mapper;
 
         public AccountRepo(GroupStudyContext dbContext):base(dbContext) 
         {
@@ -64,6 +68,20 @@ namespace RepositoryLayer.ClassImplement
         public override Task UpdateAsync(Account entity)
         {
             return base.UpdateAsync(entity);
+        }
+
+        //SignalR
+        //////////////////////////////////////////////////////////////////////
+        public async Task<Account> GetUserByUsernameSignalrAsync(string username)
+        {
+            return await dbContext.Accounts.SingleOrDefaultAsync(u => u.Username == username);
+        }
+
+        public async Task<MemberSignalrDto> GetMemberSignalrAsync(string username)
+        {
+            return await dbContext.Accounts.Where(x => x.Username == username)
+                .ProjectTo<MemberSignalrDto>(mapper.ConfigurationProvider)//add CreateMap<AppUser, MemberDto>(); in AutoMapperProfiles
+                .SingleOrDefaultAsync();
         }
     }
 }
