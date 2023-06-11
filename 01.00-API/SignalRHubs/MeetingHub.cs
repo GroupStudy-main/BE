@@ -37,16 +37,20 @@ namespace API.SignalRHub
         //BE SendAsync(OnShareScreenLastUser, new { usernameTo: string, isShare: bool })
         public static string OnShareScreenLastUser => "OnShareScreenLastUser";
 
-        //BE SendAsync(OnMuteCameraMsg, new { username: String, mute: bool })
-        public static string OnMuteCameraMsg => "OnMuteCamera";
-
-        //SendAsync(OnMuteMicroMsg, new { username: String, mute: bool })
-        public static string OnMuteMicroMsg => "OnMuteMicro";
-
-
         //Thông báo người nào đang share screen
         //SendAsync(OnUserIsSharingMsg, screenSharerUsername: string);
         public static string OnUserIsSharingMsg => "OnUserIsSharing";
+
+        //Thông báo tình trạng muteCam của username. Chỉ dùng để thay đổi icon cam trên 
+        //màn hình của người khác. Việc truyền cam là do peer trên FE quyết định
+        //BE SendAsync(OnMuteCameraMsg, new { username: String, mute: bool })
+        public static string OnMuteCameraMsg => "OnMuteCamera";
+
+        //Thông báo tình trạng muteMic của username. Chỉ dùng để thay đổi icon mic trên 
+        //màn hình của người khác. Việc truyền mic hay không là do peer trên FE quyết định
+        //SendAsync(OnMuteMicroMsg, new { username: String, mute: bool })
+        public static string OnMuteMicroMsg => "OnMuteMicro";
+
 
 
         //Thông báo có Chat Message mới
@@ -301,7 +305,7 @@ namespace API.SignalRHub
 
             if (meeting != null)
             {
-                var message = new MessageSignalrGetDto
+                MessageSignalrGetDto message = new MessageSignalrGetDto
                 {
                     SenderUsername = userName,
                     SenderDisplayName = sender.Username,
