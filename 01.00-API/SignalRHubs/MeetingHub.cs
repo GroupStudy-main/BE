@@ -16,34 +16,44 @@ namespace API.SignalRHub
         //BE SendAsync(UserOnlineInGroupMsg, MemberSignalrDto)
         public static string UserOnlineInMeetingMsg => "UserOnlineInMeeting";
 
+        //Dùng để test coi có connect thành công chưa. Nếu connect thành công, be sẽ
+        //gửi 1 đoạn msg thông báo là đã connect meetingHub thành công
+        //BE SendAsync(OnConnectMeetHubSuccessfullyMsg, msg: string);
+        public static string OnConnectMeetHubSuccessfullyMsg => "OnConnectMeetHubSuccessfully";
+        //Dùng để test coi có invoke thành công không. Nếu invoke thành công, be sẻ 
+        //gửi 1 đoạn msg thông báo đã invoke thành công
+        public static string OnTestReceiveInvokeMsg => "OnTestReceiveInvoke";
+
+        //Thông báo có người rời meeting
+        //BE SendAsync(UserOfflineInGroupMsg, offlineUser: MemberSignalrDto)
+        public static string UserOfflineInMeetingMsg => "UserOfflineInMeeting";
+       
+        //Thông báo có user nào đang show screen ko. Cho FE biết để chuyển  
+        //màn hình chính qua lại chế độ show các cam và chế độ share screen
+        //BE SendAsync(OnShareScreenMsg, isShareScreen: bool)
+        public static string OnShareScreenMsg => "OnShareScreen";
+
+        //Thông báo tới người đang share screen là có người mới, shareScreenPeer share luôn cho người này
+        //BE SendAsync(OnShareScreenLastUser, new { usernameTo: string, isShare: bool })
+        public static string OnShareScreenLastUser => "OnShareScreenLastUser";
+
         //BE SendAsync(OnMuteCameraMsg, new { username: String, mute: bool })
         public static string OnMuteCameraMsg => "OnMuteCamera";
 
         //SendAsync(OnMuteMicroMsg, new { username: String, mute: bool })
         public static string OnMuteMicroMsg => "OnMuteMicro";
 
-        //Thông báo tới người đang share screen là có người mới, shareScreenHub share luôn cho người này
-        //BE SendAsync(OnShareScreenLastUser, new { usernameTo: string, isShare: bool })
-        public static string OnShareScreenLastUser => "OnShareScreenLastUser";
 
         //Thông báo người nào đang share screen
         //SendAsync(OnUserIsSharingMsg, screenSharerUsername: string);
         public static string OnUserIsSharingMsg => "OnUserIsSharing";
 
-        //Thông báo có người rời meeting
-        //BE SendAsync(UserOfflineInGroupMsg, offlineUser: MemberSignalrDto)
-        public static string UserOfflineInMeetingMsg => "UserOfflineInMeeting";
 
         //Thông báo có Chat Message mới
         //BE SendAsync("NewMessage", MessageSignalrGetDto)
         public static string NewMessageMsg => "NewMessage";
 
-        //BE SendAsync(OnShareScreenMsg, isShareScreen: bool)
-        public static string OnShareScreenMsg => "OnShareScreen";
 
-        //BE SendAsync(OnConnectMeetHubSuccessfullyMsg, msg: string);
-
-        public static string OnConnectMeetHubSuccessfullyMsg => "OnConnectMeetHubSuccessfully";
 
         //IMapper _mapper;
         IHubContext<GroupHub> groupHub;
@@ -466,5 +476,12 @@ namespace API.SignalRHub
         //    return meeting;
         //}
         #endregion
+        //TestOnly
+        public async Task TestReceiveInvoke(string msg)
+        {
+            Console.WriteLine("+++++++++++==================== " + msg + " ReceiveInvoke successfull");
+            //int meetId = presenceTracker.
+            Clients.Caller.SendAsync(OnTestReceiveInvokeMsg, "meehub invoke dc rồi ae ơi " + msg);
+        }
     }
 }
