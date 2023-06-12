@@ -267,6 +267,61 @@ namespace API.SignalRHub
             await base.OnDisconnectedAsync(exception);
         }
 
+        #region old code
+        //public async Task ShareScreen(int roomid, bool isShareScreen)
+        //{
+        //    //Console.WriteLine("2.   " + new String('+', 50));
+        //    //Console.WriteLine("2.   Hub/Chat: ShareScreen(id, bool)");
+        //    FunctionTracker.Instance().AddHubFunc("Hub/Chat: ShareScreen(id, bool)");
+        //    if (isShareScreen)//true is doing share
+        //    {
+        //        await shareScreenTracker.UserConnectedToShareScreen(new UserConnectionSignalrDto(Context.User.GetUsername(), roomid));
+        //        await Clients.Group(roomid.ToString()).SendAsync("OnUserIsSharing", Context.User.GetUsername());
+        //    }
+        //    else
+        //    {
+        //        await shareScreenTracker.RemoveUserShareScreen(new UserConnectionSignalrDto(Context.User.GetUsername(), roomid));
+        //    }
+        //    await Clients.Group(roomid.ToString()).SendAsync("OnShareScreen", isShareScreen);
+        //    //var meetingGroup = await _unitOfWork.Rooms.GetMeetingForConnection(Context.ConnectionId);
+        //}
+        #endregion
+        //sẽ dc gọi khi FE gọi chatHubConnection.invoke('ShareScreen', roomId, isShareScreen)
+        public async Task ShareScreen(int meetingId, bool isShareScreen)
+        {
+            FunctionTracker.Instance().AddHubFunc("Hub/Chat: ShareScreen(id, bool)");
+            if (isShareScreen)//true is doing share
+            {
+                await shareScreenTracker.AddUserSharingScreen(new UserConnectionSignalrDto(Context.User.GetUsername(), meetingId));
+                await Clients.Group(meetingId.ToString()).SendAsync(OnUserIsSharingMsg, Context.User.GetUsername());
+            }
+            else
+            {
+                await shareScreenTracker.RemoveUserShareScreen(new UserConnectionSignalrDto(Context.User.GetUsername(), meetingId));
+            }
+            await Clients.Group(meetingId.ToString()).SendAsync(OnShareScreenMsg, isShareScreen);
+            //var group = await _unitOfWork.RoomRepository.GetRoomForConnection(Context.ConnectionId);
+        }
+
+        #region old code ShareScreenToUser
+        //public async Task ShareScreenToUser(int roomid, string username, bool isShare)
+        //{
+        //    //Console.WriteLine("2.   " + new String('+', 50));
+        //    //Console.WriteLine("2.   Hub/Chat: ShareScreenToUser(id, contextUsername, bool)");
+        //    FunctionTracker.Instance().AddHubFunc("Hub/Chat: ShareScreenToUser(id, contextUsername, bool)");
+        //    List<string> currentBeginConnectionsUser = await presenceTracker.GetConnectionIdsForUser(new UserConnectionSignalrDto(username, roomid));
+        //    if (currentBeginConnectionsUser.Count > 0)
+        //        await Clients.Clients(currentBeginConnectionsUser).SendAsync("OnShareScreen", isShare);
+        //}
+        #endregion
+        public async Task ShareScreenToUser(int meetingId, string receiverUsername, bool isShare)
+        {
+            FunctionTracker.Instance().AddHubFunc("Hub/Chat: ShareScreenToUser(id, username, bool)");
+            var ReceiverConnectionIds = await presenceTracker.GetConnectionIdsForUser(new UserConnectionSignalrDto(receiverUsername, meetingId));
+            if (ReceiverConnectionIds.Count > 0)
+                await Clients.Clients(ReceiverConnectionIds).SendAsync(OnShareScreenMsg, isShare);
+        }
+
         #region old map
         //public async Task SendMessage(MessageSignalRCreateDto createMessageDto)
         //{
@@ -340,10 +395,10 @@ namespace API.SignalRHub
         public async Task MuteMicro(bool muteMicro)
         {
             FunctionTracker.Instance().AddHubFunc("Hub/Chat: MuteMicro(bool)");
-            var group = await repos.Meetings.GetMeetingForConnectionSignalr(Context.ConnectionId);
-            if (group != null)
+            Meeting meeting = await repos.Meetings.GetMeetingForConnectionSignalr(Context.ConnectionId);
+            if (meeting != null)
             {
-                await Clients.Group(group.Id.ToString()).SendAsync(OnMuteMicroMsg, new { username = Context.User.GetUsername(), mute = muteMicro });
+                await Clients.Group(meeting.Id.ToString()).SendAsync(OnMuteMicroMsg, new { username = Context.User.GetUsername(), mute = muteMicro });
             }
             else
             {
@@ -381,61 +436,6 @@ namespace API.SignalRHub
             {
                 throw new HubException("group == null");
             }
-        }
-
-        #region old code
-        //public async Task ShareScreen(int roomid, bool isShareScreen)
-        //{
-        //    //Console.WriteLine("2.   " + new String('+', 50));
-        //    //Console.WriteLine("2.   Hub/Chat: ShareScreen(id, bool)");
-        //    FunctionTracker.Instance().AddHubFunc("Hub/Chat: ShareScreen(id, bool)");
-        //    if (isShareScreen)//true is doing share
-        //    {
-        //        await shareScreenTracker.UserConnectedToShareScreen(new UserConnectionSignalrDto(Context.User.GetUsername(), roomid));
-        //        await Clients.Group(roomid.ToString()).SendAsync("OnUserIsSharing", Context.User.GetUsername());
-        //    }
-        //    else
-        //    {
-        //        await shareScreenTracker.RemoveUserShareScreen(new UserConnectionSignalrDto(Context.User.GetUsername(), roomid));
-        //    }
-        //    await Clients.Group(roomid.ToString()).SendAsync("OnShareScreen", isShareScreen);
-        //    //var meetingGroup = await _unitOfWork.Rooms.GetMeetingForConnection(Context.ConnectionId);
-        //}
-        #endregion
-        //sẽ dc gọi khi FE gọi chatHubConnection.invoke('ShareScreen', roomId, isShareScreen)
-        public async Task ShareScreen(int roomid, bool isShareScreen)
-        {
-            FunctionTracker.Instance().AddHubFunc("Hub/Chat: ShareScreen(id, bool)");
-            if (isShareScreen)//true is doing share
-            {
-                await shareScreenTracker.AddUserSharingScreen(new UserConnectionSignalrDto(Context.User.GetUsername(), roomid));
-                await Clients.Group(roomid.ToString()).SendAsync(OnUserIsSharingMsg, Context.User.GetUsername());
-            }
-            else
-            {
-                await shareScreenTracker.RemoveUserShareScreen(new UserConnectionSignalrDto(Context.User.GetUsername(), roomid));
-            }
-            await Clients.Group(roomid.ToString()).SendAsync(OnShareScreenMsg, isShareScreen);
-            //var group = await _unitOfWork.RoomRepository.GetRoomForConnection(Context.ConnectionId);
-        }
-
-        #region old code ShareScreenToUser
-        //public async Task ShareScreenToUser(int roomid, string username, bool isShare)
-        //{
-        //    //Console.WriteLine("2.   " + new String('+', 50));
-        //    //Console.WriteLine("2.   Hub/Chat: ShareScreenToUser(id, contextUsername, bool)");
-        //    FunctionTracker.Instance().AddHubFunc("Hub/Chat: ShareScreenToUser(id, contextUsername, bool)");
-        //    List<string> currentBeginConnectionsUser = await presenceTracker.GetConnectionIdsForUser(new UserConnectionSignalrDto(username, roomid));
-        //    if (currentBeginConnectionsUser.Count > 0)
-        //        await Clients.Clients(currentBeginConnectionsUser).SendAsync("OnShareScreen", isShare);
-        //}
-        #endregion
-        public async Task ShareScreenToUser(int roomid, string username, bool isShare)
-        {
-            FunctionTracker.Instance().AddHubFunc("Hub/Chat: ShareScreenToUser(id, username, bool)");
-            var currentBeginConnectionsUser = await presenceTracker.GetConnectionIdsForUser(new UserConnectionSignalrDto(username, roomid));
-            if (currentBeginConnectionsUser.Count > 0)
-                await Clients.Clients(currentBeginConnectionsUser).SendAsync(OnShareScreenMsg, isShare);
         }
 
         #region old code
