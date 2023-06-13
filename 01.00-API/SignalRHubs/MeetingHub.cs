@@ -253,15 +253,15 @@ namespace API.SignalRHub
                 await Clients.Group(meeting.Id.ToString()).SendAsync(UserOfflineInMeetingMsg, offLineUser);
 
                 //step 7: Update lại số người trong phòng
-                UserConnectionSignalrDto[] currentUsersInRoom = await presenceTracker.GetOnlineUsersInMeet(meeting.Id);
-                await repos.Meetings.UpdateCountMemberSignalr(meeting.Id, currentUsersInRoom.Length);
+                UserConnectionSignalrDto[] currentUsersInMeeting = await presenceTracker.GetOnlineUsersInMeet(meeting.Id);
+                await repos.Meetings.UpdateCountMemberSignalr(meeting.Id, currentUsersInMeeting.Length);
 
                 //await presenceHub.Clients.All.SendAsync("CountMemberInGroup",
                 //       new { roomId = group.RoomId, countMember = currentUsers.Length });
 
                 //step 8: Thông báo với groupHub.Group(groupId) số người ở trong phòng
                 await groupHub.Clients.All.SendAsync(GroupHub.CountMemberInGroupMsg,
-                       new { meetingId = meeting.Id, countMember = currentUsersInRoom.Length });
+                       new { meetingId = meeting.Id, countMember = currentUsersInMeeting.Length });
             }
             //step 9: Disconnect khỏi meetHub
             await base.OnDisconnectedAsync(exception);
