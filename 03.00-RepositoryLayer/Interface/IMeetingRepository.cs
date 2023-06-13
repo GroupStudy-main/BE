@@ -20,8 +20,9 @@ namespace RepositoryLayer.Interface
         //Task<Meeting> GetRoomForMeetingAsync(int meetingIdInt);
         Task<Meeting> GetMeetingByIdSignalr(int meetingId);
         Task<Meeting> GetMeetingForConnectionSignalr(string connectionId);
-        void EndConnectionSignalr(Connection connection);
+        Task EndConnectionSignalr(Connection connection);
         Task UpdateCountMemberSignalr(int meetingId, int count);
-
+        IQueryable<Connection> GetActiveConnectionsForMeetingSignalr(int meetingId);
+        Task EndMeetingSignalRAsync(Meeting meeting);
     }
 }

@@ -456,7 +456,12 @@ namespace API.SignalRHub
             FunctionTracker.Instance().AddHubFunc("Hub/Chat: RemoveConnectionFromMeeting()");
             Meeting meeting = await repos.Meetings.GetMeetingForConnectionSignalr(Context.ConnectionId);
             Connection? connection = meeting.Connections.FirstOrDefault(x => x.Id == Context.ConnectionId);
-            repos.Meetings.EndConnectionSignalr(connection);
+            await repos.Meetings.EndConnectionSignalr(connection);
+            IQueryable<Connection> activeConnections = repos.Meetings.GetActiveConnectionsForMeetingSignalr(meeting.Id);
+            if(activeConnections.Count() == 0) 
+            {
+                await repos.Meetings.EndMeetingSignalRAsync(meeting);
+            }
             return meeting;
         }
 
@@ -483,7 +488,6 @@ namespace API.SignalRHub
         //TestOnly
         public async Task TestReceiveInvoke(string msg)
         {
-            Console.WriteLine("+++++++++++==================== " + msg + " ReceiveInvoke successfull");
             //int meetId = presenceTracker.
             Clients.Caller.SendAsync(OnTestReceiveInvokeMsg, "meehub invoke dc rồi ae ơi " + msg);
         }

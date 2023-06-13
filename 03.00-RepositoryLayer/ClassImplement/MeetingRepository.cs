@@ -56,10 +56,11 @@ namespace RepositoryLayer.ClassImplement
                 .FirstOrDefaultAsync();
         }
 
-        public void EndConnectionSignalr(Connection connection)
+        public async Task EndConnectionSignalr(Connection connection)
         {
-            dbContext.Connections.Remove(connection);
-            dbContext.SaveChanges();
+            connection.End = DateTime.Now;
+            dbContext.Connections.Update(connection);
+            await dbContext.SaveChangesAsync();
         }
 
         public async Task UpdateCountMemberSignalr(int roomId, int count)
@@ -69,6 +70,19 @@ namespace RepositoryLayer.ClassImplement
             {
                 meeting.CountMember = count;
             }
+            dbContext.Meetings.Update(meeting);
+            await dbContext.SaveChangesAsync();
+        }
+
+        public IQueryable<Connection> GetActiveConnectionsForMeetingSignalr(int meetingId)
+        {
+            return dbContext.Connections
+                .Where(e => e.MeetingId == meetingId && e.End == null);
+        }
+
+        public async Task EndMeetingSignalRAsync(Meeting meeting)
+        {
+            meeting.End = DateTime.Now;
             dbContext.Meetings.Update(meeting);
             await dbContext.SaveChangesAsync();
         }
