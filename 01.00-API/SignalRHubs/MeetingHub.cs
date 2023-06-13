@@ -286,6 +286,7 @@ namespace API.SignalRHub
         //    //var meetingGroup = await _unitOfWork.Rooms.GetMeetingForConnection(Context.ConnectionId);
         //}
         #endregion
+        //Có trong flow người mới vào meeting và flow có người bật share screen
         //sẽ dc gọi khi FE gọi chatHubConnection.invoke('ShareScreen', roomId, isShareScreen)
         public async Task ShareScreen(int meetingId, bool isShareScreen)
         {
