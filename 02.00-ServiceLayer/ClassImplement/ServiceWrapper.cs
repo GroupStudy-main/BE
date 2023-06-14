@@ -57,5 +57,19 @@ namespace ServiceLayer.ClassImplement
                 return meetingService;
             }
         }
+
+        private IDocumentFileService _documentFileService;
+
+        public IDocumentFileService DocumentFiles
+        {
+            get
+            {
+                if (_documentFileService is null)
+                {
+                    _documentFileService = new DocumentFileService(repos);
+                }
+                return _documentFileService;
+            }
+        }
     }
 }

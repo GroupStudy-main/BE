@@ -9,5 +9,7 @@ namespace ServiceLayer.Interface
         public IAuthService Auth { get; }
         
         public IMeetingService Meeting { get; }
+        
+        public IDocumentFileService DocumentFiles { get; }
     }
 }

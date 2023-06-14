@@ -84,5 +84,20 @@ namespace RepositoryLayer.ClassImplement
                 return meetings;
             }
         }
+        
+        private IDocumentFileRepository documents;
+
+        public IDocumentFileRepository DocumentFiles
+        {
+            get
+            {
+                if (documents is null)
+                {
+                    documents = new DocumentFileRepository(dbContext);
+                }
+                return documents;
+            }
+            
+        }
     }
 }

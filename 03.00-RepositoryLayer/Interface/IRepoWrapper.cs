@@ -13,5 +13,6 @@ namespace RepositoryLayer.Interface
         public IMeetingRepository Meetings { get; }
         public IGroupRepository Groups { get; }
         
+        public IDocumentFileRepository DocumentFiles { get; }
     }
 }
