@@ -4,7 +4,7 @@ namespace ServiceLayer.Interface.Db;
 
 public interface IDocumentFileService
 {
-    IQueryable<DocumentFile> GetList(string type);
+    IQueryable<DocumentFile> GetList();
 
     Task CreateDocumentFile(DocumentFile documentFile);
     

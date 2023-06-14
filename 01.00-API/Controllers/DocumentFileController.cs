@@ -31,6 +31,7 @@ public class DocumentFileController : ControllerBase
     public async Task<ActionResult> UploadFile(IFormFile file, [FromRoute] int meetingId)
     {
         string httpFilePath = "";
+        var documentFile = new DocumentFile();
         try
         {
             if (file.Length > 0)
@@ -49,10 +50,10 @@ public class DocumentFileController : ControllerBase
 
             if (!String.IsNullOrEmpty(httpFilePath))
             {
-                var documentFile = new DocumentFile();
                 documentFile.HttpLink = httpFilePath;
                 documentFile.Approved = false;
                 documentFile.MeetingId = meetingId;
+                documentFile.CreatedDate = DateTime.Now;
                 await _service.DocumentFiles.CreateDocumentFile(documentFile);
             }
         }
@@ -61,45 +62,33 @@ public class DocumentFileController : ControllerBase
             throw new Exception("File Copy Failed", ex);
         }
 
-        return Ok(httpFilePath);
+        return Ok(documentFile);
     }
 
     // GET: api/Meetings
     [HttpGet("/get-list-file")]
-    public async Task<ActionResult<MeetingGetDto>> DownloadFile([FromQuery] string? type)
+    public async Task<ActionResult<DocumentFile>> GetListFile()
     {
-        if (String.IsNullOrEmpty(type))
-        {
-            type = "All";
-        }
 
-        var meetings = _service.Meeting.GetListMeeting(type).ToList();
-        if (null == meetings || meetings.Count < 1)
-        {
-            return NotFound();
-        }
-
-        List<MeetingGetDto> result = new List<MeetingGetDto>();
-
-        foreach (var item in meetings)
-        {
-            result.Add(_mapper.Map<MeetingGetDto>(item));
-        }
+        var result = _service.DocumentFiles.GetList();
 
         return Ok(result);
     }
 
     [HttpPut("/accept-file")]
-    public async Task<IActionResult> AcceptFile(int id)
+    public async Task<IActionResult> UpdateFile(int id, bool approved)
     {
-        var meeting = _service.Meeting.GetById(id).Result;
-        if (null == meeting)
+        var file = _service.DocumentFiles.GetById(id).Result;
+        if (null == file)
         {
             return NotFound();
         }
+        if (approved)
+        {
+            file.Approved = approved;
+            await _service.DocumentFiles.UpdateDocumentFile(file);
+        }
 
-        meeting.Start = DateTime.Now;
-        await _service.Meeting.UpdateMeeting(meeting);
-        return Ok("Meeting started");
+        return Ok("approved");
     }
 }

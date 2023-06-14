@@ -14,7 +14,7 @@ public class DocumentFileService : IDocumentFileService
     }
 
     
-    public IQueryable<DocumentFile> GetList(string type)
+    public IQueryable<DocumentFile> GetList()
     {
         return repos.DocumentFiles.GetList();
     }

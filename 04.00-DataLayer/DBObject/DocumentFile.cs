@@ -9,7 +9,7 @@ public class DocumentFile
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
     public string HttpLink { get; set; }
-    public string CreatedBy { get; set; }
+    public string? CreatedBy { get; set; }
     public int MeetingId { get; set; }
     public Boolean Approved { get; set; }
     public DateTime CreatedDate { get; set; }
