@@ -12,7 +12,6 @@ namespace RepositoryLayer.ClassImplement
 {
     internal class MeetingRepository : BaseRepo<Meeting, int>, IMeetingRepository 
     {
-        private readonly GroupStudyContext dbContext;
         private IMapper _mapper;
 
         public MeetingRepository(GroupStudyContext context, IMapper mapper)
@@ -25,18 +24,33 @@ namespace RepositoryLayer.ClassImplement
         {
             return base.CreateAsync(entity);
         }
+
+        public async Task<IEnumerable<Meeting>> MassCreateAsync(IEnumerable<Meeting> creatingMeetings)
+        {
+            //await dbContext.Meetings.AddRangeAsync(creatingMeetings);
+            foreach (var item in creatingMeetings)
+            {
+                await dbContext.Meetings.AddAsync(item);
+            }
+            await dbContext.SaveChangesAsync();
+            return creatingMeetings;
+        }
+
         public override Task<Meeting> GetByIdAsync(int id)
         {
             return base.GetByIdAsync(id);
         }
+
         public override IQueryable<Meeting> GetList()
         {
             return base.GetList();
         }
+        
         public override Task RemoveAsync(int id)
         {
             return base.RemoveAsync(id);
         }
+        
         public override Task UpdateAsync(Meeting entity)
         {
             return base.UpdateAsync(entity);

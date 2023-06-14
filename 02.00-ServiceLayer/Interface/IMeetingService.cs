@@ -11,6 +11,7 @@ namespace ServiceLayer.Interface
         public IQueryable<LiveMeetingGetDto> GetLiveMeetingsForGroup(int groupId);
         public Task<Meeting> GetByIdAsync(int id);
         public Task CreateScheduleMeetingAsync(ScheduleMeetingCreateDto dto);
+        public Task<IEnumerable<Meeting>> MassCreateScheduleMeetingAsync(ScheduleMeetingMassCreateDto dto);
         public Task CreateInstantMeetingAsync(InstantMeetingCreateDto dto);
         public Task UpdateScheduleMeetingAsync(ScheduleMeetingUpdateDto dto);
         public Task StartScheduleMeetingAsync(Meeting meeting);

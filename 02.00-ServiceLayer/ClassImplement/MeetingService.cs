@@ -37,6 +37,22 @@ namespace ServiceLayer.ClassImplement
             await repos.Meetings.CreateAsync(meeting);
         }
 
+        public async Task<IEnumerable<Meeting>> MassCreateScheduleMeetingAsync(ScheduleMeetingMassCreateDto dto)
+        {
+            DateTime[] dates = Enumerable.Range(0, 1 + dto.ScheduleRangeEnd.Subtract(dto.ScheduleSRangeStart).Days)
+                .Select(offset => dto.ScheduleSRangeStart.AddDays(offset))
+                .Where(date => dto.DayOfWeeks.Contains(date.DayOfWeek + 1))
+                .ToArray();
+            IEnumerable<Meeting> creatingMeetings = dates.Select(date => new Meeting
+            {
+                Name = dto.Name + " " + date.ToString("d/M"),
+                GroupId = dto.GroupId,
+                ScheduleStart = date.Add(dto.ScheduleStartTime.TimeOfDay),
+                ScheduleEnd = date.Add(dto.ScheduleEndTime.TimeOfDay),
+            });
+            return await repos.Meetings.MassCreateAsync(creatingMeetings);
+        }
+
         public async Task<Meeting> GetByIdAsync(int id)
         {
             return await repos.Meetings.GetByIdAsync(id);

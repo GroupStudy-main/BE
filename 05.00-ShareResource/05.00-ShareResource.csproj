@@ -8,6 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DTO\Room\**" />
+    <EmbeddedResource Remove="DTO\Room\**" />
+    <None Remove="DTO\Room\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Google.Apis.Oauth2.v2" Version="1.60.0.1869" />
@@ -24,7 +30,6 @@
 
   <ItemGroup>
     <Folder Include="DTO\NewFolder\" />
-    <Folder Include="DTO\Room\" />
   </ItemGroup>
 
 </Project>

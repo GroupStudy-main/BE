@@ -24,5 +24,6 @@ namespace RepositoryLayer.Interface
         Task UpdateCountMemberSignalr(int meetingId, int count);
         IQueryable<Connection> GetActiveConnectionsForMeetingSignalr(int meetingId);
         Task EndMeetingSignalRAsync(Meeting meeting);
+        Task<IEnumerable<Meeting>> MassCreateAsync(IEnumerable<Meeting> creatingMeetings);
     }
 }
