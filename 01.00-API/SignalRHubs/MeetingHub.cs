@@ -51,8 +51,6 @@ namespace API.SignalRHub
         //SendAsync(OnMuteMicroMsg, new { username: String, mute: bool })
         public static string OnMuteMicroMsg => "OnMuteMicro";
 
-
-
         //Thông báo có Chat Message mới
         //BE SendAsync("NewMessage", MessageSignalrGetDto)
         public static string NewMessageMsg => "NewMessage";
