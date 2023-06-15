@@ -85,9 +85,17 @@ namespace ServiceLayer.ClassImplement
 
         public async Task UpdateScheduleMeetingAsync(ScheduleMeetingUpdateDto dto)
         {
-            Meeting meeting = await repos.Meetings.GetByIdAsync(dto.Id);
-            meeting.PatchUpdate(dto);
-            await repos.Meetings.UpdateAsync(meeting);
+            Meeting existed = await repos.Meetings.GetByIdAsync(dto.Id);
+            Meeting updated = new Meeting
+            {
+                Id = dto.Id,
+                GroupId = existed.GroupId,
+                Name= dto.Name,
+                ScheduleStart= dto.Date.Date.Add(dto.ScheduleStartTime),
+                ScheduleEnd= dto.Date.Date.Add(dto.ScheduleEndTime),
+            };
+            existed.PatchUpdate(updated);
+            await repos.Meetings.UpdateAsync(existed);
         }
 
         public async Task StartScheduleMeetingAsync(Meeting meeting)

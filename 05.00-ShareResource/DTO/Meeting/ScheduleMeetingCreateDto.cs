@@ -8,6 +8,7 @@ namespace ShareResource.DTO
 {
     public class ScheduleMeetingCreateDto  : BaseCreateDto
     {
+        public int GroupId { get; set; }
         private string name;
 
         public string Name
@@ -25,7 +26,6 @@ namespace ShareResource.DTO
 
         public TimeSpan ScheduleStartTime { get; set; }
         public TimeSpan ScheduleEndTime { get; set; }
-        public int GroupId { get; set; }
 
     }
 }

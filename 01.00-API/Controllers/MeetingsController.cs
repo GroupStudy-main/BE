@@ -114,6 +114,33 @@ namespace API.Controllers
         }
 
         [SwaggerOperation(
+            Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Mass create many schedule meetings within a range of time",
+            Description = "ScheduleSRangeStart: chỉ cần date, time ko quan trọng nhưng vẫn phải điền (cho 00:00:00)<br/>"
+        )]
+        //[Authorize(Roles = Actor.Student)]
+        [HttpPost("Mass-schedule")]
+        public async Task<IActionResult> MassCreateScheduleMeeting(ScheduleMeetingMassCreateDto dto)
+        {
+            int studentId = HttpContext.User.GetUserId();
+            bool isLeader = await services.Groups.IsStudentLeadingGroupAsync(studentId, dto.GroupId);
+            if (!isLeader)
+            {
+                return Unauthorized("Bạn không phải nhóm trưởng của nhóm này");
+            }
+            ValidatorResult valResult = await validators.Meetings.ValidateParams(dto, 1 /*studentId*/);
+            if (!valResult.IsValid)
+            {
+                return BadRequest(valResult.Failures);
+            }
+
+
+            IEnumerable<Meeting> createdMeetings = await services.Meetings.MassCreateScheduleMeetingAsync(dto);
+
+            //await services.Meetings.CreateScheduleMeetingAsync(dto);
+            return Ok(createdMeetings);
+        }
+
+        [SwaggerOperation(
            Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Create a new schedule meeting"
        )]
         [Authorize(Roles = Actor.Student)]
@@ -133,33 +160,6 @@ namespace API.Controllers
             }
             await services.Meetings.CreateScheduleMeetingAsync(dto);
             return Ok(dto);
-        }
-
-        [SwaggerOperation(
-            Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Mass create many schedule meetings within a range of time",
-            Description = "ScheduleSRangeStart: chỉ cần date, time ko quan trọng nhưng vẫn phải điền (cho 00:00:00)<br/>"
-        )]
-        //[Authorize(Roles = Actor.Student)]
-        [HttpPost("Mass-schedule")]
-        public async Task<IActionResult> MassCreateScheduleMeeting(ScheduleMeetingMassCreateDto dto)
-        {
-            //int studentId = HttpContext.User.GetUserId();
-            //bool isLeader = await services.Groups.IsStudentLeadingGroupAsync(studentId, dto.GroupId);
-            //if (!isLeader)
-            //{
-            //    return Unauthorized("Bạn không phải nhóm trưởng của nhóm này");
-            //}
-            ValidatorResult valResult = await validators.Meetings.ValidateParams(dto, 1 /*studentId*/);
-            if (!valResult.IsValid)
-            {
-                return BadRequest(valResult.Failures);
-            }
-
-
-            IEnumerable<Meeting> createdMeetings = await services.Meetings.MassCreateScheduleMeetingAsync(dto);
-
-            //await services.Meetings.CreateScheduleMeetingAsync(dto);
-            return Ok(createdMeetings);
         }
 
         [SwaggerOperation(

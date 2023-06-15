@@ -11,7 +11,7 @@ namespace ShareResource.UpdateApiExtension
     public static class PatchUpdateExtension
     {
         public static TDbEntity PatchUpdate<TDbEntity, TUpdateEntity>(this TDbEntity src, TUpdateEntity update)
-           where TUpdateEntity : BaseUpdateDto
+           where TUpdateEntity : class
         {
             foreach (PropertyInfo field in update.GetType().GetProperties())
             {

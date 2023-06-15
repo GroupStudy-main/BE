@@ -117,14 +117,28 @@ namespace APIExtension.Validator
                 { 
                     validatorResult.Failures.Add("Tên buổi học quá dài");
                 }
-                if (dto.ScheduleStart < DateTime.Now)
+                //Validate Date
+                if (dto.Date.Date == DateTime.Today && dto.ScheduleStartTime < DateTime.Now.TimeOfDay)
                 {
                     validatorResult.Failures.Add("Thời gian bắt đầu buổi học không hợp lí");
                 }
-                if (dto.ScheduleEnd < dto.ScheduleStart)
+                else if (dto.Date.Date < DateTime.Now.Date)
+                {
+                    validatorResult.Failures.Add("Ngày không hợp lí");
+                }
+                //validate time
+                if (dto.ScheduleEndTime < dto.ScheduleStartTime)
                 {
                     validatorResult.Failures.Add("Thời gian kết thúc buổi học không hợp lí");
                 }
+                //if (dto.ScheduleStart < DateTime.Now)
+                //{
+                //    validatorResult.Failures.Add("Thời gian bắt đầu buổi học không hợp lí");
+                //}
+                //if (dto.ScheduleEnd < dto.ScheduleStart)
+                //{
+                //    validatorResult.Failures.Add("Thời gian kết thúc buổi học không hợp lí");
+                //}
             }
             catch (Exception ex)
             {
