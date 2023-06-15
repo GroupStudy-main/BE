@@ -47,8 +47,8 @@ namespace ServiceLayer.ClassImplement
             {
                 Name = dto.Name + " " + date.ToString("d/M"),
                 GroupId = dto.GroupId,
-                ScheduleStart = date.Add(dto.ScheduleStartTime.TimeOfDay),
-                ScheduleEnd = date.Add(dto.ScheduleEndTime.TimeOfDay),
+                ScheduleStart = date.Add(dto.ScheduleStartTime),
+                ScheduleEnd = date.Add(dto.ScheduleEndTime),
             });
             return await repos.Meetings.MassCreateAsync(creatingMeetings);
         }

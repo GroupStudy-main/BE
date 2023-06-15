@@ -48,7 +48,11 @@ namespace ShareResource.Mapper
                     src => src.Group.Name))
                 .PreserveReferences();
 
-            CreateMap<ScheduleMeetingCreateDto, Meeting>();
+            CreateMap<ScheduleMeetingCreateDto, Meeting>()
+                .ForMember(dest => dest.ScheduleStart, opt => opt.MapFrom(
+                    src => src.Date.Add(src.ScheduleStartTime)))
+                .ForMember(dest => dest.ScheduleEnd, opt => opt.MapFrom(
+                    src => src.Date.Add(src.ScheduleEndTime)));
             CreateMap<InstantMeetingCreateDto, Meeting>()
                 .ForMember(dest => dest.Start, opt => opt.MapFrom(
                     src => DateTime.Now));

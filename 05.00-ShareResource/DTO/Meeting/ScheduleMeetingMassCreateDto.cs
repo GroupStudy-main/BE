@@ -17,15 +17,15 @@ namespace ShareResource.DTO
 			set { name = value.Trim(); }
 		}
 
-        private DateTime scheduleStartTime;
-        public DateTime ScheduleStartTime
+        private TimeSpan scheduleStartTime;
+        public TimeSpan ScheduleStartTime
         {
             get { return scheduleStartTime; }
             set { scheduleStartTime = value; }
         }
 
-        private DateTime scheduleEndTime;
-        public DateTime ScheduleEndTime
+        private TimeSpan scheduleEndTime;
+        public TimeSpan ScheduleEndTime
         {
             get { return scheduleEndTime; }
             set { scheduleEndTime = value; }
