@@ -17,6 +17,7 @@ public class DocumentFileController : ControllerBase
 
     //Path của thư mục chứa file
     private const string path = "D:\\UploadFile";
+
     // dòng này đổi thành host của máy
     private const string HostUploadFile = "http://192.168.0.3:8080/";
 
@@ -69,8 +70,33 @@ public class DocumentFileController : ControllerBase
     [HttpGet("/get-list-file")]
     public async Task<ActionResult<DocumentFile>> GetListFile()
     {
-
         var result = _service.DocumentFiles.GetList();
+
+        return Ok(result);
+    }
+    
+    // GET: api/Meetings
+    [HttpGet("/get-detail")]
+    public async Task<ActionResult<DocumentFile>> GetFileDetail([FromQuery] int id)
+    {
+        var result = await _service.DocumentFiles.GetById(id);
+        if (null == result)
+        {
+            return NotFound();
+        }
+        return Ok(result);
+    }
+
+    // GET: api/Meetings
+    [HttpGet("/get-file-by-meeting")]
+    public async Task<ActionResult<DocumentFile>> GetListFileByMeetingId([FromQuery] int meetingId, bool? approved)
+    {
+        var meeting = _service.Meeting.GetById(meetingId).Result;
+        if (null == meeting)
+        {
+            return NotFound();
+        }
+        var result = _service.DocumentFiles.GetListByMeetingId(meetingId, approved);
 
         return Ok(result);
     }
@@ -83,6 +109,7 @@ public class DocumentFileController : ControllerBase
         {
             return NotFound();
         }
+
         if (approved)
         {
             file.Approved = approved;
@@ -90,5 +117,19 @@ public class DocumentFileController : ControllerBase
         }
 
         return Ok("approved");
+    }
+
+    [HttpDelete("/delete-file")]
+    //chỗ này thêm Authen
+    public async Task<IActionResult> DeleteFIle(int id)
+    {
+        var file = _service.DocumentFiles.GetById(id).Result;
+        if (null == file)
+        {
+            return NotFound();
+        }
+
+        await _service.DocumentFiles.DeleteDocumentFile(id);
+        return Ok("Deleted");
     }
 }

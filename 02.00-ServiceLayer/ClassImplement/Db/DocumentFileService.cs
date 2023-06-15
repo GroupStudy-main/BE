@@ -33,4 +33,20 @@ public class DocumentFileService : IDocumentFileService
     {
         return repos.DocumentFiles.GetByIdAsync(id);
     }
+
+    public Task DeleteDocumentFile(int id)
+    {
+        return repos.DocumentFiles.RemoveAsync(id);
+    }
+
+    public IQueryable<DocumentFile> GetListByMeetingId(int meetingId, bool? approved)
+    {
+        var result = repos.DocumentFiles.GetList().Where(file => file.MeetingId == meetingId);
+        if (null != approved && approved == true)
+        {
+            result = result.Where(file => file.Approved == true);
+        }
+        
+        return result;
+    }
 }
