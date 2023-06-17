@@ -12,6 +12,7 @@ namespace APIExtension.Validator
     {
         IMeetingValidator Meetings { get; }
         IGroupMemberValidator GroupMembers { get; }
+        IAccountValidator Accounts { get; }
     }
     public class ValidatorWrapper : IValidatorWrapper
     {
@@ -21,6 +22,7 @@ namespace APIExtension.Validator
         {
             this.services = services;
             meetings = new MeetingValidator(services);
+            groupMembers = new GroupMemberValidator(services);
         }
 
         private IMeetingValidator meetings;
@@ -47,6 +49,19 @@ namespace APIExtension.Validator
                     groupMembers = new GroupMemberValidator(services);
                 }
                 return groupMembers;
+            }
+        }
+
+        private IAccountValidator accounts;
+        public IAccountValidator Accounts
+        {
+            get
+            {
+                if (accounts == null)
+                {
+                    accounts = new AccountValidator(services);
+                }
+                return accounts;
             }
         }
     }

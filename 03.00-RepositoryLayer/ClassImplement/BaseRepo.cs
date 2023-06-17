@@ -46,5 +46,10 @@ namespace RepositoryLayer.ClassImplement
             dbContext.Set<T>().Remove(entity);
             await dbContext.SaveChangesAsync();
         }
+
+        public async Task<bool> IdExistAsync(K id)
+        {
+            return await dbContext.Set<T>().FindAsync(id) != null;
+        }
     }
 }
