@@ -19,7 +19,7 @@ namespace RepositoryLayer.ClassImplement
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
-            users = new AccountRepo(dbContext);
+            users = new AccountRepo(dbContext, mapper);
             meeting = new MeetingRepository(dbContext, mapper);
             groupMembers = new GroupMemberReposity(dbContext);
             classes = new ClassRepository(dbContext);
@@ -34,7 +34,7 @@ namespace RepositoryLayer.ClassImplement
             {
                 if (users is null)
                 {
-                    users = new AccountRepo(dbContext);
+                    users = new AccountRepo(dbContext, mapper);
                 }
                 return users;
             }

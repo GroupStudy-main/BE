@@ -196,6 +196,7 @@ namespace API.SignalRHub
 
                 await Clients.Caller.SendAsync(OnUserIsSharingMsg, userIsSharing.Username);
             }
+            //Console.WriteLine("_+_+_+_+__+_+_+_+_+_+_+_+_+_+_+_++++++++++++++++++++++++\nConnect dc r !!!!!!!!!!!!!!!!!!!!!!!!!!");
         }
 
         #region old code

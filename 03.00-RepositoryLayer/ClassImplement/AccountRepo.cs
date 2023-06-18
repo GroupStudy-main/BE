@@ -18,9 +18,10 @@ namespace RepositoryLayer.ClassImplement
         private readonly GroupStudyContext dbContext;
         private IMapper mapper;
 
-        public AccountRepo(GroupStudyContext dbContext):base(dbContext) 
+        public AccountRepo(GroupStudyContext dbContext, IMapper mapper) : base(dbContext)
         {
             this.dbContext = dbContext;
+            this.mapper = mapper;
         }
 
         public override Task CreateAsync(Account entity)
@@ -79,9 +80,12 @@ namespace RepositoryLayer.ClassImplement
 
         public async Task<MemberSignalrDto> GetMemberSignalrAsync(string username)
         {
-            return await dbContext.Accounts.Where(x => x.Username == username)
-                .ProjectTo<MemberSignalrDto>(mapper.ConfigurationProvider)//add CreateMap<AppUser, MemberDto>(); in AutoMapperProfiles
-                .SingleOrDefaultAsync();
+
+            return mapper.Map<MemberSignalrDto>(
+                await dbContext.Accounts.SingleOrDefaultAsync(x => x.Username == username));
+                //.ProjectTo<MemberSignalrDto>(mapper.ConfigurationProvider);
+                //add CreateMap<AppUser, MemberDto>(); in AutoMapperProfiles
+                //.SingleOrDefaultAsync();
         }
     }
 }

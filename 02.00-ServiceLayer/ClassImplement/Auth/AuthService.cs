@@ -52,6 +52,7 @@ namespace ServiceLayer.ClassImplement.Auth
             List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, logined.Id.ToString()),
+                new Claim(ClaimTypes.Name, logined.Username),
                 new Claim(ClaimTypes.Email, logined.Email),
                 new Claim(ClaimTypes.Role, logined.Role.Name),
                 //new Claim("Email", logined.Email),
