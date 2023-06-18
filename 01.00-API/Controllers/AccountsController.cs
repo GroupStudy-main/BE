@@ -196,6 +196,7 @@ namespace API.Controllers
             return Ok(mapped);
         }
         // GET: api/Accounts/Student
+        [Tags(Actor.Test)]
         [SwaggerOperation(
           Summary = $"[{Actor.Test}/{Finnished.False}] Get all the student account"
       )]
