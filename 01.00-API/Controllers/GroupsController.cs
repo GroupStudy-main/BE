@@ -17,6 +17,7 @@ using ShareResource.UpdateApiExtension;
 using ShareResource.DTO;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using APIExtension.Validator;
 
 namespace API.Controllers
 {
@@ -26,11 +27,13 @@ namespace API.Controllers
     {
         private readonly IServiceWrapper services;
         private readonly IMapper mapper;
+        private readonly IValidatorWrapper validators;
 
-        public GroupsController(IServiceWrapper services, IMapper mapper)
+        public GroupsController(IServiceWrapper services, IMapper mapper, IValidatorWrapper validators)
         {
             this.services = services;
             this.mapper = mapper;
+            this.validators = validators;
         }
 
         // GET: api/Groups/Join
@@ -169,6 +172,11 @@ namespace API.Controllers
         public async Task<ActionResult<Group>> CreateGroup(GroupCreateDto dto)
         {
             int creatorId = HttpContext.User.GetUserId();
+            ValidatorResult valResult = await validators.Groups.ValidateParams(dto);
+            if(!valResult.IsValid)
+            {
+                return BadRequest(valResult.Failures);
+            }
             Group group = mapper.Map<Group>(dto);
             await services.Groups.CreateAsync(group, creatorId);
 

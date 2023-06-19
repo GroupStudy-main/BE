@@ -114,9 +114,10 @@ namespace API.Controllers
         [HttpPost("Register/Parent")]
         public async Task<IActionResult> ParentRegister(AccountRegisterDto dto)
         {
-            if (dto.Password != dto.ConfirmPassword)
+            ValidatorResult valResult = await validators.Accounts.ValidateParams(dto);
+            if (!valResult.IsValid)
             {
-                return BadRequest("Xác nhận password không thành công");
+                return BadRequest(valResult.Failures);
             }
             Account register = mapper.Map<Account>(dto);
             await services.Auth.Register(register, RoleNameEnum.Student);

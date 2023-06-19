@@ -24,17 +24,21 @@ namespace APIExtension.Validator
         {
             try
             {
+                if(!await services.Groups.ExistsAsync(dto.GroupId))
+                {
+                    validatorResult.Failures.Add("Nhóm không tồn tại");
+                }
                 if (!await services.Groups.IsStudentLeadingGroupAsync(studentId, dto.GroupId))
                 {
                     validatorResult.Failures.Add("Bạn không phải nhóm trưởng của nhóm này");
                 }
                 if (dto.Name.Trim().Length == 0)
                 {
-                    validatorResult.Failures.Add("Thiếu tên meeting");
+                    validatorResult.Failures.Add("Thiếu tên buổi học");
                 }
                 if (dto.Name.Trim().Length > 50)
                 {
-                    validatorResult.Failures.Add("Tên meeting quá dài");
+                    validatorResult.Failures.Add("Tên buổi học quá dài");
                 }
 
             }
@@ -103,7 +107,7 @@ namespace APIExtension.Validator
                 Meeting meeting = await services.Meetings.GetByIdAsync(dto.Id);
                 if (meeting==null)
                 {
-                    validatorResult.Failures.Add("Meeting không tồn tại");
+                    validatorResult.Failures.Add("Buổi học không tồn tại");
                 }
                 else if (!await services.Groups.IsStudentLeadingGroupAsync(studentId, meeting.GroupId))
                 {
