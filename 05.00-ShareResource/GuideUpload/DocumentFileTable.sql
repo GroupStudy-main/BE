@@ -10,3 +10,6 @@
 --     add foreign key chỗ này
     MeetingId int
 );
+
+-- rename column
+EXEC sp_rename 'dbo.DocumentFiles.MeetingId', 'GroupId', 'COLUMN';

@@ -27,9 +27,9 @@ public class DocumentFileController : ControllerBase
         this._mapper = mapper;
     }
 
-    [HttpPost("/upload-file/{meetingId}")]
+    [HttpPost("/upload-file/{groupId}")]
     [DisableRequestSizeLimit]
-    public async Task<ActionResult> UploadFile(IFormFile file, [FromRoute] int meetingId)
+    public async Task<ActionResult> UploadFile(IFormFile file, [FromRoute] int groupId)
     {
         string httpFilePath = "";
         var documentFile = new DocumentFile();
@@ -53,7 +53,7 @@ public class DocumentFileController : ControllerBase
             {
                 documentFile.HttpLink = httpFilePath;
                 documentFile.Approved = false;
-                documentFile.MeetingId = meetingId;
+                documentFile.GroupId = groupId;
                 documentFile.CreatedDate = DateTime.Now;
                 await _service.DocumentFiles.CreateDocumentFile(documentFile);
             }
@@ -88,15 +88,15 @@ public class DocumentFileController : ControllerBase
     }
 
     // GET: api/Meetings
-    [HttpGet("/get-file-by-meeting")]
-    public async Task<ActionResult<DocumentFile>> GetListFileByMeetingId([FromQuery] int meetingId, bool? approved)
+    [HttpGet("/get-file-by-group")]
+    public async Task<ActionResult<DocumentFile>> GetListFileByGroupId([FromQuery] int groupId, bool? approved)
     {
-        var meeting = _service.Meeting.GetById(meetingId).Result;
+        var meeting = _service.Meeting.GetById(groupId).Result;
         if (null == meeting)
         {
             return NotFound();
         }
-        var result = _service.DocumentFiles.GetListByMeetingId(meetingId, approved);
+        var result = _service.DocumentFiles.GetListByGroupId(groupId, approved);
 
         return Ok(result);
     }

@@ -39,9 +39,9 @@ public class DocumentFileService : IDocumentFileService
         return repos.DocumentFiles.RemoveAsync(id);
     }
 
-    public IQueryable<DocumentFile> GetListByMeetingId(int meetingId, bool? approved)
+    public IQueryable<DocumentFile> GetListByGroupId(int groupId, bool? approved)
     {
-        var result = repos.DocumentFiles.GetList().Where(file => file.MeetingId == meetingId);
+        var result = repos.DocumentFiles.GetList().Where(file => file.GroupId == groupId);
         if (null != approved && approved == true)
         {
             result = result.Where(file => file.Approved == true);

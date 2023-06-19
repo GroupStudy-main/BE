@@ -6,7 +6,7 @@ public interface IDocumentFileService
 {
     IQueryable<DocumentFile> GetList();
     
-    IQueryable<DocumentFile> GetListByMeetingId(int meetingId, bool? approved);
+    IQueryable<DocumentFile> GetListByGroupId(int groupId, bool? approved);
 
     Task CreateDocumentFile(DocumentFile documentFile);
     
