@@ -275,6 +275,26 @@ namespace DataLayer.Migrations
                     b.HasIndex("ClassId");
 
                     b.ToTable("Groups");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ClassId = 7,
+                            Name = "Nhóm 1 của học sinh 1"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ClassId = 7,
+                            Name = "Nhóm 2 của học sinh 1"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ClassId = 8,
+                            Name = "Nhóm 1 của học sinh 2"
+                        });
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.GroupMember", b =>
@@ -291,16 +311,126 @@ namespace DataLayer.Migrations
                     b.Property<int>("GroupId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsLeader")
-                        .HasColumnType("bit");
+                    b.Property<string>("InviteMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RequestMessage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("State")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountId");
-
                     b.HasIndex("GroupId");
 
+                    b.HasIndex("AccountId", "GroupId")
+                        .IsUnique();
+
                     b.ToTable("GroupMembers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AccountId = 1,
+                            GroupId = 1,
+                            State = 0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AccountId = 2,
+                            GroupId = 1,
+                            InviteMessage = "Nhóm của mình rất hay. Bạn vô nha",
+                            State = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AccountId = 3,
+                            GroupId = 1,
+                            InviteMessage = "Nhóm của mình rất hay. Bạn vô nha",
+                            State = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AccountId = 4,
+                            GroupId = 1,
+                            RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha",
+                            State = 3
+                        },
+                        new
+                        {
+                            Id = 5,
+                            AccountId = 5,
+                            GroupId = 1,
+                            RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha",
+                            State = 4
+                        },
+                        new
+                        {
+                            Id = 6,
+                            AccountId = 1,
+                            GroupId = 2,
+                            State = 0
+                        },
+                        new
+                        {
+                            Id = 7,
+                            AccountId = 2,
+                            GroupId = 2,
+                            InviteMessage = "Nhóm của mình rất hay. Bạn vô nha",
+                            State = 1
+                        },
+                        new
+                        {
+                            Id = 8,
+                            AccountId = 3,
+                            GroupId = 2,
+                            InviteMessage = "Nhóm của mình rất hay. Bạn vô nha",
+                            State = 2
+                        },
+                        new
+                        {
+                            Id = 9,
+                            AccountId = 4,
+                            GroupId = 2,
+                            RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha",
+                            State = 3
+                        },
+                        new
+                        {
+                            Id = 10,
+                            AccountId = 2,
+                            GroupId = 3,
+                            State = 0
+                        },
+                        new
+                        {
+                            Id = 11,
+                            AccountId = 1,
+                            GroupId = 3,
+                            InviteMessage = "Nhóm của mình rất hay. Bạn vô nha",
+                            State = 1
+                        },
+                        new
+                        {
+                            Id = 12,
+                            AccountId = 3,
+                            GroupId = 3,
+                            InviteMessage = "Nhóm của mình rất hay. Bạn vô nha",
+                            State = 2
+                        },
+                        new
+                        {
+                            Id = 13,
+                            AccountId = 4,
+                            GroupId = 3,
+                            RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha",
+                            State = 3
+                        });
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.GroupSubject", b =>
@@ -314,11 +444,72 @@ namespace DataLayer.Migrations
                     b.Property<int>("GroupId")
                         .HasColumnType("int");
 
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("GroupId");
 
+                    b.HasIndex("SubjectId");
+
                     b.ToTable("GroupSubjects");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            GroupId = 1,
+                            SubjectId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            GroupId = 1,
+                            SubjectId = 4
+                        },
+                        new
+                        {
+                            Id = 3,
+                            GroupId = 1,
+                            SubjectId = 8
+                        },
+                        new
+                        {
+                            Id = 4,
+                            GroupId = 2,
+                            SubjectId = 1
+                        },
+                        new
+                        {
+                            Id = 5,
+                            GroupId = 2,
+                            SubjectId = 2
+                        },
+                        new
+                        {
+                            Id = 6,
+                            GroupId = 2,
+                            SubjectId = 3
+                        },
+                        new
+                        {
+                            Id = 7,
+                            GroupId = 3,
+                            SubjectId = 5
+                        },
+                        new
+                        {
+                            Id = 8,
+                            GroupId = 3,
+                            SubjectId = 6
+                        },
+                        new
+                        {
+                            Id = 9,
+                            GroupId = 3,
+                            SubjectId = 9
+                        });
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Meeting", b =>
@@ -329,11 +520,19 @@ namespace DataLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("CountMember")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("End")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("MeetingRoomId")
+                    b.Property<int>("GroupId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime?>("ScheduleEnd")
                         .HasColumnType("datetime2");
@@ -341,39 +540,14 @@ namespace DataLayer.Migrations
                     b.Property<DateTime?>("ScheduleStart")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("Start")
+                    b.Property<DateTime?>("Start")
                         .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MeetingRoomId");
-
-                    b.ToTable("Meetings");
-                });
-
-            modelBuilder.Entity("DataLayer.DBObject.MeetingRoom", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("CountMember")
-                        .HasColumnType("int");
-
-                    b.Property<int>("GroupId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("MeetingRooms");
+                    b.ToTable("Meetings");
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Role", b =>
@@ -533,7 +707,7 @@ namespace DataLayer.Migrations
             modelBuilder.Entity("DataLayer.DBObject.GroupMember", b =>
                 {
                     b.HasOne("DataLayer.DBObject.Account", "Account")
-                        .WithMany("GroupMember")
+                        .WithMany("GroupMembers")
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -557,24 +731,21 @@ namespace DataLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DataLayer.DBObject.Subject", "Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Group");
+
+                    b.Navigation("Subject");
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Meeting", b =>
                 {
-                    b.HasOne("DataLayer.DBObject.MeetingRoom", "MeetingRoom")
-                        .WithMany("Meetings")
-                        .HasForeignKey("MeetingRoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MeetingRoom");
-                });
-
-            modelBuilder.Entity("DataLayer.DBObject.MeetingRoom", b =>
-                {
                     b.HasOne("DataLayer.DBObject.Group", "Group")
-                        .WithMany("MeetingRooms")
+                        .WithMany("Meetings")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -584,7 +755,7 @@ namespace DataLayer.Migrations
 
             modelBuilder.Entity("DataLayer.DBObject.Account", b =>
                 {
-                    b.Navigation("GroupMember");
+                    b.Navigation("GroupMembers");
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Group", b =>
@@ -593,17 +764,12 @@ namespace DataLayer.Migrations
 
                     b.Navigation("GroupSubjects");
 
-                    b.Navigation("MeetingRooms");
+                    b.Navigation("Meetings");
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Meeting", b =>
                 {
                     b.Navigation("Connections");
-                });
-
-            modelBuilder.Entity("DataLayer.DBObject.MeetingRoom", b =>
-                {
-                    b.Navigation("Meetings");
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Role", b =>

@@ -1,14 +1,20 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace DataLayer.DBObject
 {
     public class Connection
     {
+        //public Connection(string connectionId, string userName)
+        //{
+        //    Id = connectionId;
+        //    UserName = userName;
+        //}
         [Key]
         public string Id { get; set; }   
-        DateTime Start { get;set; }
-        DateTime? End { get;set; }
+        public DateTime Start { get;set; }
+        public DateTime? End { get;set; }
 
         #region Meeting
         [ForeignKey("MeetingId")]

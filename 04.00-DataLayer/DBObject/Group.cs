@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
+using System.Collections.ObjectModel;
 
 namespace DataLayer.DBObject
 {
@@ -12,11 +13,11 @@ namespace DataLayer.DBObject
         public string Name { get; set; }
 
         #region Group Member
-        public virtual ICollection<GroupMember> GroupMembers { get; set; }
+        public virtual ICollection<GroupMember> GroupMembers { get; set; } = new Collection<GroupMember>();
         #endregion
         
         #region Meeting Room
-        public virtual ICollection<MeetingRoom> MeetingRooms { get; set; }
+        public virtual ICollection<Meeting> Meetings { get; set; } = new Collection<Meeting>();
         #endregion
 
         #region Class
@@ -27,31 +28,7 @@ namespace DataLayer.DBObject
         #endregion
 
         #region Subjects
-        public virtual ICollection<GroupSubject> GroupSubjects { get; set; }
+        public virtual ICollection<GroupSubject> GroupSubjects { get; set; } = new Collection<GroupSubject>();
         #endregion
-    }
-    public class Class
-    {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        public int Name { get; set; }
-    }
-    public class Subject
-    {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        public string Name { get; set; }
-    }
-    public class GroupSubject
-    {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        //Student
-        [ForeignKey("GroupId")]
-        public int GroupId { get; set; }
-        public Group Group { get; set; }
     }
 }
