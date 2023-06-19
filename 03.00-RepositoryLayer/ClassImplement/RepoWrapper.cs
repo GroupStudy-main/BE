@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using DataLayer.DBContext;
-using Microsoft.EntityFrameworkCore;
 using RepositoryLayer.Interface;
 using System;
 using System.Collections.Generic;
@@ -19,39 +18,32 @@ namespace RepositoryLayer.ClassImplement
         {
             this.dbContext = dbContext;
             this.mapper = mapper;
-            users = new AccountRepo(dbContext);
-            meeting = new MeetingRepository(dbContext, mapper);
-            groupMembers = new GroupMemberReposity(dbContext);
-            classes = new ClassRepository(dbContext);
-            subjects = new SubjectRepository(dbContext);
-            connections = new ConnectionRepository(dbContext);
         }
 
         private IAccountRepo users;
-        public IAccountRepo Accounts
-        {
-            get
-            {
-                if (users is null)
+        public IAccountRepo Accounts { 
+            get 
+            { 
+                if(users is null)
                 {
                     users = new AccountRepo(dbContext);
                 }
-                return users;
-            }
+                return users; 
+            } 
         }
 
-        //private IMeetingRepository meetingRooms;
-        //public IMeetingRepository Meetings
-        //{
-        //    get
-        //    {
-        //        if (meetingRooms is null)
-        //        {
-        //            meetingRooms = new MeetingRepository(dbContext, mapper);
-        //        }
-        //        return meetingRooms;
-        //    }
-        //}
+        private IMeetingRoomRepository meetingRooms;
+        public IMeetingRoomRepository Rooms
+        {
+            get
+            {
+                if (meetingRooms is null)
+                {
+                    meetingRooms = new MeetingRoomRepository(dbContext, mapper);
+                }
+                return meetingRooms;
+            }
+        }
 
         private IMeetingRepository meeting;
 
@@ -61,7 +53,7 @@ namespace RepositoryLayer.ClassImplement
             {
                 if (meeting is null)
                 {
-                    meeting = new MeetingRepository(dbContext, mapper);
+                    meeting = new MeetingRepository(dbContext);
                 }
                 return meeting;
             }
@@ -80,8 +72,7 @@ namespace RepositoryLayer.ClassImplement
             }
         }
 
-
-      private IMeetingRepository meetings;
+        private IMeetingRepository meetings;
         public IMeetingRepository Meeting
         {
             get
@@ -106,58 +97,7 @@ namespace RepositoryLayer.ClassImplement
                 }
                 return documents;
             }
-        private IGroupMemberReposity groupMembers;
-
-        public IGroupMemberReposity GroupMembers
-        {
-            get
-            {
-                if (groupMembers is null)
-                {
-                    groupMembers = new GroupMemberReposity(dbContext);
-                }
-                return groupMembers;
-            }
-        }
-
-        private IClassReposity classes;
-
-        public IClassReposity Classes
-        {
-            get
-            {
-                if (classes is null)
-                {
-                    classes = new ClassRepository(dbContext);
-                }
-                return classes;
-            }
-        }
-
-        private ISubjectRepository subjects;
-        public ISubjectRepository Subjects
-        {
-            get
-            {
-                if (subjects is null)
-                {
-                    subjects = new SubjectRepository(dbContext);
-                }
-                return subjects;
-            }
-        }
-        private IConnectionRepository connections;
-        public IConnectionRepository Connections
-        {
-            get
-            {
-                if (connections is null)
-                {
-                    connections = new ConnectionRepository(dbContext);
-                }
-                return connections;
-            }
-
+            
         }
     }
 }

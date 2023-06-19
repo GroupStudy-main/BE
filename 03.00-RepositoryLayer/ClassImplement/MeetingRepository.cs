@@ -1,76 +1,49 @@
-﻿using AutoMapper;
-using DataLayer.DBContext;
+﻿using DataLayer.DBContext;
 using DataLayer.DBObject;
 using Microsoft.EntityFrameworkCore;
 using RepositoryLayer.Interface;
-using ShareResource.DTO;
-using ShareResource.FilterParams;
-using ShareResource;
-using AutoMapper.QueryableExtensions;
 
 namespace RepositoryLayer.ClassImplement
 {
     internal class MeetingRepository : BaseRepo<Meeting, int>, IMeetingRepository 
     {
-        private readonly GroupStudyContext dbContext;
-        private IMapper _mapper;
-
-        public MeetingRepository(GroupStudyContext context, IMapper mapper)
-            : base(context)
+        public MeetingRepository(GroupStudyContext dbContext) : base(dbContext)
         {
-            _mapper = mapper;
         }
 
         public override Task CreateAsync(Meeting entity)
         {
             return base.CreateAsync(entity);
         }
+
         public override Task<Meeting> GetByIdAsync(int id)
         {
             return base.GetByIdAsync(id);
         }
+
         public override IQueryable<Meeting> GetList()
         {
             return base.GetList();
         }
+
+        public async Task<Meeting> GetMeetingForConnection(string connectionId)
+        {
+            //Console.WriteLine("4.         " + new String('~', 50));
+            //Console.WriteLine("4.         Repo/MeetingRoom: GetMeetingRoomForConnection(connectionId)");
+            return (await dbContext.Connections
+                .Include(x => x.Meeting)
+                .SingleOrDefaultAsync(x => x.Id == connectionId))
+                .Meeting;
+        }
+
         public override Task RemoveAsync(int id)
         {
             return base.RemoveAsync(id);
         }
+
         public override Task UpdateAsync(Meeting entity)
         {
             return base.UpdateAsync(entity);
-        }
-
-        ///SignalR
-        ////////////////////////////////////////////////////////////
-        public async Task<Meeting> GetMeetingByIdSignalr(int meetingId)
-        {
-            return await dbContext.Meetings.Include(x => x.Connections).FirstOrDefaultAsync(x => x.Id == meetingId);
-        }
-
-        public async Task<Meeting> GetMeetingForConnectionSignalr(string connectionId)
-        {
-            return await dbContext.Meetings.Include(x => x.Connections)
-                .Where(x => x.Connections.Any(c => c.Id == connectionId))
-                .FirstOrDefaultAsync();
-        }
-
-        public void EndConnectionSignalr(Connection connection)
-        {
-            dbContext.Connections.Remove(connection);
-            dbContext.SaveChanges();
-        }
-
-        public async Task UpdateCountMemberSignalr(int roomId, int count)
-        {
-            var meeting = await dbContext.Meetings.FindAsync(roomId);
-            if (meeting != null)
-            {
-                meeting.CountMember = count;
-            }
-            dbContext.Meetings.Update(meeting);
-            await dbContext.SaveChangesAsync();
         }
     }
 }

@@ -1,16 +1,6 @@
-﻿using ShareResource.Enums;
-
-namespace ShareResource.DTO
+﻿namespace ShareResource.DTO
 {
-    public class GroupMemberGetDto : BaseGetDto
+    public class GroupMemberGetDto
     {
-        public int Id { get; set; }
-        public GroupMemberState State { get; set; }
-        public string InviteMessage { get; set; }
-        public string RequestMessage { get; set; }
-        public int GroupId { get; set; }
-        public string GroupName { get; set; }
-        public int AccountId { get; set; }
-        public string Username { get; set; }
     }
 }

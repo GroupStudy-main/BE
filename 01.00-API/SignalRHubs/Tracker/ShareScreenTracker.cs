@@ -4,114 +4,82 @@ namespace API.SignalRHub.Tracker
 {
     public class ShareScreenTracker
     {
-        // chứa xem user ở meeting nào đang shareScreen
-        private static readonly List<UserConnectionSignalrDto> usersSharingScreen = new List<UserConnectionSignalrDto>();
-
-        public Task<bool> AddUserSharingScreen(UserConnectionSignalrDto userMeetConnection)
+        public ShareScreenTracker()
         {
-            #region old code
-            //FunctionTracker.Instance().AddTrackerFunc("Tracker/ShareScreen: UserConnectedToShareScreen(UserConnectionDto)");
-            //bool isOnline = false;
-            //lock (usersSharingScreen)
-            //{
-            //    var temp = usersSharingScreen.FirstOrDefault(x => x.UserName == userMeetConnection.UserName && x.RoomId == userMeetConnection.RoomId);
+            Console.WriteLine("4.         " + new String('~', 50));
+            Console.WriteLine("4.         Tracker/ShareScreen: ctor()");
 
-            //    if (temp == null)//chua co online
-            //    {
-            //        usersSharingScreen.Add(userMeetConnection);
-            //        isOnline = true;
-            //    }
-            //}
-            //return Task.FromResult(isOnline);
-            #endregion
+        }
+        private static readonly List<UserConnectionDto> usersShareScreen = new List<UserConnectionDto>();
+
+        public Task<bool> UserConnectedToShareScreen(UserConnectionDto user)
+        {
+            Console.WriteLine("4.         " + new String('~', 50));
+            Console.WriteLine("4.         Tracker/ShareScreen: UserConnectedToShareScreen(UserConnectionDto)");
             FunctionTracker.Instance().AddTrackerFunc("Tracker/ShareScreen: UserConnectedToShareScreen(UserConnectionDto)");
             bool isOnline = false;
-            lock (usersSharingScreen)
+            lock (usersShareScreen)
             {
-                UserConnectionSignalrDto exsited = usersSharingScreen.FirstOrDefault(x => x.Username == userMeetConnection.Username && x.MeetingId == userMeetConnection.MeetingId);
+                var temp = usersShareScreen.FirstOrDefault(x => x.UserName == user.UserName && x.RoomId == user.RoomId);
 
-                if (exsited == null)//chua co online
+                if (temp == null)//chua co online
                 {
-                    usersSharingScreen.Add(userMeetConnection);
+                    usersShareScreen.Add(user);
                     isOnline = true;
                 }
             }
             return Task.FromResult(isOnline);
         }
 
-        public Task<bool> RemoveUserShareScreen(UserConnectionSignalrDto userMeetConnection)
+        public Task<bool> UserDisconnectedShareScreen(UserConnectionDto user)
         {
-            #region old code
-            //FunctionTracker.Instance().AddTrackerFunc("Tracker/ShareScreen: RemoveUserShareScreen(UserConnectionDto)");
-            //bool isOffline = false;
-            //lock (usersSharingScreen)
-            //{
-            //    var temp = usersSharingScreen.FirstOrDefault(x => x.UserName == userMeetConnection.UserName && x.RoomId == userMeetConnection.RoomId);
-            //    if (temp == null)
-            //        return Task.FromResult(isOffline);
-            //    else
-            //    {
-            //        usersSharingScreen.Remove(temp);
-            //        isOffline = true;
-            //    }
-            //}
-            //return Task.FromResult(isOffline);
-            #endregion
+            Console.WriteLine("4.         " + new String('~', 50));
+            Console.WriteLine("4.         Tracker/ShareScreen: UserDisconnectedShareScreen(UserConnectionDto)");
             FunctionTracker.Instance().AddTrackerFunc("Tracker/ShareScreen: UserDisconnectedShareScreen(UserConnectionDto)");
             bool isOffline = false;
-            lock (usersSharingScreen)
+            lock (usersShareScreen)
             {
-                var temp = usersSharingScreen.FirstOrDefault(x => x.Username == userMeetConnection.Username && x.MeetingId == userMeetConnection.MeetingId);
+                var temp = usersShareScreen.FirstOrDefault(x => x.UserName == user.UserName && x.RoomId == user.RoomId);
                 if (temp == null)
                     return Task.FromResult(isOffline);
                 else
                 {
-                    usersSharingScreen.Remove(temp);
+                    usersShareScreen.Remove(temp);
                     isOffline = true;
                 }
             }
             return Task.FromResult(isOffline);
         }
 
-        public Task<bool> RemoveUserShareScreen(string username, int meetingId)
+        public Task<UserConnectionDto> GetUserIsSharing(int roomId)
         {
-            #region old code
-            //FunctionTracker.Instance().AddTrackerFunc("Tracker/ShareScreen: DisconnectedByUser(username, roomId)");
-            //bool isOffline = false;
-            //lock (usersSharingScreen)
-            //{
-            //    var temp = usersSharingScreen.FirstOrDefault(x => x.UserName == username && x.RoomId == meetingId);
-            //    if(temp != null)
-            //    {
-            //        isOffline = true;
-            //        usersSharingScreen.Remove(temp);
-            //    }
-            //}
-            //return Task.FromResult(isOffline);
-            #endregion
-            FunctionTracker.Instance().AddTrackerFunc("Tracker/ShareScreen: RemoveUserShareScreen(username, meetingId)");
-            bool isOffline = false;
-            lock (usersSharingScreen)
+            Console.WriteLine("4.         " + new String('~', 50));
+            Console.WriteLine("4.         Tracker/ShareScreen: GetUserIsSharing(roomId)");
+            FunctionTracker.Instance().AddTrackerFunc("Tracker/ShareScreen: GetUserIsSharing(roomId)");
+            UserConnectionDto temp = null;
+            lock (usersShareScreen)
             {
-                var temp = usersSharingScreen.FirstOrDefault(x => x.Username == username && x.MeetingId == meetingId);
-                if (temp != null)
+                temp = usersShareScreen.FirstOrDefault(x => x.RoomId == roomId);                               
+            }
+            return Task.FromResult(temp);
+        }
+
+        public Task<bool> DisconnectedByUser(string username, int roomId)
+        {
+            Console.WriteLine("4.         " + new String('~', 50));
+            Console.WriteLine("4.         Tracker/ShareScreen: DisconnectedByUser(username, roomId)");
+            FunctionTracker.Instance().AddTrackerFunc("Tracker/ShareScreen: DisconnectedByUser(username, roomId)");
+            bool isOffline = false;
+            lock (usersShareScreen)
+            {
+                var temp = usersShareScreen.FirstOrDefault(x => x.UserName == username && x.RoomId == roomId);
+                if(temp != null)
                 {
                     isOffline = true;
-                    usersSharingScreen.Remove(temp);
+                    usersShareScreen.Remove(temp);
                 }
             }
             return Task.FromResult(isOffline);
-        }
-
-        public Task<UserConnectionSignalrDto> GetUserIsSharingScreenForMeeting(int meetingId)
-        {
-            FunctionTracker.Instance().AddTrackerFunc("Tracker/ShareScreen: GetUserIsSharingScreenForMeeting(roomId)");
-            UserConnectionSignalrDto user = null;
-            lock (usersSharingScreen)
-            {
-                user = usersSharingScreen.FirstOrDefault(x => x.MeetingId == meetingId);                               
-            }
-            return Task.FromResult(user);
         }
     }
 }

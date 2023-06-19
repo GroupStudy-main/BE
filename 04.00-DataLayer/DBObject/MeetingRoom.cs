@@ -3,19 +3,20 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DataLayer.DBObject
 {
-    public class GroupMember
+    public class MeetingRoom
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public bool IsLeader { get; set; }
-        //Group
+        public string Name { get; set; }
+        public int CountMember { get; set; }
+        #region Group
         [ForeignKey("GroupId")]
         public int GroupId { get; set; }
         public virtual Group Group { get; set; }
-        //Student
-        [ForeignKey("AccountId")]
-        public int AccountId { get; set; }
-        public virtual Account Account { get; set; }
+        #endregion
+        #region Meeting
+        public virtual ICollection<Meeting> Meetings { get; set; }
+        #endregion
     }
 }

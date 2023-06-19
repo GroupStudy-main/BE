@@ -1,10 +1,7 @@
-﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using DataLayer.DBContext;
+﻿using DataLayer.DBContext;
 using DataLayer.DBObject;
 using Microsoft.EntityFrameworkCore;
 using RepositoryLayer.Interface;
-using ShareResource.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +13,6 @@ namespace RepositoryLayer.ClassImplement
     public class AccountRepo : BaseRepo<Account, int>, IAccountRepo
     {
         private readonly GroupStudyContext dbContext;
-        private IMapper mapper;
 
         public AccountRepo(GroupStudyContext dbContext):base(dbContext) 
         {
@@ -33,13 +29,6 @@ namespace RepositoryLayer.ClassImplement
             return base.GetByIdAsync(id);
         }
 
-        public async Task<Account> GetProfileByIdAsync(int id)
-        {
-            return await dbContext.Accounts
-                 .Include(e => e.Role)
-                 .Include(e => e.GroupMembers).ThenInclude(e => e.Group).ThenInclude(e=>e.GroupMembers)
-                 .SingleOrDefaultAsync(e => e.Id == id);
-        } 
         public async Task<Account> GetByUsernameAsync(string username)
         {
             return await dbContext.Accounts
@@ -51,14 +40,13 @@ namespace RepositoryLayer.ClassImplement
         {
             return await dbContext.Accounts
                 .Include(a=>a.Role)
-                .SingleOrDefaultAsync(a => (a.Username == usernameOrEmail || a.Email == usernameOrEmail.ToLower()) && a.Password == password); 
+                .SingleOrDefaultAsync(a => a.Username == usernameOrEmail || a.Email == usernameOrEmail.ToLower() && a.Password == password); 
         }
 
         public override IQueryable<Account> GetList()
         {
             return base.GetList();
         }
-
 
         public override Task RemoveAsync(int id)
         {
@@ -68,20 +56,6 @@ namespace RepositoryLayer.ClassImplement
         public override Task UpdateAsync(Account entity)
         {
             return base.UpdateAsync(entity);
-        }
-
-        //SignalR
-        //////////////////////////////////////////////////////////////////////
-        public async Task<Account> GetUserByUsernameSignalrAsync(string username)
-        {
-            return await dbContext.Accounts.SingleOrDefaultAsync(u => u.Username == username);
-        }
-
-        public async Task<MemberSignalrDto> GetMemberSignalrAsync(string username)
-        {
-            return await dbContext.Accounts.Where(x => x.Username == username)
-                .ProjectTo<MemberSignalrDto>(mapper.ConfigurationProvider)//add CreateMap<AppUser, MemberDto>(); in AutoMapperProfiles
-                .SingleOrDefaultAsync();
         }
     }
 }

@@ -1,7 +1,11 @@
 ﻿using DataLayer.DBObject;
-using Microsoft.EntityFrameworkCore;
 using RepositoryLayer.Interface;
 using ServiceLayer.Interface.Db;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace ServiceLayer.ClassImplement.Db
 {
@@ -17,41 +21,6 @@ namespace ServiceLayer.ClassImplement.Db
         {
             return repos.Accounts.GetList();
         }
-        public IQueryable<Account> SearchStudents(string search, int? groupId)
-        {
-            search = search.ToLower().Trim();
-            if (groupId.HasValue)
-            {
-                //return repos.GroupMembers.GetList().Where(e=>e.GroupId!=groupId).Include(e => e.Account).Select(e=>e.Account)
-                //.Where(e =>
-                //    EF.Functions.Like(e.Id.ToString(), search + "%")
-                //    //e.Id.ToString().Contains(search)
-                //    //SqlFunctions.StringConvert((double)e.Id) 
-                //    || e.Email.ToLower().Contains(search)
-                //    || e.Username.ToLower().Contains(search)
-                //    || e.FullName.ToLower().Contains(search)
-                //);
-                return repos.Accounts.GetList()
-                .Include(e=>e.GroupMembers).ThenInclude(e=>e.Group)
-                .Where(e =>
-                    !e.GroupMembers.Any(e=>e.GroupId==groupId)
-                    &&(EF.Functions.Like(e.Id.ToString(), search + "%")
-                    || e.Email.ToLower().Contains(search)
-                    || e.Username.ToLower().Contains(search)
-                    || e.FullName.ToLower().Contains(search))
-                );
-            }
-            return repos.Accounts.GetList()
-                .Include(e=>e.GroupMembers).ThenInclude(e=>e.Group)
-                .Where(e =>
-                EF.Functions.Like(e.Id.ToString(), search+"%")
-                //e.Id.ToString().Contains(search)
-                    //SqlFunctions.StringConvert((double)e.Id) 
-                    || e.Email.ToLower().Contains(search)
-                    || e.Username.ToLower().Contains(search)
-                    || e.FullName.ToLower().Contains(search)
-                );
-        }
 
 
         public async Task<Account> GetByIdAsync(int id)
@@ -59,10 +28,6 @@ namespace ServiceLayer.ClassImplement.Db
             return await repos.Accounts.GetByIdAsync(id);
         }
 
-        public async Task<Account> GetProfileByIdAsync(int id)
-        {
-            return await repos.Accounts.GetProfileByIdAsync(id);
-        }
 
         public async Task<Account> GetAccountByUserNameAsync(string userName)
         {
@@ -83,6 +48,5 @@ namespace ServiceLayer.ClassImplement.Db
         {
             await repos.Accounts.UpdateAsync(entity);
         }
-
     }
 }

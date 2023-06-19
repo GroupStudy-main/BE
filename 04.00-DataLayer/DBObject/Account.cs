@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -33,7 +31,7 @@ namespace DataLayer.DBObject
         public virtual Role Role { get; set; }
 
         // Group Member
-        public virtual ICollection<GroupMember> GroupMembers { get; set; } = new Collection<GroupMember>();
+        public virtual ICollection<GroupMember> GroupMember { get; set; }
 
     }
    
