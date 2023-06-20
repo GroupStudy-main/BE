@@ -132,5 +132,20 @@ namespace RepositoryLayer.ClassImplement
                 return connections;
             }
         }
+
+        private IDocumentFileRepository documents;
+
+        public IDocumentFileRepository DocumentFiles
+        {
+            get
+            {
+                if (documents is null)
+                {
+                    documents = new DocumentFileRepository(dbContext);
+                }
+                return documents;
+            }
+
+        }
     }
 }

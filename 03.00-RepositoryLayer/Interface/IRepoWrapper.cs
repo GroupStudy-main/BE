@@ -17,5 +17,7 @@ namespace RepositoryLayer.Interface
         public IClassReposity Classes { get; }
         public ISubjectRepository Subjects { get; }
         public IConnectionRepository Connections { get; }
+
+        public IDocumentFileRepository DocumentFiles { get; }
     }
 }

@@ -28,6 +28,8 @@ namespace DataLayer.DBContext
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Subject> Subjects { get; set; }
 
+        public virtual DbSet<DocumentFile> DocumentFiles { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
