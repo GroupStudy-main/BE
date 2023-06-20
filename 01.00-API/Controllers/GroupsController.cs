@@ -206,6 +206,11 @@ namespace API.Controllers
             {
                 return Unauthorized("You can't update other's group");
             }
+            ValidatorResult valResult = await validators.Groups.ValidateParams(dto);
+            if (!valResult.IsValid)
+            {
+                return BadRequest(valResult.Failures);
+            }
 
             var group = await services.Groups.GetFullByIdAsync(id);
             if (group == null)
