@@ -1,11 +1,8 @@
 ﻿using DataLayer.DBObject;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
-using ShareResource.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,24 +16,24 @@ namespace DataLayer.DBContext
 
         }
         public virtual DbSet<Account> Accounts { get; set; }
-        public virtual DbSet<Class> Classes { get; set; }
         public virtual DbSet<Connection> Connections { get; set; }
         public virtual DbSet<Group> Groups { get; set; }
         public virtual DbSet<GroupMember> GroupMembers { get; set; }
-        public virtual DbSet<GroupSubject> GroupSubjects { get; set; }
+        public virtual DbSet<MeetingRoom> MeetingRooms { get; set; }
         public virtual DbSet<Meeting> Meetings { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
+        public virtual DbSet<Class> Classes { get; set; }
         public virtual DbSet<Subject> Subjects { get; set; }
+        public virtual DbSet<GroupSubject> GroupSubjects { get; set; }
+        public virtual DbSet<DocumentFile> DocumentFiles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            //modelBuilder.Entity<Account>()
-            //    .HasIndex(a => a.Username).IsUnique();
-            //modelBuilder.Entity<Account>()
-            //    .HasIndex(a => a.Email).IsUnique();
-            modelBuilder.Entity<GroupMember>()
-                .HasIndex(gm => new {  gm.AccountId, gm.GroupId }).IsUnique();
+            modelBuilder.Entity<Account>()
+                .HasIndex(a => a.Username).IsUnique();
+            modelBuilder.Entity<Account>()
+                .HasIndex(a => a.Email).IsUnique();
 
             Seed();
             void Seed()
@@ -171,7 +168,7 @@ namespace DataLayer.DBContext
                 #endregion
 
                 #region seed class
-                modelBuilder.Entity<Class>().HasData(
+                modelBuilder.Entity<Class>().HasData( 
                     new Class
                     {
                         Id = 6,
@@ -180,17 +177,17 @@ namespace DataLayer.DBContext
                     new Class
                     {
                         Id = 7,
-                        Name = 7
+                        Name =7
                     },
                     new Class
                     {
                         Id = 8,
-                        Name = 8
+                        Name =8
                     },
                     new Class
                     {
                         Id = 9,
-                        Name = 9
+                        Name =9
                     },
                     new Class
                     {
@@ -278,229 +275,6 @@ namespace DataLayer.DBContext
                         Name = "Tin"
                     }
                 );
-                #endregion
-
-                #region seed Group, GroupMember, Group Subject
-                #region seed Group
-                modelBuilder.Entity<Group>().HasData(
-                        //Group 1
-                        new Group
-                        {
-                            Id = 1,
-                            Name = "Nhóm 1 của học sinh 1",
-                            ClassId = 7,
-                        },
-                        new Group
-                        {
-                            Id = 2,
-                            Name = "Nhóm 2 của học sinh 1",
-                            ClassId = 7,
-                        } ,
-                        new Group
-                        {
-                            Id = 3,
-                            Name = "Nhóm 1 của học sinh 2",
-                            ClassId = 8,
-                        }
-                    );
-
-                #region seed later
-                //e.HasData(
-                
-                //new Group
-                //{
-                //    Id = 3,
-                //    Name = "Nhóm 1 của học sinh 2",
-                //    ClassId = 8,
-                //    GroupSubjects = new GroupSubject[]
-                //  {
-                //      
-                //  },
-                //    GroupMembers = new GroupMember[]
-                //  {
-                //      
-                //  },
-
-                //}
-                //);
-                #endregion
-
-                #endregion
-                #region seed GroupSubjects
-                modelBuilder.Entity<GroupSubject>().HasData(
-                #region Subject Group 1
-                    new GroupSubject
-                    {
-                        Id = 1,
-                        GroupId = 1,
-                        SubjectId = (int)SubjectEnum.Toan
-                    },
-                    new GroupSubject
-                    {
-                        Id = 2,
-                        GroupId = 1,
-                        SubjectId = (int)SubjectEnum.Van
-                    },
-                    new GroupSubject
-                    {
-                        Id = 3,
-                        GroupId = 1,
-                        SubjectId = (int)SubjectEnum.Anh
-                    },
-                #endregion
-                #region Subject group 2
-                    new GroupSubject
-                    {
-                        Id = 4,
-                        GroupId = 2,
-                        SubjectId = (int)SubjectEnum.Toan
-                    },
-                    new GroupSubject
-                    {
-                        Id = 5,
-                        GroupId = 2,
-                        SubjectId = (int)SubjectEnum.Li
-                    },
-                    new GroupSubject
-                    {
-                        Id = 6,
-                        GroupId = 2,
-                        SubjectId = (int)SubjectEnum.Hoa
-                    } ,
-                #endregion
-                #region Subject group 3
-                    new GroupSubject
-                    {
-                        Id = 7,
-                        GroupId = 3,
-                        SubjectId = (int)SubjectEnum.Su
-                    },
-                    new GroupSubject
-                    {
-                        Id = 8,
-                        GroupId = 3,
-                        SubjectId = (int)SubjectEnum.Dia
-                    },
-                    new GroupSubject
-                    {
-                        Id = 9,
-                        GroupId = 3,
-                        SubjectId = (int)SubjectEnum.Gdcd
-                    }
-                #endregion
-                );
-                #endregion
-                #region Seed GroupMembers
-                modelBuilder.Entity<GroupMember>().HasData(
-                    #region Member Group 1
-                    new GroupMember
-                    {
-                       Id = 1,
-                       GroupId = 1,
-                       AccountId = 1,
-                       State = GroupMemberState.Leader
-                    },
-                    new GroupMember
-                    {
-                        Id = 2,
-                        GroupId = 1,
-                        AccountId = 2,
-                        State = GroupMemberState.Member,
-                        InviteMessage = "Nhóm của mình rất hay. Bạn vô nha"
-                    },
-                    new GroupMember
-                    {
-                        Id = 3,
-                        GroupId = 1,
-                        AccountId = 3,
-                        State = GroupMemberState.Inviting,
-                        InviteMessage = "Nhóm của mình rất hay. Bạn vô nha"
-                    },
-                    new GroupMember
-                    {
-                        Id = 4,
-                        GroupId = 1,
-                        AccountId = 4,
-                        State = GroupMemberState.Requesting,
-                        RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha"
-                    },
-                    new GroupMember
-                    {
-                        Id = 5,
-                        GroupId = 1,
-                        AccountId = 5,
-                        State = GroupMemberState.Declined,
-                        RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha"
-                    },
-                    #endregion
-                    #region Member group 2
-                    new GroupMember
-                    {
-                        Id = 6,
-                        GroupId = 2,
-                        AccountId = 1,
-                        State = GroupMemberState.Leader
-                    },
-                    new GroupMember
-                    {
-                        Id = 7,
-                        GroupId = 2,
-                        AccountId = 2,
-                        State = GroupMemberState.Member,
-                        InviteMessage = "Nhóm của mình rất hay. Bạn vô nha"
-                    },
-                    new GroupMember
-                    {
-                        Id = 8,
-                        GroupId = 2,
-                        AccountId = 3,
-                        State = GroupMemberState.Inviting,
-                        InviteMessage = "Nhóm của mình rất hay. Bạn vô nha"
-                    },
-                    new GroupMember
-                    {
-                        Id = 9,
-                        GroupId = 2,
-                        AccountId = 4,
-                        State = GroupMemberState.Requesting,
-                        RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha"
-                    },
-                    #endregion
-                    #region Member group 3
-                    new GroupMember
-                    {
-                        Id = 10,
-                        GroupId = 3,
-                        AccountId = 2,
-                        State = GroupMemberState.Leader
-                    },
-                    new GroupMember
-                    {
-                        Id = 11,
-                        GroupId = 3,
-                        AccountId = 1,
-                        State = GroupMemberState.Member,
-                        InviteMessage = "Nhóm của mình rất hay. Bạn vô nha"
-                    },
-                    new GroupMember
-                    {
-                        Id = 12,
-                        GroupId = 3,
-                        AccountId = 3,
-                        State = GroupMemberState.Inviting,
-                        InviteMessage = "Nhóm của mình rất hay. Bạn vô nha"
-                    },
-                    new GroupMember
-                    {
-                        Id = 13,
-                        GroupId = 3,
-                        AccountId = 4,
-                        State = GroupMemberState.Requesting,
-                        RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha"
-                    }
-                    #endregion
-               );
-                #endregion
                 #endregion
             }
         }

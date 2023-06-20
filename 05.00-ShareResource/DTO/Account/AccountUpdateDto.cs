@@ -27,5 +27,6 @@ namespace ShareResource.DTO
             set { phone = value?.Trim(); }
         }
 
+     
     }
 }

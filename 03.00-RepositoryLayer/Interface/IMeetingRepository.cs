@@ -1,7 +1,4 @@
 ﻿using DataLayer.DBObject;
-using ShareResource.DTO;
-using ShareResource.FilterParams;
-using ShareResource;
 
 namespace RepositoryLayer.Interface
 {
@@ -25,5 +22,6 @@ namespace RepositoryLayer.Interface
         IQueryable<Connection> GetActiveConnectionsForMeetingSignalr(int meetingId);
         Task EndMeetingSignalRAsync(Meeting meeting);
         Task<IEnumerable<Meeting>> MassCreateAsync(IEnumerable<Meeting> creatingMeetings);
+        Task<Meeting> GetMeetingForConnection(string connectionId);
     }
 }

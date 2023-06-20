@@ -5,7 +5,6 @@ using ServiceLayer.Interface.Db;
 using ServiceLayer.ClassImplement.Auth;
 using Microsoft.Extensions.Configuration;
 using ServiceLayer.ClassImplement.Db;
-using AutoMapper;
 
 namespace ServiceLayer.ClassImplement
 {
@@ -13,32 +12,23 @@ namespace ServiceLayer.ClassImplement
     {
         private readonly IRepoWrapper repos;
         private readonly IConfiguration configuration;
-        private readonly IMapper mapper;
 
-        public ServiceWrapper(IRepoWrapper repos, IConfiguration configuration, IMapper mapper)
+        public ServiceWrapper(IRepoWrapper repos, IConfiguration configuration)
         {
             this.repos = repos;
             this.configuration = configuration;
-            this.mapper = mapper;
-            accounts = new AccountService(repos);
-            auth = new AuthService(repos, configuration);
-            groups = new GroupService(repos);
-            classes = new ClassService(repos);
-            subjects = new SubjectService(repos);
-            meetings = new MeetingService(repos, mapper);
-            groupMembers = new GroupMemberSerivce(repos, mapper);
         }
 
-        private IAccountService accounts;
+        private IAccountService users;
         public IAccountService Accounts
         {
             get
             {
-                if (accounts is null)
+                if (users is null)
                 {
-                    accounts = new AccountService(repos);
+                    users = new AccountService(repos);
                 }
-                return accounts;
+                return users;
             }
         }
 
@@ -54,69 +44,31 @@ namespace ServiceLayer.ClassImplement
                 return auth;
             }
         }
-
-        private IGroupService groups;
-        public IGroupService Groups
+        
+        private IMeetingService meetingService;
+        public IMeetingService Meeting
         {
             get
             {
-                if (groups is null)
+                if (meetingService is null)
                 {
-                    groups = new GroupService(repos);
+                    meetingService = new MeetingService(repos);
                 }
-                return groups;
+                return meetingService;
             }
         }
 
-        private IClassService classes;
-        public IClassService Classes
-        {
-            get
-            {
-                if (classes is null)
-                {
-                    classes = new ClassService(repos);
-                }
-                return classes;
-            }
-        }
+        private IDocumentFileService _documentFileService;
 
-        private ISubjectService subjects;
-        public ISubjectService Subjects
+        public IDocumentFileService DocumentFiles
         {
             get
             {
-                if (subjects is null)
+                if (_documentFileService is null)
                 {
-                    subjects = new SubjectService(repos);
+                    _documentFileService = new DocumentFileService(repos);
                 }
-                return subjects;
-            }
-        }
-
-        private IMeetingService meetings;
-        public IMeetingService Meetings
-        {
-            get
-            {
-                if (meetings is null)
-                {
-                    meetings = new MeetingService(repos, mapper);
-                }
-                return meetings;
-            }
-        }
-
-        private IGroupMemberSerivce groupMembers;
-        public IGroupMemberSerivce GroupMembers
-        {
-            get
-            {
-                if (groupMembers is null)
-                {
-                    groupMembers = new GroupMemberSerivce(repos, mapper);
-                }
-                return groupMembers;
+                return _documentFileService;
             }
         }
     }

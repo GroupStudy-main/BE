@@ -1,5 +1,4 @@
 ﻿using DataLayer.DBObject;
-using ShareResource.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +10,7 @@ namespace ServiceLayer.Interface.Db
     public interface IGroupService
     {
         public IQueryable<Group> GetList();
-        public Task<Group> GetFullByIdAsync(int id);
+        public Task<Group> GetByIdAsync(int id);
         /// <summary>
         /// Create a group and add group leader
         /// </summary>
@@ -19,13 +18,7 @@ namespace ServiceLayer.Interface.Db
         /// <param name="creatorId">id of creator account id</param>
         /// <returns></returns>
         public Task CreateAsync(Group group, int creatorId);
-        //public Task UpdateAsync(Group group);
-        public Task UpdateAsync(GroupUpdateDto dto);
-        /// <summary>
-        /// DO NOT USE
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        public Task UpdateAsync(Group group);
         public Task RemoveAsync(int id);
         /// <summary>
         /// Get all groups student (member) has joined

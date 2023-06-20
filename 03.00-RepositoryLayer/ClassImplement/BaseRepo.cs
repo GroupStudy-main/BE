@@ -33,6 +33,12 @@ namespace RepositoryLayer.ClassImplement
             await dbContext.Set<T>().AddAsync(entity);
             await dbContext.SaveChangesAsync();
         }
+        
+        public void Create(T entity)
+        {
+            dbContext.Add(entity);
+            dbContext.SaveChanges();
+        }
 
         public virtual async Task UpdateAsync(T entity)
         {

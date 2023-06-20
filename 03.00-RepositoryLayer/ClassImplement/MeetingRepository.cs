@@ -1,12 +1,7 @@
-﻿using AutoMapper;
-using DataLayer.DBContext;
+﻿using DataLayer.DBContext;
 using DataLayer.DBObject;
 using Microsoft.EntityFrameworkCore;
 using RepositoryLayer.Interface;
-using ShareResource.DTO;
-using ShareResource.FilterParams;
-using ShareResource;
-using AutoMapper.QueryableExtensions;
 
 namespace RepositoryLayer.ClassImplement
 {
@@ -17,7 +12,6 @@ namespace RepositoryLayer.ClassImplement
         public MeetingRepository(GroupStudyContext context, IMapper mapper)
             : base(context)
         {
-            _mapper = mapper;
         }
 
         public override Task CreateAsync(Meeting entity)
@@ -45,7 +39,17 @@ namespace RepositoryLayer.ClassImplement
         {
             return base.GetList();
         }
-        
+
+        public async Task<Meeting> GetMeetingForConnection(string connectionId)
+        {
+            //Console.WriteLine("4.         " + new String('~', 50));
+            //Console.WriteLine("4.         Repo/MeetingRoom: GetMeetingRoomForConnection(connectionId)");
+            return (await dbContext.Connections
+                .Include(x => x.Meeting)
+                .SingleOrDefaultAsync(x => x.Id == connectionId))
+                .Meeting;
+        }
+
         public override Task RemoveAsync(int id)
         {
             return base.RemoveAsync(id);

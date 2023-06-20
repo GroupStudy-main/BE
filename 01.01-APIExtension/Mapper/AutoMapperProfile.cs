@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using DataLayer.DBObject;
 using ShareResource.DTO;
-using ShareResource.Enums;
+using ShareResource.DTO.Group;
+using ShareResource.DTO.Meeting;
+using ShareResource.DTO.MeetingRoom;
 
 namespace ShareResource.Mapper
 {
@@ -9,19 +11,17 @@ namespace ShareResource.Mapper
     {
         public AutoMapperProfile()
         {
-            //CreateMap<src, dest>
-            MapAccount();
+            BasicMap<Account, AccountGetDto, AccountRegisterDto, AccountUpdateDto>();
+            CreateMap<Account, MemberDto>();
 
-            MapGroup();
 
-            MapRole();
+            CreateMap<MeetingRoom, RoomDto>();
+            
+            BasicMap<Meeting, MeetingGetDto, MeetingCreateDto, MeetingUpdateDto>();
+            CreateMap<Meeting, MeetingCreateDto>();
+            CreateMap<Meeting, MeetingGetDto>();
 
-            MapGroupMember();
-
-            MapMeeting();
-
-            MapSubject();
-            //CreateMap<MeetingRoom, MeetingDto>();
+            CreateMap<Group, GroupGetDto>();
             //.ForMember(dest => dest.DisplayName, opt => opt.MapFrom(src => src.AppUser.DisplayName))
             //.ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.AppUser.UserName));
 
