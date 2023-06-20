@@ -36,22 +36,26 @@ namespace DataLayer.Migrations
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
 
                     b.Property<string>("Phone")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
 
                     b.HasKey("Id");
 
@@ -139,7 +143,7 @@ namespace DataLayer.Migrations
                         new
                         {
                             Id = 8,
-                            Email = "student3@gmail.com",
+                            Email = "student8@gmail.com",
                             FullName = "Tran Van H",
                             Password = "123456789",
                             Phone = "0123456789",
@@ -149,7 +153,7 @@ namespace DataLayer.Migrations
                         new
                         {
                             Id = 9,
-                            Email = "student10@gmail.com",
+                            Email = "student9@gmail.com",
                             FullName = "Tran Van I",
                             Password = "123456789",
                             Phone = "0123456789",
@@ -239,8 +243,14 @@ namespace DataLayer.Migrations
                     b.Property<int>("AccountId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("End")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("MeetingId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("Start")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserName")
                         .IsRequired()
@@ -253,6 +263,35 @@ namespace DataLayer.Migrations
                     b.HasIndex("MeetingId");
 
                     b.ToTable("Connections");
+                });
+
+            modelBuilder.Entity("DataLayer.DBObject.DocumentFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<bool>("Approved")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("GroupId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("HttpLink")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DocumentFiles");
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Group", b =>

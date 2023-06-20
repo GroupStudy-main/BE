@@ -134,7 +134,7 @@ namespace APIExtension.ImMemorySeeding
                             Id = 8,
                             Username = "student8",
                             FullName = "Tran Van H",
-                            Email = "student3@gmail.com",
+                            Email = "student8@gmail.com",
                             Password = "123456789",
                             Phone = "0123456789",
                             RoleId = 2
@@ -144,7 +144,7 @@ namespace APIExtension.ImMemorySeeding
                             Id = 9,
                             Username = "student9",
                             FullName = "Tran Van I",
-                            Email = "student10@gmail.com",
+                            Email = "student9@gmail.com",
                             Password = "123456789",
                             Phone = "0123456789",
                             RoleId = 2
