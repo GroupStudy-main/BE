@@ -27,6 +27,7 @@ namespace DataLayer.DBContext
         public virtual DbSet<Meeting> Meetings { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Subject> Subjects { get; set; }
+        public virtual DbSet<Schedule> Schedules { get; set; }
 
         public virtual DbSet<DocumentFile> DocumentFiles { get; set; }
 
