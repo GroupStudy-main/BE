@@ -28,6 +28,8 @@ namespace DataLayer.DBContext
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Subject> Subjects { get; set; }
         public virtual DbSet<Schedule> Schedules { get; set; }
+        public virtual DbSet<Review> Reviews { get; set; }
+        public virtual DbSet<ReviewDetail> ReviewDetails { get; set; }
 
         public virtual DbSet<DocumentFile> DocumentFiles { get; set; }
 
@@ -40,6 +42,11 @@ namespace DataLayer.DBContext
             //    .HasIndex(a => a.Email).IsUnique();
             modelBuilder.Entity<GroupMember>()
                 .HasIndex(gm => new {  gm.AccountId, gm.GroupId }).IsUnique();
+            //
+            //modelBuilder.Entity<ReviewDetail>()
+            //    .HasOne(r => r.Reviewer)
+            //    .WithMany()
+            //    .WillCascadeOnDelete
 
             Seed();
             void Seed()

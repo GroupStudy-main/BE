@@ -4,6 +4,7 @@ using DataLayer.DBContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(GroupStudyContext))]
-    partial class GroupStudyContextModelSnapshot : ModelSnapshot
+    [Migration("20230620163256_AddReview")]
+    partial class AddReview
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -637,14 +639,9 @@ namespace DataLayer.Migrations
                     b.Property<int>("ReviewId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ReviewerId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ReviewId");
-
-                    b.HasIndex("ReviewerId");
 
                     b.ToTable("ReviewDetails");
                 });
@@ -934,13 +931,7 @@ namespace DataLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DataLayer.DBObject.Account", "Reviewer")
-                        .WithMany()
-                        .HasForeignKey("ReviewerId");
-
                     b.Navigation("Review");
-
-                    b.Navigation("Reviewer");
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Schedule", b =>

@@ -29,8 +29,12 @@ namespace DataLayer.DBObject
         public virtual Schedule? Schedule { get; set; }
         #endregion
 
-        #region Connection
+        #region Connections
         public virtual ICollection<Connection> Connections { get; set; } = new Collection<Connection>();
+        #endregion
+
+        #region Review
+        public virtual ICollection<Review> Reviews { get; set; } = new Collection<Review>();
         #endregion
     }
 }
