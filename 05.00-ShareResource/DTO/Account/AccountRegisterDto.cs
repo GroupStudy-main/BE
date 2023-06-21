@@ -10,13 +10,44 @@ namespace ShareResource.DTO
 {
     public class AccountRegisterDto : BaseCreateDto
     {
-        public string Username { get; set; }
+        private string username;
+
+        public string Username
+        {
+            get { return username; }
+            set { username = value.Trim(); }
+        }
+
         [EmailAddress]
         public string Email { get; set; }
-        public string Password { get; set; }
-        public string ConfirmPassword { get; set; }
-        public string FullName { get; set; }
-        public string Phone { get; set; }
+
+        private string password;
+        public string Password
+        {
+            get { return password; }
+            set { password = value.Trim(); }
+        }
+
+        private string confirmPassword;
+        public string ConfirmPassword
+        {
+            get { return confirmPassword; }
+            set { confirmPassword = value.Trim(); }
+        }
+
+        private string fullName;
+        public string FullName
+        {
+            get { return fullName; }
+            set { fullName = value.Trim(); }
+        }
+
+        private string phone;
+        public string Phone
+        {
+            get { return phone; }
+            set { phone = value.Trim(); }
+        }
 
         //Role
         //[ForeignKey("RoleId")]

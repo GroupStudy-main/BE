@@ -8,6 +8,14 @@ namespace ShareResource.DTO
 {
     public class MessageSignalrCreateDto
     {
-        public string Content { get; set; }
+        private string content;
+
+        public string Content
+        {
+            get { return content.Trim(); }
+            set { content = value.Trim(); }
+        }
+
+        public DateTime? TimeSent { get; set; } = DateTime.Now;
     }
 }

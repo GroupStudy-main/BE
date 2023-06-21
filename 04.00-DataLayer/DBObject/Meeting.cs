@@ -23,8 +23,18 @@ namespace DataLayer.DBObject
         public virtual Group Group { get; set; }
         #endregion
 
-        #region Connection
+        #region Schedule
+        public int? ScheduleId { get; set; }
+        [ForeignKey("ScheduleId")]
+        public virtual Schedule? Schedule { get; set; }
+        #endregion
+
+        #region Connections
         public virtual ICollection<Connection> Connections { get; set; } = new Collection<Connection>();
+        #endregion
+
+        #region Review
+        public virtual ICollection<Review> Reviews { get; set; } = new Collection<Review>();
         #endregion
     }
 }

@@ -36,22 +36,26 @@ namespace DataLayer.Migrations
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
 
                     b.Property<string>("Phone")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
 
                     b.HasKey("Id");
 
@@ -139,7 +143,7 @@ namespace DataLayer.Migrations
                         new
                         {
                             Id = 8,
-                            Email = "student3@gmail.com",
+                            Email = "student8@gmail.com",
                             FullName = "Tran Van H",
                             Password = "123456789",
                             Phone = "0123456789",
@@ -149,7 +153,7 @@ namespace DataLayer.Migrations
                         new
                         {
                             Id = 9,
-                            Email = "student10@gmail.com",
+                            Email = "student9@gmail.com",
                             FullName = "Tran Van I",
                             Password = "123456789",
                             Phone = "0123456789",
@@ -239,8 +243,14 @@ namespace DataLayer.Migrations
                     b.Property<int>("AccountId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("End")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("MeetingId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("Start")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserName")
                         .IsRequired()
@@ -252,7 +262,38 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("MeetingId");
 
-                    b.ToTable("Connections");
+                    b.ToTable("MeetingParticipations");
+                });
+
+            modelBuilder.Entity("DataLayer.DBObject.DocumentFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<bool>("Approved")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("GroupId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("HttpLink")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("DocumentFiles");
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Group", b =>
@@ -537,6 +578,9 @@ namespace DataLayer.Migrations
                     b.Property<DateTime?>("ScheduleEnd")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("ScheduleId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("ScheduleStart")
                         .HasColumnType("datetime2");
 
@@ -547,7 +591,62 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("GroupId");
 
+                    b.HasIndex("ScheduleId");
+
                     b.ToTable("Meetings");
+                });
+
+            modelBuilder.Entity("DataLayer.DBObject.Review", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("MeetingId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RevieweeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MeetingId");
+
+                    b.HasIndex("RevieweeId");
+
+                    b.ToTable("Reviews");
+                });
+
+            modelBuilder.Entity("DataLayer.DBObject.ReviewDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Result")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReviewId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ReviewerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReviewId");
+
+                    b.HasIndex("ReviewerId");
+
+                    b.ToTable("ReviewDetails");
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Role", b =>
@@ -577,6 +676,44 @@ namespace DataLayer.Migrations
                             Id = 2,
                             Name = "Student"
                         });
+                });
+
+            modelBuilder.Entity("DataLayer.DBObject.Schedule", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("DaysOfWeek")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<TimeSpan>("EndTime")
+                        .HasColumnType("time");
+
+                    b.Property<int>("GroupId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<TimeSpan>("StartTime")
+                        .HasColumnType("time");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("Schedules");
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Subject", b =>
@@ -693,6 +830,17 @@ namespace DataLayer.Migrations
                     b.Navigation("Meeting");
                 });
 
+            modelBuilder.Entity("DataLayer.DBObject.DocumentFile", b =>
+                {
+                    b.HasOne("DataLayer.DBObject.Group", "Group")
+                        .WithMany()
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Group");
+                });
+
             modelBuilder.Entity("DataLayer.DBObject.Group", b =>
                 {
                     b.HasOne("DataLayer.DBObject.Class", "Class")
@@ -750,6 +898,59 @@ namespace DataLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DataLayer.DBObject.Schedule", "Schedule")
+                        .WithMany("Meetings")
+                        .HasForeignKey("ScheduleId");
+
+                    b.Navigation("Group");
+
+                    b.Navigation("Schedule");
+                });
+
+            modelBuilder.Entity("DataLayer.DBObject.Review", b =>
+                {
+                    b.HasOne("DataLayer.DBObject.Meeting", "Meeting")
+                        .WithMany("Reviews")
+                        .HasForeignKey("MeetingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataLayer.DBObject.Account", "Reviewee")
+                        .WithMany()
+                        .HasForeignKey("RevieweeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Meeting");
+
+                    b.Navigation("Reviewee");
+                });
+
+            modelBuilder.Entity("DataLayer.DBObject.ReviewDetail", b =>
+                {
+                    b.HasOne("DataLayer.DBObject.Review", "Review")
+                        .WithMany("Details")
+                        .HasForeignKey("ReviewId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataLayer.DBObject.Account", "Reviewer")
+                        .WithMany()
+                        .HasForeignKey("ReviewerId");
+
+                    b.Navigation("Review");
+
+                    b.Navigation("Reviewer");
+                });
+
+            modelBuilder.Entity("DataLayer.DBObject.Schedule", b =>
+                {
+                    b.HasOne("DataLayer.DBObject.Group", "Group")
+                        .WithMany("Schedules")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Group");
                 });
 
@@ -765,16 +966,30 @@ namespace DataLayer.Migrations
                     b.Navigation("GroupSubjects");
 
                     b.Navigation("Meetings");
+
+                    b.Navigation("Schedules");
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Meeting", b =>
                 {
                     b.Navigation("Connections");
+
+                    b.Navigation("Reviews");
+                });
+
+            modelBuilder.Entity("DataLayer.DBObject.Review", b =>
+                {
+                    b.Navigation("Details");
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Role", b =>
                 {
                     b.Navigation("Accounts");
+                });
+
+            modelBuilder.Entity("DataLayer.DBObject.Schedule", b =>
+                {
+                    b.Navigation("Meetings");
                 });
 #pragma warning restore 612, 618
         }

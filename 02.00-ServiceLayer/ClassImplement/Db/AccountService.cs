@@ -84,5 +84,19 @@ namespace ServiceLayer.ClassImplement.Db
             await repos.Accounts.UpdateAsync(entity);
         }
 
+        public async Task<bool> ExistAsync(int id)
+        {
+            return await repos.Accounts.IdExistAsync(id);
+        }
+
+        public async Task<bool> ExistUsernameAsync(string username)
+        {
+            return await repos.Accounts.GetList().AnyAsync(x => x.Username == username);
+        }
+
+        public async Task<bool> ExistEmailAsync(string email)
+        {
+            return await repos.Accounts.GetList().AnyAsync(x => x.Email == email);
+        }
     }
 }

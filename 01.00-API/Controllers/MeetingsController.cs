@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Authorization;
 using ShareResource.DTO;
 using APIExtension.Validator;
 using AutoMapper;
+using System.Collections;
+using DataLayer.DBContext;
 
 namespace API.Controllers
 {
@@ -25,27 +27,29 @@ namespace API.Controllers
         private readonly IServiceWrapper services;
         private readonly IValidatorWrapper validators;
         private readonly IMapper mapper;
+        private readonly GroupStudyContext context;
 
-        public MeetingsController(IServiceWrapper services, IValidatorWrapper validators, IMapper mapper)
+        public MeetingsController(IServiceWrapper services, IValidatorWrapper validators, IMapper mapper, GroupStudyContext context)
         {
             this.services = services;
             this.validators = validators;
             this.mapper = mapper;
+            this.context = context;
         }
 
         //GET: api/Meetings/Past/Group/id
         [SwaggerOperation(
             Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Get all past meetings of group"
         )]
-        [Authorize(Roles =Actor.Student)]
+        [Authorize(Roles = Actor.Student)]
         [HttpGet("Past/Group/{groupId}")]
         public async Task<IActionResult> GetPastMeetingForGroup(int groupId)
         {
-            int studentId=HttpContext.User.GetUserId();
+            int studentId = HttpContext.User.GetUserId();
             bool isLeader = await services.Groups.IsStudentLeadingGroupAsync(studentId, groupId);
-            if(!isLeader)
+            if (!isLeader)
             {
-                 return Unauthorized("Bạn không phải nhóm trưởng của nhóm này");
+                return Unauthorized("Bạn không phải nhóm trưởng của nhóm này");
             }
             var mapped = services.Meetings.GetPastMeetingsForGroup(groupId);
             return Ok(mapped);
@@ -55,7 +59,7 @@ namespace API.Controllers
         [SwaggerOperation(
             Summary = $"[{Actor.Student}/{Finnished.True}/{Auth.True}] Get all Schedule meetings of group"
         )]
-        [Authorize(Roles =Actor.Student)]
+        [Authorize(Roles = Actor.Student)]
         [HttpGet("Schedule/Group/{groupId}")]
         public async Task<IActionResult> GetScheduleMeetingForGroup(int groupId)
         {
@@ -110,13 +114,40 @@ namespace API.Controllers
         }
 
         [SwaggerOperation(
+            Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Mass create many schedule meetings within a range of time",
+            Description = "ScheduleSRangeStart: chỉ cần date, time ko quan trọng nhưng vẫn phải điền (cho 00:00:00)<br/>"
+        )]
+        //[Authorize(Roles = Actor.Student)]
+        [HttpPost("Mass-schedule")]
+        public async Task<IActionResult> MassCreateScheduleMeeting(ScheduleMeetingMassCreateDto dto)
+        {
+            int studentId = HttpContext.User.GetUserId();
+            bool isLeader = await services.Groups.IsStudentLeadingGroupAsync(studentId, dto.GroupId);
+            if (!isLeader)
+            {
+                return Unauthorized("Bạn không phải nhóm trưởng của nhóm này");
+            }
+            ValidatorResult valResult = await validators.Meetings.ValidateParams(dto, 1 /*studentId*/);
+            if (!valResult.IsValid)
+            {
+                return BadRequest(valResult.Failures);
+            }
+
+
+            IEnumerable<Meeting> createdMeetings = await services.Meetings.MassCreateScheduleMeetingAsync(dto);
+
+            //await services.Meetings.CreateScheduleMeetingAsync(dto);
+            return Ok(createdMeetings);
+        }
+
+        [SwaggerOperation(
            Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Create a new schedule meeting"
        )]
         [Authorize(Roles = Actor.Student)]
         [HttpPost("Schedule")]
         public async Task<IActionResult> CreateScheduleMeeting(ScheduleMeetingCreateDto dto)
         {
-            int studentId=HttpContext.User.GetUserId();
+            int studentId = HttpContext.User.GetUserId();
             bool isLeader = await services.Groups.IsStudentLeadingGroupAsync(studentId, dto.GroupId);
             if (!isLeader)
             {
@@ -157,14 +188,14 @@ namespace API.Controllers
             //phải bắt đầu trong ngày schedule
             if (meeting.ScheduleStart.Value.Date > DateTime.Today)
             {
-                return BadRequest($"Meeting được hẹn vào ngày {meeting.ScheduleStart.Value.Date.ToString("dd/MM")} Nếu muốn bắt đầu vào ngày hôm nay, hãy {(isLeader?"cập nhật lại ngày hẹn": "yêu  cầu nhóm trưởng cập nhật lại ngày hẹn")}");
+                return BadRequest($"Meeting được hẹn vào ngày {meeting.ScheduleStart.Value.Date.ToString("dd/MM")} Nếu muốn bắt đầu vào ngày hôm nay, hãy {(isLeader ? "cập nhật lại ngày hẹn" : "yêu  cầu nhóm trưởng cập nhật lại ngày hẹn")}");
             }
             //Member ko dc bắt sớm hơn
             if (meeting.ScheduleStart.Value > DateTime.Now && !isLeader)
             {
                 return BadRequest($"Thành viên không thể bắt đầu meeting sớm hơn giờ hẹn. Nếu muốn bắt đầu ngay, hãy yêu  cầu nhóm trưởng bắt đầu cuộc họp");
             }
-            meeting.Start= DateTime.Now;
+            meeting.Start = DateTime.Now;
             await services.Meetings.StartScheduleMeetingAsync(meeting);
             LiveMeetingGetDto dto = mapper.Map<LiveMeetingGetDto>(meeting);
             return Ok(dto);
@@ -190,7 +221,7 @@ namespace API.Controllers
                 return BadRequest(valResult.Failures);
             }
             await services.Meetings.UpdateScheduleMeetingAsync(dto);
-            var updatedDto = mapper.Map<ScheduleMeetingGetDto>( await services.Meetings.GetByIdAsync(id));
+            var updatedDto = mapper.Map<ScheduleMeetingGetDto>(await services.Meetings.GetByIdAsync(id));
             return Ok(updatedDto);
         }
 
@@ -226,16 +257,16 @@ namespace API.Controllers
             return Ok("Đã xóa meeting");
         }
 
-        //// GET: api/Meetings
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<Meeting>>> GetMeetings()
-        //{
-        //  if (services.Meetings. == null)
-        //  {
-        //      return NotFound();
-        //  }
-        //    return await services.Meetings.ToListAsync();
-        //}
+        // GET: api/Meetings
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Meeting>>> GetMeetings()
+        {
+            if (context.Meetings == null)
+            {
+                return NotFound();
+            }
+            return await context.Meetings.ToListAsync();
+        }
 
         //// GET: api/Meetings/5
         //[HttpGet("{id}")]

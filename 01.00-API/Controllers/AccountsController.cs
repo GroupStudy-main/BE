@@ -14,6 +14,8 @@ using Swashbuckle.AspNetCore.Annotations;
 using APIExtension.Const;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using APIExtension.Validator;
+using Microsoft.IdentityModel.Tokens;
 
 namespace API.Controllers
 {
@@ -28,14 +30,16 @@ namespace API.Controllers
         private readonly IHubContext<GroupHub> presenceHub;
         private readonly PresenceTracker presenceTracker;
         private readonly IMapper mapper;
+        private readonly IValidatorWrapper validators;
 
-        public AccountsController(IServiceWrapper services, IRepoWrapper unitOfWork, IHubContext<GroupHub> presenceHub, PresenceTracker presenceTracker, IMapper mapper)
+        public AccountsController(IServiceWrapper services, IRepoWrapper unitOfWork, IHubContext<GroupHub> presenceHub, PresenceTracker presenceTracker, IMapper mapper, IValidatorWrapper validators)
         {
             this.services = services;
             this.unitOfWork = unitOfWork;
             this.presenceHub = presenceHub;
             this.presenceTracker = presenceTracker;
             this.mapper = mapper;
+            this.validators = validators;
         }
 
         //Get: api/Accounts/search
@@ -101,6 +105,11 @@ namespace API.Controllers
             if (account == null)
             {
                 return NotFound();
+            }
+            ValidatorResult valResult = await validators.Accounts.ValidateParams(dto);
+            if (!valResult.IsValid)
+            {
+                return BadRequest(valResult.Failures);
             }
             try
             {
@@ -170,6 +179,7 @@ namespace API.Controllers
             }
         }
         /// ///////////////////////////////////////////////////////////////////////////////////////////////
+        [Tags(Actor.Test)]
         [SwaggerOperation(
             Summary = $"[{Actor.Test}/{Finnished.False}] Get all the account"
         )]
@@ -186,6 +196,7 @@ namespace API.Controllers
             return Ok(mapped);
         }
         // GET: api/Accounts/Student
+        [Tags(Actor.Test)]
         [SwaggerOperation(
           Summary = $"[{Actor.Test}/{Finnished.False}] Get all the student account"
       )]
@@ -202,6 +213,7 @@ namespace API.Controllers
         }
 
         // GET: api/Accounts/Student
+        [Tags(Actor.Test)]
         [SwaggerOperation(
           Summary = $"[{Actor.Test}/{Finnished.False}] Get all the parent account"
         )]
@@ -215,10 +227,12 @@ namespace API.Controllers
             }
             return Ok(list);
         }
+
+        // GET: api/Accounts/5
+        [Tags(Actor.Test)]
         [SwaggerOperation(
           Summary = $"[{Actor.Test}/{Finnished.False}] Get account info "
         )]
-        // GET: api/Accounts/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUser(int id)
         {

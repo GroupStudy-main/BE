@@ -1,6 +1,7 @@
 ﻿using APIExtension.Auth;
 using APIExtension.Const;
 using APIExtension.HttpContext;
+using APIExtension.Validator;
 using AutoMapper;
 using DataLayer.DBObject;
 using Microsoft.AspNetCore.Authentication;
@@ -24,10 +25,12 @@ namespace API.Controllers
     {
         private readonly IServiceWrapper services;
         private readonly IMapper mapper;
-        public AuthController(IServiceWrapper services, IMapper mapper)
+        private readonly IValidatorWrapper validators;
+        public AuthController(IServiceWrapper services, IMapper mapper, IValidatorWrapper validators)
         {
             this.services = services;
             this.mapper = mapper;
+            this.validators = validators;
         }
 
 
@@ -94,9 +97,10 @@ namespace API.Controllers
         [HttpPost("Register/Student")]
         public async Task<IActionResult> StudentRegister(AccountRegisterDto dto)
         {
-            if (dto.Password != dto.ConfirmPassword)
+            ValidatorResult valResult = await validators.Accounts.ValidateParams(dto);
+            if (!valResult.IsValid)
             {
-                return BadRequest("Xác nhận password không thành công");
+                return BadRequest(valResult.Failures);
             }
             Account register = mapper.Map<Account>(dto);
             await services.Auth.Register(register, RoleNameEnum.Student);
@@ -110,9 +114,10 @@ namespace API.Controllers
         [HttpPost("Register/Parent")]
         public async Task<IActionResult> ParentRegister(AccountRegisterDto dto)
         {
-            if (dto.Password != dto.ConfirmPassword)
+            ValidatorResult valResult = await validators.Accounts.ValidateParams(dto);
+            if (!valResult.IsValid)
             {
-                return BadRequest("Xác nhận password không thành công");
+                return BadRequest(valResult.Failures);
             }
             Account register = mapper.Map<Account>(dto);
             await services.Auth.Register(register, RoleNameEnum.Student);
@@ -152,8 +157,8 @@ namespace API.Controllers
             //return Ok(await services.Accounts.GetAccountByUserNameAsync(dto.Username));
             return BadRequest();
         }
-         /// ////////////////////////////////////////////////////////////////////////////////////////
-        
+        /// ////////////////////////////////////////////////////////////////////////////////////////
+        [Tags(Actor.Test)]        
         [SwaggerOperation(
            Summary = $"[{Actor.Test}/{Finnished.True}] Get all the token sent in the header of the swagger request"
        )]
@@ -171,6 +176,7 @@ namespace API.Controllers
             });
         }
 
+        [Tags(Actor.Test)]        
         [SwaggerOperation(
           Summary = $"[{Actor.Test}/{Finnished.True}] Get all the data of the account of the swagger request"
       )]
@@ -197,6 +203,7 @@ namespace API.Controllers
             });
         }
 
+        [Tags(Actor.Test)]        
         [SwaggerOperation(
          Summary = $"[{Actor.Test}/{Finnished.True}] Test if the account of the swagger request is a student"
         )]
@@ -207,6 +214,7 @@ namespace API.Controllers
             return Ok("You're student ");
         }
 
+        [Tags(Actor.Test)]        
         [SwaggerOperation(
          Summary = $"[{Actor.Test}/{Finnished.True}] Test if the account of the swagger request is a student"
         )]

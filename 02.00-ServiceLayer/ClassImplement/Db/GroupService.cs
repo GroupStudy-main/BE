@@ -174,5 +174,10 @@ namespace ServiceLayer.ClassImplement.Db
             return await repos.GroupMembers.GetList()
                 .AnyAsync(e => e.AccountId == studentId && e.GroupId == groupId && (e.State == GroupMemberState.Declined));
         }
+
+        public async Task<bool> ExistsAsync(int groupId)
+        {
+            return await repos.Groups.IdExistAsync(groupId);
+        }
     }
 }

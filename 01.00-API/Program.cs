@@ -8,6 +8,8 @@ using DataLayer.DBContext;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Any;
+using Microsoft.OpenApi.Models;
 using RepositoryLayer.ClassImplement;
 using RepositoryLayer.Interface;
 using ServiceLayer.ClassImplement;
@@ -22,11 +24,12 @@ bool IsInMemory = configuration["ConnectionStrings:InMemory"].ToLower() == "true
 
 // Add services to the container.
 
-builder.Services.AddControllers().AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
-    //options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-});
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+        //options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+    });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
@@ -86,6 +89,11 @@ builder.Services.AddJwtAuthService(configuration);
 builder.Services.AddSwaggerGen(options =>
 {
     options.EnableAnnotations();
+    options.MapType<TimeSpan>(() => new OpenApiSchema
+    {
+        Type = "string",
+        Example = new OpenApiString("00:00:00")
+    });
     #region auth
     options.AddJwtAuthUi();
     options.AddGoogleAuthUi(configuration);

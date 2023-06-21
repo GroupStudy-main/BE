@@ -27,6 +27,11 @@ namespace DataLayer.DBContext
         public virtual DbSet<Meeting> Meetings { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Subject> Subjects { get; set; }
+        public virtual DbSet<Schedule> Schedules { get; set; }
+        public virtual DbSet<Review> Reviews { get; set; }
+        public virtual DbSet<ReviewDetail> ReviewDetails { get; set; }
+
+        public virtual DbSet<DocumentFile> DocumentFiles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,6 +42,11 @@ namespace DataLayer.DBContext
             //    .HasIndex(a => a.Email).IsUnique();
             modelBuilder.Entity<GroupMember>()
                 .HasIndex(gm => new {  gm.AccountId, gm.GroupId }).IsUnique();
+            //
+            //modelBuilder.Entity<ReviewDetail>()
+            //    .HasOne(r => r.Reviewer)
+            //    .WithMany()
+            //    .WillCascadeOnDelete
 
             Seed();
             void Seed()
@@ -133,7 +143,7 @@ namespace DataLayer.DBContext
                         Id = 8,
                         Username = "student8",
                         FullName = "Tran Van H",
-                        Email = "student3@gmail.com",
+                        Email = "student8@gmail.com",
                         Password = "123456789",
                         Phone = "0123456789",
                         RoleId = 2
@@ -143,7 +153,7 @@ namespace DataLayer.DBContext
                         Id = 9,
                         Username = "student9",
                         FullName = "Tran Van I",
-                        Email = "student10@gmail.com",
+                        Email = "student9@gmail.com",
                         Password = "123456789",
                         Phone = "0123456789",
                         RoleId = 2

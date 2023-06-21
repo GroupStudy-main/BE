@@ -96,5 +96,6 @@ namespace ServiceLayer.Interface.Db
         /// <param name="newGroup"></param>
         /// <returns></returns>
         public Task<IQueryable<Group>> SearchGroups(string search, int studentId, bool newGroup);
+        public Task<bool> ExistsAsync(int groupId);
     }
 }

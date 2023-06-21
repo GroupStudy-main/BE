@@ -23,5 +23,8 @@ namespace ServiceLayer.Interface.Db
         public Task<Account> GetAccountByUserNameAsync(string userName);
         public Task<Account> GetProfileByIdAsync(int id);
         public IQueryable<Account> SearchStudents(string search, int? groupId);
+        public Task<bool> ExistAsync(int id);
+        public Task<bool> ExistUsernameAsync(string username);
+        public Task<bool> ExistEmailAsync(string email);
     }
 }

@@ -12,7 +12,6 @@ namespace RepositoryLayer.ClassImplement
 {
     internal class MeetingRepository : BaseRepo<Meeting, int>, IMeetingRepository 
     {
-        private readonly GroupStudyContext dbContext;
         private IMapper _mapper;
 
         public MeetingRepository(GroupStudyContext context, IMapper mapper)
@@ -25,18 +24,33 @@ namespace RepositoryLayer.ClassImplement
         {
             return base.CreateAsync(entity);
         }
+
+        public async Task<IEnumerable<Meeting>> MassCreateAsync(IEnumerable<Meeting> creatingMeetings)
+        {
+            //await dbContext.Meetings.AddRangeAsync(creatingMeetings);
+            foreach (var item in creatingMeetings)
+            {
+                await dbContext.Meetings.AddAsync(item);
+            }
+            await dbContext.SaveChangesAsync();
+            return creatingMeetings;
+        }
+
         public override Task<Meeting> GetByIdAsync(int id)
         {
             return base.GetByIdAsync(id);
         }
+
         public override IQueryable<Meeting> GetList()
         {
             return base.GetList();
         }
+        
         public override Task RemoveAsync(int id)
         {
             return base.RemoveAsync(id);
         }
+        
         public override Task UpdateAsync(Meeting entity)
         {
             return base.UpdateAsync(entity);
@@ -56,10 +70,11 @@ namespace RepositoryLayer.ClassImplement
                 .FirstOrDefaultAsync();
         }
 
-        public void EndConnectionSignalr(Connection connection)
+        public async Task EndConnectionSignalr(Connection connection)
         {
-            dbContext.Connections.Remove(connection);
-            dbContext.SaveChanges();
+            connection.End = DateTime.Now;
+            dbContext.Connections.Update(connection);
+            await dbContext.SaveChangesAsync();
         }
 
         public async Task UpdateCountMemberSignalr(int roomId, int count)
@@ -69,6 +84,19 @@ namespace RepositoryLayer.ClassImplement
             {
                 meeting.CountMember = count;
             }
+            dbContext.Meetings.Update(meeting);
+            await dbContext.SaveChangesAsync();
+        }
+
+        public IQueryable<Connection> GetActiveConnectionsForMeetingSignalr(int meetingId)
+        {
+            return dbContext.Connections
+                .Where(e => e.MeetingId == meetingId && e.End == null);
+        }
+
+        public async Task EndMeetingSignalRAsync(Meeting meeting)
+        {
+            meeting.End = DateTime.Now;
             dbContext.Meetings.Update(meeting);
             await dbContext.SaveChangesAsync();
         }

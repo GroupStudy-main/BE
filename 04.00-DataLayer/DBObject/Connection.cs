@@ -4,6 +4,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace DataLayer.DBObject
 {
+    [Table("MeetingParticipations")]
     public class Connection
     {
         //public Connection(string connectionId, string userName)

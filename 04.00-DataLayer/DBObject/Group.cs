@@ -30,5 +30,9 @@ namespace DataLayer.DBObject
         #region Subjects
         public virtual ICollection<GroupSubject> GroupSubjects { get; set; } = new Collection<GroupSubject>();
         #endregion
+
+        #region Schedules
+        public virtual ICollection<Schedule> Schedules { get; set; } = new Collection<Schedule>();
+        #endregion
     }
 }

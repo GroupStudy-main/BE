@@ -20,11 +20,19 @@ namespace DataLayer.DBObject
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+
+        [StringLength(32)]
         public string Username { get; set; }
         [EmailAddress]
         public string Email { get; set; }
+
+        [StringLength(32)]
         public string Password { get; set; }
+
+        [StringLength(50)]
         public string FullName { get; set; }
+
+        [StringLength(20)]
         public string Phone { get; set; }
         
         //Role

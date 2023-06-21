@@ -9,8 +9,22 @@ namespace ShareResource.DTO
     public class ScheduleMeetingUpdateDto  : BaseUpdateDto
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public DateTime? ScheduleStart { get; set; } = null;
-        public DateTime? ScheduleEnd { get; set; } = null;
+        private string name;
+
+        public string Name
+        {
+            get { return name.Trim(); }
+            set { name = value.Trim(); }
+        }
+        private DateTime date;
+
+        public DateTime Date
+        {
+            get { return date.Date; }
+            set { date = value.Date; }
+        }
+
+        public TimeSpan ScheduleStartTime { get; set; }
+        public TimeSpan ScheduleEndTime { get; set; }
     }
 }
