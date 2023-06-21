@@ -1,6 +1,6 @@
 ﻿using DataLayer.DBObject;
 
-namespace ServiceLayer.Interface
+namespace ServiceLayer.Interface.Db
 {
     public interface ISubjectService
     {

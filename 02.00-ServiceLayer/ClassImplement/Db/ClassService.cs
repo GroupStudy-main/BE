@@ -1,8 +1,8 @@
 ﻿using DataLayer.DBObject;
 using RepositoryLayer.Interface;
-using ServiceLayer.Interface;
+using ServiceLayer.Interface.Db;
 
-namespace ServiceLayer.ClassImplement
+namespace ServiceLayer.ClassImplement.Db
 {
     public class ClassService : IClassService
     {

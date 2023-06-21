@@ -3,11 +3,11 @@ using AutoMapper.QueryableExtensions;
 using DataLayer.DBObject;
 using Microsoft.EntityFrameworkCore;
 using RepositoryLayer.Interface;
-using ServiceLayer.Interface;
+using ServiceLayer.Interface.Db;
 using ShareResource.DTO;
 using ShareResource.UpdateApiExtension;
 
-namespace ServiceLayer.ClassImplement
+namespace ServiceLayer.ClassImplement.Db
 {
     internal class MeetingService : IMeetingService
     {
@@ -22,13 +22,13 @@ namespace ServiceLayer.ClassImplement
 
         public async Task<bool> AnyAsync(int id)
         {
-            return await repos.Meetings.GetList().AnyAsync(e=>e.Id == id);
+            return await repos.Meetings.GetList().AnyAsync(e => e.Id == id);
         }
 
         public async Task CreateInstantMeetingAsync(InstantMeetingCreateDto dto)
         {
             Meeting meeting = mapper.Map<Meeting>(dto);
-            await repos.Meetings.CreateAsync(meeting);  
+            await repos.Meetings.CreateAsync(meeting);
         }
 
         public async Task CreateScheduleMeetingAsync(ScheduleMeetingCreateDto dto)
@@ -62,7 +62,7 @@ namespace ServiceLayer.ClassImplement
         {
             return repos.Meetings.GetList()
                //.Where(e => e.GroupId == groupId && (e.End != null || (e.ScheduleStart != null && e.ScheduleStart.Value.Date < DateTime.Today && e.Start == null)))
-               .Where(e => e.GroupId == groupId && (e.End != null || (e.ScheduleStart != null && e.ScheduleStart.Value.Date < DateTime.Today)))
+               .Where(e => e.GroupId == groupId && (e.End != null || e.ScheduleStart != null && e.ScheduleStart.Value.Date < DateTime.Today))
                .ProjectTo<PastMeetingGetDto>(mapper.ConfigurationProvider);
         }
 
@@ -71,7 +71,7 @@ namespace ServiceLayer.ClassImplement
             //var liveMeetings = repos.Meetings.GetList()
             //    .Where(e => e.Start != null && e.End == null);
             return repos.Meetings.GetList()
-                .Where(e => e.GroupId==groupId && e.Start != null && e.End == null)
+                .Where(e => e.GroupId == groupId && e.Start != null && e.End == null)
                 .ProjectTo<LiveMeetingGetDto>(mapper.ConfigurationProvider);
         }
 
@@ -79,7 +79,7 @@ namespace ServiceLayer.ClassImplement
         {
             return repos.Meetings.GetList()
                 //.Where(e => e.GroupId == groupId && (e.End != null || (e.ScheduleStart != null && e.ScheduleStart.Value.Date >= DateTime.Today)))
-                .Where(e => e.GroupId == groupId && (e.ScheduleStart != null && e.ScheduleStart.Value.Date >= DateTime.Today && e.Start == null))
+                .Where(e => e.GroupId == groupId && e.ScheduleStart != null && e.ScheduleStart.Value.Date >= DateTime.Today && e.Start == null)
                 .ProjectTo<ScheduleMeetingGetDto>(mapper.ConfigurationProvider);
         }
 
@@ -90,9 +90,9 @@ namespace ServiceLayer.ClassImplement
             {
                 Id = dto.Id,
                 GroupId = existed.GroupId,
-                Name= dto.Name,
-                ScheduleStart= dto.Date.Date.Add(dto.ScheduleStartTime),
-                ScheduleEnd= dto.Date.Date.Add(dto.ScheduleEndTime),
+                Name = dto.Name,
+                ScheduleStart = dto.Date.Date.Add(dto.ScheduleStartTime),
+                ScheduleEnd = dto.Date.Date.Add(dto.ScheduleEndTime),
             };
             existed.PatchUpdate(updated);
             await repos.Meetings.UpdateAsync(existed);
