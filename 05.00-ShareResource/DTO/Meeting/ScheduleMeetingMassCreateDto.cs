@@ -34,7 +34,7 @@ namespace ShareResource.DTO
         public ICollection<DayOfWeek> DayOfWeeks { get; set; }
 
         private DateTime scheduleSRangeStart;
-		public DateTime ScheduleSRangeStart
+		public DateTime ScheduleRangeStart
 		{
 			get { return scheduleSRangeStart.Date; }
 			set { scheduleSRangeStart = value.Date; }

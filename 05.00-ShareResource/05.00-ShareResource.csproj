@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTO\NewFolder\" />
+    <Folder Include="DTO\Schedule\" />
   </ItemGroup>
 
 </Project>

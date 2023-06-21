@@ -21,10 +21,26 @@ namespace ShareResource.Mapper
             MapMeeting();
 
             MapSubject();
+
+            MapSchedule();
             //CreateMap<MeetingRoom, MeetingDto>();
             //.ForMember(dest => dest.DisplayName, opt => opt.MapFrom(src => src.AppUser.DisplayName))
             //.ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.AppUser.UserName));
 
+        }
+
+        private void MapSchedule()
+        {
+           CreateMap<Schedule, ScheduleGetDto>()
+            //Live
+                .ForMember(dest => dest.CurrentLiveMeeting, opt => opt.MapFrom(
+                    src => src.Meetings
+                        .FirstOrDefault(e => e.Start != null && e.End == null)))
+                //Schedule
+                .ForMember(dest => dest.ScheduleMeetings, opt => opt.MapFrom(
+                    src => src.Meetings
+                        .Where(e => (e.ScheduleStart != null && e.ScheduleStart.Value.Date >= DateTime.Today && e.Start == null))))
+                .PreserveReferences();
         }
 
         private void MapSubject()

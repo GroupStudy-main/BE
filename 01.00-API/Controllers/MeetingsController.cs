@@ -134,10 +134,10 @@ namespace API.Controllers
             }
 
 
-            IEnumerable<Meeting> createdMeetings = await services.Meetings.MassCreateScheduleMeetingAsync(dto);
-
+            Schedule schedule = await services.Meetings.MassCreateScheduleMeetingAsync(dto);
+                            var mapped = mapper.Map<ScheduleGetDto>(schedule);
             //await services.Meetings.CreateScheduleMeetingAsync(dto);
-            return Ok(createdMeetings);
+            return Ok(mapped);
         }
 
         [SwaggerOperation(
