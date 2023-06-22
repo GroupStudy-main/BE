@@ -450,7 +450,7 @@ namespace API.SignalRHub
                 throw new HubException("group == null");
             }
         }
-        //sẽ dc gọi 
+        //sẽ dc gọi khi có người xin dc vote (review)
         //sẽ dc gọi khi FE gọi chatHubConnection.invoke('StartVote', meetingId: int)
         public async Task StartVote(int meetingId)
         {
@@ -464,7 +464,8 @@ namespace API.SignalRHub
             ReviewSignalrDTO mapped = mapper.Map<ReviewSignalrDTO>(newReview);
             await Clients.Group(meetingId.ToString()).SendAsync(OnStartVoteMsg, mapped);
         }
-
+        //sẽ dc gọi khi có người xin dc vote (review)
+        //sẽ dc gọi khi FE gọi chatHubConnection.invoke('VoteForReview', reviewDetail: ReviewDetailSignalrCreateDto)
         public async Task VoteForReview(ReviewDetailSignalrCreateDto dto)
         {
             int reviewerId = Context.User.GetUserId();
