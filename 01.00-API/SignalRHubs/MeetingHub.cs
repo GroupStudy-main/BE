@@ -64,7 +64,7 @@ namespace API.SignalRHub
 
         //Thông báo Review có thay đổi
         //BE SendAsync(OnStartVoteMsg, ReviewSignalrDTO);
-        private const string OnVoteChangeMsg = "OnVoteChange";
+        public static string OnVoteChangeMsg => "OnVoteChange";
         #endregion
 
         IMapper mapper;
