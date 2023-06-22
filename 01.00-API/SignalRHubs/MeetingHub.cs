@@ -1,5 +1,6 @@
 ﻿using API.SignalRHub.Tracker;
 using APIExtension.ClaimsPrinciple;
+using AutoMapper;
 using DataLayer.DBObject;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
@@ -12,6 +13,7 @@ namespace API.SignalRHub
     [Authorize]
     public class MeetingHub : Hub
     {
+        #region Message
         //Thông báo có người mới vào meeting
         //BE SendAsync(UserOnlineInGroupMsg, MemberSignalrDto)
         public static string UserOnlineInMeetingMsg => "UserOnlineInMeeting";
@@ -54,25 +56,24 @@ namespace API.SignalRHub
         //Thông báo có Chat Message mới
         //BE SendAsync("NewMessage", MessageSignalrGetDto)
         public static string NewMessageMsg => "NewMessage";
+        #endregion
 
-
-
-        //IMapper _mapper;
+        IMapper mapper;
         IHubContext<GroupHub> groupHub;
         PresenceTracker presenceTracker;
         IRepoWrapper repos;
         ShareScreenTracker shareScreenTracker;
 
-        public MeetingHub(IRepoWrapper repos, ShareScreenTracker shareScreenTracker, PresenceTracker presenceTracker, IHubContext<GroupHub> presenceHubContext)
+        public MeetingHub(IRepoWrapper repos, ShareScreenTracker shareScreenTracker, PresenceTracker presenceTracker, IHubContext<GroupHub> presenceHubContext, IMapper mapper)
         {
             //Console.WriteLine("2.   " + new String('+', 50));
             //Console.WriteLine("2.   Hub/Chat: ctor(IUnitOfWork, UserShareScreenTracker, PresenceTracker, PresenceHub)");
 
-            //_mapper = mapper;
             this.repos = repos;
             this.presenceTracker = presenceTracker;
             this.groupHub = presenceHubContext;
             this.shareScreenTracker = shareScreenTracker;
+            this.mapper = mapper;
         }
         #region old code
         /// <summary>
@@ -423,7 +424,9 @@ namespace API.SignalRHub
         //    }
         //}
         #endregion
-        //sẽ dc gọi khi FE gọi chatHubConnection.invoke('MuteCamera', mute)
+        //sẽ dc gọi khi người dùng muốn bật tắt cam
+        //sẽ dc gọi khi FE gọi chatHubConnection.invoke('MuteCamera', mute: bool)
+        //Thông báo cho cả meeting là có người bật tắt camera
         public async Task MuteCamera(bool muteCamera)
         {
             FunctionTracker.Instance().AddHubFunc("Hub/Chat: MuteCamera(bool)");
@@ -436,6 +439,20 @@ namespace API.SignalRHub
             {
                 throw new HubException("group == null");
             }
+        }
+        //sẽ dc gọi 
+        //sẽ dc gọi khi FE gọi chatHubConnection.invoke('StartVote', meetingId: int)
+        public async Task StartVote(int meetingId)
+        {
+            string reviewee = Context.User.GetUsername();
+            Review newReview = new Review
+            {
+                MeetingId = meetingId,
+                RevieweeId = Context.User.GetUserId(),
+            };
+            await repos.Reviews.CreateAsync(newReview);
+            ReviewSignalrDTO mapped = mapper.Map<ReviewSignalrDTO>(newReview);
+            await Clients.Group(meetingId.ToString()).SendAsync("OnStartVote", mapped);
         }
 
         #region old code
@@ -465,27 +482,8 @@ namespace API.SignalRHub
             return meeting;
         }
 
-        #region old code
-        //private async Task<Meeting> AddConnectionToMeeting(int meetingId)
-        //{
-        //    //Console.WriteLine("2.   " + new String('+', 50));
-        //    //Console.WriteLine("2.   Hub/Chat: AddConnectionToMeeting(meetingIdString)");
-        //    FunctionTracker.Instance().AddHubFunc("Hub/Chat: AddConnectionToMeeting(meetingIdString)");
-        //    Meeting? meeting = await repos.Meetings.GetByIdAsync(meetingId);
-        //    Connection connection = new Connection
-        //    {
-        //        Id = Context.ConnectionId,
-        //        AccountId = Context.User.GetUserId()
-        //    };
-        //    if (meeting != null)
-        //    {
-        //        meeting.Connections.Add(connection);
-        //    }
-
-        //    return meeting;
-        //}
-        #endregion
-        //TestOnly
+        //////////////////////////////////////////
+        /////TestOnly
         public async Task TestReceiveInvoke(string msg)
         {
             //int meetId = presenceTracker.

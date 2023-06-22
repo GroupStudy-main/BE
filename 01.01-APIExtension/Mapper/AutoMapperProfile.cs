@@ -23,10 +23,26 @@ namespace ShareResource.Mapper
             MapSubject();
 
             MapSchedule();
+
+            MapReview();
             //CreateMap<MeetingRoom, MeetingDto>();
             //.ForMember(dest => dest.DisplayName, opt => opt.MapFrom(src => src.AppUser.DisplayName))
             //.ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.AppUser.UserName));
 
+        }
+
+        private void MapReview()
+        {
+            CreateMap<Review, ReviewSignalrDTO>()
+                .ForMember(dest=>dest.ReviewerUsernames, opt=>opt.MapFrom(
+                    src=>src.Details.Select(d=>d.Reviewer.Username)))
+                .ForMember(dest => dest.ReviewerIds, opt => opt.MapFrom(
+                    src => src.Details.Select(d => d.ReviewerId)))
+                .ForMember(dest => dest.Average, opt => opt.MapFrom(
+                    src => src.Details.Count>0? src.Details.Select(d => (int)d.Result).Average() : 0.0))
+                .PreserveReferences();
+            CreateMap<ReviewDetail, ReviewDetailSignalrGetDto>()
+                .PreserveReferences();
         }
 
         private void MapSchedule()
