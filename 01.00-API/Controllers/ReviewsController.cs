@@ -66,7 +66,7 @@ namespace API.Controllers
         )]
         [Authorize(Roles=Actor.Student)]
         [HttpPost("Vote")]
-        public async Task<IActionResult> StartReviewForUserInMeeting(ReviewDetailSignalrCreateDto dto)
+        public async Task<IActionResult> VoteForReview(ReviewDetailSignalrCreateDto dto)
         {
             int reviewerId = HttpContext.User.GetUserId();
             ReviewDetail newReviewDetail = new ReviewDetail

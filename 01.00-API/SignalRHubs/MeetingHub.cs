@@ -4,6 +4,7 @@ using AutoMapper;
 using DataLayer.DBObject;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using RepositoryLayer.Interface;
 using ShareResource.DTO;
 using ShareResource.DTO.Connection;
@@ -29,7 +30,7 @@ namespace API.SignalRHub
         //Thông báo có người rời meeting
         //BE SendAsync(UserOfflineInGroupMsg, offlineUser: MemberSignalrDto)
         public static string UserOfflineInMeetingMsg => "UserOfflineInMeeting";
-       
+
         //Thông báo có user nào đang show screen ko. Cho FE biết để chuyển  
         //màn hình chính qua lại chế độ show các cam và chế độ share screen
         //BE SendAsync(OnShareScreenMsg, isShareScreen: bool)
@@ -56,6 +57,14 @@ namespace API.SignalRHub
         //Thông báo có Chat Message mới
         //BE SendAsync("NewMessage", MessageSignalrGetDto)
         public static string NewMessageMsg => "NewMessage";
+
+        //Thông báo có người yêu cầu dc vote
+        // BE SendAsync(OnStartVoteMsg, ReviewSignalrDTO);
+        public static string OnStartVoteMsg => "OnStartVote";
+
+        //Thông báo Review có thay đổi
+        //BE SendAsync(OnStartVoteMsg, ReviewSignalrDTO);
+        private const string OnVoteChangeMsg = "OnVoteChange";
         #endregion
 
         IMapper mapper;
@@ -146,7 +155,8 @@ namespace API.SignalRHub
             #region lưu Db Connection
             Meeting meeting = await repos.Meetings.GetMeetingByIdSignalr(meetingIdInt);
             //Connection connection = new Connection(Context.ConnectionId, Context.User.GetUsername());
-            Connection connection = new Connection {
+            Connection connection = new Connection
+            {
                 Id = Context.ConnectionId,
                 AccountId = Context.User.GetUserId(),
                 MeetingId = meetingIdInt,
@@ -158,7 +168,7 @@ namespace API.SignalRHub
                 //meeting.Connections.Add(connection);
                 repos.Connections.CreateConnectionSignalrAsync(connection);
             }
-          
+
             #endregion
 
             //var usersOnline = await _unitOfWork.UserRepository.GetUsersOnlineAsync(currentUsers);
@@ -452,7 +462,27 @@ namespace API.SignalRHub
             };
             await repos.Reviews.CreateAsync(newReview);
             ReviewSignalrDTO mapped = mapper.Map<ReviewSignalrDTO>(newReview);
-            await Clients.Group(meetingId.ToString()).SendAsync("OnStartVote", mapped);
+            await Clients.Group(meetingId.ToString()).SendAsync(OnStartVoteMsg, mapped);
+        }
+
+        public async Task VoteForReview(ReviewDetailSignalrCreateDto dto)
+        {
+            int reviewerId = Context.User.GetUserId();
+
+            ReviewDetail newReviewDetail = new ReviewDetail
+            {
+                ReviewId = dto.ReviewId,
+                Comment = dto.Comment,
+                Result = dto.Result,
+                ReviewerId = reviewerId,
+            };
+            await repos.ReviewDetails.CreateAsync(newReviewDetail);
+            Review review = await repos.Reviews.GetList()
+                .Include(e => e.Reviewee)
+                .Include(e => e.Details).ThenInclude(e => e.Reviewer)
+                .SingleOrDefaultAsync(e => e.MeetingId == newReviewDetail.ReviewId);
+            ReviewSignalrDTO mapped = mapper.Map<ReviewSignalrDTO>(review);
+            await Clients.Group(review.MeetingId.ToString()).SendAsync(OnVoteChangeMsg, mapped);
         }
 
         #region old code
@@ -475,7 +505,7 @@ namespace API.SignalRHub
             Connection? connection = meeting.Connections.FirstOrDefault(x => x.Id == Context.ConnectionId);
             await repos.Meetings.EndConnectionSignalr(connection);
             IQueryable<Connection> activeConnections = repos.Meetings.GetActiveConnectionsForMeetingSignalr(meeting.Id);
-            if(activeConnections.Count() == 0) 
+            if (activeConnections.Count() == 0)
             {
                 await repos.Meetings.EndMeetingSignalRAsync(meeting);
             }
