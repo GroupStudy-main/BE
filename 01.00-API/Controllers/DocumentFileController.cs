@@ -29,7 +29,7 @@ public class DocumentFileController : ControllerBase
 
     [HttpPost("/upload-file/{groupId}")]
     [DisableRequestSizeLimit]
-    public async Task<ActionResult> UploadFile(IFormFile file, [FromRoute] int groupId)
+    public async Task<ActionResult> UploadFile(IFormFile file, [FromRoute] int groupId, int accountId)
     {
         string httpFilePath = "";
         var documentFile = new DocumentFile();
@@ -53,6 +53,7 @@ public class DocumentFileController : ControllerBase
             {
                 documentFile.HttpLink = httpFilePath;
                 documentFile.Approved = false;
+                documentFile.AccountId = accountId;
                 documentFile.GroupId = groupId;
                 documentFile.CreatedDate = DateTime.Now;
                 await _service.DocumentFiles.CreateDocumentFile(documentFile);
