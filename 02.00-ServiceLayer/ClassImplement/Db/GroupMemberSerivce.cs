@@ -38,11 +38,11 @@ namespace ServiceLayer.ClassImplement.Db
                 .Select(e => e.Account);
             return list.ProjectTo<AccountProfileDto>(mapper.ConfigurationProvider);
         }
-
+        //Fix later
         public IQueryable<GroupMemberRequestGetDto> GetJoinRequestForGroup(int groupId)
         {
             IQueryable<GroupMember> list = repos.GroupMembers.GetList()
-                .Where(e => e.GroupId == groupId && e.State == GroupMemberState.Requesting)
+                //.Where(e => e.GroupId == groupId && e.State == GroupMemberState.Requesting)
                 .Include(e => e.Account)
                 .Include(e => e.Group);
             return list.ProjectTo<GroupMemberRequestGetDto>(mapper.ConfigurationProvider);
@@ -52,7 +52,7 @@ namespace ServiceLayer.ClassImplement.Db
         public IQueryable<GroupMemberInviteGetDto> GetJoinInviteForGroup(int groupId)
         {
             IQueryable<GroupMember> list = repos.GroupMembers.GetList()
-                .Where(e => e.GroupId == groupId && e.State == GroupMemberState.Inviting)
+                //.Where(e => e.GroupId == groupId && e.State == GroupMemberState.Inviting)
                 .Include(e => e.Account)
                 .Include(e => e.Group);
             return list.ProjectTo<GroupMemberInviteGetDto>(mapper.ConfigurationProvider);
@@ -62,7 +62,7 @@ namespace ServiceLayer.ClassImplement.Db
         public IQueryable<GroupMemberRequestGetDto> GetJoinRequestForStudent(int studentId)
         {
             IQueryable<GroupMember> list = repos.GroupMembers.GetList()
-                .Where(e => e.AccountId == studentId && e.State == GroupMemberState.Requesting)
+                //.Where(e => e.AccountId == studentId && e.State == GroupMemberState.Requesting)
                 .Include(e => e.Account)
                 .Include(e => e.Group);
             return list.ProjectTo<GroupMemberRequestGetDto>(mapper.ConfigurationProvider);
@@ -72,7 +72,7 @@ namespace ServiceLayer.ClassImplement.Db
         public IQueryable<GroupMemberInviteGetDto> GetJoinInviteForStudent(int studentId)
         {
             IQueryable<GroupMember> list = repos.GroupMembers.GetList()
-                .Where(e => e.AccountId == studentId && e.State == GroupMemberState.Inviting)
+                //.Where(e => e.AccountId == studentId && e.State == GroupMemberState.Inviting)
                 .Include(e => e.Account)
                 .Include(e => e.Group);
             return list.ProjectTo<GroupMemberInviteGetDto>(mapper.ConfigurationProvider);
@@ -98,7 +98,7 @@ namespace ServiceLayer.ClassImplement.Db
 
         public async Task AcceptOrDeclineInviteAsync(GroupMember existed, bool isAccepted)
         {
-            if (existed.State != GroupMemberState.Inviting)
+            //if (existed.State != GroupMemberState.Inviting)
             {
                 throw new Exception("Đây không phải là thư mời");
             }
@@ -108,7 +108,7 @@ namespace ServiceLayer.ClassImplement.Db
 
         public async Task AcceptOrDeclineRequestAsync(GroupMember existed, bool isAccepted)
         {
-            if (existed.State != GroupMemberState.Requesting)
+            //if (existed.State != GroupMemberState.Requesting)
             {
                 throw new Exception("Đây không phải là yêu cầu");
             }

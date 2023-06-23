@@ -161,18 +161,19 @@ namespace API.Controllers
                         {
                             return BadRequest(new { Message = "Học sinh đã tham gia nhóm này" });
                         }
-                    case GroupMemberState.Inviting:
-                        {
-                            GroupMemberInviteGetDto inviteGetDto = mapper.Map<GroupMemberInviteGetDto>(
-                                await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
-                            return BadRequest(new { Message = "Học sinh đã được mời tham gia nhóm này từ trước", Previous = inviteGetDto });
-                        }
-                    case GroupMemberState.Requesting:
-                        {
-                            GroupMemberRequestGetDto requestGetDto = mapper.Map<GroupMemberRequestGetDto>(
-                                await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
-                            return BadRequest(new { Message = "Học sinh đã yêu cầu tham gia nhóm này từ trước", Previous = requestGetDto });
-                        }
+                        //Fix later
+                    //case GroupMemberState.Inviting:
+                    //    {
+                    //        GroupMemberInviteGetDto inviteGetDto = mapper.Map<GroupMemberInviteGetDto>(
+                    //            await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
+                    //        return BadRequest(new { Message = "Học sinh đã được mời tham gia nhóm này từ trước", Previous = inviteGetDto });
+                    //    }
+                    //case GroupMemberState.Requesting:
+                    //    {
+                    //        GroupMemberRequestGetDto requestGetDto = mapper.Map<GroupMemberRequestGetDto>(
+                    //            await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
+                    //        return BadRequest(new { Message = "Học sinh đã yêu cầu tham gia nhóm này từ trước", Previous = requestGetDto });
+                    //    }
                     case GroupMemberState.Declined:
                         {
                             GroupMemberGetDto getDto = mapper.Map<GroupMemberGetDto>(
@@ -223,10 +224,10 @@ namespace API.Controllers
             {
                 return BadRequest("Bạn không phải trưởng nhóm này");
             }
-            if (existed.State != GroupMemberState.Requesting)
-            {
-                return BadRequest("Đây không phải yêu cầu");
-            }
+            //if (existed.State != GroupMemberState.Requesting)
+            //{
+            //    return BadRequest("Đây không phải yêu cầu");
+            //}
             await services.GroupMembers.AcceptOrDeclineRequestAsync(existed, true);
             return Ok();
         }
@@ -250,10 +251,10 @@ namespace API.Controllers
             {
                 return BadRequest("Bạn không phải trưởng nhóm này");
             }
-            if (existed.State != GroupMemberState.Requesting)
-            {
-                return BadRequest("Đây không phải yêu cầu");
-            }
+            //if (existed.State != GroupMemberState.Requesting)
+            //{
+            //    return BadRequest("Đây không phải yêu cầu");
+            //}
             await services.GroupMembers.AcceptOrDeclineRequestAsync(existed, false);
             return Ok();
         }
@@ -352,18 +353,19 @@ namespace API.Controllers
                         {
                             return BadRequest(new { Message = "Bạn đã tham gia nhóm này" });
                         }
-                    case GroupMemberState.Inviting:
-                        {
-                            GroupMemberInviteGetDto inviteGetDto = mapper.Map<GroupMemberInviteGetDto>(
-                                await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
-                            return BadRequest(new { Message = "Bạn đã được mời tham gia nhóm này từ trước", Previous = inviteGetDto });
-                        }
-                    case GroupMemberState.Requesting:
-                        {
-                            GroupMemberRequestGetDto requestGetDto = mapper.Map<GroupMemberRequestGetDto>(
-                                await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
-                            return BadRequest(new { Message = "Bạn đã yêu cầu tham gia nhóm này từ trước", Previous = requestGetDto });
-                        }
+                        //Fix later
+                    //case GroupMemberState.Inviting:
+                    //    {
+                    //        GroupMemberInviteGetDto inviteGetDto = mapper.Map<GroupMemberInviteGetDto>(
+                    //            await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
+                    //        return BadRequest(new { Message = "Bạn đã được mời tham gia nhóm này từ trước", Previous = inviteGetDto });
+                    //    }
+                    //case GroupMemberState.Requesting:
+                    //    {
+                    //        GroupMemberRequestGetDto requestGetDto = mapper.Map<GroupMemberRequestGetDto>(
+                    //            await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
+                    //        return BadRequest(new { Message = "Bạn đã yêu cầu tham gia nhóm này từ trước", Previous = requestGetDto });
+                    //    }
                     case GroupMemberState.Declined:
                         {
                             GroupMemberGetDto getDto = mapper.Map<GroupMemberGetDto>(
@@ -414,10 +416,11 @@ namespace API.Controllers
             {
                 return BadRequest("Đây không phải lời mời cho bạn");
             }
-            if (existed.State != GroupMemberState.Inviting)
-            {
-                return BadRequest("Đây không phải lời mời");
-            }
+            //Fix later
+            //if (existed.State != GroupMemberState.Inviting)
+            //{
+            //    return BadRequest("Đây không phải lời mời");
+            //}
             await services.GroupMembers.AcceptOrDeclineInviteAsync(existed, true);
             return Ok();
         }
@@ -441,10 +444,10 @@ namespace API.Controllers
             {
                 return BadRequest("Đây không phải lời mời cho bạn");
             }
-            if (existed.State != GroupMemberState.Inviting)
-            {
-                return BadRequest("Đây không phải lời mời");
-            }
+            //if (existed.State != GroupMemberState.Inviting)
+            //{
+            //    return BadRequest("Đây không phải lời mời");
+            //}
             await services.GroupMembers.AcceptOrDeclineInviteAsync(existed, false);
             return Ok();
         }

@@ -416,31 +416,32 @@ namespace DataLayer.DBContext
                         GroupId = 1,
                         AccountId = 2,
                         State = GroupMemberState.Member,
-                        InviteMessage = "Nhóm của mình rất hay. Bạn vô nha"
+                        //InviteMessage = "Nhóm của mình rất hay. Bạn vô nha"
                     },
-                    new GroupMember
-                    {
-                        Id = 3,
-                        GroupId = 1,
-                        AccountId = 3,
-                        State = GroupMemberState.Inviting,
-                        InviteMessage = "Nhóm của mình rất hay. Bạn vô nha"
-                    },
-                    new GroupMember
-                    {
-                        Id = 4,
-                        GroupId = 1,
-                        AccountId = 4,
-                        State = GroupMemberState.Requesting,
-                        RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha"
-                    },
+                    //Fix later
+                    //new GroupMember
+                    //{
+                    //    Id = 3,
+                    //    GroupId = 1,
+                    //    AccountId = 3,
+                    //    State = GroupMemberState.Inviting,
+                    //    //InviteMessage = "Nhóm của mình rất hay. Bạn vô nha"
+                    //},
+                    //new GroupMember
+                    //{
+                    //    Id = 4,
+                    //    GroupId = 1,
+                    //    AccountId = 4,
+                    //    State = GroupMemberState.Requesting,
+                    //    //RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha"
+                    //},
                     new GroupMember
                     {
                         Id = 5,
                         GroupId = 1,
                         AccountId = 5,
                         State = GroupMemberState.Declined,
-                        RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha"
+                        //RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha"
                     },
                     #endregion
                     #region Member group 2
@@ -457,24 +458,24 @@ namespace DataLayer.DBContext
                         GroupId = 2,
                         AccountId = 2,
                         State = GroupMemberState.Member,
-                        InviteMessage = "Nhóm của mình rất hay. Bạn vô nha"
+                        //InviteMessage = "Nhóm của mình rất hay. Bạn vô nha"
                     },
-                    new GroupMember
-                    {
-                        Id = 8,
-                        GroupId = 2,
-                        AccountId = 3,
-                        State = GroupMemberState.Inviting,
-                        InviteMessage = "Nhóm của mình rất hay. Bạn vô nha"
-                    },
-                    new GroupMember
-                    {
-                        Id = 9,
-                        GroupId = 2,
-                        AccountId = 4,
-                        State = GroupMemberState.Requesting,
-                        RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha"
-                    },
+                    //new GroupMember
+                    //{
+                    //    Id = 8,
+                    //    GroupId = 2,
+                    //    AccountId = 3,
+                    //    State = GroupMemberState.Inviting,
+                    //    //InviteMessage = "Nhóm của mình rất hay. Bạn vô nha"
+                    //},
+                    //new GroupMember
+                    //{
+                    //    Id = 9,
+                    //    GroupId = 2,
+                    //    AccountId = 4,
+                    //    State = GroupMemberState.Requesting,
+                    //    //RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha"
+                    //},
                     #endregion
                     #region Member group 3
                     new GroupMember
@@ -490,24 +491,24 @@ namespace DataLayer.DBContext
                         GroupId = 3,
                         AccountId = 1,
                         State = GroupMemberState.Member,
-                        InviteMessage = "Nhóm của mình rất hay. Bạn vô nha"
-                    },
-                    new GroupMember
-                    {
-                        Id = 12,
-                        GroupId = 3,
-                        AccountId = 3,
-                        State = GroupMemberState.Inviting,
-                        InviteMessage = "Nhóm của mình rất hay. Bạn vô nha"
-                    },
-                    new GroupMember
-                    {
-                        Id = 13,
-                        GroupId = 3,
-                        AccountId = 4,
-                        State = GroupMemberState.Requesting,
-                        RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha"
+                        //InviteMessage = "Nhóm của mình rất hay. Bạn vô nha"
                     }
+                    //new GroupMember
+                    //{
+                    //    Id = 12,
+                    //    GroupId = 3,
+                    //    AccountId = 3,
+                    //    State = GroupMemberState.Inviting,
+                    //    //InviteMessage = "Nhóm của mình rất hay. Bạn vô nha"
+                    //},
+                    //new GroupMember
+                    //{
+                    //    Id = 13,
+                    //    GroupId = 3,
+                    //    AccountId = 4,
+                    //    State = GroupMemberState.Requesting,
+                    //    //RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha"
+                    //}
                     #endregion
                );
                 #endregion

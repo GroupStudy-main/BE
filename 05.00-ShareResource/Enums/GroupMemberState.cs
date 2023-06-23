@@ -10,8 +10,8 @@ namespace ShareResource.Enums
     {
         Leader,
         Member,
-        Inviting,
-        Requesting,
+        //Inviting,
+        //Requesting,
         Declined
     }
 }

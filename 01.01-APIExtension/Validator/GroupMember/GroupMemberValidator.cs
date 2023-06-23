@@ -60,16 +60,17 @@ namespace APIExtension.Validator
                                 validatorResult.Failures.Add("Học sinh đã tham gia nhóm này");
                                 break;
                             }
-                        case GroupMemberState.Inviting:
-                            {
-                                validatorResult.Failures.Add("Học sinh đã được mời tham gia nhóm này từ trước");
-                                break;
-                            }
-                        case GroupMemberState.Requesting:
-                            {
-                                validatorResult.Failures.Add("Học sinh đã yêu cầu tham gia nhóm này từ trước");
-                                break;
-                            }
+                            //Fix later
+                        //case GroupMemberState.Inviting:
+                        //    {
+                        //        validatorResult.Failures.Add("Học sinh đã được mời tham gia nhóm này từ trước");
+                        //        break;
+                        //    }
+                        //case GroupMemberState.Requesting:
+                        //    {
+                        //        validatorResult.Failures.Add("Học sinh đã yêu cầu tham gia nhóm này từ trước");
+                        //        break;
+                        //    }
                         case GroupMemberState.Declined:
                             {
                                 validatorResult.Failures.Add("Học sinh đã từ chối/bị từ chối tham gia nhóm này từ trước");

@@ -105,8 +105,9 @@ namespace ShareResource.Mapper
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(
                     src => src.Account.Username))
                 .PreserveReferences();
-            CreateMap<GroupMemberInviteCreateDto, GroupMember>()
-                .ForMember(dest => dest.State, opt => opt.MapFrom(src => GroupMemberState.Inviting));
+            //Fix later
+            //CreateMap<GroupMemberInviteCreateDto, GroupMember>()
+            //    .ForMember(dest => dest.State, opt => opt.MapFrom(src => GroupMemberState.Inviting));
             //Request
             CreateMap<GroupMember, GroupMemberRequestGetDto>()
                 .ForMember(dest => dest.GroupName, opt => opt.MapFrom(
@@ -114,8 +115,8 @@ namespace ShareResource.Mapper
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(
                     src => src.Account.Username))
                 .PreserveReferences();
-            CreateMap<GroupMemberRequestCreateDto, GroupMember>()
-                .ForMember(dest => dest.State, opt => opt.MapFrom(src => GroupMemberState.Requesting));
+            //CreateMap<GroupMemberRequestCreateDto, GroupMember>()
+            //    .ForMember(dest => dest.State, opt => opt.MapFrom(src => GroupMemberState.Requesting));
         }
 
         private void MapRole()
@@ -144,12 +145,12 @@ namespace ShareResource.Mapper
                     src => src.GroupMembers
                         .Where(e => e.State == GroupMemberState.Leader || e.State == GroupMemberState.Member)
                         .Select(e => e.Account)))
-                .ForMember(dest => dest.JoinRequest, opt => opt.MapFrom(
-                    src => src.GroupMembers
-                        .Where(e => e.State == GroupMemberState.Requesting)))
-                .ForMember(dest => dest.JoinInvite, opt => opt.MapFrom(
-                    src => src.GroupMembers
-                        .Where(e => e.State == GroupMemberState.Inviting)))
+                //.ForMember(dest => dest.JoinRequest, opt => opt.MapFrom(
+                //    src => src.GroupMembers
+                //        .Where(e => e.State == GroupMemberState.Requesting)))
+                //.ForMember(dest => dest.JoinInvite, opt => opt.MapFrom(
+                //    src => src.GroupMembers
+                //        .Where(e => e.State == GroupMemberState.Inviting)))
                 .ForMember(dest => dest.DeclineRequest, opt => opt.MapFrom(
                     src => src.GroupMembers
                         .Where(e => e.State == GroupMemberState.Declined)))

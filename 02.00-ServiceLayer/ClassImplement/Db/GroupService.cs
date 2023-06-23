@@ -156,17 +156,21 @@ namespace ServiceLayer.ClassImplement.Db
             return await repos.GroupMembers.GetList()
                .AnyAsync(e => e.AccountId == studentId && e.GroupId == groupId && (e.State == GroupMemberState.Member || e.State == GroupMemberState.Leader));
         }
-
+           //Fix later
         public async Task<bool> IsStudentRequestingToGroupAsync(int studentId, int groupId)
         {
             return await repos.GroupMembers.GetList()
-              .AnyAsync(e => e.AccountId == studentId && e.GroupId == groupId && (e.State == GroupMemberState.Requesting));
+              .AnyAsync(e => e.AccountId == studentId && e.GroupId == groupId 
+              //&& (e.State == GroupMemberState.Requesting)
+              );
         }
-
+         //Fix later
         public async Task<bool> IsStudentInvitedToGroupAsync(int studentId, int groupId)
         {
             return await repos.GroupMembers.GetList()
-              .AnyAsync(e => e.AccountId == studentId && e.GroupId == groupId && (e.State == GroupMemberState.Inviting));
+              .AnyAsync(e => e.AccountId == studentId && e.GroupId == groupId 
+              //&& (e.State == GroupMemberState.Inviting)
+              );
         }
 
         public async Task<bool> IsStudentDeclinedToGroupAsync(int studentId, int groupId)
