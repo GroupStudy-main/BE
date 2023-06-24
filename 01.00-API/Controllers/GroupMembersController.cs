@@ -340,10 +340,10 @@ namespace API.Controllers
             //    });
             //}
             #endregion
-            GroupMember exsited = await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId);
-            if (exsited != null)
+            GroupMember exsitedGroupMember = await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId);
+            if (exsitedGroupMember != null)
             {
-                switch (exsited.State)
+                switch (exsitedGroupMember.State)
                 {
                     case GroupMemberState.Leader:
                         {
@@ -388,13 +388,25 @@ namespace API.Controllers
                         }
                 }
             }
+            JoinInvite exsitedInvite = await services.GroupMembers.GetInviteOfStudentAndGroupAsync(dto.AccountId, dto.GroupId);
+            if (exsitedInvite != null)
+            {
+                JoinInviteGetDto inviteGetDto = mapper.Map<JoinInviteGetDto>(exsitedInvite);
+                return BadRequest(new { Message = "Bạn đã được mời tham gia nhóm này từ trước", Previous = inviteGetDto });
+            }
+            JoinRequest exsitedRequest = await services.GroupMembers.GetRequestOfStudentAndGroupAsync(dto.AccountId, dto.GroupId);
+            if (exsitedRequest != null)
+            {
+                JoinRequestGetDto requestGetDto = mapper.Map<JoinRequestGetDto>(exsitedRequest);
+                return BadRequest(new { Message = "Bạn đã yêu cầu tham gia nhóm này từ trước", Previous = requestGetDto });
+            }
+
             ValidatorResult valResult = await validators.GroupMembers.ValidateParamsAsync(dto);
             if (!valResult.IsValid)
             {
                 return BadRequest(valResult.Failures);
             }
             await services.GroupMembers.CreateJoinRequest(dto);
-
             return Ok();
         }
 

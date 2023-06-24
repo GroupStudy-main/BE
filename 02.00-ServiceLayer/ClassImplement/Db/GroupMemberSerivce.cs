@@ -70,6 +70,27 @@ namespace ServiceLayer.ClassImplement.Db
             return mapped;
         }
 
+        public async Task<JoinInvite> GetInviteOfStudentAndGroupAsync(int accountId, int groupId)
+        {
+            JoinInvite invite = await repos.Invites.GetList()
+                .Include(e => e.Account)
+                .Include(e => e.Group)
+                .SingleOrDefaultAsync(e => e.AccountId == accountId
+                    && e.GroupId == groupId && e.State == InviteRequestStateEnum.Waiting);
+            return invite;
+
+        }
+
+        public async Task<JoinRequest> GetRequestOfStudentAndGroupAsync(int accountId, int groupId)
+        {
+            JoinRequest request = await repos.Requests.GetList()
+                .Include(e => e.Account)
+                .Include(e => e.Group)
+                .SingleOrDefaultAsync(e => e.AccountId == accountId
+                    && e.GroupId == groupId && e.State == InviteRequestStateEnum.Waiting);
+            return request;
+        }
+
 
         public IQueryable<JoinInviteGetDto> GetJoinInviteForStudent(int studentId)
         {
@@ -82,14 +103,18 @@ namespace ServiceLayer.ClassImplement.Db
 
         public async Task CreateJoinInvite(GroupMemberInviteCreateDto dto)
         {
-            GroupMember invite = mapper.Map<GroupMember>(dto);
-            await repos.GroupMembers.CreateAsync(invite);
+            //GroupMember invite = mapper.Map<GroupMember>(dto);
+            //await repos.GroupMembers.CreateAsync(invite);
+            JoinInvite invite = mapper.Map<JoinInvite>(dto);
+            await repos.Invites.CreateAsync(invite);
         }
 
         public async Task CreateJoinRequest(GroupMemberRequestCreateDto dto)
         {
-            GroupMember request = mapper.Map<GroupMember>(dto);
-            await repos.GroupMembers.CreateAsync(request);
+            //GroupMember request = mapper.Map<GroupMember>(dto);
+            //await repos.GroupMembers.CreateAsync(request);
+            JoinRequest request = mapper.Map<JoinRequest>(dto);
+            await repos.Requests.CreateAsync(request);
         }
 
         public async Task<GroupMember> GetGroupMemberOfStudentAndGroupAsync(int studentId, int groupId)

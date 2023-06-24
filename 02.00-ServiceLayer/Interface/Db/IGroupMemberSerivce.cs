@@ -23,5 +23,7 @@ namespace ServiceLayer.Interface.Db
         public Task<GroupMember> GetGroupMemberOfStudentAndGroupAsync(int studentId, int groupId);
         public Task AcceptOrDeclineInviteAsync(GroupMember existed, bool isAccepted);
         public Task AcceptOrDeclineRequestAsync(GroupMember existed, bool isAccepted);
+        public Task<JoinInvite> GetInviteOfStudentAndGroupAsync(int accountId, int groupId);
+        public Task<JoinRequest> GetRequestOfStudentAndGroupAsync(int accountId, int groupId);
     }
 }
