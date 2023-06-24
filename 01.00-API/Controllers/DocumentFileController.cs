@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServiceLayer.Interface;
+using ShareResource.DTO.File;
 
 
 namespace API.Controllers;
@@ -98,8 +99,13 @@ public class DocumentFileController : ControllerBase
             return NotFound();
         }
         var result = _service.DocumentFiles.GetListByGroupId(groupId, approved);
-
-        return Ok(result);
+        List<DocumentFileDto> resultDto = new List<DocumentFileDto>();
+        foreach (var documentFile in result)
+        {
+           var dto = _mapper.Map<DocumentFileDto>(documentFile);
+           resultDto.Add(dto);
+        }
+        return Ok(resultDto);
     }
 
     [HttpPut("/accept-file")]
