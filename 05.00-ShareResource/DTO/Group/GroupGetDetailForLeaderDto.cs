@@ -7,7 +7,7 @@
         public int ClassId { get; set; }
         public ICollection<StudentGetDto> Members { get; set; }
         public ICollection<JoinRequestGetDto> JoinRequest { get; set; }
-        public ICollection<GroupMemberInviteGetDto> JoinInvite { get; set; }
+        public ICollection<JoinInviteGetDto> JoinInvite { get; set; }
         public ICollection<GroupMemberGetDto> DeclineRequest { get; set; }
         public virtual ICollection<PastMeetingGetDto> PastMeetings { get; set; }
         public virtual ICollection<LiveMeetingGetDto> LiveMeetings { get; set; }

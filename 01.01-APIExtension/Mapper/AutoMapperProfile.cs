@@ -99,17 +99,20 @@ namespace ShareResource.Mapper
                     src=>src.Account.Username)) 
                 .PreserveReferences();
             //Invite
-            CreateMap<GroupMember, GroupMemberInviteGetDto>()
+            CreateMap<JoinInvite, JoinInviteGetDto>()
                 .ForMember(dest => dest.GroupName, opt => opt.MapFrom(
                     src => src.Group.Name))
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(
                     src => src.Account.Username))
                 .PreserveReferences();
-            //Fix later
             //CreateMap<GroupMemberInviteCreateDto, GroupMember>()
             //    .ForMember(dest => dest.State, opt => opt.MapFrom(src => GroupMemberState.Inviting));
+            CreateMap<GroupMemberInviteCreateDto, JoinInvite>()
+                .ForMember(dest => dest.State, opt => opt.MapFrom(src => InviteRequestStateEnum.Waiting));
             //Request
-            CreateMap<GroupMember, JoinRequestGetDto>()
+
+            //CreateMap<GroupMember, JoinRequestGetDto>()
+            CreateMap<JoinRequest, JoinRequestGetDto>()
                 .ForMember(dest => dest.GroupName, opt => opt.MapFrom(
                     src => src.Group.Name))
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(
@@ -117,6 +120,8 @@ namespace ShareResource.Mapper
                 .PreserveReferences();
             //CreateMap<GroupMemberRequestCreateDto, GroupMember>()
             //    .ForMember(dest => dest.State, opt => opt.MapFrom(src => GroupMemberState.Requesting));
+            CreateMap<GroupMemberRequestCreateDto, JoinRequest>()
+                .ForMember(dest => dest.State, opt => opt.MapFrom(src => InviteRequestStateEnum.Waiting));
         }
 
         private void MapRole()

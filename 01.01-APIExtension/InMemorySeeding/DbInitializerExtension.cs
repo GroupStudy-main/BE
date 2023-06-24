@@ -36,7 +36,7 @@ namespace APIExtension.ImMemorySeeding
             internal static void Initialize(GroupStudyContext context)
             {
                 ArgumentNullException.ThrowIfNull(context, nameof(context));
-                context.Database.EnsureCreated();
+                //context.Database.EnsureCreated();
                 #region seed Role
                 if (!context.Roles.Any())
                 {
@@ -692,6 +692,13 @@ namespace APIExtension.ImMemorySeeding
                             Id = 9,
                             GroupId = 6,
                             AccountId = 2,
+                            State = InviteRequestStateEnum.Waiting,
+                        },
+                        new JoinInvite
+                        {
+                            Id = 10,
+                            GroupId = 6,
+                            AccountId = 1,
                             State = InviteRequestStateEnum.Waiting,
                         },
                         #endregion

@@ -9,9 +9,9 @@ namespace ServiceLayer.Interface.Db
         IQueryable<AccountProfileDto> GetMembersJoinForGroup(int id);
         public Task<GroupMember> GetByIdAsync(int inviteId);
         public IQueryable<JoinRequestGetDto> GetJoinRequestForGroup(int groupId);
-        public IQueryable<GroupMemberInviteGetDto> GetJoinInviteForGroup(int groupId);
+        public IQueryable<JoinInviteGetDto> GetJoinInviteForGroup(int groupId);
         public IQueryable<JoinRequestGetDto> GetJoinRequestForStudent(int studentId);
-        public IQueryable<GroupMemberInviteGetDto> GetJoinInviteForStudent(int studentId);
+        public IQueryable<JoinInviteGetDto> GetJoinInviteForStudent(int studentId);
         public Task CreateJoinInvite(GroupMemberInviteCreateDto dto);
         public Task CreateJoinRequest(GroupMemberRequestCreateDto dto);
         /// <summary>

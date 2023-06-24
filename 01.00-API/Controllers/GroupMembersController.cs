@@ -72,7 +72,7 @@ namespace API.Controllers
             {
                 return Unauthorized("Bạn không phải nhóm trưởng của nhóm này");
             }
-            IQueryable<GroupMemberInviteGetDto> mapped = services.GroupMembers.GetJoinInviteForGroup(groupId);
+            IQueryable<JoinInviteGetDto> mapped = services.GroupMembers.GetJoinInviteForGroup(groupId);
             if (mapped == null || !mapped.Any())
             {
                 return NotFound();
@@ -268,7 +268,7 @@ namespace API.Controllers
         public async Task<IActionResult> GetInviteForStudent()
         {
             int studentId = HttpContext.User.GetUserId();
-            IQueryable<GroupMemberInviteGetDto> mapped = services.GroupMembers.GetJoinInviteForStudent(studentId);
+            IQueryable<JoinInviteGetDto> mapped = services.GroupMembers.GetJoinInviteForStudent(studentId);
             if (mapped == null || !mapped.Any())
             {
                 return NotFound();

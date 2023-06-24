@@ -83,14 +83,14 @@ namespace APIExtension.Validator
                             }
                     }
                 }
-                if (dto.InviteMessage == null || dto.InviteMessage.Trim().Length == 0)
-                {
-                    validatorResult.Failures.Add("Thiếu lời mời");
-                }
-                if (dto.InviteMessage == null || dto.InviteMessage.Trim().Length > 250)
-                {
-                    validatorResult.Failures.Add("Lời mời không thể dài hơn 250 kí tự");
-                }
+                //if (dto.InviteMessage == null || dto.InviteMessage.Trim().Length == 0)
+                //{
+                //    validatorResult.Failures.Add("Thiếu lời mời");
+                //}
+                //if (dto.InviteMessage == null || dto.InviteMessage.Trim().Length > 250)
+                //{
+                //    validatorResult.Failures.Add("Lời mời không thể dài hơn 250 kí tự");
+                //}
             }
             catch (Exception ex)
             {
@@ -107,14 +107,14 @@ namespace APIExtension.Validator
                 {
                     validatorResult.Failures.Add("Bạn đã tham gia nhóm này");
                 }
-                if (dto.RequestMessage == null || dto.RequestMessage.Trim().Length == 0)
-                {
-                    validatorResult.Failures.Add("Thiếu yêu cầu");
-                }
-                if (dto.RequestMessage == null || dto.RequestMessage.Trim().Length > 250)
-                {
-                    validatorResult.Failures.Add("Lời yêu cầu không thể dài hơn 250 kí tự");
-                }
+                //if (dto.RequestMessage == null || dto.RequestMessage.Trim().Length == 0)
+                //{
+                //    validatorResult.Failures.Add("Thiếu yêu cầu");
+                //}
+                //if (dto.RequestMessage == null || dto.RequestMessage.Trim().Length > 250)
+                //{
+                //    validatorResult.Failures.Add("Lời yêu cầu không thể dài hơn 250 kí tự");
+                //}
             }
             catch (Exception ex)
             {

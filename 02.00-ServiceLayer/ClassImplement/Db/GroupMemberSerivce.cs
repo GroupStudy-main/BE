@@ -45,17 +45,18 @@ namespace ServiceLayer.ClassImplement.Db
                 .Where(e => e.GroupId == groupId && e.State == InviteRequestStateEnum.Waiting)
                 .Include(e => e.Account)
                 .Include(e => e.Group);
+            //Console.WriteLine("+_+_+_+_+_+_ " + list.Count());
             return list.ProjectTo<JoinRequestGetDto>(mapper.ConfigurationProvider);
         }
 
 
-        public IQueryable<GroupMemberInviteGetDto> GetJoinInviteForGroup(int groupId)
+        public IQueryable<JoinInviteGetDto> GetJoinInviteForGroup(int groupId)
         {
-            IQueryable<GroupMember> list = repos.GroupMembers.GetList()
-                //.Where(e => e.GroupId == groupId && e.State == GroupMemberState.Inviting)
+            IQueryable<JoinInvite> list = repos.Invites.GetList()
+                .Where(e => e.GroupId == groupId && e.State == InviteRequestStateEnum.Waiting)
                 .Include(e => e.Account)
                 .Include(e => e.Group);
-            return list.ProjectTo<GroupMemberInviteGetDto>(mapper.ConfigurationProvider);
+            return list.ProjectTo<JoinInviteGetDto>(mapper.ConfigurationProvider);
         }
 
 
@@ -65,17 +66,18 @@ namespace ServiceLayer.ClassImplement.Db
                 .Where(e => e.AccountId == studentId && e.State == InviteRequestStateEnum.Waiting)
                 .Include(e => e.Account)
                 .Include(e => e.Group);
-            return list.ProjectTo<JoinRequestGetDto>(mapper.ConfigurationProvider);
+            IQueryable<JoinRequestGetDto> mapped = list.ProjectTo<JoinRequestGetDto>(mapper.ConfigurationProvider);
+            return mapped;
         }
 
 
-        public IQueryable<GroupMemberInviteGetDto> GetJoinInviteForStudent(int studentId)
+        public IQueryable<JoinInviteGetDto> GetJoinInviteForStudent(int studentId)
         {
-            IQueryable<GroupMember> list = repos.GroupMembers.GetList()
-                //.Where(e => e.AccountId == studentId && e.State == GroupMemberState.Inviting)
+            IQueryable<JoinInvite> list = repos.Invites.GetList()
+                .Where(e => e.AccountId == studentId && e.State == InviteRequestStateEnum.Waiting)
                 .Include(e => e.Account)
                 .Include(e => e.Group);
-            return list.ProjectTo<GroupMemberInviteGetDto>(mapper.ConfigurationProvider);
+            return list.ProjectTo<JoinInviteGetDto>(mapper.ConfigurationProvider);
         }
 
         public async Task CreateJoinInvite(GroupMemberInviteCreateDto dto)
