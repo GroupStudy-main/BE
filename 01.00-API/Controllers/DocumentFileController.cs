@@ -139,4 +139,23 @@ public class DocumentFileController : ControllerBase
         await _service.DocumentFiles.DeleteDocumentFile(id);
         return Ok("Deleted");
     }
+    
+    [HttpGet("/get-by-accountid")]
+    //chỗ này thêm Authen
+    public async Task<IActionResult> GetByAccountId([FromQuery] int accountId)
+    {
+        var account = await _service.Accounts.GetByIdAsync(accountId);
+        if (null == account)
+        {
+            return NotFound();
+        }
+        var result = _service.DocumentFiles.GetListByAccountId(accountId);
+        List<DocumentFileDto> resultDto = new List<DocumentFileDto>();
+        foreach (var documentFile in result)
+        {
+            var dto = _mapper.Map<DocumentFileDto>(documentFile);
+            resultDto.Add(dto);
+        }
+        return Ok(resultDto);
+    }
 }
