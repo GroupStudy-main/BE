@@ -27,7 +27,7 @@ namespace RepositoryLayer.ClassImplement
             connections = new ConnectionRepository(dbContext);
             reviews = new ReviewRepository(dbContext);
             reviewDetails = new ReviewDetailRepository(dbContext);
-                    schedules = new ScheduleRepository(dbContext);
+            schedules = new ScheduleRepository(dbContext);
         }
 
         private IAccountRepo users;
@@ -186,6 +186,34 @@ namespace RepositoryLayer.ClassImplement
                     schedules = new ScheduleRepository(dbContext);
                 }
                 return schedules;
+            }
+
+        }
+
+        private IInviteReposity invites;
+        public IInviteReposity Invites
+        {
+            get
+            {
+                if (invites is null)
+                {
+                    invites = new InviteReposity(dbContext);
+                }
+                return invites;
+            }
+
+        }
+
+        private IRequestReposity requests;
+        public IRequestReposity Requests
+        {
+            get
+            {
+                if (requests is null)
+                {
+                    requests = new RequestReposity(dbContext);
+                }
+                return requests;
             }
 
         }

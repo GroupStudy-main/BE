@@ -71,7 +71,7 @@ namespace APIExtension.Validator
                         //        validatorResult.Failures.Add("Học sinh đã yêu cầu tham gia nhóm này từ trước");
                         //        break;
                         //    }
-                        case GroupMemberState.Declined:
+                        case GroupMemberState.Banned:
                             {
                                 validatorResult.Failures.Add("Học sinh đã từ chối/bị từ chối tham gia nhóm này từ trước");
                                 break;

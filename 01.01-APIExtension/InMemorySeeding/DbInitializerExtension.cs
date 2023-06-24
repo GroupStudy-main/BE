@@ -380,24 +380,27 @@ namespace APIExtension.ImMemorySeeding
                         //},
                         new GroupMember
                         {
-                            Id = 5,
+                            //Id = 5,
+                            Id = 3,
                             GroupId = 1,
                             AccountId = 5,
-                            State = GroupMemberState.Declined,
+                            State = GroupMemberState.Banned,
                             //RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha"
                         },
                         #endregion
                         #region Member group 2
                         new GroupMember
                         {
-                            Id = 6,
+                            //Id = 6,
+                            Id = 4,
                             GroupId = 2,
                             AccountId = 1,
                             State = GroupMemberState.Leader
                         },
                         new GroupMember
                         {
-                            Id = 7,
+                            //Id = 7,
+                            Id = 5,
                             GroupId = 2,
                             AccountId = 2,
                             State = GroupMemberState.Member,
@@ -423,14 +426,16 @@ namespace APIExtension.ImMemorySeeding
                         #region Member group 3
                         new GroupMember
                         {
-                            Id = 10,
+                            //Id = 10,
+                            Id = 6,
                             GroupId = 3,
                             AccountId = 2,
                             State = GroupMemberState.Leader
                         },
                         new GroupMember
                         {
-                            Id = 11,
+                            //Id = 11,
+                            Id = 7,
                             GroupId = 3,
                             AccountId = 1,
                             State = GroupMemberState.Member,
@@ -456,7 +461,8 @@ namespace APIExtension.ImMemorySeeding
                         #region member group 4
                         new GroupMember
                         {
-                            Id = 14,
+                            //Id = 14,
+                            Id = 8,
                             GroupId = 4,
                             AccountId = 2,
                             State = GroupMemberState.Leader
@@ -481,7 +487,8 @@ namespace APIExtension.ImMemorySeeding
                         #region member group 5
                         new GroupMember
                         {
-                            Id = 17,
+                            //Id = 17,
+                            Id = 9,
                             GroupId = 5,
                             AccountId = 3,
                             State = GroupMemberState.Leader
@@ -506,7 +513,8 @@ namespace APIExtension.ImMemorySeeding
                         #region member group 6
                         new GroupMember
                         {
-                            Id = 20,
+                            //Id = 20,
+                            Id = 10,
                             GroupId = 6,
                             AccountId = 3,
                             State = GroupMemberState.Leader
@@ -603,10 +611,170 @@ namespace APIExtension.ImMemorySeeding
                 }
                 #endregion
 
+                #region seed invite
+                if (!context.Invites.Any())
+                {
+                    JoinInvite[] list =
+                    {
+                        #region Group 1
+                        new JoinInvite {
+                            Id = 1,
+                            GroupId= 1,
+                            AccountId=2,
+                            State = InviteRequestStateEnum.Approved
+                        },
+                        new JoinInvite
+                        {
+                            Id = 2,
+                            GroupId = 1,
+                            AccountId = 3,
+                            State = InviteRequestStateEnum.Waiting,
+                        },
+                        #endregion
+
+                        #region Group 2
+                         new JoinInvite
+                        {
+                            Id = 3,
+                            GroupId = 2,
+                            AccountId = 2,
+                            State = InviteRequestStateEnum.Approved,
+                        },
+                        new JoinInvite
+                        {
+                            Id = 4,
+                            GroupId = 2,
+                            AccountId = 3,
+                            State = InviteRequestStateEnum.Waiting,
+                        },
+                        #endregion 
+
+                        #region Group 3
+                          new JoinInvite
+                        {
+                            Id = 5,
+                            GroupId = 3,
+                            AccountId = 1,
+                            State = InviteRequestStateEnum.Approved,
+                        },
+                        new JoinInvite
+                        {
+                            Id = 6,
+                            GroupId = 3,
+                            AccountId = 3,
+                            State = InviteRequestStateEnum.Waiting,
+                        },
+                        #endregion
+                        
+                        #region Group 4
+                        new JoinInvite
+                        {
+                            Id = 7,
+                            GroupId = 4,
+                            AccountId = 3,
+                            State = InviteRequestStateEnum.Waiting,
+                        },
+                        #endregion
+                        
+                        #region Group 5
+                        new JoinInvite
+                        {
+                            Id = 8,
+                            GroupId = 5,
+                            AccountId = 3,
+                            State = InviteRequestStateEnum.Waiting,
+                        },
+                        #endregion
+                        
+                        #region Group 6
+                        new JoinInvite
+                        {
+                            Id = 9,
+                            GroupId = 6,
+                            AccountId = 2,
+                            State = InviteRequestStateEnum.Waiting,
+                        },
+                        #endregion
+
+                    };
+                    context.Invites.AddRange(list);
+                }
+                #endregion
+
+                #region seed request
+                if (!context.Requests.Any())
+                {
+                    JoinRequest[] list =
+                    {
+                        
+                        #region Group 1
+                        new JoinRequest
+                        {
+                            Id = 1,
+                            GroupId = 1,
+                            AccountId = 4,
+                            State = InviteRequestStateEnum.Waiting,
+                        },
+                        #endregion
+                        
+                        #region Group 2
+                        new JoinRequest
+                        {
+                            Id = 2,
+                            GroupId = 2,
+                            AccountId = 3,
+                            State = InviteRequestStateEnum.Waiting,
+                        },
+                        #endregion
+                        
+                        #region Group 3
+                         new JoinRequest
+                        {
+                            Id = 3,
+                            GroupId = 3,
+                            AccountId = 4,
+                            State = InviteRequestStateEnum.Waiting,
+                        },
+                        #endregion
+                        
+                        #region Group 4
+                        new JoinRequest
+                        {
+                            Id = 4,
+                            GroupId = 4,
+                            AccountId = 4,
+                            State = InviteRequestStateEnum.Waiting,
+                        },
+                        #endregion
+                        
+                        #region Group 5
+                        new JoinRequest
+                        {
+                            Id = 5,
+                            GroupId = 5,
+                            AccountId = 3,
+                            State = InviteRequestStateEnum.Waiting,
+                        },
+                        #endregion
+                        
+                        #region Group 6
+                        new JoinRequest
+                        {
+                            Id = 6,
+                            GroupId = 6,
+                            AccountId = 1,
+                            State = InviteRequestStateEnum.Waiting,
+                        },
+                        #endregion
+                    };
+                    context.Requests.AddRange(list);
+                }
+                #endregion
+
                 #region seed meeting
                 if (!context.Meetings.Any())
                 {
-                    var meetings= new Meeting[] 
+                    var meetings = new Meeting[]
                     {
                         #region meeting for group 1
                         //Forgoten meeting

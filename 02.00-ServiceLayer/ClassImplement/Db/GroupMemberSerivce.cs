@@ -39,13 +39,13 @@ namespace ServiceLayer.ClassImplement.Db
             return list.ProjectTo<AccountProfileDto>(mapper.ConfigurationProvider);
         }
         //Fix later
-        public IQueryable<GroupMemberRequestGetDto> GetJoinRequestForGroup(int groupId)
+        public IQueryable<JoinRequestGetDto> GetJoinRequestForGroup(int groupId)
         {
-            IQueryable<GroupMember> list = repos.GroupMembers.GetList()
-                //.Where(e => e.GroupId == groupId && e.State == GroupMemberState.Requesting)
+            IQueryable<JoinRequest> list = repos.Requests.GetList()
+                .Where(e => e.GroupId == groupId && e.State == InviteRequestStateEnum.Waiting)
                 .Include(e => e.Account)
                 .Include(e => e.Group);
-            return list.ProjectTo<GroupMemberRequestGetDto>(mapper.ConfigurationProvider);
+            return list.ProjectTo<JoinRequestGetDto>(mapper.ConfigurationProvider);
         }
 
 
@@ -59,13 +59,13 @@ namespace ServiceLayer.ClassImplement.Db
         }
 
 
-        public IQueryable<GroupMemberRequestGetDto> GetJoinRequestForStudent(int studentId)
+        public IQueryable<JoinRequestGetDto> GetJoinRequestForStudent(int studentId)
         {
-            IQueryable<GroupMember> list = repos.GroupMembers.GetList()
-                //.Where(e => e.AccountId == studentId && e.State == GroupMemberState.Requesting)
+            IQueryable<JoinRequest> list = repos.Requests.GetList()
+                .Where(e => e.AccountId == studentId && e.State == InviteRequestStateEnum.Waiting)
                 .Include(e => e.Account)
                 .Include(e => e.Group);
-            return list.ProjectTo<GroupMemberRequestGetDto>(mapper.ConfigurationProvider);
+            return list.ProjectTo<JoinRequestGetDto>(mapper.ConfigurationProvider);
         }
 
 
@@ -102,7 +102,7 @@ namespace ServiceLayer.ClassImplement.Db
             {
                 throw new Exception("Đây không phải là thư mời");
             }
-            existed.State = isAccepted ? GroupMemberState.Member : GroupMemberState.Declined;
+            existed.State = isAccepted ? GroupMemberState.Member : GroupMemberState.Banned;
             await repos.GroupMembers.UpdateAsync(existed);
         }
 
@@ -112,7 +112,7 @@ namespace ServiceLayer.ClassImplement.Db
             {
                 throw new Exception("Đây không phải là yêu cầu");
             }
-            existed.State = isAccepted ? GroupMemberState.Member : GroupMemberState.Declined;
+            existed.State = isAccepted ? GroupMemberState.Member : GroupMemberState.Banned;
             await repos.GroupMembers.UpdateAsync(existed);
         }
     }

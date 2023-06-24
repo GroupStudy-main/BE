@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using ShareResource.Enums;
 
 namespace DataLayer.DBObject
 {
@@ -8,6 +9,7 @@ namespace DataLayer.DBObject
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        public InviteRequestStateEnum State { get; set; } = InviteRequestStateEnum.Waiting;
 
         //Group
         public int GroupId { get; set; }

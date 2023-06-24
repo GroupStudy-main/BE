@@ -176,7 +176,7 @@ namespace ServiceLayer.ClassImplement.Db
         public async Task<bool> IsStudentDeclinedToGroupAsync(int studentId, int groupId)
         {
             return await repos.GroupMembers.GetList()
-                .AnyAsync(e => e.AccountId == studentId && e.GroupId == groupId && (e.State == GroupMemberState.Declined));
+                .AnyAsync(e => e.AccountId == studentId && e.GroupId == groupId && (e.State == GroupMemberState.Banned));
         }
 
         public async Task<bool> ExistsAsync(int groupId)

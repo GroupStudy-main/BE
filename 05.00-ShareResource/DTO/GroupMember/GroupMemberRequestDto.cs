@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ShareResource.DTO
 {
-    public class GroupMemberRequestGetDto
+    public class JoinRequestGetDto
     {
         public int Id { get; set; }
         public string RequestMessage { get; set; }

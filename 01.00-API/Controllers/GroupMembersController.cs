@@ -95,7 +95,7 @@ namespace API.Controllers
             {
                 return Unauthorized("Bạn không phải nhóm trưởng của nhóm này");
             }
-            IQueryable<GroupMemberRequestGetDto> mapped = services.GroupMembers.GetJoinRequestForGroup(groupId);
+            IQueryable<JoinRequestGetDto> mapped = services.GroupMembers.GetJoinRequestForGroup(groupId);
             if (mapped == null || !mapped.Any())
             {
                 return NotFound();
@@ -174,7 +174,7 @@ namespace API.Controllers
                     //            await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
                     //        return BadRequest(new { Message = "Học sinh đã yêu cầu tham gia nhóm này từ trước", Previous = requestGetDto });
                     //    }
-                    case GroupMemberState.Declined:
+                    case GroupMemberState.Banned:
                         {
                             GroupMemberGetDto getDto = mapper.Map<GroupMemberGetDto>(
                                 await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
@@ -286,7 +286,7 @@ namespace API.Controllers
         public async Task<IActionResult> GetRequestForStudent()
         {
             int studentId = HttpContext.User.GetUserId();
-            IQueryable<GroupMemberRequestGetDto> mapped = services.GroupMembers.GetJoinRequestForStudent(studentId);
+            IQueryable<JoinRequestGetDto> mapped = services.GroupMembers.GetJoinRequestForStudent(studentId);
             if (mapped == null || !mapped.Any())
             {
                 return NotFound();
@@ -366,7 +366,7 @@ namespace API.Controllers
                     //            await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
                     //        return BadRequest(new { Message = "Bạn đã yêu cầu tham gia nhóm này từ trước", Previous = requestGetDto });
                     //    }
-                    case GroupMemberState.Declined:
+                    case GroupMemberState.Banned:
                         {
                             GroupMemberGetDto getDto = mapper.Map<GroupMemberGetDto>(
                                 await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));

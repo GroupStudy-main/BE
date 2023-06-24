@@ -109,7 +109,7 @@ namespace ShareResource.Mapper
             //CreateMap<GroupMemberInviteCreateDto, GroupMember>()
             //    .ForMember(dest => dest.State, opt => opt.MapFrom(src => GroupMemberState.Inviting));
             //Request
-            CreateMap<GroupMember, GroupMemberRequestGetDto>()
+            CreateMap<GroupMember, JoinRequestGetDto>()
                 .ForMember(dest => dest.GroupName, opt => opt.MapFrom(
                     src => src.Group.Name))
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(
@@ -153,7 +153,7 @@ namespace ShareResource.Mapper
                 //        .Where(e => e.State == GroupMemberState.Inviting)))
                 .ForMember(dest => dest.DeclineRequest, opt => opt.MapFrom(
                     src => src.GroupMembers
-                        .Where(e => e.State == GroupMemberState.Declined)))
+                        .Where(e => e.State == GroupMemberState.Banned)))
                 .ForMember(dest => dest.Subjects, opt => opt.MapFrom(
                     src => src.GroupSubjects.Select(gs => gs.Subject)))
 

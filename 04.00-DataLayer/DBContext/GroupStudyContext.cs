@@ -23,6 +23,8 @@ namespace DataLayer.DBContext
         public virtual DbSet<Connection> Connections { get; set; }
         public virtual DbSet<Group> Groups { get; set; }
         public virtual DbSet<GroupMember> GroupMembers { get; set; }
+        public virtual DbSet<JoinInvite> Invites { get; set; }
+        public virtual DbSet<JoinRequest> Requests { get; set; }
         public virtual DbSet<GroupSubject> GroupSubjects { get; set; }
         public virtual DbSet<Meeting> Meetings { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
@@ -440,7 +442,7 @@ namespace DataLayer.DBContext
                         Id = 5,
                         GroupId = 1,
                         AccountId = 5,
-                        State = GroupMemberState.Declined,
+                        State = GroupMemberState.Banned,
                         //RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha"
                     },
                     #endregion
