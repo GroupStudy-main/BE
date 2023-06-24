@@ -49,4 +49,10 @@ public class DocumentFileService : IDocumentFileService
         
         return result;
     }
+    
+    public IQueryable<DocumentFile> GetListByAccountId(int accountId)
+    {
+        var result = repos.DocumentFiles.GetList().Where(file => file.AccountId == accountId);
+        return result;
+    }
 }

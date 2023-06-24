@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DataLayer.DBObject;
 using ShareResource.DTO;
+using ShareResource.DTO.File;
 using ShareResource.Enums;
 
 namespace ShareResource.Mapper
@@ -25,6 +26,8 @@ namespace ShareResource.Mapper
             MapSchedule();
 
             MapReview();
+
+            MapDocumentFile();
             //CreateMap<MeetingRoom, MeetingDto>();
             //.ForMember(dest => dest.DisplayName, opt => opt.MapFrom(src => src.AppUser.DisplayName))
             //.ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.AppUser.UserName));
@@ -90,6 +93,16 @@ namespace ShareResource.Mapper
                     src => DateTime.Now));
         }
 
+        private void MapDocumentFile()
+        {
+            CreateMap<DocumentFile, DocumentFileDto>()
+                .ForMember(dest => dest.AccountName, opt => opt.MapFrom(
+                    src => src.Account.Username))
+                .ForMember(dest => dest.GroupName, opt => opt.MapFrom(
+                    src => src.Group.Name))
+                .PreserveReferences();
+        }
+        
         private void MapGroupMember()
         {
             CreateMap<GroupMember, GroupMemberGetDto>()
