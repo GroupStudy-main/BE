@@ -20,7 +20,7 @@ public class DocumentFileController : ControllerBase
     private const string path = "D:\\UploadFile";
 
     // dòng này đổi thành host của máy
-    private const string HostUploadFile = "http://192.168.0.3:8080/";
+    private const string HostUploadFile = "http://192.168.1.5:8080/";
 
     public DocumentFileController(IServiceWrapper services, IMapper mapper)
     {
