@@ -83,6 +83,14 @@ namespace APIExtension.Validator
                 {
                     validatorResult.Failures.Add("Số điện thoại không đúng định dạng");
                 }
+                //Dob
+                if (dto.DateOfBirth != null)
+                {
+                    if(dto.DateOfBirth.Value > DateTime.Today)
+                    {
+                        validatorResult.Failures.Add("Ngày sinh không hợp lệ");
+                    }
+                }
             }
 
             catch (Exception ex)
@@ -116,6 +124,14 @@ namespace APIExtension.Validator
                 if (dto.Phone != null && !phoneRegex.IsMatch(dto.Phone))
                 {
                     validatorResult.Failures.Add("Số điện thoại không đúng định dạng");
+                }
+                //Dob
+                if (dto.DateOfBirth != null)
+                {
+                    if (dto.DateOfBirth.Value > DateTime.Today)
+                    {
+                        validatorResult.Failures.Add("Ngày sinh không hợp lệ");
+                    }
                 }
             }
 

@@ -34,7 +34,10 @@ namespace DataLayer.DBObject
 
         [StringLength(20)]
         public string Phone { get; set; }
-        
+
+        [Column("Dob")]
+        public DateTime? DateOfBirth { get; set; }
+
         //Role
         [ForeignKey("RoleId")]
         public int RoleId { get; set; }

@@ -19,6 +19,7 @@ namespace ShareResource.DTO
         public string FullName { get; set; }
 
         public string RoleName { get; set; }
+        public DateTime DateOfBirth { get; set; }
 
         // Group Member
         public virtual ICollection<GroupGetListDto> LeadGroups { get; set; }// = new Collection<GroupGetListDto>();

@@ -49,6 +49,15 @@ namespace ShareResource.DTO
             set { phone = value.Trim(); }
         }
 
+        private DateTime? dateOfBirth;
+
+        public DateTime? DateOfBirth
+        {
+            get { return dateOfBirth; }
+            set { dateOfBirth = value.Value.Date; }
+        }
+
+
         //Role
         //[ForeignKey("RoleId")]
         //public int RoleId { get; set; }
