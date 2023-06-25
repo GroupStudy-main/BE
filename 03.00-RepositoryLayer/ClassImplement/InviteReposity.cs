@@ -4,23 +4,23 @@ using RepositoryLayer.Interface;
 
 namespace RepositoryLayer.ClassImplement
 {
-    internal class InviteReposity : BaseRepo<JoinInvite, int>, IInviteReposity
+    internal class InviteReposity : BaseRepo<Invite, int>, IInviteReposity
     {
         public InviteReposity(GroupStudyContext dbContext) : base(dbContext)
         {
         }
 
-        public override Task CreateAsync(JoinInvite entity)
+        public override Task CreateAsync(Invite entity)
         {
             return base.CreateAsync(entity);
         }
 
-        public override Task<JoinInvite> GetByIdAsync(int id)
+        public override Task<Invite> GetByIdAsync(int id)
         {
             return base.GetByIdAsync(id);
         }
 
-        public override IQueryable<JoinInvite> GetList()
+        public override IQueryable<Invite> GetList()
         {
             return base.GetList();
         }
@@ -30,7 +30,7 @@ namespace RepositoryLayer.ClassImplement
             return base.RemoveAsync(id);
         }
 
-        public override Task UpdateAsync(JoinInvite entity)
+        public override Task UpdateAsync(Invite entity)
         {
             return base.UpdateAsync(entity);
         }

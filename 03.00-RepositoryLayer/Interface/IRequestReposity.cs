@@ -2,7 +2,7 @@
 
 namespace RepositoryLayer.Interface
 {
-    public interface IRequestReposity : IBaseRepo<JoinRequest, int>
+    public interface IRequestReposity : IBaseRepo<Request, int>
     {
     }
 }

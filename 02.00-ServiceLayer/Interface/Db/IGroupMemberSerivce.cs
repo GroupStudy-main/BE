@@ -21,9 +21,11 @@ namespace ServiceLayer.Interface.Db
         /// <param name="groupId"></param>
         /// <returns></returns>
         public Task<GroupMember> GetGroupMemberOfStudentAndGroupAsync(int studentId, int groupId);
-        public Task AcceptOrDeclineInviteAsync(GroupMember existed, bool isAccepted);
-        public Task AcceptOrDeclineRequestAsync(GroupMember existed, bool isAccepted);
-        public Task<JoinInvite> GetInviteOfStudentAndGroupAsync(int accountId, int groupId);
-        public Task<JoinRequest> GetRequestOfStudentAndGroupAsync(int accountId, int groupId);
+        public Task AcceptOrDeclineInviteAsync(Invite existed, bool isAccepted);
+        public Task AcceptOrDeclineRequestAsync(Request existed, bool isAccepted);
+        public Task<Invite> GetInviteOfStudentAndGroupAsync(int accountId, int groupId);
+        public Task<Request> GetRequestOfStudentAndGroupAsync(int accountId, int groupId);
+        public Task<Request> GetRequestByIdAsync(int requestId);
+        public Task<Invite> GetInviteByIdAsync(int inviteId);
     }
 }

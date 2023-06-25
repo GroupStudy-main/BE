@@ -2,7 +2,7 @@
 
 namespace RepositoryLayer.Interface
 {
-    public interface IInviteReposity: IBaseRepo<JoinInvite, int>
+    public interface IInviteReposity: IBaseRepo<Invite, int>
     {
     }
 }

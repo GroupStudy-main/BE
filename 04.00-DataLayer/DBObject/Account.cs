@@ -45,11 +45,11 @@ namespace DataLayer.DBObject
 
 
         #region Invite
-        public virtual ICollection<JoinInvite> JoinInvites { get; set; } = new Collection<JoinInvite>();
+        public virtual ICollection<Invite> JoinInvites { get; set; } = new Collection<Invite>();
         #endregion
 
         #region Request
-        public virtual ICollection<JoinRequest> JoinRequests { get; set; } = new Collection<JoinRequest>();
+        public virtual ICollection<Request> JoinRequests { get; set; } = new Collection<Request>();
         #endregion
 
     }

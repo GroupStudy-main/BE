@@ -1,10 +1,11 @@
-﻿using ShareResource.Enums;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using ShareResource.Enums;
 
 namespace DataLayer.DBObject
 {
-    public class JoinInvite
+    [Table("JoinRequests")]
+    public class Request
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

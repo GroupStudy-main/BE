@@ -23,8 +23,8 @@ namespace DataLayer.DBContext
         public virtual DbSet<Connection> Connections { get; set; }
         public virtual DbSet<Group> Groups { get; set; }
         public virtual DbSet<GroupMember> GroupMembers { get; set; }
-        public virtual DbSet<JoinInvite> Invites { get; set; }
-        public virtual DbSet<JoinRequest> Requests { get; set; }
+        public virtual DbSet<Invite> Invites { get; set; }
+        public virtual DbSet<Request> Requests { get; set; }
         public virtual DbSet<GroupSubject> GroupSubjects { get; set; }
         public virtual DbSet<Meeting> Meetings { get; set; }
         public virtual DbSet<Role> Roles { get; set; }

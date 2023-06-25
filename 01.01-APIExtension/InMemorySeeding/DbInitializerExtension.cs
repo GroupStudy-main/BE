@@ -614,16 +614,16 @@ namespace APIExtension.ImMemorySeeding
                 #region seed invite
                 if (!context.Invites.Any())
                 {
-                    JoinInvite[] list =
+                    Invite[] list =
                     {
                         #region Group 1
-                        new JoinInvite {
+                        new Invite {
                             Id = 1,
                             GroupId= 1,
                             AccountId=2,
                             State = InviteRequestStateEnum.Approved
                         },
-                        new JoinInvite
+                        new Invite
                         {
                             Id = 2,
                             GroupId = 1,
@@ -633,14 +633,14 @@ namespace APIExtension.ImMemorySeeding
                         #endregion
 
                         #region Group 2
-                         new JoinInvite
+                         new Invite
                         {
                             Id = 3,
                             GroupId = 2,
                             AccountId = 2,
                             State = InviteRequestStateEnum.Approved,
                         },
-                        new JoinInvite
+                        new Invite
                         {
                             Id = 4,
                             GroupId = 2,
@@ -650,14 +650,14 @@ namespace APIExtension.ImMemorySeeding
                         #endregion 
 
                         #region Group 3
-                          new JoinInvite
+                          new Invite
                         {
                             Id = 5,
                             GroupId = 3,
                             AccountId = 1,
                             State = InviteRequestStateEnum.Approved,
                         },
-                        new JoinInvite
+                        new Invite
                         {
                             Id = 6,
                             GroupId = 3,
@@ -667,7 +667,7 @@ namespace APIExtension.ImMemorySeeding
                         #endregion
                         
                         #region Group 4
-                        new JoinInvite
+                        new Invite
                         {
                             Id = 7,
                             GroupId = 4,
@@ -677,7 +677,7 @@ namespace APIExtension.ImMemorySeeding
                         #endregion
                         
                         #region Group 5
-                        new JoinInvite
+                        new Invite
                         {
                             Id = 8,
                             GroupId = 5,
@@ -687,14 +687,14 @@ namespace APIExtension.ImMemorySeeding
                         #endregion
                         
                         #region Group 6
-                        new JoinInvite
+                        new Invite
                         {
                             Id = 9,
                             GroupId = 6,
                             AccountId = 2,
                             State = InviteRequestStateEnum.Waiting,
                         },
-                        new JoinInvite
+                        new Invite
                         {
                             Id = 10,
                             GroupId = 6,
@@ -711,11 +711,11 @@ namespace APIExtension.ImMemorySeeding
                 #region seed request
                 if (!context.Requests.Any())
                 {
-                    JoinRequest[] list =
+                    Request[] list =
                     {
                         
                         #region Group 1
-                        new JoinRequest
+                        new Request
                         {
                             Id = 1,
                             GroupId = 1,
@@ -725,7 +725,7 @@ namespace APIExtension.ImMemorySeeding
                         #endregion
                         
                         #region Group 2
-                        new JoinRequest
+                        new Request
                         {
                             Id = 2,
                             GroupId = 2,
@@ -735,7 +735,7 @@ namespace APIExtension.ImMemorySeeding
                         #endregion
                         
                         #region Group 3
-                         new JoinRequest
+                         new Request
                         {
                             Id = 3,
                             GroupId = 3,
@@ -745,7 +745,7 @@ namespace APIExtension.ImMemorySeeding
                         #endregion
                         
                         #region Group 4
-                        new JoinRequest
+                        new Request
                         {
                             Id = 4,
                             GroupId = 4,
@@ -755,7 +755,7 @@ namespace APIExtension.ImMemorySeeding
                         #endregion
                         
                         #region Group 5
-                        new JoinRequest
+                        new Request
                         {
                             Id = 5,
                             GroupId = 5,
@@ -765,7 +765,7 @@ namespace APIExtension.ImMemorySeeding
                         #endregion
                         
                         #region Group 6
-                        new JoinRequest
+                        new Request
                         {
                             Id = 6,
                             GroupId = 6,

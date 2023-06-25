@@ -6,6 +6,7 @@ using RepositoryLayer.Interface;
 using ServiceLayer.Interface.Db;
 using ShareResource.DTO;
 using ShareResource.Enums;
+using System.Text.RegularExpressions;
 
 namespace ServiceLayer.ClassImplement.Db
 {
@@ -41,7 +42,7 @@ namespace ServiceLayer.ClassImplement.Db
         //Fix later
         public IQueryable<JoinRequestGetDto> GetJoinRequestForGroup(int groupId)
         {
-            IQueryable<JoinRequest> list = repos.Requests.GetList()
+            IQueryable<Request> list = repos.Requests.GetList()
                 .Where(e => e.GroupId == groupId && e.State == InviteRequestStateEnum.Waiting)
                 .Include(e => e.Account)
                 .Include(e => e.Group);
@@ -52,7 +53,7 @@ namespace ServiceLayer.ClassImplement.Db
 
         public IQueryable<JoinInviteGetDto> GetJoinInviteForGroup(int groupId)
         {
-            IQueryable<JoinInvite> list = repos.Invites.GetList()
+            IQueryable<Invite> list = repos.Invites.GetList()
                 .Where(e => e.GroupId == groupId && e.State == InviteRequestStateEnum.Waiting)
                 .Include(e => e.Account)
                 .Include(e => e.Group);
@@ -62,7 +63,7 @@ namespace ServiceLayer.ClassImplement.Db
 
         public IQueryable<JoinRequestGetDto> GetJoinRequestForStudent(int studentId)
         {
-            IQueryable<JoinRequest> list = repos.Requests.GetList()
+            IQueryable<Request> list = repos.Requests.GetList()
                 .Where(e => e.AccountId == studentId && e.State == InviteRequestStateEnum.Waiting)
                 .Include(e => e.Account)
                 .Include(e => e.Group);
@@ -70,9 +71,9 @@ namespace ServiceLayer.ClassImplement.Db
             return mapped;
         }
 
-        public async Task<JoinInvite> GetInviteOfStudentAndGroupAsync(int accountId, int groupId)
+        public async Task<Invite> GetInviteOfStudentAndGroupAsync(int accountId, int groupId)
         {
-            JoinInvite invite = await repos.Invites.GetList()
+            Invite invite = await repos.Invites.GetList()
                 .Include(e => e.Account)
                 .Include(e => e.Group)
                 .SingleOrDefaultAsync(e => e.AccountId == accountId
@@ -81,9 +82,9 @@ namespace ServiceLayer.ClassImplement.Db
 
         }
 
-        public async Task<JoinRequest> GetRequestOfStudentAndGroupAsync(int accountId, int groupId)
+        public async Task<Request> GetRequestOfStudentAndGroupAsync(int accountId, int groupId)
         {
-            JoinRequest request = await repos.Requests.GetList()
+            Request request = await repos.Requests.GetList()
                 .Include(e => e.Account)
                 .Include(e => e.Group)
                 .SingleOrDefaultAsync(e => e.AccountId == accountId
@@ -91,10 +92,28 @@ namespace ServiceLayer.ClassImplement.Db
             return request;
         }
 
+        public async Task<Invite> GetInviteByIdAsync(int inviteId)
+        {
+            Invite invite = await repos.Invites.GetList()
+                .Include(e => e.Account)
+                .Include(e => e.Group)
+                .SingleOrDefaultAsync(e => e.Id == inviteId);
+            return invite;
+        }
+
+        public async Task<Request> GetRequestByIdAsync(int requestId)
+        {
+            Request request = await repos.Requests.GetList()
+                .Include(e => e.Account)
+                .Include(e => e.Group)
+                .SingleOrDefaultAsync(e => e.Id == requestId);
+            return request;
+        }
+
 
         public IQueryable<JoinInviteGetDto> GetJoinInviteForStudent(int studentId)
         {
-            IQueryable<JoinInvite> list = repos.Invites.GetList()
+            IQueryable<Invite> list = repos.Invites.GetList()
                 .Where(e => e.AccountId == studentId && e.State == InviteRequestStateEnum.Waiting)
                 .Include(e => e.Account)
                 .Include(e => e.Group);
@@ -105,7 +124,7 @@ namespace ServiceLayer.ClassImplement.Db
         {
             //GroupMember invite = mapper.Map<GroupMember>(dto);
             //await repos.GroupMembers.CreateAsync(invite);
-            JoinInvite invite = mapper.Map<JoinInvite>(dto);
+            Invite invite = mapper.Map<Invite>(dto);
             await repos.Invites.CreateAsync(invite);
         }
 
@@ -113,7 +132,7 @@ namespace ServiceLayer.ClassImplement.Db
         {
             //GroupMember request = mapper.Map<GroupMember>(dto);
             //await repos.GroupMembers.CreateAsync(request);
-            JoinRequest request = mapper.Map<JoinRequest>(dto);
+            Request request = mapper.Map<Request>(dto);
             await repos.Requests.CreateAsync(request);
         }
 
@@ -123,24 +142,46 @@ namespace ServiceLayer.ClassImplement.Db
                .SingleOrDefaultAsync(e => e.AccountId == studentId && e.GroupId == groupId);
         }
 
-        public async Task AcceptOrDeclineInviteAsync(GroupMember existed, bool isAccepted)
+        public async Task AcceptOrDeclineInviteAsync(Invite existedInvite, bool isAccepted)
         {
             //if (existed.State != GroupMemberState.Inviting)
+            //{
+            //    throw new Exception("Đây không phải là thư mời");
+            //}
+            //existed.State = isAccepted ? GroupMemberState.Member : GroupMemberState.Banned;
+            //await repos.GroupMembers.UpdateAsync(existed);
+            existedInvite.State = isAccepted ? InviteRequestStateEnum.Approved : InviteRequestStateEnum.Decline;
+            await repos.Invites.UpdateAsync(existedInvite);
+            if (isAccepted)
             {
-                throw new Exception("Đây không phải là thư mời");
+                GroupMember newMember = new GroupMember
+                {
+                    AccountId = existedInvite.AccountId,
+                    GroupId = existedInvite.GroupId,
+                    State = GroupMemberState.Member
+                };
+                await repos.GroupMembers.CreateAsync(newMember);
             }
-            existed.State = isAccepted ? GroupMemberState.Member : GroupMemberState.Banned;
-            await repos.GroupMembers.UpdateAsync(existed);
         }
 
-        public async Task AcceptOrDeclineRequestAsync(GroupMember existed, bool isAccepted)
+        public async Task AcceptOrDeclineRequestAsync(Request existedRequest, bool isAccepted)
         {
-            //if (existed.State != GroupMemberState.Requesting)
+            //if (existed.State != InviteRequestStateEnum.Waiting)
+            //{
+            //    throw new Exception("Yêu cầu đã được xử lí");
+            //}
+            existedRequest.State = isAccepted ? InviteRequestStateEnum.Approved : InviteRequestStateEnum.Decline;
+            await repos.Requests.UpdateAsync(existedRequest);
+            if (isAccepted)
             {
-                throw new Exception("Đây không phải là yêu cầu");
+                GroupMember newMember = new GroupMember
+                {
+                    AccountId = existedRequest.AccountId,
+                    GroupId = existedRequest.GroupId,
+                    State = GroupMemberState.Member
+                };
+                await repos.GroupMembers.CreateAsync(newMember);
             }
-            existed.State = isAccepted ? GroupMemberState.Member : GroupMemberState.Banned;
-            await repos.GroupMembers.UpdateAsync(existed);
         }
     }
 }
