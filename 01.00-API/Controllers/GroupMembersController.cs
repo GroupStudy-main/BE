@@ -60,7 +60,7 @@ namespace API.Controllers
 
         //GET: api/GroupMember/Invite/Group/groupId
         [SwaggerOperation(
-            Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Get all invite of group"
+            Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Get all invite of group for leader"
         )]
         [Authorize(Roles =Actor.Student)]
         [HttpGet("Invite/Group/{groupId}")]
@@ -83,7 +83,7 @@ namespace API.Controllers
 
         //GET: api/GroupMember/Request/Group/groupId
         [SwaggerOperation(
-            Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Get all join request of group"
+            Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Get all join request of group for leader"
         )]
         [Authorize(Roles =Actor.Student)]
         [HttpGet("Request/Group/{groupId}")]
@@ -107,6 +107,9 @@ namespace API.Controllers
         //Post: api/GroupMember/Invite
         [SwaggerOperation(
             Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Create Invite to join group for leader"
+            , Description ="Nhóm trưởng tạo thư mời vào nhóm<br>" +
+                "groupId id của nhóm mời vào<br>" +
+                "accountId id của học sinh được mời vào"
         )]
         [Authorize(Roles = Actor.Student)]
         [HttpPost("Invite")]
@@ -209,6 +212,7 @@ namespace API.Controllers
         //Put: api/GroupMember/Request/{requestId}/Accept"
         [SwaggerOperation(
             Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Accept join request for leader"
+            , Description ="Nhóm trưởng chấp nhận request vào nhóm của học sinh"
         )]
         [Authorize(Roles = Actor.Student)]
         [HttpPut("Request/{requestId}/Accept")]
@@ -253,7 +257,8 @@ namespace API.Controllers
 
         //Put: api/GroupMember/Request/{requestId}/Decline"
         [SwaggerOperation(
-            Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Get all join request of group"
+            Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Decline join request for leader"
+            , Description ="Nhóm trưởng từ chối request vào nhóm của học sinh"
         )]
         [Authorize(Roles = Actor.Student)]
         [HttpPut("Request/{requestId}/Decline")]
@@ -297,7 +302,7 @@ namespace API.Controllers
 
         //GET: api/GroupMember/Invite/Student/{studentId}
         [SwaggerOperation(
-            Summary = $"[{Actor.Student}/{Finnished.True}/{Auth.True}] Get all join invite of group"
+            Summary = $"[{Actor.Student}/{Finnished.True}/{Auth.True}] Get all join invite of student"
         )]
         [Authorize(Roles =Actor.Student)]
         [HttpGet("Invite/Student")]
@@ -315,7 +320,7 @@ namespace API.Controllers
 
         //GET: api/GroupMember/Request/Student/{studentId}
         [SwaggerOperation(
-            Summary = $"[{Actor.Student}/{Finnished.True}/{Auth.True}] Get all request of group"
+            Summary = $"[{Actor.Student}/{Finnished.True}/{Auth.True}] Get all request of student"
         )]
         [Authorize(Roles =Actor.Student)]
         [HttpGet("Request/Student")]
@@ -333,7 +338,10 @@ namespace API.Controllers
 
         //POST: api/GroupMember/Request
         [SwaggerOperation(
-            Summary = $"[{Actor.Student}/{Finnished.True}/{Auth.True}] Get all request of group"
+            Summary = $"[{Actor.Student}/{Finnished.True}/{Auth.True}] Request to join new group for student"
+            , Description ="Học sinh tạo request vào nhóm mới<br>" +
+                "groupId: id của nhóm học sinh muốn vào<br>" +
+                "accountId: id của học sinh đang muốn vào"
         )]
         [Authorize(Roles = Actor.Student)]
         [HttpPost("Request")]
@@ -448,7 +456,8 @@ namespace API.Controllers
 
         //Put: api/GroupMember/Invite/{inviteId}/Accept"
         [SwaggerOperation(
-            Summary = $"[{Actor.Member}/{Finnished.True}/{Auth.True}] Get all join request of group"
+            Summary = $"[{Actor.Member}/{Finnished.True}/{Auth.True}] Accpet join invite for student"
+            , Description ="Học sinh chấp nhận lời mời vào nhóm"
         )]
         [Authorize(Roles = Actor.Student)]
         [HttpPut("Invite/{inviteId}/Accept")]
@@ -508,8 +517,9 @@ namespace API.Controllers
 
         //Put: api/GroupMember/Invite/{inviteId}/Decline"
         [SwaggerOperation(
-            Summary = $"[{Actor.Member}/{Finnished.True}/{Auth.True}] Get all join request of group"
-        )]
+           Summary = $"[{Actor.Member}/{Finnished.True}/{Auth.True}] Decline join invite for student"
+           , Description = "Học sinh từ chối lời mời vào nhóm"
+       )]
         [Authorize(Roles = Actor.Student)]
         [HttpPut("Invite/{inviteId}/Decline")]
         public async Task<IActionResult> DeclineInvite(int inviteId)
