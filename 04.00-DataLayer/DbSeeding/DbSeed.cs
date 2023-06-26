@@ -30,6 +30,7 @@ namespace DataLayer.DbSeeding
                 Email = "trankhaiminhkhoi10a3@gmail.com",
                 Password = "123456789",
                 Phone = "0123456789",
+                Schhool="THCS Minh Đức",
                 DateOfBirth = new DateTime(2009,5, 5),
                 RoleId = 2
             },
@@ -41,6 +42,7 @@ namespace DataLayer.DbSeeding
                 Email = "student2@gmail.com",
                 Password = "123456789",
                 Phone = "0123456789",
+                Schhool="THCS Minh Đức",
                 DateOfBirth = new DateTime(2009,5, 5),
                 RoleId = 2
             },
@@ -52,6 +54,7 @@ namespace DataLayer.DbSeeding
                 Email = "student3@gmail.com",
                 Password = "123456789",
                 Phone = "0123456789",
+                Schhool="THCS Minh Đức",
                 DateOfBirth = new DateTime(2009,5, 5),
                 RoleId = 2
             },
@@ -63,6 +66,7 @@ namespace DataLayer.DbSeeding
                 Email = "student4@gmail.com",
                 Password = "123456789",
                 Phone = "0123456789",
+                Schhool="THCS Minh Đức",
                 DateOfBirth = new DateTime(2009,5, 5),
                 RoleId = 2
             },
@@ -85,6 +89,7 @@ namespace DataLayer.DbSeeding
                 Email = "student6@gmail.com",
                 Password = "123456789",
                 Phone = "0123456789",
+                Schhool="THCS Minh Đức",
                 DateOfBirth = new DateTime(2009,5, 5),
                 RoleId = 2
             },
@@ -96,6 +101,7 @@ namespace DataLayer.DbSeeding
                 Email = "student7@gmail.com",
                 Password = "123456789",
                 Phone = "0123456789",
+                Schhool="THCS Minh Đức",
                 DateOfBirth = new DateTime(2009,5, 5),
                 RoleId = 2
             },
@@ -107,6 +113,7 @@ namespace DataLayer.DbSeeding
                 Email = "student8@gmail.com",
                 Password = "123456789",
                 Phone = "0123456789",
+                DateOfBirth = new DateTime(2009,5, 5),
                 RoleId = 2
             }
             , new Account
@@ -117,6 +124,8 @@ namespace DataLayer.DbSeeding
                 Email = "student9@gmail.com",
                 Password = "123456789",
                 Phone = "0123456789",
+                Schhool="THCS Minh Đức",
+                DateOfBirth = new DateTime(2009,5, 5),
                 RoleId = 2
             }, new Account
             {
@@ -126,6 +135,7 @@ namespace DataLayer.DbSeeding
                 Email = "student10@gmail.com",
                 Password = "123456789",
                 Phone = "0123456789",
+                Schhool="THCS Minh Đức",
                 DateOfBirth = new DateTime(2009,5, 5),
                 RoleId = 2
             },

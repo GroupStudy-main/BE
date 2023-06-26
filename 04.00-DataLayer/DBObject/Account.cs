@@ -34,6 +34,7 @@ namespace DataLayer.DBObject
 
         [StringLength(20)]
         public string Phone { get; set; }
+        public string? Schhool { get; set; }
 
         [Column("Dob")]
         public DateTime? DateOfBirth { get; set; }
