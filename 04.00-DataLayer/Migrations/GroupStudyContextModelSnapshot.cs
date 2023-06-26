@@ -77,8 +77,9 @@ namespace DataLayer.Migrations
                         new
                         {
                             Id = 1,
+                            DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "trankhaiminhkhoi10a3@gmail.com",
-                            FullName = "Nguyen Van A",
+                            FullName = "Tran Khai Minh Khoi",
                             Password = "123456789",
                             Phone = "0123456789",
                             RoleId = 2,
@@ -87,6 +88,7 @@ namespace DataLayer.Migrations
                         new
                         {
                             Id = 2,
+                            DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student2@gmail.com",
                             FullName = "Dao Thi B",
                             Password = "123456789",
@@ -97,6 +99,7 @@ namespace DataLayer.Migrations
                         new
                         {
                             Id = 3,
+                            DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student3@gmail.com",
                             FullName = "Tran Van C",
                             Password = "123456789",
@@ -107,6 +110,7 @@ namespace DataLayer.Migrations
                         new
                         {
                             Id = 4,
+                            DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student4@gmail.com",
                             FullName = "Li Thi D",
                             Password = "123456789",
@@ -117,6 +121,7 @@ namespace DataLayer.Migrations
                         new
                         {
                             Id = 5,
+                            DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student5@gmail.com",
                             FullName = "Tran Van E",
                             Password = "123456789",
@@ -127,6 +132,7 @@ namespace DataLayer.Migrations
                         new
                         {
                             Id = 6,
+                            DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student6@gmail.com",
                             FullName = "Li Chinh F",
                             Password = "123456789",
@@ -137,6 +143,7 @@ namespace DataLayer.Migrations
                         new
                         {
                             Id = 7,
+                            DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student7@gmail.com",
                             FullName = "Ngo Van G",
                             Password = "123456789",
@@ -167,6 +174,7 @@ namespace DataLayer.Migrations
                         new
                         {
                             Id = 10,
+                            DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student10@gmail.com",
                             FullName = "Tran Van J",
                             Password = "123456789",
@@ -177,6 +185,7 @@ namespace DataLayer.Migrations
                         new
                         {
                             Id = 11,
+                            DateOfBirth = new DateTime(1975, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "trankhaiminhkhoi@gmail.com",
                             FullName = "Tran Khoi",
                             Password = "123456789",
@@ -341,6 +350,24 @@ namespace DataLayer.Migrations
                             Id = 3,
                             ClassId = 8,
                             Name = "Nhóm 1 của học sinh 2"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            ClassId = 8,
+                            Name = "Nhóm 2 của học sinh 2"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            ClassId = 8,
+                            Name = "Nhóm 1 của học sinh 3"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            ClassId = 8,
+                            Name = "Nhóm 2 của học sinh 3"
                         });
                 });
 
@@ -376,48 +403,69 @@ namespace DataLayer.Migrations
                             Id = 1,
                             AccountId = 1,
                             GroupId = 1,
-                            State = 0
+                            State = 1
                         },
                         new
                         {
                             Id = 2,
                             AccountId = 2,
                             GroupId = 1,
+                            State = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AccountId = 5,
+                            GroupId = 1,
+                            State = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AccountId = 1,
+                            GroupId = 2,
                             State = 1
                         },
                         new
                         {
                             Id = 5,
-                            AccountId = 5,
-                            GroupId = 1,
+                            AccountId = 2,
+                            GroupId = 2,
                             State = 2
                         },
                         new
                         {
                             Id = 6,
-                            AccountId = 1,
-                            GroupId = 2,
-                            State = 0
+                            AccountId = 2,
+                            GroupId = 3,
+                            State = 1
                         },
                         new
                         {
                             Id = 7,
+                            AccountId = 1,
+                            GroupId = 3,
+                            State = 2
+                        },
+                        new
+                        {
+                            Id = 8,
                             AccountId = 2,
-                            GroupId = 2,
+                            GroupId = 4,
+                            State = 1
+                        },
+                        new
+                        {
+                            Id = 9,
+                            AccountId = 3,
+                            GroupId = 5,
                             State = 1
                         },
                         new
                         {
                             Id = 10,
-                            AccountId = 2,
-                            GroupId = 3,
-                            State = 0
-                        },
-                        new
-                        {
-                            Id = 11,
-                            AccountId = 1,
-                            GroupId = 3,
+                            AccountId = 3,
+                            GroupId = 6,
                             State = 1
                         });
                 });
@@ -492,12 +540,6 @@ namespace DataLayer.Migrations
                             Id = 8,
                             GroupId = 3,
                             SubjectId = 6
-                        },
-                        new
-                        {
-                            Id = 9,
-                            GroupId = 3,
-                            SubjectId = 9
                         });
                 });
 
@@ -525,6 +567,78 @@ namespace DataLayer.Migrations
                     b.HasIndex("GroupId");
 
                     b.ToTable("JoinInvites");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AccountId = 2,
+                            GroupId = 1,
+                            State = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AccountId = 3,
+                            GroupId = 1,
+                            State = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AccountId = 2,
+                            GroupId = 2,
+                            State = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AccountId = 3,
+                            GroupId = 2,
+                            State = 2
+                        },
+                        new
+                        {
+                            Id = 5,
+                            AccountId = 1,
+                            GroupId = 3,
+                            State = 1
+                        },
+                        new
+                        {
+                            Id = 6,
+                            AccountId = 3,
+                            GroupId = 3,
+                            State = 2
+                        },
+                        new
+                        {
+                            Id = 7,
+                            AccountId = 3,
+                            GroupId = 4,
+                            State = 2
+                        },
+                        new
+                        {
+                            Id = 8,
+                            AccountId = 3,
+                            GroupId = 5,
+                            State = 2
+                        },
+                        new
+                        {
+                            Id = 9,
+                            AccountId = 2,
+                            GroupId = 6,
+                            State = 2
+                        },
+                        new
+                        {
+                            Id = 10,
+                            AccountId = 1,
+                            GroupId = 6,
+                            State = 2
+                        });
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Meeting", b =>
@@ -594,6 +708,50 @@ namespace DataLayer.Migrations
                     b.HasIndex("GroupId");
 
                     b.ToTable("JoinRequests");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AccountId = 4,
+                            GroupId = 1,
+                            State = 2
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AccountId = 3,
+                            GroupId = 2,
+                            State = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AccountId = 4,
+                            GroupId = 3,
+                            State = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AccountId = 4,
+                            GroupId = 4,
+                            State = 2
+                        },
+                        new
+                        {
+                            Id = 5,
+                            AccountId = 3,
+                            GroupId = 5,
+                            State = 2
+                        },
+                        new
+                        {
+                            Id = 6,
+                            AccountId = 1,
+                            GroupId = 6,
+                            State = 2
+                        });
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Review", b =>
@@ -772,31 +930,6 @@ namespace DataLayer.Migrations
                         {
                             Id = 8,
                             Name = "Anh"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Name = "Giáo dục công dân"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Name = "Công nghệ"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Name = "Quốc phòng"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Name = "Thể dục"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            Name = "Tin"
                         });
                 });
 

@@ -8,7 +8,7 @@ namespace ShareResource.Enums
 {
     public enum GroupMemberState
     {
-        Leader,
+        Leader=1,
         Member,
         //Inviting,
         //Requesting,

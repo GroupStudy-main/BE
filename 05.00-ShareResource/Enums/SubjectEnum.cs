@@ -16,10 +16,5 @@ namespace ShareResource.Enums
         Dia,
         Sinh,
         Anh,
-        Gdcd,
-        CongNghe,
-        QuocPhong,
-        TheDuc,
-        Tin
     }
 }

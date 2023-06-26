@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -43,30 +44,25 @@ namespace DataLayer.Migrations
                     { 5, "Sử" },
                     { 6, "Địa" },
                     { 7, "Sinh" },
-                    { 8, "Anh" },
-                    { 9, "Giáo dục công dân" },
-                    { 10, "Công nghệ" },
-                    { 11, "Quốc phòng" },
-                    { 12, "Thể dục" },
-                    { 13, "Tin" }
+                    { 8, "Anh" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Accounts",
-                columns: new[] { "Id", "Email", "FullName", "Password", "Phone", "RoleId", "Username" },
+                columns: new[] { "Id", "Dob", "Email", "FullName", "Password", "Phone", "RoleId", "Username" },
                 values: new object[,]
                 {
-                    { 1, "trankhaiminhkhoi10a3@gmail.com", "Nguyen Van A", "123456789", "0123456789", 2, "student1" },
-                    { 2, "student2@gmail.com", "Dao Thi B", "123456789", "0123456789", 2, "student2" },
-                    { 3, "student3@gmail.com", "Tran Van C", "123456789", "0123456789", 2, "student3" },
-                    { 4, "student4@gmail.com", "Li Thi D", "123456789", "0123456789", 2, "student4" },
-                    { 5, "student5@gmail.com", "Tran Van E", "123456789", "0123456789", 2, "student5" },
-                    { 6, "student6@gmail.com", "Li Chinh F", "123456789", "0123456789", 2, "student6" },
-                    { 7, "student7@gmail.com", "Ngo Van G", "123456789", "0123456789", 2, "student7" },
-                    { 8, "student8@gmail.com", "Tran Van H", "123456789", "0123456789", 2, "student8" },
-                    { 9, "student9@gmail.com", "Tran Van I", "123456789", "0123456789", 2, "student9" },
-                    { 10, "student10@gmail.com", "Tran Van J", "123456789", "0123456789", 2, "student10" },
-                    { 11, "trankhaiminhkhoi@gmail.com", "Tran Khoi", "123456789", "0123456789", 1, "parent1" }
+                    { 1, new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "trankhaiminhkhoi10a3@gmail.com", "Tran Khai Minh Khoi", "123456789", "0123456789", 2, "student1" },
+                    { 2, new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "student2@gmail.com", "Dao Thi B", "123456789", "0123456789", 2, "student2" },
+                    { 3, new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "student3@gmail.com", "Tran Van C", "123456789", "0123456789", 2, "student3" },
+                    { 4, new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "student4@gmail.com", "Li Thi D", "123456789", "0123456789", 2, "student4" },
+                    { 5, new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "student5@gmail.com", "Tran Van E", "123456789", "0123456789", 2, "student5" },
+                    { 6, new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "student6@gmail.com", "Li Chinh F", "123456789", "0123456789", 2, "student6" },
+                    { 7, new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "student7@gmail.com", "Ngo Van G", "123456789", "0123456789", 2, "student7" },
+                    { 8, null, "student8@gmail.com", "Tran Van H", "123456789", "0123456789", 2, "student8" },
+                    { 9, null, "student9@gmail.com", "Tran Van I", "123456789", "0123456789", 2, "student9" },
+                    { 10, new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "student10@gmail.com", "Tran Van J", "123456789", "0123456789", 2, "student10" },
+                    { 11, new DateTime(1975, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified), "trankhaiminhkhoi@gmail.com", "Tran Khoi", "123456789", "0123456789", 1, "parent1" }
                 });
 
             migrationBuilder.InsertData(
@@ -76,27 +72,27 @@ namespace DataLayer.Migrations
                 {
                     { 1, 7, "Nhóm 1 của học sinh 1" },
                     { 2, 7, "Nhóm 2 của học sinh 1" },
-                    { 3, 8, "Nhóm 1 của học sinh 2" }
+                    { 3, 8, "Nhóm 1 của học sinh 2" },
+                    { 4, 8, "Nhóm 2 của học sinh 2" },
+                    { 5, 8, "Nhóm 1 của học sinh 3" },
+                    { 6, 8, "Nhóm 2 của học sinh 3" }
                 });
 
             migrationBuilder.InsertData(
                 table: "GroupMembers",
-                columns: new[] { "Id", "AccountId", "GroupId", "InviteMessage", "RequestMessage", "State" },
+                columns: new[] { "Id", "AccountId", "GroupId", "State" },
                 values: new object[,]
                 {
-                    { 1, 1, 1, null, null, 0 },
-                    { 2, 2, 1, "Nhóm của mình rất hay. Bạn vô nha", null, 1 },
-                    { 3, 3, 1, "Nhóm của mình rất hay. Bạn vô nha", null, 2 },
-                    { 4, 4, 1, null, "Nhóm của bạn rất hay. Bạn cho mình vô nha", 3 },
-                    { 5, 5, 1, null, "Nhóm của bạn rất hay. Bạn cho mình vô nha", 4 },
-                    { 6, 1, 2, null, null, 0 },
-                    { 7, 2, 2, "Nhóm của mình rất hay. Bạn vô nha", null, 1 },
-                    { 8, 3, 2, "Nhóm của mình rất hay. Bạn vô nha", null, 2 },
-                    { 9, 4, 2, null, "Nhóm của bạn rất hay. Bạn cho mình vô nha", 3 },
-                    { 10, 2, 3, null, null, 0 },
-                    { 11, 1, 3, "Nhóm của mình rất hay. Bạn vô nha", null, 1 },
-                    { 12, 3, 3, "Nhóm của mình rất hay. Bạn vô nha", null, 2 },
-                    { 13, 4, 3, null, "Nhóm của bạn rất hay. Bạn cho mình vô nha", 3 }
+                    { 1, 1, 1, 1 },
+                    { 2, 2, 1, 2 },
+                    { 3, 5, 1, 3 },
+                    { 4, 1, 2, 1 },
+                    { 5, 2, 2, 2 },
+                    { 6, 2, 3, 1 },
+                    { 7, 1, 3, 2 },
+                    { 8, 2, 4, 1 },
+                    { 9, 3, 5, 1 },
+                    { 10, 3, 6, 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -111,8 +107,37 @@ namespace DataLayer.Migrations
                     { 5, 2, 2 },
                     { 6, 2, 3 },
                     { 7, 3, 5 },
-                    { 8, 3, 6 },
-                    { 9, 3, 9 }
+                    { 8, 3, 6 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "JoinInvites",
+                columns: new[] { "Id", "AccountId", "GroupId", "State" },
+                values: new object[,]
+                {
+                    { 1, 2, 1, 1 },
+                    { 2, 3, 1, 2 },
+                    { 3, 2, 2, 1 },
+                    { 4, 3, 2, 2 },
+                    { 5, 1, 3, 1 },
+                    { 6, 3, 3, 2 },
+                    { 7, 3, 4, 2 },
+                    { 8, 3, 5, 2 },
+                    { 9, 2, 6, 2 },
+                    { 10, 1, 6, 2 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "JoinRequests",
+                columns: new[] { "Id", "AccountId", "GroupId", "State" },
+                values: new object[,]
+                {
+                    { 1, 4, 1, 2 },
+                    { 2, 3, 2, 2 },
+                    { 3, 4, 3, 2 },
+                    { 4, 4, 4, 2 },
+                    { 5, 3, 5, 2 },
+                    { 6, 1, 6, 2 }
                 });
         }
 
@@ -224,21 +249,6 @@ namespace DataLayer.Migrations
                 keyValue: 10);
 
             migrationBuilder.DeleteData(
-                table: "GroupMembers",
-                keyColumn: "Id",
-                keyValue: 11);
-
-            migrationBuilder.DeleteData(
-                table: "GroupMembers",
-                keyColumn: "Id",
-                keyValue: 12);
-
-            migrationBuilder.DeleteData(
-                table: "GroupMembers",
-                keyColumn: "Id",
-                keyValue: 13);
-
-            migrationBuilder.DeleteData(
                 table: "GroupSubjects",
                 keyColumn: "Id",
                 keyValue: 1);
@@ -279,34 +289,89 @@ namespace DataLayer.Migrations
                 keyValue: 8);
 
             migrationBuilder.DeleteData(
-                table: "GroupSubjects",
+                table: "JoinInvites",
+                keyColumn: "Id",
+                keyValue: 1);
+
+            migrationBuilder.DeleteData(
+                table: "JoinInvites",
+                keyColumn: "Id",
+                keyValue: 2);
+
+            migrationBuilder.DeleteData(
+                table: "JoinInvites",
+                keyColumn: "Id",
+                keyValue: 3);
+
+            migrationBuilder.DeleteData(
+                table: "JoinInvites",
+                keyColumn: "Id",
+                keyValue: 4);
+
+            migrationBuilder.DeleteData(
+                table: "JoinInvites",
+                keyColumn: "Id",
+                keyValue: 5);
+
+            migrationBuilder.DeleteData(
+                table: "JoinInvites",
+                keyColumn: "Id",
+                keyValue: 6);
+
+            migrationBuilder.DeleteData(
+                table: "JoinInvites",
+                keyColumn: "Id",
+                keyValue: 7);
+
+            migrationBuilder.DeleteData(
+                table: "JoinInvites",
+                keyColumn: "Id",
+                keyValue: 8);
+
+            migrationBuilder.DeleteData(
+                table: "JoinInvites",
                 keyColumn: "Id",
                 keyValue: 9);
+
+            migrationBuilder.DeleteData(
+                table: "JoinInvites",
+                keyColumn: "Id",
+                keyValue: 10);
+
+            migrationBuilder.DeleteData(
+                table: "JoinRequests",
+                keyColumn: "Id",
+                keyValue: 1);
+
+            migrationBuilder.DeleteData(
+                table: "JoinRequests",
+                keyColumn: "Id",
+                keyValue: 2);
+
+            migrationBuilder.DeleteData(
+                table: "JoinRequests",
+                keyColumn: "Id",
+                keyValue: 3);
+
+            migrationBuilder.DeleteData(
+                table: "JoinRequests",
+                keyColumn: "Id",
+                keyValue: 4);
+
+            migrationBuilder.DeleteData(
+                table: "JoinRequests",
+                keyColumn: "Id",
+                keyValue: 5);
+
+            migrationBuilder.DeleteData(
+                table: "JoinRequests",
+                keyColumn: "Id",
+                keyValue: 6);
 
             migrationBuilder.DeleteData(
                 table: "Subjects",
                 keyColumn: "Id",
                 keyValue: 7);
-
-            migrationBuilder.DeleteData(
-                table: "Subjects",
-                keyColumn: "Id",
-                keyValue: 10);
-
-            migrationBuilder.DeleteData(
-                table: "Subjects",
-                keyColumn: "Id",
-                keyValue: 11);
-
-            migrationBuilder.DeleteData(
-                table: "Subjects",
-                keyColumn: "Id",
-                keyValue: 12);
-
-            migrationBuilder.DeleteData(
-                table: "Subjects",
-                keyColumn: "Id",
-                keyValue: 13);
 
             migrationBuilder.DeleteData(
                 table: "Accounts",
@@ -347,6 +412,21 @@ namespace DataLayer.Migrations
                 table: "Groups",
                 keyColumn: "Id",
                 keyValue: 3);
+
+            migrationBuilder.DeleteData(
+                table: "Groups",
+                keyColumn: "Id",
+                keyValue: 4);
+
+            migrationBuilder.DeleteData(
+                table: "Groups",
+                keyColumn: "Id",
+                keyValue: 5);
+
+            migrationBuilder.DeleteData(
+                table: "Groups",
+                keyColumn: "Id",
+                keyValue: 6);
 
             migrationBuilder.DeleteData(
                 table: "Roles",
@@ -387,11 +467,6 @@ namespace DataLayer.Migrations
                 table: "Subjects",
                 keyColumn: "Id",
                 keyValue: 8);
-
-            migrationBuilder.DeleteData(
-                table: "Subjects",
-                keyColumn: "Id",
-                keyValue: 9);
 
             migrationBuilder.DeleteData(
                 table: "Classes",
