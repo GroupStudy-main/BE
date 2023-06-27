@@ -87,7 +87,7 @@ namespace ServiceLayer.Interface.Db
         /// <param name="studentId"></param>
         /// <param name="groupId"></param>
         /// <returns></returns>
-        public Task<bool> IsStudentDeclinedToGroupAsync(int studentId, int groupId);
+        public Task<bool> IsStudentBannedToGroupAsync(int studentId, int groupId);
         /// <summary>
         /// search by name, class, subject
         /// </summary>

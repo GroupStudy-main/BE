@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace ShareResource.Enums
 {
-    public enum GroupMemberState
+    public enum GroupMemberRole
     {
         Leader=1,
         Member,
         //Inviting,
         //Requesting,
-        Banned
+        //Banned 
     }
 }

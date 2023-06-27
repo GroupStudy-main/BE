@@ -34,7 +34,7 @@ namespace ServiceLayer.ClassImplement.Db
         public IQueryable<AccountProfileDto> GetMembersJoinForGroup(int groupId)
         {
             IQueryable<Account> list = repos.GroupMembers.GetList()
-                .Where(e => e.GroupId == groupId && (e.State == GroupMemberState.Member || e.State == GroupMemberState.Leader))
+                .Where(e => e.GroupId == groupId && e.IsActive == true)
                 .Include(e => e.Account)
                 .Select(e => e.Account);
             return list.ProjectTo<AccountProfileDto>(mapper.ConfigurationProvider);
@@ -158,7 +158,8 @@ namespace ServiceLayer.ClassImplement.Db
                 {
                     AccountId = existedInvite.AccountId,
                     GroupId = existedInvite.GroupId,
-                    State = GroupMemberState.Member
+                    MemberRole = GroupMemberRole.Member,
+                    IsActive = true,
                 };
                 await repos.GroupMembers.CreateAsync(newMember);
             }
@@ -178,7 +179,8 @@ namespace ServiceLayer.ClassImplement.Db
                 {
                     AccountId = existedRequest.AccountId,
                     GroupId = existedRequest.GroupId,
-                    State = GroupMemberState.Member
+                    MemberRole = GroupMemberRole.Member,
+                    IsActive = true,
                 };
                 await repos.GroupMembers.CreateAsync(newMember);
             }

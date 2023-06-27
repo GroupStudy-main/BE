@@ -58,7 +58,7 @@ namespace ServiceLayer.ClassImplement.Db
         {
             return repos.GroupMembers.GetList()
                 .Include(e => e.Group).ThenInclude(e => e.GroupMembers)
-                .Where(e => e.AccountId == studentId && (e.State == GroupMemberState.Member || e.State == GroupMemberState.Leader))
+                .Where(e => e.AccountId == studentId && e.IsActive == true)
                 .Select(e => e.Group);
         }
 
@@ -66,7 +66,7 @@ namespace ServiceLayer.ClassImplement.Db
         {
             return repos.GroupMembers.GetList()
                 .Include(e => e.Group).ThenInclude(e => e.GroupMembers)
-                .Where(e => e.AccountId == studentId && e.State == GroupMemberState.Member)
+                .Where(e => e.AccountId == studentId && e.MemberRole == GroupMemberRole.Member && e.IsActive == true)
                 .Select(e => e.Group);
         }
 
@@ -74,7 +74,7 @@ namespace ServiceLayer.ClassImplement.Db
         {
             return repos.GroupMembers.GetList()
                 .Include(e => e.Group).ThenInclude(e=>e.GroupMembers)
-                .Where(e => e.AccountId == studentId && e.State == GroupMemberState.Leader)
+                .Where(e => e.AccountId == studentId && e.MemberRole == GroupMemberRole.Leader && e.IsActive == true)
                 .Select(e => e.Group);
         }
 
@@ -88,7 +88,7 @@ namespace ServiceLayer.ClassImplement.Db
         {
             entity.GroupMembers.Add(new GroupMember { 
                 AccountId = creatorId,
-                State=GroupMemberState.Leader
+                MemberRole=GroupMemberRole.Leader
             });
             await repos.Groups.CreateAsync(entity);
         }
@@ -135,48 +135,51 @@ namespace ServiceLayer.ClassImplement.Db
         {
             return repos.GroupMembers.GetList()
                 .Include(e => e.Group).ThenInclude(e => e.GroupMembers)
-                .Where(e => e.AccountId == studentId && e.State == GroupMemberState.Leader)
+                .Where(e => e.AccountId == studentId && e.MemberRole == GroupMemberRole.Leader && e.IsActive == true)
                 .Select(e => e.GroupId).ToList();
         }
 
         public async Task<bool> IsStudentLeadingGroupAsync(int studentId, int groupId)
         {
             return await repos.GroupMembers.GetList()
-                .AnyAsync(e=>e.AccountId==studentId && e.GroupId==groupId && e.State == GroupMemberState.Leader);
+                .AnyAsync(e=>e.AccountId==studentId && e.GroupId==groupId && e.MemberRole == GroupMemberRole.Leader
+                     && e.IsActive == true);
         }
 
         public async Task<bool> IsStudentMemberGroupAsync(int studentId, int groupId)
         {
             return await repos.GroupMembers.GetList()
-                .AnyAsync(e => e.AccountId == studentId && e.GroupId == groupId && e.State == GroupMemberState.Member);
+                .AnyAsync(e => e.AccountId == studentId && e.GroupId == groupId && e.MemberRole == GroupMemberRole.Member
+                     && e.IsActive == true);
         }
 
         public async Task<bool> IsStudentJoiningGroupAsync(int studentId, int groupId)
         {
             return await repos.GroupMembers.GetList()
-               .AnyAsync(e => e.AccountId == studentId && e.GroupId == groupId && (e.State == GroupMemberState.Member || e.State == GroupMemberState.Leader));
+               .AnyAsync(e => e.AccountId == studentId && e.GroupId == groupId
+                    && e.IsActive == true);
         }
            //Fix later
         public async Task<bool> IsStudentRequestingToGroupAsync(int studentId, int groupId)
         {
-            return await repos.GroupMembers.GetList()
+            return await repos.Requests.GetList()
               .AnyAsync(e => e.AccountId == studentId && e.GroupId == groupId 
-              //&& (e.State == GroupMemberState.Requesting)
+                && (e.State == InviteRequestStateEnum.Waiting)
               );
         }
          //Fix later
         public async Task<bool> IsStudentInvitedToGroupAsync(int studentId, int groupId)
         {
             return await repos.GroupMembers.GetList()
-              .AnyAsync(e => e.AccountId == studentId && e.GroupId == groupId 
+              .AnyAsync(e => e.AccountId == studentId && e.GroupId == groupId && e.IsActive == true
               //&& (e.State == GroupMemberState.Inviting)
               );
         }
 
-        public async Task<bool> IsStudentDeclinedToGroupAsync(int studentId, int groupId)
+        public async Task<bool> IsStudentBannedToGroupAsync(int studentId, int groupId)
         {
             return await repos.GroupMembers.GetList()
-                .AnyAsync(e => e.AccountId == studentId && e.GroupId == groupId && (e.State == GroupMemberState.Banned));
+                .AnyAsync(e => e.AccountId == studentId && e.GroupId == groupId && e.IsActive == false);
         }
 
         public async Task<bool> ExistsAsync(int groupId)

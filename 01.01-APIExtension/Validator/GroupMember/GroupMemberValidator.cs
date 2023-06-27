@@ -48,14 +48,14 @@ namespace APIExtension.Validator
                 GroupMember exsited = await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId);
                 if (exsited != null)
                 {
-                    switch (exsited.State)
+                    switch (exsited.MemberRole)
                     {
-                        case GroupMemberState.Leader:
+                        case GroupMemberRole.Leader:
                             {
                                 validatorResult.Failures.Add("Học sinh đã tham gia nhóm này");
                                 break;
                             }
-                        case GroupMemberState.Member:
+                        case GroupMemberRole.Member:
                             {
                                 validatorResult.Failures.Add("Học sinh đã tham gia nhóm này");
                                 break;
@@ -71,11 +71,11 @@ namespace APIExtension.Validator
                         //        validatorResult.Failures.Add("Học sinh đã yêu cầu tham gia nhóm này từ trước");
                         //        break;
                         //    }
-                        case GroupMemberState.Banned:
-                            {
-                                validatorResult.Failures.Add("Học sinh đã từ chối/bị từ chối tham gia nhóm này từ trước");
-                                break;
-                            }
+                        //case GroupMemberRole.Banned:
+                        //    {
+                        //        validatorResult.Failures.Add("Học sinh đã từ chối/bị từ chối tham gia nhóm này từ trước");
+                        //        break;
+                        //    }
                         default:
                             {
                                 validatorResult.Failures.Add("Học sinh đã có liên quan đến nhóm");

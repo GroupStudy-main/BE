@@ -10,10 +10,10 @@ namespace DataLayer.DBObject
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public GroupMemberState State { get; set; }
+        public GroupMemberRole MemberRole { get; set; }
         //public string? InviteMessage { get; set; }
         //public string? RequestMessage { get; set; }
-
+        public bool IsActive { get; set; } = true;
         //Group
         [ForeignKey("GroupId")]
         public int GroupId { get; set; }

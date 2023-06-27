@@ -249,25 +249,25 @@ namespace DataLayer.DbSeeding
             new Group
             {
                 Id = 3,
-                Name = "Nhóm 1 của học sinh 2",
+                Name = "Nhóm 3 của học sinh 2",
                 ClassId = 8,
             } ,
             new Group
             {
                 Id = 4,
-                Name = "Nhóm 2 của học sinh 2",
+                Name = "Nhóm 4 của học sinh 2",
                 ClassId = 8,
             },
             new Group
             {
                 Id = 5,
-                Name = "Nhóm 1 của học sinh 3",
+                Name = "Nhóm 5 của học sinh 3",
                 ClassId = 8,
             },
             new Group
             {
                 Id = 6,
-                Name = "Nhóm 2 của học sinh 3",
+                Name = "Nhóm 6 của học sinh 3",
                 ClassId = 8,
             },
         };
@@ -279,14 +279,16 @@ namespace DataLayer.DbSeeding
                             Id = 1,
                             GroupId = 1,
                             AccountId = 1,
-                            State = GroupMemberState.Leader
+                            MemberRole = GroupMemberRole.Leader,
+                            IsActive = true,
                         },
                         new GroupMember
                         {
                             Id = 2,
                             GroupId = 1,
                             AccountId = 2,
-                            State = GroupMemberState.Member,
+                            MemberRole = GroupMemberRole.Member,
+                            IsActive = true,
                             //InviteMessage = "Nhóm của mình rất hay. Bạn vô nha"
                         },
                         //Fix later
@@ -312,7 +314,8 @@ namespace DataLayer.DbSeeding
                             Id = 3,
                             GroupId = 1,
                             AccountId = 5,
-                            State = GroupMemberState.Banned,
+                            MemberRole = GroupMemberRole.Member,
+                            IsActive = false,
                             //RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha"
                         },
                         #endregion
@@ -323,7 +326,8 @@ namespace DataLayer.DbSeeding
                             Id = 4,
                             GroupId = 2,
                             AccountId = 1,
-                            State = GroupMemberState.Leader
+                            MemberRole = GroupMemberRole.Leader,
+                            IsActive = true,
                         },
                         new GroupMember
                         {
@@ -331,7 +335,8 @@ namespace DataLayer.DbSeeding
                             Id = 5,
                             GroupId = 2,
                             AccountId = 2,
-                            State = GroupMemberState.Member,
+                            MemberRole = GroupMemberRole.Member,
+                            IsActive = true,
                             ////InviteMessage = "Nhóm của mình rất hay. Bạn vô nha"
                         },
                         //new GroupMember
@@ -358,7 +363,8 @@ namespace DataLayer.DbSeeding
                             Id = 6,
                             GroupId = 3,
                             AccountId = 2,
-                            State = GroupMemberState.Leader
+                            MemberRole = GroupMemberRole.Leader,
+                            IsActive = true,
                         },
                         new GroupMember
                         {
@@ -366,7 +372,8 @@ namespace DataLayer.DbSeeding
                             Id = 7,
                             GroupId = 3,
                             AccountId = 1,
-                            State = GroupMemberState.Member,
+                            MemberRole = GroupMemberRole.Member,
+                            IsActive = true,
                             //InviteMessage = "Nhóm của mình rất hay. Bạn vô nha"
                         },
                         //new GroupMember
@@ -393,7 +400,8 @@ namespace DataLayer.DbSeeding
                             Id = 8,
                             GroupId = 4,
                             AccountId = 2,
-                            State = GroupMemberState.Leader
+                            MemberRole = GroupMemberRole.Leader,
+                            IsActive = true,
                         },
                         // new GroupMember
                         //{
@@ -419,7 +427,8 @@ namespace DataLayer.DbSeeding
                             Id = 9,
                             GroupId = 5,
                             AccountId = 3,
-                            State = GroupMemberState.Leader
+                            MemberRole = GroupMemberRole.Leader,
+                            IsActive = true,
                         },
                         // new GroupMember
                         //{
@@ -445,7 +454,8 @@ namespace DataLayer.DbSeeding
                             Id = 10,
                             GroupId = 6,
                             AccountId = 3,
-                            State = GroupMemberState.Leader
+                            MemberRole = GroupMemberRole.Leader,
+                            IsActive = true,
                         }
                         // new GroupMember
                         //{

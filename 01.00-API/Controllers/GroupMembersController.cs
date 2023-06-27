@@ -154,13 +154,23 @@ namespace API.Controllers
             #endregion
             GroupMember exsited = await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId);
             if (exsited!=null) {
-                switch (exsited.State)
+                if (!exsited.IsActive)
                 {
-                    case GroupMemberState.Leader:
+                    GroupMemberGetDto getDto = mapper.Map<GroupMemberGetDto>(
+                              await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
+                    return BadRequest(new
+                    {
+                        Message = "Học sinh đã từ chối/bị từ chối tham gia nhóm này từ trước. Hãy đợi tới tháng sau để thử lại",
+                        Previous = getDto
+                    });
+                }
+                switch (exsited.MemberRole)
+                {
+                    case GroupMemberRole.Leader:
                         {
                             return BadRequest(new { Message = "Học sinh đã tham gia nhóm này" });
                         }
-                    case GroupMemberState.Member:
+                    case GroupMemberRole.Member:
                         {
                             return BadRequest(new { Message = "Học sinh đã tham gia nhóm này" });
                         }
@@ -177,16 +187,10 @@ namespace API.Controllers
                     //            await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
                     //        return BadRequest(new { Message = "Học sinh đã yêu cầu tham gia nhóm này từ trước", Previous = requestGetDto });
                     //    }
-                    case GroupMemberState.Banned:
-                        {
-                            GroupMemberGetDto getDto = mapper.Map<GroupMemberGetDto>(
-                                await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
-                            return BadRequest(new
-                            {
-                                Message = "Học sinh đã từ chối/bị từ chối tham gia nhóm này từ trước. Hãy đợi tới tháng sau để thử lại",
-                                Previous = getDto
-                            });
-                        }
+                    //case GroupMemberRole.Banned:
+                    //    {
+                            
+                    //    }
                     default:
                         {
                             GroupMemberGetDto getDto = mapper.Map<GroupMemberGetDto>(
@@ -236,7 +240,7 @@ namespace API.Controllers
                 .GetGroupMemberOfStudentAndGroupAsync(existedRequest.AccountId ,existedRequest.GroupId);
             if (existedMember != null)
             {
-                if (existedMember.State == GroupMemberState.Banned)
+                if (!existedMember.IsActive)
                 {
                     return BadRequest("Học sinh đã bị đuổi khỏi nhóm");
                 }
@@ -282,7 +286,7 @@ namespace API.Controllers
                 .GetGroupMemberOfStudentAndGroupAsync(existedRequest.AccountId, existedRequest.GroupId);
             if (existedMember != null)
             {
-                if (existedMember.State == GroupMemberState.Banned)
+                if (!existedMember.IsActive)
                 {
                     return BadRequest("Học sinh đã bị đuổi khỏi nhóm");
                 }
@@ -387,13 +391,23 @@ namespace API.Controllers
             GroupMember exsitedGroupMember = await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId);
             if (exsitedGroupMember != null)
             {
-                switch (exsitedGroupMember.State)
+                if (!exsitedGroupMember.IsActive)
                 {
-                    case GroupMemberState.Leader:
+                    GroupMemberGetDto getDto = mapper.Map<GroupMemberGetDto>(
+                             await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
+                    return BadRequest(new
+                    {
+                        Message = "Bạn đã từ chối/bị từ chối tham gia nhóm này từ trước. Hãy đợi tới tháng sau để thử lại",
+                        Previous = getDto
+                    });
+                }
+                switch (exsitedGroupMember.MemberRole)
+                {
+                    case GroupMemberRole.Leader:
                         {
                             return BadRequest(new { Message = "Bạn đã tham gia nhóm này" });
                         }
-                    case GroupMemberState.Member:
+                    case GroupMemberRole.Member:
                         {
                             return BadRequest(new { Message = "Bạn đã tham gia nhóm này" });
                         }
@@ -410,16 +424,16 @@ namespace API.Controllers
                     //            await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
                     //        return BadRequest(new { Message = "Bạn đã yêu cầu tham gia nhóm này từ trước", Previous = requestGetDto });
                     //    }
-                    case GroupMemberState.Banned:
-                        {
-                            GroupMemberGetDto getDto = mapper.Map<GroupMemberGetDto>(
-                                await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
-                            return BadRequest(new
-                            {
-                                Message = "Bạn đã từ chối/bị từ chối tham gia nhóm này từ trước. Hãy đợi tới tháng sau để thử lại",
-                                Previous = getDto
-                            });
-                        }
+                    //case GroupMemberRole.Banned:
+                    //    {
+                    //        GroupMemberGetDto getDto = mapper.Map<GroupMemberGetDto>(
+                    //            await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
+                    //        return BadRequest(new
+                    //        {
+                    //            Message = "Bạn đã từ chối/bị từ chối tham gia nhóm này từ trước. Hãy đợi tới tháng sau để thử lại",
+                    //            Previous = getDto
+                    //        });
+                    //    }
                     default:
                         {
                             GroupMemberGetDto getDto = mapper.Map<GroupMemberGetDto>(
@@ -481,7 +495,7 @@ namespace API.Controllers
                 .GetGroupMemberOfStudentAndGroupAsync(existedInvite.AccountId, existedInvite.GroupId);
             if (existedMember != null)
             {
-                if (existedMember.State == GroupMemberState.Banned)
+                if (!existedMember.IsActive)
                 {
                     return BadRequest("Học sinh đã bị đuổi khỏi nhóm");
                 }
@@ -542,7 +556,7 @@ namespace API.Controllers
                 .GetGroupMemberOfStudentAndGroupAsync(existedInvite.AccountId, existedInvite.GroupId);
             if (existedMember != null)
             {
-                if (existedMember.State == GroupMemberState.Banned)
+                if (!existedMember.IsActive)
                 {
                     return BadRequest("Học sinh đã bị đuổi khỏi nhóm");
                 }
