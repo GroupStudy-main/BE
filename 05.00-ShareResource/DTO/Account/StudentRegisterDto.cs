@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ShareResource.DTO
 {
-    public class AccountRegisterDto : BaseCreateDto
+    public class StudentRegisterDto : BaseCreateDto
     {
         private string username;
 
@@ -54,6 +54,60 @@ namespace ShareResource.DTO
         {
             get { return schhool; }
             set { schhool = value.Trim(); }
+        }
+
+        private DateTime? dateOfBirth;
+
+        public DateTime? DateOfBirth
+        {
+            get { return dateOfBirth; }
+            set { dateOfBirth = value.Value.Date; }
+        }
+
+
+        //Role
+        //[ForeignKey("RoleId")]
+        //public int RoleId { get; set; }
+    }
+    public class ParentRegisterDto : BaseCreateDto
+    {
+        private string username;
+
+        public string Username
+        {
+            get { return username; }
+            set { username = value.Trim(); }
+        }
+
+        [EmailAddress]
+        public string Email { get; set; }
+
+        private string password;
+        public string Password
+        {
+            get { return password; }
+            set { password = value.Trim(); }
+        }
+
+        private string confirmPassword;
+        public string ConfirmPassword
+        {
+            get { return confirmPassword; }
+            set { confirmPassword = value.Trim(); }
+        }
+
+        private string fullName;
+        public string FullName
+        {
+            get { return fullName; }
+            set { fullName = value.Trim(); }
+        }
+
+        private string phone;
+        public string Phone
+        {
+            get { return phone; }
+            set { phone = value.Trim(); }
         }
 
         private DateTime? dateOfBirth;

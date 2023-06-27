@@ -209,7 +209,7 @@ namespace ShareResource.Mapper
 
         private void MapAccount()
         {
-            BasicMap<Account, StudentGetDto, AccountRegisterDto, AccountUpdateDto>();
+            BasicMap<Account, StudentGetDto, StudentRegisterDto, AccountUpdateDto>();
             CreateMap<Account, MemberSignalrDto>();
             CreateMap<Account, AccountProfileDto>()
                 .ForMember(dest => dest.RoleName, opt => opt.MapFrom(

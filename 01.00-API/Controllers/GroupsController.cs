@@ -38,8 +38,9 @@ namespace API.Controllers
 
         // GET: api/Groups/Join
         [SwaggerOperation(
-           Summary = $"[{Actor.Student}/{Finnished.True}]Get list of groups student joined",
-           Description = "Get list of groups student joined as leader or member"
+           Summary = $"[{Actor.Student}/{Finnished.True}]Search list of groups for student",
+           Description = "Search group theo name, class, môn, id<br>" +
+                "newGroup thành true nếu không muốn search những nhóm cũ (nên để)"
        )]
         [Authorize(Roles = Actor.Student)]
         [HttpGet("Search")]
@@ -58,7 +59,7 @@ namespace API.Controllers
         // GET: api/Groups/Join
         [SwaggerOperation(
            Summary = $"[{Actor.Student}/{Finnished.True}]Get list of groups student joined",
-           Description = "Get list of groups student joined as leader or member"
+           Description = "Lấy list nhóm mà học sinh đã tham gia (role là leader hoặc member)"
        )]
         [Authorize(Roles = Actor.Student)]
         [HttpGet("Join")]
@@ -77,7 +78,7 @@ namespace API.Controllers
         // GET: api/Groups/Member
         [SwaggerOperation(
            Summary = $"[{Actor.Student}/{Finnished.True}]Get list of groups student joined as a member",
-           Description = "Get list of groups student joined as member"
+           Description = "Lấy list nhóm mà học sinh đã tham gia (role member)"
        )]
         [Authorize(Roles = Actor.Student)]
         [HttpGet("Member")]
@@ -96,19 +97,19 @@ namespace API.Controllers
         // GET: api/Groups/Member
         [SwaggerOperation(
            Summary = $"[{Actor.Student}/{Finnished.True}]Get group detail for a member",
-           Description = "Get group detail for a member"
+           Description = "Lấy chi tiết group cho member (ít thông tin hơn)"
        )]
         [Authorize(Roles = Actor.Student)]
-        [HttpGet("Member/{id}")]
-        public async Task<IActionResult> GetGroupDetailForMember(int id)
+        [HttpGet("Member/{groupId}")]
+        public async Task<IActionResult> GetGroupDetailForMember(int groupId)
         {
             int studentId = HttpContext.User.GetUserId();
-            bool isLeader = await services.Groups.IsStudentMemberGroupAsync(studentId, id);
+            bool isLeader = await services.Groups.IsStudentMemberGroupAsync(studentId, groupId);
             if (!isLeader)
             {
                 return Unauthorized("Bạn không phải là thành viên nhóm này");
             }
-            Group group = await services.Groups.GetFullByIdAsync(id);
+            Group group = await services.Groups.GetFullByIdAsync(groupId);
 
             if (group == null)
             {
@@ -121,7 +122,7 @@ namespace API.Controllers
         // GET: api/Groups/Lead
         [SwaggerOperation(
            Summary = $"[{Actor.Leader}/{Finnished.True}] Get list of groups where student is leader",
-           Description = "Get list of groups where student is leader"
+           Description = "Lấy list nhóm mà học sinh đã tạo(role leader)"
        )]
         [Authorize(Roles =Actor.Student)]
         [HttpGet("Lead")]
@@ -140,7 +141,7 @@ namespace API.Controllers
         // GET: api/Groups/Lead/5
         [SwaggerOperation(
             Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Get group detail for leader by Id",
-            Description = "Get group detail for leader by Id"
+           Description = "Lấy chi tiết group cho leader (nhiều thông tin hơn)"
         )]
         [Authorize(Roles =Actor.Student)]
         [HttpGet("Lead/{id}")]
@@ -165,7 +166,8 @@ namespace API.Controllers
         // POST: api/Groups
         [SwaggerOperation(
            Summary = $"[{Actor.Leader}/{Finnished.True}] create new group for leader",
-           Description = "create new group for leader"
+           Description = "create new group for leader<br>" +
+                "Ai tạo nhóm sẽ trở thành trưởng nhóm"
        )]
         [Authorize(Roles = Actor.Student)]
         [HttpPost]
@@ -192,17 +194,17 @@ namespace API.Controllers
          Description = "Get group by Id"
         )]
         [Authorize(Roles = Actor.Student)]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateGroup(int id, GroupUpdateDto dto)
+        [HttpPut("{groupId}")]
+        public async Task<IActionResult> UpdateGroup(int groupId, GroupUpdateDto dto)
         {
-            if (id != dto.Id)
+            if (groupId != dto.Id)
             {
                 return BadRequest();
             }
             int studentId = HttpContext.User.GetUserId();
             //List<int> leadGroupIds = (await services.Groups.GetLeaderGroupsIdAsync(studentId));
 
-            if (!await services.Groups.IsStudentLeadingGroupAsync(studentId, id))
+            if (!await services.Groups.IsStudentLeadingGroupAsync(studentId, groupId))
             {
                 return Unauthorized("You can't update other's group");
             }
@@ -212,7 +214,7 @@ namespace API.Controllers
                 return BadRequest(valResult.Failures);
             }
 
-            var group = await services.Groups.GetFullByIdAsync(id);
+            var group = await services.Groups.GetFullByIdAsync(groupId);
             if (group == null)
             {
                 return NotFound();
@@ -225,7 +227,7 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                if (!await GroupExists(id))
+                if (!await GroupExists(groupId))
                 {
                     return NotFound();
                 }
@@ -237,6 +239,7 @@ namespace API.Controllers
         }
 
         // GET: api/Groups
+        [Tags(Actor.Test)]
         [SwaggerOperation(
            Summary = $"[{Actor.Test}/{Finnished.True}]Get list of groups",
            Description = "Get leadGroupIds of group"
@@ -253,6 +256,7 @@ namespace API.Controllers
             return Ok(mapped);
         }
 
+        [Tags(Actor.Test)]
         [SwaggerOperation(
         Summary = $"[{Actor.Test}/{Finnished.True}] Get group by Id",
         Description = "Get group by Id"
