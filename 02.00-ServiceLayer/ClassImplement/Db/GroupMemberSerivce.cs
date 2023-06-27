@@ -185,5 +185,11 @@ namespace ServiceLayer.ClassImplement.Db
                 await repos.GroupMembers.CreateAsync(newMember);
             }
         }
+
+        public async Task BanUserFromGroupAsync(GroupMember banned)
+        {
+            banned.IsActive = false;
+            await repos.GroupMembers.UpdateAsync(banned);
+        }
     }
 }

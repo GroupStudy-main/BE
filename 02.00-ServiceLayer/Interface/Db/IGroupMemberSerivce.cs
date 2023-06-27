@@ -27,5 +27,6 @@ namespace ServiceLayer.Interface.Db
         public Task<Request> GetRequestOfStudentAndGroupAsync(int accountId, int groupId);
         public Task<Request> GetRequestByIdAsync(int requestId);
         public Task<Invite> GetInviteByIdAsync(int inviteId);
+        public Task BanUserFromGroupAsync(GroupMember banned);
     }
 }

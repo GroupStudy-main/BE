@@ -583,6 +583,42 @@ namespace API.Controllers
             await services.GroupMembers.AcceptOrDeclineInviteAsync(existedInvite, false);
             return Ok();
         }
+        //Delete
+        //: api/GroupMember/Invite/{inviteId}/Decline"
+        [SwaggerOperation(
+           Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Banned user from group for leader"
+           , Description = "Leader ban member khỏi nhóm<br>" +
+                "groupId: id của nhóm<br>" +
+                "banAccId: id của member bị ban"
+        )]
+        [Authorize(Roles =Actor.Student)]
+        [HttpDelete("Group/{groupId}/Account/{banAccId}")]
+        public async Task<IActionResult> BanMember(int groupId, int banAccId)
+        {
+            int studentId = HttpContext.User.GetUserId();
+            bool isLead = await services.Groups.IsStudentLeadingGroupAsync(studentId, groupId);
+            if (!isLead)
+            {
+                return Unauthorized("Bạn không phải nhóm trưởng của nhóm này");
+            }
+            if(studentId == banAccId)
+            {
+                return Unauthorized("Bạn không thể đuổi chính mình");
+            }
+            GroupMember exited= await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(banAccId, groupId);
+            if(exited == null) 
+            {
+                return BadRequest("Học sinh không tham gia nhóm này");    
+            }
+            if(!exited.IsActive)
+            {
+                return BadRequest("Học sinh đã bị đuổi khỏi nhóm này");
+            }
+            await services.GroupMembers.BanUserFromGroupAsync(exited);
+            return Ok();
+        }
+
+
 
         //////////////////////////////////////////////////////////////////// 
         //// GET: api/GroupMembers
