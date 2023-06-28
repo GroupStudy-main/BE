@@ -185,13 +185,10 @@ namespace API.Controllers
             return Ok();
         }
 
-      
-
-
         // PUT: api/Groups/5
         [SwaggerOperation(
          Summary = $"[{Actor.Leader}/{Finnished.True}] Update group for leader",
-         Description = "Get group by Id"
+         Description = "groupId Id nhóm dc update"
         )]
         [Authorize(Roles = Actor.Student)]
         [HttpPut("{groupId}")]

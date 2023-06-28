@@ -15,15 +15,16 @@ namespace ShareResource.DTO
         public string Username { get; set; }
         [EmailAddress]
         public string Email { get; set; }
-        public string Phone { get; set; }
         public string FullName { get; set; }
-
+        public string Phone { get; set; }
+        public string? Schhool { get; set; }
+        public DateTime? DateOfBirth { get; set; }
         //Role
         [ForeignKey("RoleId")]
         public int RoleId { get; set; }
         public virtual RoleGetDto Role { get; set; }
 
-        // Group Member
-        public virtual ICollection<GroupMemberGetDto> GroupMember { get; set; }
+        //// Group Member
+        //public virtual ICollection<GroupMemberGetDto> GroupMember { get; set; }
     }
 }

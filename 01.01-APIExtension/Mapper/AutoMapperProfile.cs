@@ -163,12 +163,14 @@ namespace ShareResource.Mapper
                     src => src.GroupMembers
                         .Where(e => e.MemberRole == GroupMemberRole.Leader || e.MemberRole == GroupMemberRole.Member)
                         .Select(e => e.Account)))
-                //.ForMember(dest => dest.JoinRequest, opt => opt.MapFrom(
-                //    src => src.GroupMembers
-                //        .Where(e => e.State == GroupMemberState.Requesting)))
-                //.ForMember(dest => dest.JoinInvite, opt => opt.MapFrom(
-                //    src => src.GroupMembers
-                //        .Where(e => e.State == GroupMemberState.Inviting)))
+
+                .ForMember(dest => dest.JoinRequest, opt => opt.MapFrom(
+                    src => src.JoinRequests
+                        .Where(e => e.State == InviteRequestStateEnum.Waiting)))
+                .ForMember(dest => dest.JoinInvite, opt => opt.MapFrom(
+                    src => src.JoinInvites
+                        .Where(e => e.State == InviteRequestStateEnum.Waiting)))
+
                 .ForMember(dest => dest.DeclineRequest, opt => opt.MapFrom(
                     src => src.JoinRequests
                         .Where(e => e.State == InviteRequestStateEnum.Decline)))
