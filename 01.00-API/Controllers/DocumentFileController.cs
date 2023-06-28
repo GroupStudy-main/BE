@@ -38,15 +38,16 @@ public class DocumentFileController : ControllerBase
         {
             if (file.Length > 0)
             {
-                if (!Directory.Exists(path))
+                var groupPath = path + "\\" + groupId;
+                if (!Directory.Exists(groupPath))
                 {
-                    Directory.CreateDirectory(path);
+                    Directory.CreateDirectory(groupPath);
                 }
 
-                using (var fileStream = new FileStream(Path.Combine(path, file.FileName), FileMode.Create))
+                using (var fileStream = new FileStream(Path.Combine(groupPath, file.FileName), FileMode.Create))
                 {
                     await file.CopyToAsync(fileStream);
-                    httpFilePath = HostUploadFile + file.FileName;
+                    httpFilePath = HostUploadFile  + groupId + "/" + file.FileName;
                 }
             }
 
