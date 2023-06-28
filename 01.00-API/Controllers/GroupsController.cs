@@ -159,7 +159,7 @@ namespace API.Controllers
             {
                 return NotFound();
             }
-            GroupGetDetailForLeaderDto dto = mapper.Map<GroupGetDetailForLeaderDto>(group);
+            GroupDetailForLeaderGetDto dto = mapper.Map<GroupDetailForLeaderGetDto>(group);
             return Ok(dto);
         }
 
@@ -268,7 +268,7 @@ namespace API.Controllers
             {
                 return NotFound();
             }
-            GroupGetDetailForLeaderDto dto = mapper.Map<GroupGetDetailForLeaderDto>(group);
+            GroupDetailForLeaderGetDto dto = mapper.Map<GroupDetailForLeaderGetDto>(group);
             return Ok(dto);
         }
 

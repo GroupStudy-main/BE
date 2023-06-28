@@ -8,10 +8,10 @@ namespace ServiceLayer.Interface.Db
         Task<bool> AnyAsync(int id);
         IQueryable<AccountProfileDto> GetMembersJoinForGroup(int id);
         public Task<GroupMember> GetByIdAsync(int inviteId);
-        public IQueryable<JoinRequestGetDto> GetJoinRequestForGroup(int groupId);
-        public IQueryable<JoinInviteGetDto> GetJoinInviteForGroup(int groupId);
-        public IQueryable<JoinRequestGetDto> GetJoinRequestForStudent(int studentId);
-        public IQueryable<JoinInviteGetDto> GetJoinInviteForStudent(int studentId);
+        public IQueryable<JoinRequestForGroupGetDto> GetJoinRequestForGroup(int groupId);
+        public IQueryable<JoinInviteForGroupGetDto> GetJoinInviteForGroup(int groupId);
+        public IQueryable<JoinRequestForStudentGetDto> GetJoinRequestForStudent(int studentId);
+        public IQueryable<JoinInviteForStudentGetDto> GetJoinInviteForStudent(int studentId);
         public Task CreateJoinInvite(GroupMemberInviteCreateDto dto);
         public Task CreateJoinRequest(GroupMemberRequestCreateDto dto);
         /// <summary>

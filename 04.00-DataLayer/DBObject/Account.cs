@@ -39,6 +39,11 @@ namespace DataLayer.DBObject
         [Column("Dob")]
         public DateTime? DateOfBirth { get; set; }
 
+        #region Class
+        public int ClassId { get; set; }
+        public Class Class { get; set; }
+        #endregion
+
         //Role
         [ForeignKey("RoleId")]
         public int RoleId { get; set; }

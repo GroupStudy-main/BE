@@ -6,7 +6,21 @@ using System.Threading.Tasks;
 
 namespace ShareResource.DTO
 {
-    public class JoinInviteGetDto
+    public class JoinInviteForGroupGetDto
+    {
+        public int Id { get; set; }
+        //public string InviteMessage { get; set; }
+        public int GroupId { get; set; }
+        public string GroupName { get; set; }
+        public int AccountId { get; set; }
+        public string UserName { get; set; }
+        public string Email { get; set; }
+        public string FullName { get; set; }
+        public string? Schhool { get; set; }
+        public int Class { get; set; }
+    }
+
+    public class JoinInviteForStudentGetDto
     {
         public int Id { get; set; }
         //public string InviteMessage { get; set; }

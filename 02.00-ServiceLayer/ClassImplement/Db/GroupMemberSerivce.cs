@@ -40,34 +40,34 @@ namespace ServiceLayer.ClassImplement.Db
             return list.ProjectTo<AccountProfileDto>(mapper.ConfigurationProvider);
         }
         //Fix later
-        public IQueryable<JoinRequestGetDto> GetJoinRequestForGroup(int groupId)
+        public IQueryable<JoinRequestForGroupGetDto> GetJoinRequestForGroup(int groupId)
         {
             IQueryable<Request> list = repos.Requests.GetList()
                 .Where(e => e.GroupId == groupId && e.State == InviteRequestStateEnum.Waiting)
                 .Include(e => e.Account)
                 .Include(e => e.Group);
             //Console.WriteLine("+_+_+_+_+_+_ " + list.Count());
-            return list.ProjectTo<JoinRequestGetDto>(mapper.ConfigurationProvider);
+            return list.ProjectTo<JoinRequestForGroupGetDto>(mapper.ConfigurationProvider);
         }
 
 
-        public IQueryable<JoinInviteGetDto> GetJoinInviteForGroup(int groupId)
+        public IQueryable<JoinInviteForGroupGetDto> GetJoinInviteForGroup(int groupId)
         {
             IQueryable<Invite> list = repos.Invites.GetList()
                 .Where(e => e.GroupId == groupId && e.State == InviteRequestStateEnum.Waiting)
                 .Include(e => e.Account)
                 .Include(e => e.Group);
-            return list.ProjectTo<JoinInviteGetDto>(mapper.ConfigurationProvider);
+            return list.ProjectTo<JoinInviteForGroupGetDto>(mapper.ConfigurationProvider);
         }
 
 
-        public IQueryable<JoinRequestGetDto> GetJoinRequestForStudent(int studentId)
+        public IQueryable<JoinRequestForStudentGetDto> GetJoinRequestForStudent(int studentId)
         {
             IQueryable<Request> list = repos.Requests.GetList()
                 .Where(e => e.AccountId == studentId && e.State == InviteRequestStateEnum.Waiting)
                 .Include(e => e.Account)
                 .Include(e => e.Group);
-            IQueryable<JoinRequestGetDto> mapped = list.ProjectTo<JoinRequestGetDto>(mapper.ConfigurationProvider);
+            IQueryable<JoinRequestForStudentGetDto> mapped = list.ProjectTo<JoinRequestForStudentGetDto>(mapper.ConfigurationProvider);
             return mapped;
         }
 
@@ -111,13 +111,13 @@ namespace ServiceLayer.ClassImplement.Db
         }
 
 
-        public IQueryable<JoinInviteGetDto> GetJoinInviteForStudent(int studentId)
+        public IQueryable<JoinInviteForStudentGetDto> GetJoinInviteForStudent(int studentId)
         {
             IQueryable<Invite> list = repos.Invites.GetList()
                 .Where(e => e.AccountId == studentId && e.State == InviteRequestStateEnum.Waiting)
                 .Include(e => e.Account)
                 .Include(e => e.Group);
-            return list.ProjectTo<JoinInviteGetDto>(mapper.ConfigurationProvider);
+            return list.ProjectTo<JoinInviteForStudentGetDto>(mapper.ConfigurationProvider);
         }
 
         public async Task CreateJoinInvite(GroupMemberInviteCreateDto dto)

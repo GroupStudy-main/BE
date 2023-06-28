@@ -72,7 +72,7 @@ namespace API.Controllers
             {
                 return Unauthorized("Bạn không phải nhóm trưởng của nhóm này");
             }
-            IQueryable<JoinInviteGetDto> mapped = services.GroupMembers.GetJoinInviteForGroup(groupId);
+            IQueryable<JoinInviteForGroupGetDto> mapped = services.GroupMembers.GetJoinInviteForGroup(groupId);
             if (mapped == null || !mapped.Any())
             {
                 return NotFound();
@@ -95,7 +95,7 @@ namespace API.Controllers
             {
                 return Unauthorized("Bạn không phải nhóm trưởng của nhóm này");
             }
-            IQueryable<JoinRequestGetDto> mapped = services.GroupMembers.GetJoinRequestForGroup(groupId);
+            IQueryable<JoinRequestForGroupGetDto> mapped = services.GroupMembers.GetJoinRequestForGroup(groupId);
             if (mapped == null || !mapped.Any())
             {
                 return NotFound();
@@ -313,7 +313,7 @@ namespace API.Controllers
         public async Task<IActionResult> GetInviteForStudent()
         {
             int studentId = HttpContext.User.GetUserId();
-            IQueryable<JoinInviteGetDto> mapped = services.GroupMembers.GetJoinInviteForStudent(studentId);
+            IQueryable<JoinInviteForStudentGetDto> mapped = services.GroupMembers.GetJoinInviteForStudent(studentId);
             if (mapped == null || !mapped.Any())
             {
                 return NotFound();
@@ -331,7 +331,7 @@ namespace API.Controllers
         public async Task<IActionResult> GetRequestForStudent()
         {
             int studentId = HttpContext.User.GetUserId();
-            IQueryable<JoinRequestGetDto> mapped = services.GroupMembers.GetJoinRequestForStudent(studentId);
+            IQueryable<JoinRequestForStudentGetDto> mapped = services.GroupMembers.GetJoinRequestForStudent(studentId);
             if (mapped == null || !mapped.Any())
             {
                 return NotFound();
@@ -449,13 +449,13 @@ namespace API.Controllers
             Invite exsitedInvite = await services.GroupMembers.GetInviteOfStudentAndGroupAsync(dto.AccountId, dto.GroupId);
             if (exsitedInvite != null)
             {
-                JoinInviteGetDto inviteGetDto = mapper.Map<JoinInviteGetDto>(exsitedInvite);
+                JoinInviteForGroupGetDto inviteGetDto = mapper.Map<JoinInviteForGroupGetDto>(exsitedInvite);
                 return BadRequest(new { Message = "Bạn đã được mời tham gia nhóm này từ trước", Previous = inviteGetDto });
             }
             Request exsitedRequest = await services.GroupMembers.GetRequestOfStudentAndGroupAsync(dto.AccountId, dto.GroupId);
             if (exsitedRequest != null)
             {
-                JoinRequestGetDto requestGetDto = mapper.Map<JoinRequestGetDto>(exsitedRequest);
+                JoinRequestForGroupGetDto requestGetDto = mapper.Map<JoinRequestForGroupGetDto>(exsitedRequest);
                 return BadRequest(new { Message = "Bạn đã yêu cầu tham gia nhóm này từ trước", Previous = requestGetDto });
             }
 
