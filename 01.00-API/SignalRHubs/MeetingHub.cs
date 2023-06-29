@@ -184,7 +184,7 @@ namespace API.SignalRHub
             await repos.Meetings.UpdateCountMemberSignalr(meetingIdInt, currentUsersInMeeting.Length);
 
             //Test
-            await Clients.Caller.SendAsync(OnConnectMeetHubSuccessfullyMsg, $"Connect meethub dc r! {username} vô dc r ae ơi!!!");
+            //await Clients.Group(meetingIdString).SendAsync(OnConnectMeetHubSuccessfullyMsg, $"Connect meethub dc r! {username} vô dc r ae ơi!!!");
 
             // Step 6: Thông báo với groupHub.Group(groupId) số người ở trong phòng  
             List<string> currentConnectionIds = await presenceTracker.GetConnectionIdsForUser(new UserConnectionSignalrDto(username, meetingIdInt));
@@ -520,5 +520,60 @@ namespace API.SignalRHub
             //int meetId = presenceTracker.
             Clients.Caller.SendAsync(OnTestReceiveInvokeMsg, "meehub invoke dc rồi ae ơi " + msg);
         }
+
+        //Huy yêu cầu
+        //Key dạng string chứa roomId do FE đẻ ra const roomId = uuidV4();
+        //Value chứa list các peerId
+
+        private static readonly Dictionary<string, List<string>> Rooms = new Dictionary<string, List<string>>();
+        public class CreateRoomInput
+        {
+            public string peerId;
+        }
+        public async Task CreateRoom(CreateRoomInput input)
+        {
+            string newRoomId = Guid.NewGuid().ToString();
+            //RoomPeerIds.Add(roomId, new List<string>() { input.peerId});
+            Rooms.Add(newRoomId, new List<string>());
+            //Gửi cho thằng gọi CreateRoom thui
+            await Clients.Caller.SendAsync("room-created", new { roomId = newRoomId });
+            await JoinRoom(new JoinRoomInput { roomId = newRoomId, peerId = input.peerId });
+
+        }
+        public class JoinRoomInput
+        {
+            public string roomId;
+            public string peerId;
+        }
+        public async Task JoinRoom(JoinRoomInput input)
+        {
+            string roomId = input.roomId;
+            string peerId = input.peerId;
+            bool isRoomExisted = Rooms.ContainsKey(roomId);
+            if (isRoomExisted)
+            {
+                Rooms[roomId].Add(input.peerId);
+                await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
+                await Clients.Group(roomId).SendAsync("user-joined", new { roomId = roomId, peerId = peerId });
+                await Clients.Caller.SendAsync("get-users", new { roomId = roomId, participants = Rooms[roomId] });
+            }
+            else
+            {
+                await CreateRoom(new CreateRoomInput {  peerId = peerId });
+            }
+        }
+        public class LeaveRoomInput
+        {
+            public string roomId;
+            public string peerId;
+        }
+        public async Task LeaveRoom(LeaveRoomInput input)
+        {
+            string roomId = input.roomId;
+            string peerId = input.peerId;
+            await Clients.Group(roomId).SendAsync("user-disconnected", new { peerId = peerId });
+            Rooms[roomId].Remove(peerId);
+        }
+
     }
 }
