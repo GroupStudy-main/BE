@@ -40,8 +40,10 @@ namespace DataLayer.DBObject
         public DateTime? DateOfBirth { get; set; }
 
         #region Class
-        public int ClassId { get; set; }
-        public Class Class { get; set; }
+
+        
+        public int? ClassId { get; set; }
+        public Class? Class { get; set; }
         #endregion
 
         //Role
