@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +29,9 @@ namespace ShareResource.DTO
         public string GroupName { get; set; }
         public int AccountId { get; set; }
         public string UserName { get; set; }
+        public int MemberCount { get; set; }
+        public int Class { get; set; }
+        public ICollection<string> Subjects { get; set; } = new Collection<string>();
     }
 
     public class GroupMemberInviteCreateDto
