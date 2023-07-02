@@ -112,6 +112,13 @@ namespace DataLayer.ImMemorySeeding
                     context.Meetings.AddRange(DbSeed.Meetings);
                 }
                 #endregion
+
+                #region seed Connection
+                if (!context.Connections.Any())
+                {
+                    context.Connections.AddRange(DbSeed.Connections);
+                }
+                #endregion
                 context.SaveChanges();
             }
         }

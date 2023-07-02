@@ -693,7 +693,7 @@ namespace DataLayer.DbSeeding
             {
                 Id = 1,
                 GroupId=1,
-                Name="Forgoten past history",
+                Name=$"Forgoten past history {DateTime.Now.AddDays(-3).ToShortDateString()}",
                 ScheduleStart = DateTime.Now.AddDays(-3),
                 ScheduleEnd = DateTime.Now.AddDays(-3).AddHours(1),
             },
@@ -702,27 +702,29 @@ namespace DataLayer.DbSeeding
             {
                 Id = 2,
                 GroupId=1,
-                Name="Ended schedule past history",
+                Name=$"Ended schedule past history {DateTime.Now.AddDays(-2).ToShortDateString()}",
                 ScheduleStart = DateTime.Now.AddDays(-2).AddMinutes(15),
                 ScheduleEnd = DateTime.Now.AddDays(-2).AddHours(1),
                 Start = DateTime.Now.AddDays(-2).AddMinutes(30),
                 End = DateTime.Now.AddDays(-2).AddHours(2),
+                CountMember = 1,
             },
             //Ended instant meeting
             new Meeting
             {
                 Id = 3,
                 GroupId=1,
-                Name="Ended instant past history",
+                Name=$"Ended instant past history {DateTime.Now.AddDays(-2).ToShortDateString()}",
                 Start = DateTime.Now.AddDays(-2).AddMinutes(30),
                 End = DateTime.Now.AddDays(-2).AddHours(2),
+                CountMember = 1,
             },
             //Live schedule meeting
             new Meeting
             {
                 Id = 4,
                 GroupId=1,
-                Name="Live schedule meeting",
+                Name=$"Live schedule meeting {DateTime.Now.ToShortDateString()}",
                 ScheduleStart = DateTime.Now.AddMinutes(15),
                 ScheduleEnd = DateTime.Now.AddHours(1),
                 Start = DateTime.Now.AddMinutes(30),
@@ -732,7 +734,7 @@ namespace DataLayer.DbSeeding
             {
                 Id = 5,
                 GroupId=1,
-                Name="Live Instant meeting",
+                Name=$"Live Instant meeting {DateTime.Now.ToShortDateString()}",
                 Start = DateTime.Now.AddMinutes(-30),
             },
             //Future Schedule meeting
@@ -740,7 +742,7 @@ namespace DataLayer.DbSeeding
             {
                 Id = 6,
                 GroupId=1,
-                Name="Today late schedule meeting",
+                Name=$"Today late schedule meeting {DateTime.Now.ToShortDateString()}",
                 ScheduleStart = DateTime.Now.AddMinutes(-15),
                 ScheduleEnd = DateTime.Now.AddHours(1),
             },
@@ -748,7 +750,7 @@ namespace DataLayer.DbSeeding
             {
                 Id = 7,
                 GroupId=1,
-                Name="Today early schedule meeting",
+                Name=$"Today early schedule meeting {DateTime.Now.ToShortDateString()}",
                 ScheduleStart = DateTime.Now.AddMinutes(15),
                 ScheduleEnd = DateTime.Now.AddHours(1),
             },
@@ -756,10 +758,34 @@ namespace DataLayer.DbSeeding
             {
                 Id = 8,
                 GroupId=1,
-                Name="Future schedule meeting",
+                Name=$"Future schedule meeting {DateTime.Now.AddDays(1).ToShortDateString()}",
                 ScheduleStart = DateTime.Now.AddDays(1).AddMinutes(15),
                 ScheduleEnd = DateTime.Now.AddDays(1).AddHours(1),
             },
+            #endregion
+        };
+        public static Connection[] Connections = new Connection[]
+        {
+            #region Meeting 2
+            new Connection
+            {
+                Id= "Id1",
+                AccountId = 1,
+                MeetingId = 2,
+                Start = DateTime.Now.AddDays(-2).AddMinutes(30),
+                End = DateTime.Now.AddDays(-2).AddMinutes(45),
+                UserName = "student1",
+            },
+            new Connection
+            {
+                Id= "Id2",
+                AccountId = 1,
+                MeetingId = 2,
+                Start = DateTime.Now.AddDays(-2).AddHours(1),
+                End = DateTime.Now.AddDays(-2).AddHours(2),
+                UserName = "student1",
+            },
+
             #endregion
         };
     }

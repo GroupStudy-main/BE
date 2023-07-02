@@ -1,5 +1,7 @@
 ﻿using APIExtension.ClaimsPrinciple;
 using APIExtension.Const;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using DataLayer.DBObject;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -7,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RepositoryLayer.ClassImplement;
 using RepositoryLayer.Interface;
+using ShareResource.DTO;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Linq;
 
@@ -17,17 +20,19 @@ namespace API.Controllers
     public class StatsController : ControllerBase
     {
         private readonly IRepoWrapper repos;
+        private readonly IMapper mapper;
 
-        public StatsController(IRepoWrapper repos)
+        public StatsController(IRepoWrapper repos, IMapper mapper)
         {
             this.repos = repos;
+            this.mapper = mapper;
         }
 
         //Get: api/Accounts/search
         [SwaggerOperation(
-            Summary = $"[{Actor.Student_Parent}/{Finnished.False}/{Auth.True}] Search students by id, username, mail, Full Name"
-            , Description = "Search theo tên, username, id" +
-            "<br>Để search thêm thành viên mới cho group, thêm groupId để loại ra hết những student đã liên quan đến nhóm"
+            Summary = $"[{Actor.Student_Parent}/{Finnished.False}/{Auth.True}] Student's stat by month"
+            , Description = "lấy stat theo month" +
+            "<br>month (yyyy-mm-dd): chỉ cần năm với tháng, day nhập đại"
         )]
         [HttpGet("{studentId}/{month}")]
         [Authorize(Roles = Actor.Student_Parent)]
@@ -53,21 +58,28 @@ namespace API.Controllers
                 .Include(m => m.Group).ThenInclude(g => g.GroupMembers)
                 .Where(c => c.Start>=start && c.Start.Value.Date<end
                     && c.Group.GroupMembers.Any(gm => gm.AccountId == studentId));
-            int totalMeetings = allMeetingsOfJoinedGroups.Count()==0 
-                ? 0 : allMeetingsOfJoinedGroups.Count();
-            int atendedMeetings = allMeetingsOfJoinedGroups.Count() == 0 
+            //int totalMeetingsCount = allMeetingsOfJoinedGroups.Count() == 0
+            //    ? 0 : allMeetingsOfJoinedGroups.Count();
+            int totalMeetingsCount = allMeetingsOfJoinedGroups.Count();
+            var atendedMeetings = allMeetingsOfJoinedGroups
+                .Where(e => e.Connections.Any(c => c.AccountId == studentId));
+            int atendedMeetingsCount = allMeetingsOfJoinedGroups.Count() == 0
                 ? 0 : allMeetingsOfJoinedGroups
                 .Where(e => e.Connections.Any(c=>c.AccountId == studentId)).Count();
-            var totalMeetingTime = allMeetingsOfJoinedGroups.Count() == 0 ? 0
-                : allMeetingsOfJoinedGroups.SelectMany(m => m.Connections).Select(e => e.End.Value - e.Start).Select(ts => ts.Ticks).Sum();
+            long totalMeetingTime = allMeetingsOfJoinedGroups.Count() == 0 ? 0
+                : allMeetingsOfJoinedGroups.SelectMany(m => m.Connections)
+                    .Select(e => e.End.Value - e.Start).Select(ts => ts.Ticks).Sum();
+            var timeSpan = new TimeSpan(totalMeetingTime);
             //var totalMeetingTime = allMeetingsOfJoinedGroups.SelectMany(m => m.Connections);//.Select(e=>e.End.Value-e.Start).Select(ts=>ts.Ticks).Sum(); 
+            
             return Ok(new
             {
-                TotalMeetings = totalMeetings,
-                AtendedMeetings = atendedMeetings,
-                MissedMeetings = totalMeetings - atendedMeetings,
+                TotalMeetings = allMeetingsOfJoinedGroups.ProjectTo<PastMeetingGetDto>(mapper.ConfigurationProvider),
+                TotalMeetingsCount = totalMeetingsCount,
+                AtendedMeetingsCount = atendedMeetingsCount,
+                MissedMeetingsCount = totalMeetingsCount - atendedMeetingsCount,
                 TotalMeetingTme = totalMeetingTime == 0 ? "Chưa tham gia buổi học nào" 
-                    : new TimeSpan(totalMeetingTime).ToString("HH:mm:ss"),
+                    : $"{timeSpan.Hours} giờ {timeSpan.Minutes} phút {timeSpan.Seconds} giây"
             });
         }
     }
