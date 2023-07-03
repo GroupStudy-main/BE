@@ -184,7 +184,7 @@ namespace API.SignalRHub
             await repos.Meetings.UpdateCountMemberSignalr(meetingIdInt, currentUsersInMeeting.Length);
 
             //Test
-            //await Clients.Group(meetingIdString).SendAsync(OnConnectMeetHubSuccessfullyMsg, $"Connect meethub dc r! {username} vô dc r ae ơi!!!");
+            await Clients.Group(meetingIdString).SendAsync(OnConnectMeetHubSuccessfullyMsg, $"Connect meethub dc r! {username} vô dc r ae ơi!!!");
 
             // Step 6: Thông báo với groupHub.Group(groupId) số người ở trong phòng  
             List<string> currentConnectionIds = await presenceTracker.GetConnectionIdsForUser(new UserConnectionSignalrDto(username, meetingIdInt));
