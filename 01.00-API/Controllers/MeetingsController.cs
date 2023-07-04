@@ -97,7 +97,7 @@ namespace API.Controllers
         )]
         [Authorize(Roles = Actor.Student)]
         [HttpGet("Past/Student")]
-        public async Task<IActionResult> GetPastMeetingForGroup()
+        public async Task<IActionResult> GetPastMeetingForStudent()
         {
             int studentId = HttpContext.User.GetUserId();
             var mapped = services.Meetings.GetPastMeetingsForStudent(studentId);
@@ -106,16 +106,56 @@ namespace API.Controllers
 
         //GET: api/Meetings/Past/Student/month
         [SwaggerOperation(
-            Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Get all past meetings of group"
+            Summary = $"[{Actor.Student}/{Finnished.True}/{Auth.True}] Get all past meetings of group"
             ,Description = "month (yyyy-mm-dd): chỉ cần năm với tháng, day nhập đại"
 
         )]
         [Authorize(Roles = Actor.Student)]
         [HttpGet("Past/Student/{month}")]
-        public async Task<IActionResult> GetPastMeetingForGroupByMonth(DateTime month)
+        public async Task<IActionResult> GetPastMeetingForStudentByMonth(DateTime month)
         {
             int studentId = HttpContext.User.GetUserId();
             var mapped = services.Meetings.GetPastMeetingsForStudentByMonth(studentId,month);
+            return Ok(mapped);
+        }
+
+
+        //GET: api/Meetings/Schedule/Student
+        [SwaggerOperation(
+            Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Get all past meetings of student"
+        )]
+        [Authorize(Roles = Actor.Student)]
+        [HttpGet("Schedule/Student")]
+        public async Task<IActionResult> GetScheduleMeetingForStudent()
+        {
+            int studentId = HttpContext.User.GetUserId();
+            var mapped = services.Meetings.GetScheduleMeetingsForStudent(studentId);
+            return Ok(mapped);
+        }
+
+        //GET: api/Meetings/Schedule/Student/{date}
+        [SwaggerOperation(
+            Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Get all past meetings of student"
+        )]
+        [Authorize(Roles = Actor.Student)]
+        [HttpGet("Schedule/Student/{date}")]
+        public async Task<IActionResult> GetScheduleMeetingForStudent(DateTime date)
+        {
+            int studentId = HttpContext.User.GetUserId();
+            var mapped = services.Meetings.GetScheduleMeetingsForStudentByDate(studentId, date);
+            return Ok(mapped);
+        }
+
+        //GET: api/Meetings/Live/Student
+        [SwaggerOperation(
+            Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Get all past meetings of student"
+        )]
+        [Authorize(Roles = Actor.Student)]
+        [HttpGet("Live/Student")]
+        public async Task<IActionResult> GetLiveMeetingForStudent()
+        {
+            int studentId = HttpContext.User.GetUserId();
+            var mapped = services.Meetings.GetLiveMeetingsForStudent(studentId);
             return Ok(mapped);
         }
 
@@ -285,6 +325,9 @@ namespace API.Controllers
             return Ok("Đã xóa meeting");
         }
 
+        [SwaggerOperation(
+           Summary = $"[{Actor.Test}/{Finnished.True}/{Auth.True}] Get all meetings"
+       )]
         // GET: api/Meetings
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Meeting>>> GetMeetings()

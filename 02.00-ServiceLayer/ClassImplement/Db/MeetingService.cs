@@ -165,7 +165,7 @@ namespace ServiceLayer.ClassImplement.Db
                 ? repos.Meetings.GetList()
                 .Include(c => c.Connections)
                 .Include(m => m.Group).ThenInclude(g => g.GroupMembers)
-                .Where(e => e.Start >= start && e.Start.Value.Date < end
+                .Where(e => ((e.ScheduleStart >= start && e.ScheduleStart.Value.Date < end)||(e.Start >= start && e.Start.Value.Date < end))
                     && e.Group.GroupMembers.Any(gm => gm.AccountId == studentId)
                     //lấy past meeting
                     && (e.End != null || e.ScheduleStart != null && e.ScheduleStart.Value.Date < DateTime.Today))
@@ -200,14 +200,14 @@ namespace ServiceLayer.ClassImplement.Db
             return scheduleMeetingsOfJoinedGroups.ProjectTo<ScheduleMeetingGetDto>(mapper.ConfigurationProvider);
         }
 
-        public IQueryable<LiveMeetingGetDto> GetLiveMeetingsForStudentByDate(int studentId)
+        public IQueryable<LiveMeetingGetDto> GetLiveMeetingsForStudent(int studentId)
         {
             IQueryable<Meeting> scheduleMeetingsOfJoinedGroups = repos.Meetings.GetList()
                 .Include(c => c.Connections)
                 .Include(m => m.Group).ThenInclude(g => g.GroupMembers)
                 .Where(e => e.Group.GroupMembers.Any(gm => gm.AccountId == studentId)
                 //lấy live meeting
-                && (e.ScheduleStart != null && e.ScheduleStart.Value.Date >= DateTime.Today && e.Start == null));
+                && e.Start != null && e.End == null);
             return scheduleMeetingsOfJoinedGroups.ProjectTo<LiveMeetingGetDto>(mapper.ConfigurationProvider);
         }
 
