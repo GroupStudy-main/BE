@@ -2,16 +2,18 @@
 using APIExtension.ClaimsPrinciple;
 using AutoMapper;
 using DataLayer.DBObject;
+using DataLayer.Migrations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using RepositoryLayer.Interface;
 using ShareResource.DTO;
 using ShareResource.DTO.Connection;
 
 namespace API.SignalRHub
 {
-    //[Authorize]
+    [Authorize]
     public class MeetingHub : Hub
     {
         #region Message
@@ -545,14 +547,19 @@ namespace API.SignalRHub
         {
             public string peerId;
         }
+        //public async Task CreateRoom(CreateRoomInput input)
         public async Task CreateRoom(CreateRoomInput input)
         {
+            Console.WriteLine($"\n\n==++==++===+++\n CreateRoom");
+            Console.WriteLine(input.peerId);
             string newRoomId = Guid.NewGuid().ToString();
             //RoomPeerIds.Add(roomId, new List<string>() { input.peerId});
             Rooms.Add(newRoomId, new List<string>());
             //Gửi cho thằng gọi CreateRoom thui
             await Clients.Caller.SendAsync("room-created", new { roomId = newRoomId });
-            await JoinRoom(new JoinRoomInput { roomId = newRoomId, peerId = input.peerId });
+            //await JoinRoom( new JoinRoomInput { roomId = newRoomId, peerId = input.peerId });
+            await JoinRoom(JsonConvert.SerializeObject( new JoinRoomInput { roomId = newRoomId, peerId = input.peerId }));
+            //await JoinRoom(newRoomId, input.peerId);
 
         }
         public class JoinRoomInput
@@ -560,14 +567,21 @@ namespace API.SignalRHub
             public string roomId;
             public string peerId;
         }
-        public async Task JoinRoom(JoinRoomInput input)
+        //public async Task JoinRoom(JoinRoomInput input)
+        public async Task JoinRoom(string json)
+        //public async Task JoinRoom(string roomId, string peerId)
         {
+            var input = JsonConvert.DeserializeObject<JoinRoomInput>(json);
             string roomId = input.roomId;
             string peerId = input.peerId;
+
+            Console.WriteLine($"\n\n==++==++===+++\n JoinRoom");
+            Console.WriteLine(peerId);
+            Console.WriteLine(roomId);
             bool isRoomExisted = Rooms.ContainsKey(roomId);
             if (isRoomExisted)
             {
-                Rooms[roomId].Add(input.peerId);
+                Rooms[roomId].Add(peerId);
                 await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
                 await Clients.Group(roomId).SendAsync("user-joined", new { roomId = roomId, peerId = peerId });
                 await Clients.Caller.SendAsync("get-users", new { roomId = roomId, participants = Rooms[roomId] });
@@ -584,6 +598,9 @@ namespace API.SignalRHub
         }
         public async Task LeaveRoom(LeaveRoomInput input)
         {
+            Console.WriteLine($"\n\n==++==++===+++\n LeaveRoom");
+            Console.WriteLine(input.peerId);
+            Console.WriteLine(input.roomId);
             string roomId = input.roomId;
             string peerId = input.peerId;
             await Clients.Group(roomId).SendAsync("user-disconnected", new { peerId = peerId });
