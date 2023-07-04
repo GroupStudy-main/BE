@@ -11,7 +11,7 @@ using ShareResource.DTO.Connection;
 
 namespace API.SignalRHub
 {
-    [Authorize]
+    //[Authorize]
     public class MeetingHub : Hub
     {
         #region Message
@@ -144,7 +144,20 @@ namespace API.SignalRHub
             HttpContext httpContext = Context.GetHttpContext();
             string meetingIdString = httpContext.Request.Query["meetingId"].ToString();
             int meetingIdInt = int.Parse(meetingIdString);
-            string username = Context.User.GetUsername();
+
+            string username;
+            int accountId;
+            try
+            {
+                username = Context.User.GetUsername();
+                accountId = Context.User.GetUserId();
+            }   
+            catch
+            {
+                username = httpContext.Request.Query["username"].ToString();
+                string acoountIdString = httpContext.Request.Query["accountId"].ToString();
+                accountId = int.Parse(acoountIdString);
+            }
             //Step 2: Add ContextConnection vào MeetingHub.Group(meetingId) và add (user, meeting) vào presenceTracker
             await presenceTracker.UserConnected(new UserConnectionSignalrDto(username, meetingIdInt), Context.ConnectionId);
 
@@ -158,9 +171,11 @@ namespace API.SignalRHub
             Connection connection = new Connection
             {
                 Id = Context.ConnectionId,
-                AccountId = Context.User.GetUserId(),
+                //AccountId = Context.User.GetUserId(),
+                AccountId = accountId,
                 MeetingId = meetingIdInt,
-                UserName = Context.User.GetUsername(),
+                //UserName = Context.User.GetUsername(),
+                UserName = username,
                 Start = DateTime.Now
             };
             if (meeting != null)
@@ -168,7 +183,7 @@ namespace API.SignalRHub
                 //meeting.Connections.Add(connection);
                 repos.Connections.CreateConnectionSignalrAsync(connection);
             }
-
+            Console.WriteLine("++==++==++++++++++++++++");
             #endregion
 
             //var usersOnline = await _unitOfWork.UserRepository.GetUsersOnlineAsync(currentUsers);
