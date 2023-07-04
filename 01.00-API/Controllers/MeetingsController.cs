@@ -91,6 +91,34 @@ namespace API.Controllers
             return Ok(mapped);
         }
 
+        //GET: api/Meetings/Past/Student
+        [SwaggerOperation(
+            Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Get all past meetings of student"
+        )]
+        [Authorize(Roles = Actor.Student)]
+        [HttpGet("Past/Student")]
+        public async Task<IActionResult> GetPastMeetingForGroup()
+        {
+            int studentId = HttpContext.User.GetUserId();
+            var mapped = services.Meetings.GetPastMeetingsForStudent(studentId);
+            return Ok(mapped);
+        }
+
+        //GET: api/Meetings/Past/Student/month
+        [SwaggerOperation(
+            Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Get all past meetings of group"
+            ,Description = "month (yyyy-mm-dd): chỉ cần năm với tháng, day nhập đại"
+
+        )]
+        [Authorize(Roles = Actor.Student)]
+        [HttpGet("Past/Student/{month}")]
+        public async Task<IActionResult> GetPastMeetingForGroupByMonth(DateTime month)
+        {
+            int studentId = HttpContext.User.GetUserId();
+            var mapped = services.Meetings.GetPastMeetingsForStudentByMonth(studentId,month);
+            return Ok(mapped);
+        }
+
         [SwaggerOperation(
           Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Create a new instant meeting"
         )]

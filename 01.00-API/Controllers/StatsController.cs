@@ -42,21 +42,21 @@ namespace API.Controllers
             {
                 return Unauthorized("Bạn không thể xem dữ liệu của học sinh khác");
             }
-            DateTime start = new DateTime(month.Year, month.Month, 1);
+            DateTime start = new DateTime(month.Year, month.Month, 1, 0, 0, 0).Date;
             DateTime end = start.AddMonths(1);
             //Nếu tháng này thì chỉ lấy past meeting
             IQueryable<Meeting> allMeetingsOfJoinedGroups = month.Month == DateTime.Now.Month
                 ? repos.Meetings.GetList()
                 .Include(c => c.Connections)
                 .Include(m => m.Group).ThenInclude(g => g.GroupMembers)
-                .Where(e => e.Start >= start && e.Start.Value.Date < end
+                .Where(e => ((e.ScheduleStart >= start && e.ScheduleStart.Value.Date < end)|| (e.Start >= start && e.Start.Value.Date < end))
                     && e.Group.GroupMembers.Any(gm => gm.AccountId == studentId)
                     //lấy past meeting
                     && (e.End != null || e.ScheduleStart != null && e.ScheduleStart.Value.Date < DateTime.Today))
                 : repos.Meetings.GetList()
                 .Include(c => c.Connections)
                 .Include(m => m.Group).ThenInclude(g => g.GroupMembers)
-                .Where(c => c.Start>=start && c.Start.Value.Date<end
+                .Where(c => c.ScheduleStart>=start && c.ScheduleStart.Value.Date<end
                     && c.Group.GroupMembers.Any(gm => gm.AccountId == studentId));
             //int totalMeetingsCount = allMeetingsOfJoinedGroups.Count() == 0
             //    ? 0 : allMeetingsOfJoinedGroups.Count();
