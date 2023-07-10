@@ -5,7 +5,7 @@ namespace API.SignalRHub.Tracker
     public class ShareScreenTracker
     {
         // chứa xem user ở meeting nào đang shareScreen
-        private static readonly List<UserConnectionSignalrDto> usersSharingScreen = new List<UserConnectionSignalrDto>();
+        public static readonly List<UserConnectionSignalrDto> usersSharingScreen = new List<UserConnectionSignalrDto>();
 
         public Task<bool> AddUserSharingScreen(UserConnectionSignalrDto userMeetConnection)
         {

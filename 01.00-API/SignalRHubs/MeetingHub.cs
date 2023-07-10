@@ -64,6 +64,10 @@ namespace API.SignalRHub
         // BE SendAsync(OnStartVoteMsg, ReviewSignalrDTO);
         public static string OnStartVoteMsg => "OnStartVote";
 
+        //Thông báo có người yêu cầu dc vote
+        // BE SendAsync("OnEndVote", username);
+        public static string OnEndVoteMsg => "OnEndVote";
+
         //Thông báo Review có thay đổi
         //BE SendAsync(OnStartVoteMsg, ReviewSignalrDTO);
         public static string OnVoteChangeMsg => "OnVoteChange";
@@ -141,6 +145,7 @@ namespace API.SignalRHub
         //this.chatHubConnection.start().catch(err => console.log(err));
         public override async Task OnConnectedAsync()
         {
+            Console.WriteLine("\n\n===========================\nOnConnectedAsync");
             FunctionTracker.Instance().AddHubFunc("Hub/Chat: OnConnectedAsync()");
             //Step 1: Lấy meeting Id và username
             HttpContext httpContext = Context.GetHttpContext();
@@ -481,6 +486,15 @@ namespace API.SignalRHub
             ReviewSignalrDTO mapped = mapper.Map<ReviewSignalrDTO>(newReview);
             await Clients.Group(meetingId.ToString()).SendAsync(OnStartVoteMsg, mapped);
         }
+
+        //sẽ dc gọi khi có người xin dc vote (review)
+        //sẽ dc gọi khi FE gọi chatHubConnection.invoke('StartVote', reviewee: username)
+        public async Task EndVote(int meetingId)
+        {
+            string reviewee = Context.User.GetUsername();
+            await Clients.Group(meetingId.ToString()).SendAsync(OnEndVoteMsg, reviewee);
+        }
+
         //sẽ dc gọi khi có người xin dc vote (review)
         //sẽ dc gọi khi FE gọi chatHubConnection.invoke('VoteForReview', reviewDetail: ReviewDetailSignalrCreateDto)
         public async Task VoteForReview(ReviewDetailSignalrCreateDto dto)
@@ -542,30 +556,34 @@ namespace API.SignalRHub
         //Key dạng string chứa roomId do FE đẻ ra const roomId = uuidV4();
         //Value chứa list các peerId
 
-        private static readonly Dictionary<string, List<string>> Rooms = new Dictionary<string, List<string>>();
+        public static readonly Dictionary<string, List<string>> Rooms = new Dictionary<string, List<string>>();
         public class CreateRoomInput
         {
-            public string peerId;
+            public string peerId { get; set; }
+            public string roomId { get; set; } = "default";
+            //public string roomId { get; set; } = Guid.NewGuid().ToString();
         }
         //public async Task CreateRoom(CreateRoomInput input)
         public async Task CreateRoom(CreateRoomInput input)
         {
+            string roomId = input.roomId;
+            string peerId = input.peerId;
             Console.WriteLine($"\n\n==++==++===+++\n CreateRoom");
             Console.WriteLine(input.peerId);
-            string newRoomId = Guid.NewGuid().ToString();
+            //string newRoomId = Guid.NewGuid().ToString();
             //RoomPeerIds.Add(roomId, new List<string>() { input.peerId});
-            Rooms.Add(newRoomId, new List<string>());
+            Rooms.Add(roomId, new List<string>());
             //Gửi cho thằng gọi CreateRoom thui
-            await Clients.Caller.SendAsync("room-created", new { roomId = newRoomId });
-            //await JoinRoom( new JoinRoomInput { roomId = newRoomId, peerId = input.peerId });
-            await JoinRoom(JsonConvert.SerializeObject( new JoinRoomInput { roomId = newRoomId, peerId = input.peerId }));
+            await Clients.Caller.SendAsync("room-created", new { roomId = roomId });
+            //await JoinRoom(new JoinRoomInput { roomId = roomId, peerId = peerId });
+            await JoinRoom(JsonConvert.SerializeObject(new JoinRoomInput { roomId = roomId, peerId = input.peerId }));
             //await JoinRoom(newRoomId, input.peerId);
 
         }
         public class JoinRoomInput
         {
-            public string roomId;
-            public string peerId;
+            public string roomId { get; set; }
+            public string peerId { get; set; }
         }
         //public async Task JoinRoom(JoinRoomInput input)
         public async Task JoinRoom(string json)
@@ -583,18 +601,18 @@ namespace API.SignalRHub
             {
                 Rooms[roomId].Add(peerId);
                 await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
-                await Clients.Group(roomId).SendAsync("user-joined", new { roomId = roomId, peerId = peerId });
+                await Clients.GroupExcept(roomId, Context.ConnectionId).SendAsync("user-joined", new { roomId = roomId, peerId = peerId });
                 await Clients.Caller.SendAsync("get-users", new { roomId = roomId, participants = Rooms[roomId] });
             }
             else
             {
-                await CreateRoom(new CreateRoomInput {  peerId = peerId });
+                await CreateRoom(new CreateRoomInput {  peerId = peerId, roomId=roomId });
             }
         }
         public class LeaveRoomInput
         {
-            public string roomId;
-            public string peerId;
+            public string roomId { get; set; }
+            public string peerId { get; set; }
         }
         public async Task LeaveRoom(LeaveRoomInput input)
         {
