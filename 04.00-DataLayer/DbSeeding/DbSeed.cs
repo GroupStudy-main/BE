@@ -793,7 +793,13 @@ namespace DataLayer.DbSeeding
             new Review
             {
                 Id = 1,
-                MeetingId=1,
+                MeetingId=4,
+                RevieweeId=1,
+            } ,
+             new Review
+            {
+                Id = 2,
+                MeetingId=5,
                 RevieweeId=1,
             }
         };
@@ -806,6 +812,14 @@ namespace DataLayer.DbSeeding
                 ReviewerId=1,
                 Result=ReviewResultEnum.VeryGood,
                 Comment="Bạn thuộc bài rất kĩ"
+            }    ,
+            new ReviewDetail
+            {
+                Id=2,
+                ReviewId=2,
+                ReviewerId=1,
+                Result=ReviewResultEnum.Good,
+                Comment="Bạn thuộc bài khá"
             }
         };
 
