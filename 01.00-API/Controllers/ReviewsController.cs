@@ -30,7 +30,10 @@ namespace API.Controllers
             this.meetingHub = meetingHub;
         }
 
-
+        [SwaggerOperation(
+           Summary = $"[{Actor.Test}/{Finnished.False}]Get review info"
+           //, Description = "RevieweeId là id của người xin review (người gửi request)"
+        )]
         [Authorize(Roles=Actor.Student)]
         [HttpGet("Meeting/{meetingId}")]
         public async Task<IActionResult> GetReviewForMeeting(int meetingId)
@@ -44,7 +47,24 @@ namespace API.Controllers
                 .ProjectTo<ReviewSignalrDTO>(mapper.ConfigurationProvider);
             return Ok(mapped);
         }
-        
+
+        [SwaggerOperation(
+            Summary = $"[{Actor.Test}/{Finnished.False}]review info"
+            , Description = "RevieweeId là id của người xin review (người gửi request)"
+        )]
+        [Authorize(Roles = Actor.Student)]
+        [HttpGet("{reviewId}")]
+        public async Task<IActionResult> GetReview(int reviewId)
+        {
+            string reviewee = HttpContext.User.GetUsername();
+            Review endReview = await repos.Reviews.GetList()
+                .Include(e => e.Reviewee)
+                .Include(r => r.Details).ThenInclude(d => d.Reviewer)
+                .SingleOrDefaultAsync(e => e.Id == reviewId);
+            ReviewSignalrDTO mapped = mapper.Map<ReviewSignalrDTO>(endReview);
+            return Ok(mapped);
+        }
+
         [SwaggerOperation(
             Summary = $"[{Actor.Test}/{Finnished.True}] Start a review"
             , Description = "RevieweeId là id của người xin review (người gửi request)"
