@@ -42,7 +42,7 @@ namespace DataLayer.ImMemorySeeding
                 #region seed Role
                 if (!context.Roles.Any())
                 {
-                    
+
                     context.Roles.AddRange(DbSeed.Roles);
                 }
                 #endregion
@@ -50,7 +50,7 @@ namespace DataLayer.ImMemorySeeding
                 #region seed Account
                 if (!context.Accounts.Any())
                 {
-                    
+
                     context.Accounts.AddRange(DbSeed.Accounts);
 
                 }
@@ -59,7 +59,7 @@ namespace DataLayer.ImMemorySeeding
                 #region seed class
                 if (!context.Classes.Any())
                 {
-                    
+
                     context.Classes.AddRange(DbSeed.Classes);
                 }
                 #endregion
@@ -117,6 +117,20 @@ namespace DataLayer.ImMemorySeeding
                 if (!context.Connections.Any())
                 {
                     context.Connections.AddRange(DbSeed.Connections);
+                }
+                #endregion
+
+                #region seed Review
+                if (!context.Reviews.Any())
+                {
+                    context.Reviews.AddRange(DbSeed.Reviews);
+                }
+                #endregion
+
+                #region seed ReviewDetail
+                if (!context.ReviewDetails.Any())
+                {
+                    context.ReviewDetails.AddRange(DbSeed.ReviewDetails);
                 }
                 #endregion
                 context.SaveChanges();

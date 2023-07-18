@@ -788,5 +788,26 @@ namespace DataLayer.DbSeeding
 
             #endregion
         };
+        public static Review[] Reviews = new Review[]
+        {
+            new Review
+            {
+                Id = 1,
+                MeetingId=1,
+                RevieweeId=1,
+            }
+        };
+        public static ReviewDetail[] ReviewDetails = new ReviewDetail[]
+        {
+            new ReviewDetail
+            {
+                Id=1,
+                ReviewId=1,
+                ReviewerId=1,
+                Result=ReviewResultEnum.VeryGood,
+                Comment="Bạn thuộc bài rất kĩ"
+            }
+        };
+
     }
 }

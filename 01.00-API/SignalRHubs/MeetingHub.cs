@@ -489,10 +489,15 @@ namespace API.SignalRHub
 
         //sẽ dc gọi khi có người xin dc vote (review)
         //sẽ dc gọi khi FE gọi chatHubConnection.invoke('StartVote', reviewee: username)
-        public async Task EndVote(int meetingId)
+        public async Task EndVote(int reviewId)
         {
             string reviewee = Context.User.GetUsername();
-            await Clients.Group(meetingId.ToString()).SendAsync(OnEndVoteMsg, reviewee);
+            Review endReview = await repos.Reviews.GetList()
+                .Include(e=>e.Reviewee)
+                .Include(r=>r.Details).ThenInclude(d=>d.Reviewer)
+                .SingleOrDefaultAsync(e=>e.Id==reviewId);
+            ReviewSignalrDTO mapped = mapper.Map<ReviewSignalrDTO>(endReview);
+            await Clients.Group(endReview.MeetingId.ToString()).SendAsync(OnEndVoteMsg, mapped);
         }
 
         //sẽ dc gọi khi có người xin dc vote (review)
