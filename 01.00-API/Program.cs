@@ -79,6 +79,7 @@ builder.Services.AddSingleton<PresenceTracker>();
 builder.Services.AddSingleton<ShareScreenTracker>();
 builder.Services.AddScoped<IRepoWrapper, RepoWrapper>();
 builder.Services.AddScoped<IServiceWrapper, ServiceWrapper>();
+builder.Services.AddScoped<IAutoMailService, AutoMailService>();
 #endregion
 
 #region validator
