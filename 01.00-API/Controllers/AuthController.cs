@@ -95,7 +95,7 @@ namespace API.Controllers
             Description = "Register for student with form"
         )]
         [HttpPost("Register/Student")]
-        public async Task<IActionResult> StudentRegister(AccountRegisterDto dto)
+        public async Task<IActionResult> StudentRegister(StudentRegisterDto dto)
         {
             ValidatorResult valResult = await validators.Accounts.ValidateParams(dto);
             if (!valResult.IsValid)
@@ -112,7 +112,7 @@ namespace API.Controllers
             Description = "Register for parent with form"
         )]
         [HttpPost("Register/Parent")]
-        public async Task<IActionResult> ParentRegister(AccountRegisterDto dto)
+        public async Task<IActionResult> ParentRegister(ParentRegisterDto dto)
         {
             ValidatorResult valResult = await validators.Accounts.ValidateParams(dto);
             if (!valResult.IsValid)

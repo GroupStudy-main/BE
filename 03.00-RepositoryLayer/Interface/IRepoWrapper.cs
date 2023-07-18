@@ -14,10 +14,14 @@ namespace RepositoryLayer.Interface
         public IMeetingRepository Meetings { get; }
         public IGroupRepository Groups { get; }
         public IGroupMemberReposity GroupMembers { get; }
+        public IInviteReposity Invites { get; }
+        public IRequestReposity Requests { get; }
         public IClassReposity Classes { get; }
         public ISubjectRepository Subjects { get; }
         public IConnectionRepository Connections { get; }
-
+        public IReviewRepository Reviews { get; }
+        public IReviewDetailRepository ReviewDetails { get; }
         public IDocumentFileRepository DocumentFiles { get; }
+        public IScheduleRepository Schedules { get; }
     }
 }

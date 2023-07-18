@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ShareResource.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataLayer.DBObject
@@ -25,12 +26,5 @@ namespace DataLayer.DBObject
 
     }
 
-    public enum ReviewResultEnum
-    {
-        VeryBad = 1,
-        Bad,
-        Medium,
-        Good,
-        VeryGood
-    }
+    
 }

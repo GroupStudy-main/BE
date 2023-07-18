@@ -44,8 +44,9 @@ namespace API.Controllers
 
         //Get: api/Accounts/search
         [SwaggerOperation(
-            Summary = $"[{Actor.Student_Parent}/{Finnished.False}/{Auth.True}] Search students by id, username, mail, Full Name",
-            Description = "Để search thêm thành viên mới cho group, thêm groupId để loại ra hết những student đã liên quan đến nhóm"
+            Summary = $"[{Actor.Student_Parent}/{Finnished.False}/{Auth.True}] Search students by id, username, mail, Full Name"
+            , Description = "Search theo tên, username, id" +
+            "<br>Để search thêm thành viên mới cho group, thêm groupId để loại ra hết những student đã liên quan đến nhóm"
         )]
         [Authorize(Roles = Actor.Student_Parent)]
         [HttpGet("search")]
@@ -65,7 +66,8 @@ namespace API.Controllers
 
         // GET: api/Accounts/5
         [SwaggerOperation(
-          Summary = $"[{Actor.Student_Parent}/{Finnished.True}/{Auth.True}] Get the self profile"
+            Summary = $"[{Actor.Student_Parent}/{Finnished.True}/{Auth.True}] Get the self profile"
+            , Description ="Lấy profile của account đang login, accountId dc lấy từ jwtToken"
         )]
         [Authorize(Roles = Actor.Student_Parent)]
         //[Authorize(Roles = "Student, Parent")]
@@ -86,22 +88,23 @@ namespace API.Controllers
 
         // PUT: api/Accounts/5
         [SwaggerOperation(
-          Summary = $"[{Actor.Student_Parent}/{Finnished.True}/{Auth.True}] Update logined profile"
+            Summary = $"[{Actor.Student_Parent}/{Finnished.True}/{Auth.True}] Update logined profile"
+            , Description ="accountId là id của account đang cập nhật profile"
         )]
         [Authorize(Roles = "Student, Parent")]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProfile(int id, AccountUpdateDto dto)
+        [HttpPut("{accountId}")]
+        public async Task<IActionResult> UpdateProfile(int accountId, AccountUpdateDto dto)
         {
-            if (id != HttpContext.User.GetUserId())
+            if (accountId != HttpContext.User.GetUserId())
             {
                 return Unauthorized("Không thể thay đổi profile của người khác");
             }
-            if (id != dto.Id)
+            if (accountId != dto.Id)
             {
                 return BadRequest();
             }
 
-            var account = await services.Accounts.GetByIdAsync(id);
+            var account = await services.Accounts.GetByIdAsync(accountId);
             if (account == null)
             {
                 return NotFound();
@@ -119,7 +122,7 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                if (!UserExists(id))
+                if (!UserExists(accountId))
                 {
                     return NotFound();
                 }
@@ -132,17 +135,18 @@ namespace API.Controllers
 
         // PUT: api/Accounts/5/Password
         [SwaggerOperation(
-          Summary = $"[{Actor.Student_Parent}/{Finnished.True}/{Auth.True}] Update account password"
+            Summary = $"[{Actor.Student_Parent}/{Finnished.True}/{Auth.True}] Update account password"
+            , Description ="accountId là id của account đang cập nhật profile"
         )]
         [Authorize(Roles = Actor.Student_Parent)]
-        [HttpPut("{id}/Password")]
-        public async Task<IActionResult> ChangePassword(int id, AccountChangePasswordDto dto)
+        [HttpPut("{accountId}/Password")]
+        public async Task<IActionResult> ChangePassword(int accountId, AccountChangePasswordDto dto)
         {
-            if (id != HttpContext.User.GetUserId())
+            if (accountId != HttpContext.User.GetUserId())
             {
                 return Unauthorized("Không thể thay đổi mật khẩu của người khác");
             }
-            if (id != dto.Id)
+            if (accountId != dto.Id)
             {
                 return BadRequest();
             }
@@ -151,7 +155,7 @@ namespace API.Controllers
                 return BadRequest(FAIL_CONFIRM_PASSWORD_MSG);
             }
 
-            var account = await services.Accounts.GetByIdAsync(id);
+            var account = await services.Accounts.GetByIdAsync(accountId);
             if (account == null)
             {
                 return NotFound();
@@ -168,7 +172,7 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                if (!UserExists(id))
+                if (!UserExists(accountId))
                 {
                     return NotFound();
                 }

@@ -14,14 +14,19 @@ namespace API
 
         }
         public virtual DbSet<Account> Accounts { get; set; }
-        public DbSet<Connection> Connections { get; set; }
-        public DbSet<Group> Groups { get; set; }
-        public DbSet<GroupMember> GroupMembers { get; set; }
-        //public DbSet<MeetingRoom> MeetingRooms { get; set; }
-        public DbSet<Meeting> Meetings { get; set; }
+        public virtual DbSet<Class> Classes { get; set; }
+        public virtual DbSet<Connection> Connections { get; set; }
+        public virtual DbSet<Group> Groups { get; set; }
+        public virtual DbSet<GroupMember> GroupMembers { get; set; }
+        public virtual DbSet<GroupSubject> GroupSubjects { get; set; }
+        public virtual DbSet<Meeting> Meetings { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
-        public DbSet<DataLayer.DBObject.Class>? Class { get; set; }
-        public DbSet<DataLayer.DBObject.Subject>? Subject { get; set; }
+        public virtual DbSet<Subject> Subjects { get; set; }
+        public virtual DbSet<Schedule> Schedules { get; set; }
+        public virtual DbSet<Review> Reviews { get; set; }
+        public virtual DbSet<ReviewDetail> ReviewDetails { get; set; }
+
+        public virtual DbSet<DocumentFile> DocumentFiles { get; set; }
 
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{

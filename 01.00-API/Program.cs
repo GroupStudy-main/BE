@@ -2,7 +2,7 @@ using API;
 using API.SignalRHub;
 using API.SignalRHub.Tracker;
 using APIExtension.Auth;
-using APIExtension.ImMemorySeeding;
+using DataLayer.ImMemorySeeding;
 using APIExtension.Validator;
 using DataLayer.DBContext;
 using Google.Apis.Auth.OAuth2;
@@ -79,6 +79,7 @@ builder.Services.AddSingleton<PresenceTracker>();
 builder.Services.AddSingleton<ShareScreenTracker>();
 builder.Services.AddScoped<IRepoWrapper, RepoWrapper>();
 builder.Services.AddScoped<IServiceWrapper, ServiceWrapper>();
+builder.Services.AddScoped<IAutoMailService, AutoMailService>();
 #endregion
 
 #region validator

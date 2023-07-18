@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DataLayer.DBObject;
 using ShareResource.DTO;
+using ShareResource.DTO.File;
 using ShareResource.Enums;
 
 namespace ShareResource.Mapper
@@ -21,10 +22,44 @@ namespace ShareResource.Mapper
             MapMeeting();
 
             MapSubject();
+
+            MapSchedule();
+
+            MapReview();
+
+            MapDocumentFile();
             //CreateMap<MeetingRoom, MeetingDto>();
             //.ForMember(dest => dest.DisplayName, opt => opt.MapFrom(src => src.AppUser.DisplayName))
             //.ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.AppUser.UserName));
 
+        }
+
+        private void MapReview()
+        {
+            CreateMap<Review, ReviewSignalrDTO>()
+                .ForMember(dest=>dest.ReviewerUsernames, opt=>opt.MapFrom(
+                    src=>src.Details.Select(d=>d.Reviewer.Username)))
+                .ForMember(dest => dest.ReviewerIds, opt => opt.MapFrom(
+                    src => src.Details.Select(d => d.ReviewerId)))
+                .ForMember(dest => dest.Average, opt => opt.MapFrom(
+                    src => src.Details.Count>0? src.Details.Select(d => (int)d.Result).Average() : 0.0))
+                .PreserveReferences();
+            CreateMap<ReviewDetail, ReviewDetailSignalrGetDto>()
+                .PreserveReferences();
+        }
+
+        private void MapSchedule()
+        {
+           CreateMap<Schedule, ScheduleGetDto>()
+            //Live
+                .ForMember(dest => dest.CurrentLiveMeeting, opt => opt.MapFrom(
+                    src => src.Meetings
+                        .FirstOrDefault(e => e.Start != null && e.End == null)))
+                //Schedule
+                .ForMember(dest => dest.ScheduleMeetings, opt => opt.MapFrom(
+                    src => src.Meetings
+                        .Where(e => (e.ScheduleStart != null && e.ScheduleStart.Value.Date >= DateTime.Today && e.Start == null))))
+                .PreserveReferences();
         }
 
         private void MapSubject()
@@ -58,6 +93,16 @@ namespace ShareResource.Mapper
                     src => DateTime.Now));
         }
 
+        private void MapDocumentFile()
+        {
+            CreateMap<DocumentFile, DocumentFileDto>()
+                .ForMember(dest => dest.AccountName, opt => opt.MapFrom(
+                    src => src.Account.Username))
+                .ForMember(dest => dest.GroupName, opt => opt.MapFrom(
+                    src => src.Group.Name))
+                .PreserveReferences();
+        }
+        
         private void MapGroupMember()
         {
             CreateMap<GroupMember, GroupMemberGetDto>()
@@ -67,23 +112,80 @@ namespace ShareResource.Mapper
                     src=>src.Account.Username)) 
                 .PreserveReferences();
             //Invite
-            CreateMap<GroupMember, GroupMemberInviteGetDto>()
+            CreateMap<Invite, JoinInviteForGroupGetDto>()
                 .ForMember(dest => dest.GroupName, opt => opt.MapFrom(
                     src => src.Group.Name))
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(
                     src => src.Account.Username))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(
+                    src => src.Account.Email))
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(
+                    src => src.Account.FullName))
+                .ForMember(dest => dest.Schhool, opt => opt.MapFrom(
+                    src => src.Account.Schhool))
+                .ForMember(dest => dest.Class, opt => opt.MapFrom(
+                    src => src.Account.ClassId))
+                //.ForMember(dest => dest.Email, opt => opt.MapFrom(
+                //    src => src.Account.Username))
                 .PreserveReferences();
-            CreateMap<GroupMemberInviteCreateDto, GroupMember>()
-                .ForMember(dest => dest.State, opt => opt.MapFrom(src => GroupMemberState.Inviting));
+            CreateMap<Invite, JoinInviteForStudentGetDto>()
+                .ForMember(dest => dest.GroupName, opt => opt.MapFrom(
+                    src => src.Group.Name))
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(
+                    src => src.Account.Username))
+                .ForMember(dest=>dest.Class, opt=>opt.MapFrom(
+                    src=>src.Group.ClassId))
+                .ForMember(dest => dest.MemberCount, opt => opt.MapFrom<int>(
+                    src => src.Group.GroupMembers
+                        .Where(e => e.MemberRole == GroupMemberRole.Leader || e.MemberRole == GroupMemberRole.Member)
+                        .Count()))
+                .ForMember(dest => dest.Subjects, opt => opt.MapFrom(
+                    src => src.Group.GroupSubjects.Select(gs => gs.Subject.Name)))
+                //.ForMember(dest => dest.Email, opt => opt.MapFrom(
+                //    src => src.Account.Username))
+                .PreserveReferences();
+
+            //CreateMap<GroupMemberInviteCreateDto, GroupMember>()
+            //    .ForMember(dest => dest.State, opt => opt.MapFrom(src => GroupMemberState.Inviting));
+            CreateMap<GroupMemberInviteCreateDto, Invite>()
+                .ForMember(dest => dest.State, opt => opt.MapFrom(src => InviteRequestStateEnum.Waiting));
+            
             //Request
-            CreateMap<GroupMember, GroupMemberRequestGetDto>()
+
+            //CreateMap<GroupMember, JoinRequestGetDto>()
+            CreateMap<Request, JoinRequestForGroupGetDto>()
                 .ForMember(dest => dest.GroupName, opt => opt.MapFrom(
                     src => src.Group.Name))
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(
                     src => src.Account.Username))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(
+                    src => src.Account.Email))
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(
+                    src => src.Account.FullName))
+                .ForMember(dest => dest.Schhool, opt => opt.MapFrom(
+                    src => src.Account.Schhool))
+                .ForMember(dest => dest.Class, opt => opt.MapFrom(
+                    src => src.Account.ClassId))
                 .PreserveReferences();
-            CreateMap<GroupMemberRequestCreateDto, GroupMember>()
-                .ForMember(dest => dest.State, opt => opt.MapFrom(src => GroupMemberState.Requesting));
+
+            CreateMap<Request, JoinRequestForStudentGetDto>()
+                .ForMember(dest => dest.GroupName, opt => opt.MapFrom(
+                    src => src.Group.Name))
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(
+                    src => src.Account.Username))
+                .ForMember(dest => dest.Class, opt => opt.MapFrom(
+                    src => src.Group.ClassId))
+                .ForMember(dest => dest.MemberCount, opt => opt.MapFrom<int>(
+                    src => src.Group.GroupMembers
+                        .Where(e => e.MemberRole == GroupMemberRole.Leader || e.MemberRole == GroupMemberRole.Member)
+                        .Count()))
+                .ForMember(dest => dest.Subjects, opt => opt.MapFrom(
+                    src => src.Group.GroupSubjects.Select(gs => gs.Subject.Name)))
+                .PreserveReferences();
+            //CreateMap<GroupMemberRequestCreateDto, GroupMember>()   
+            //    .ForMember(dest => dest.State, opt => opt.MapFrom(src => GroupMemberState.Requesting));
+            CreateMap<GroupMemberRequestCreateDto, Request>()
+                .ForMember(dest => dest.State, opt => opt.MapFrom(src => InviteRequestStateEnum.Waiting));
         }
 
         private void MapRole()
@@ -101,26 +203,28 @@ namespace ShareResource.Mapper
             CreateMap<Group, GroupGetListDto>()
                 .ForMember(dest => dest.MemberCount, opt => opt.MapFrom<int>(
                     src => src.GroupMembers
-                        .Where(e => e.State == GroupMemberState.Leader|| e.State == GroupMemberState.Member)
+                        .Where(e => e.MemberRole == GroupMemberRole.Leader|| e.MemberRole == GroupMemberRole.Member)
                         .Count()))
                 .ForMember(dest => dest.Subjects, opt => opt.MapFrom(
                     src => src.GroupSubjects.Select(gs => gs.Subject.Name)))
                 .PreserveReferences();
 
-            CreateMap<Group, GroupGetDetailForLeaderDto>()
+            CreateMap<Group, GroupDetailForLeaderGetDto>()
                 .ForMember(dest => dest.Members, opt => opt.MapFrom(
                     src => src.GroupMembers
-                        .Where(e => e.State == GroupMemberState.Leader || e.State == GroupMemberState.Member)
+                        .Where(e => e.MemberRole == GroupMemberRole.Leader || e.MemberRole == GroupMemberRole.Member)
                         .Select(e => e.Account)))
+
                 .ForMember(dest => dest.JoinRequest, opt => opt.MapFrom(
-                    src => src.GroupMembers
-                        .Where(e => e.State == GroupMemberState.Requesting)))
+                    src => src.JoinRequests
+                        .Where(e => e.State == InviteRequestStateEnum.Waiting)))
                 .ForMember(dest => dest.JoinInvite, opt => opt.MapFrom(
-                    src => src.GroupMembers
-                        .Where(e => e.State == GroupMemberState.Inviting)))
+                    src => src.JoinInvites
+                        .Where(e => e.State == InviteRequestStateEnum.Waiting)))
+
                 .ForMember(dest => dest.DeclineRequest, opt => opt.MapFrom(
-                    src => src.GroupMembers
-                        .Where(e => e.State == GroupMemberState.Declined)))
+                    src => src.JoinRequests
+                        .Where(e => e.State == InviteRequestStateEnum.Decline)))
                 .ForMember(dest => dest.Subjects, opt => opt.MapFrom(
                     src => src.GroupSubjects.Select(gs => gs.Subject)))
 
@@ -141,7 +245,7 @@ namespace ShareResource.Mapper
             CreateMap<Group, GroupGetDetailForMemberDto>()
                 .ForMember(dest => dest.Members, opt => opt.MapFrom(
                     src => src.GroupMembers
-                        .Where(e => e.State == GroupMemberState.Leader || e.State == GroupMemberState.Member)
+                        .Where(e => e.MemberRole == GroupMemberRole.Leader || e.MemberRole == GroupMemberRole.Member)
                         .Select(e => e.Account)))
                 .ForMember(dest => dest.Subjects, opt => opt.MapFrom(
                     src => src.GroupSubjects.Select(gs => gs.Subject)))
@@ -158,15 +262,15 @@ namespace ShareResource.Mapper
 
         private void MapAccount()
         {
-            BasicMap<Account, StudentGetDto, AccountRegisterDto, AccountUpdateDto>();
+            BasicMap<Account, StudentGetDto, StudentRegisterDto, AccountUpdateDto>();
             CreateMap<Account, MemberSignalrDto>();
             CreateMap<Account, AccountProfileDto>()
                 .ForMember(dest => dest.RoleName, opt => opt.MapFrom(
                     src => src.Role.Name))
                 .ForMember(dest => dest.LeadGroups, opt => opt.MapFrom(
-                    src => src.GroupMembers.Where(e => e.State == GroupMemberState.Leader).Select(e => e.Group)))
+                    src => src.GroupMembers.Where(e => e.MemberRole == GroupMemberRole.Leader).Select(e => e.Group)))
                 .ForMember(dest => dest.JoinGroups, opt => opt.MapFrom(
-                    src => src.GroupMembers.Where(e => e.State == GroupMemberState.Member).Select(e => e.Group)))
+                    src => src.GroupMembers.Where(e => e.MemberRole == GroupMemberRole.Member).Select(e => e.Group)))
                 .PreserveReferences();
         }
 

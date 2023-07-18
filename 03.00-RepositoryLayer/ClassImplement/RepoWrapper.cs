@@ -25,6 +25,9 @@ namespace RepositoryLayer.ClassImplement
             classes = new ClassRepository(dbContext);
             subjects = new SubjectRepository(dbContext);
             connections = new ConnectionRepository(dbContext);
+            reviews = new ReviewRepository(dbContext);
+            reviewDetails = new ReviewDetailRepository(dbContext);
+            schedules = new ScheduleRepository(dbContext);
         }
 
         private IAccountRepo users;
@@ -54,7 +57,6 @@ namespace RepositoryLayer.ClassImplement
         //}
 
         private IMeetingRepository meeting;
-
         public IMeetingRepository Meetings
         {
             get
@@ -81,7 +83,6 @@ namespace RepositoryLayer.ClassImplement
         }
 
         private IGroupMemberReposity groupMembers;
-
         public IGroupMemberReposity GroupMembers
         {
             get
@@ -95,7 +96,6 @@ namespace RepositoryLayer.ClassImplement
         }
 
         private IClassReposity classes;
-
         public IClassReposity Classes
         {
             get
@@ -120,6 +120,7 @@ namespace RepositoryLayer.ClassImplement
                 return subjects;
             }
         }
+
         private IConnectionRepository connections;
         public IConnectionRepository Connections
         {
@@ -134,7 +135,6 @@ namespace RepositoryLayer.ClassImplement
         }
 
         private IDocumentFileRepository documents;
-
         public IDocumentFileRepository DocumentFiles
         {
             get
@@ -144,6 +144,76 @@ namespace RepositoryLayer.ClassImplement
                     documents = new DocumentFileRepository(dbContext);
                 }
                 return documents;
+            }
+
+        }
+
+        private IReviewRepository reviews;
+        public IReviewRepository Reviews
+        {
+            get
+            {
+                if (reviews is null)
+                {
+                    reviews = new ReviewRepository(dbContext);
+                }
+                return reviews;
+            }
+
+        }
+
+        private IReviewDetailRepository reviewDetails;
+        public IReviewDetailRepository ReviewDetails
+        {
+            get
+            {
+                if (reviewDetails is null)
+                {
+                    reviewDetails = new ReviewDetailRepository(dbContext);
+                }
+                return reviewDetails;
+            }
+
+        }
+
+        public IScheduleRepository schedules;
+        public IScheduleRepository Schedules
+        {
+            get
+            {
+                if (schedules is null)
+                {
+                    schedules = new ScheduleRepository(dbContext);
+                }
+                return schedules;
+            }
+
+        }
+
+        private IInviteReposity invites;
+        public IInviteReposity Invites
+        {
+            get
+            {
+                if (invites is null)
+                {
+                    invites = new InviteReposity(dbContext);
+                }
+                return invites;
+            }
+
+        }
+
+        private IRequestReposity requests;
+        public IRequestReposity Requests
+        {
+            get
+            {
+                if (requests is null)
+                {
+                    requests = new RequestReposity(dbContext);
+                }
+                return requests;
             }
 
         }

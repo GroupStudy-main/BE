@@ -34,7 +34,18 @@ namespace DataLayer.DBObject
 
         [StringLength(20)]
         public string Phone { get; set; }
+        public string? Schhool { get; set; }
+
+        [Column("Dob")]
+        public DateTime? DateOfBirth { get; set; }
+
+        #region Class
+
         
+        public int? ClassId { get; set; }
+        public Class? Class { get; set; }
+        #endregion
+
         //Role
         [ForeignKey("RoleId")]
         public int RoleId { get; set; }
@@ -43,6 +54,15 @@ namespace DataLayer.DBObject
         // Group Member
         public virtual ICollection<GroupMember> GroupMembers { get; set; } = new Collection<GroupMember>();
 
+
+        #region Invite
+        public virtual ICollection<Invite> JoinInvites { get; set; } = new Collection<Invite>();
+        #endregion
+
+        #region Request
+        public virtual ICollection<Request> JoinRequests { get; set; } = new Collection<Request>();
+        #endregion
+
     }
-   
+
 }

@@ -28,6 +28,8 @@ namespace RepositoryLayer.ClassImplement
                 .Include(e=>e.GroupSubjects).ThenInclude(e=>e.Subject)
                 .Include(e=>e.Meetings)
                 .Include(e=>e.GroupMembers).ThenInclude(e=>e.Account)
+                .Include(e=>e.JoinInvites).ThenInclude(e=>e.Account)
+                .Include(e=>e.JoinRequests).ThenInclude(e=>e.Account)
                 .SingleOrDefaultAsync(e=>e.Id == id);
         }
 

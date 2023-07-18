@@ -20,6 +20,14 @@ namespace DataLayer.DBObject
         public virtual ICollection<Meeting> Meetings { get; set; } = new Collection<Meeting>();
         #endregion
 
+        #region Invite
+        public virtual ICollection<Invite> JoinInvites { get; set; } = new Collection<Invite>();
+        #endregion
+
+        #region Request
+        public virtual ICollection<Request> JoinRequests { get; set; } = new Collection<Request>();
+        #endregion
+
         #region Class
         //Class
         [ForeignKey("ClassId")]

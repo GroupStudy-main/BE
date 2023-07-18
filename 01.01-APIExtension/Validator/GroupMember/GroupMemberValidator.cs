@@ -48,33 +48,34 @@ namespace APIExtension.Validator
                 GroupMember exsited = await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId);
                 if (exsited != null)
                 {
-                    switch (exsited.State)
+                    switch (exsited.MemberRole)
                     {
-                        case GroupMemberState.Leader:
+                        case GroupMemberRole.Leader:
                             {
                                 validatorResult.Failures.Add("Học sinh đã tham gia nhóm này");
                                 break;
                             }
-                        case GroupMemberState.Member:
+                        case GroupMemberRole.Member:
                             {
                                 validatorResult.Failures.Add("Học sinh đã tham gia nhóm này");
                                 break;
                             }
-                        case GroupMemberState.Inviting:
-                            {
-                                validatorResult.Failures.Add("Học sinh đã được mời tham gia nhóm này từ trước");
-                                break;
-                            }
-                        case GroupMemberState.Requesting:
-                            {
-                                validatorResult.Failures.Add("Học sinh đã yêu cầu tham gia nhóm này từ trước");
-                                break;
-                            }
-                        case GroupMemberState.Declined:
-                            {
-                                validatorResult.Failures.Add("Học sinh đã từ chối/bị từ chối tham gia nhóm này từ trước");
-                                break;
-                            }
+                            //Fix later
+                        //case GroupMemberState.Inviting:
+                        //    {
+                        //        validatorResult.Failures.Add("Học sinh đã được mời tham gia nhóm này từ trước");
+                        //        break;
+                        //    }
+                        //case GroupMemberState.Requesting:
+                        //    {
+                        //        validatorResult.Failures.Add("Học sinh đã yêu cầu tham gia nhóm này từ trước");
+                        //        break;
+                        //    }
+                        //case GroupMemberRole.Banned:
+                        //    {
+                        //        validatorResult.Failures.Add("Học sinh đã từ chối/bị từ chối tham gia nhóm này từ trước");
+                        //        break;
+                        //    }
                         default:
                             {
                                 validatorResult.Failures.Add("Học sinh đã có liên quan đến nhóm");
@@ -82,14 +83,14 @@ namespace APIExtension.Validator
                             }
                     }
                 }
-                if (dto.InviteMessage == null || dto.InviteMessage.Trim().Length == 0)
-                {
-                    validatorResult.Failures.Add("Thiếu lời mời");
-                }
-                if (dto.InviteMessage == null || dto.InviteMessage.Trim().Length > 250)
-                {
-                    validatorResult.Failures.Add("Lời mời không thể dài hơn 250 kí tự");
-                }
+                //if (dto.InviteMessage == null || dto.InviteMessage.Trim().Length == 0)
+                //{
+                //    validatorResult.Failures.Add("Thiếu lời mời");
+                //}
+                //if (dto.InviteMessage == null || dto.InviteMessage.Trim().Length > 250)
+                //{
+                //    validatorResult.Failures.Add("Lời mời không thể dài hơn 250 kí tự");
+                //}
             }
             catch (Exception ex)
             {
@@ -106,14 +107,14 @@ namespace APIExtension.Validator
                 {
                     validatorResult.Failures.Add("Bạn đã tham gia nhóm này");
                 }
-                if (dto.RequestMessage == null || dto.RequestMessage.Trim().Length == 0)
-                {
-                    validatorResult.Failures.Add("Thiếu yêu cầu");
-                }
-                if (dto.RequestMessage == null || dto.RequestMessage.Trim().Length > 250)
-                {
-                    validatorResult.Failures.Add("Lời yêu cầu không thể dài hơn 250 kí tự");
-                }
+                //if (dto.RequestMessage == null || dto.RequestMessage.Trim().Length == 0)
+                //{
+                //    validatorResult.Failures.Add("Thiếu yêu cầu");
+                //}
+                //if (dto.RequestMessage == null || dto.RequestMessage.Trim().Length > 250)
+                //{
+                //    validatorResult.Failures.Add("Lời yêu cầu không thể dài hơn 250 kí tự");
+                //}
             }
             catch (Exception ex)
             {

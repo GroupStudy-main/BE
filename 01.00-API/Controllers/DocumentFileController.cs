@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServiceLayer.Interface;
+using ShareResource.DTO.File;
 
 
 namespace API.Controllers;
@@ -19,7 +20,7 @@ public class DocumentFileController : ControllerBase
     private const string path = "D:\\UploadFile";
 
     // dòng này đổi thành host của máy
-    private const string HostUploadFile = "http://192.168.0.3:8080/";
+    private const string HostUploadFile = "http://192.168.1.5:8080/";
 
     public DocumentFileController(IServiceWrapper services, IMapper mapper)
     {
@@ -29,7 +30,7 @@ public class DocumentFileController : ControllerBase
 
     [HttpPost("/upload-file/{groupId}")]
     [DisableRequestSizeLimit]
-    public async Task<ActionResult> UploadFile(IFormFile file, [FromRoute] int groupId)
+    public async Task<ActionResult> UploadFile(IFormFile file, [FromRoute] int groupId, int accountId)
     {
         string httpFilePath = "";
         var documentFile = new DocumentFile();
@@ -53,6 +54,7 @@ public class DocumentFileController : ControllerBase
             {
                 documentFile.HttpLink = httpFilePath;
                 documentFile.Approved = false;
+                documentFile.AccountId = accountId;
                 documentFile.GroupId = groupId;
                 documentFile.CreatedDate = DateTime.Now;
                 await _service.DocumentFiles.CreateDocumentFile(documentFile);
@@ -97,8 +99,13 @@ public class DocumentFileController : ControllerBase
             return NotFound();
         }
         var result = _service.DocumentFiles.GetListByGroupId(groupId, approved);
-
-        return Ok(result);
+        List<DocumentFileDto> resultDto = new List<DocumentFileDto>();
+        foreach (var documentFile in result)
+        {
+           var dto = _mapper.Map<DocumentFileDto>(documentFile);
+           resultDto.Add(dto);
+        }
+        return Ok(resultDto);
     }
 
     [HttpPut("/accept-file")]
@@ -131,5 +138,24 @@ public class DocumentFileController : ControllerBase
 
         await _service.DocumentFiles.DeleteDocumentFile(id);
         return Ok("Deleted");
+    }
+    
+    [HttpGet("/get-by-accountid")]
+    //chỗ này thêm Authen
+    public async Task<IActionResult> GetByAccountId([FromQuery] int accountId)
+    {
+        var account = await _service.Accounts.GetByIdAsync(accountId);
+        if (null == account)
+        {
+            return NotFound();
+        }
+        var result = _service.DocumentFiles.GetListByAccountId(accountId);
+        List<DocumentFileDto> resultDto = new List<DocumentFileDto>();
+        foreach (var documentFile in result)
+        {
+            var dto = _mapper.Map<DocumentFileDto>(documentFile);
+            resultDto.Add(dto);
+        }
+        return Ok(resultDto);
     }
 }

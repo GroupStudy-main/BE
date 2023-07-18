@@ -60,7 +60,7 @@ namespace API.Controllers
 
         //GET: api/GroupMember/Invite/Group/groupId
         [SwaggerOperation(
-            Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Get all invite of group"
+            Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Get all invite of group for leader"
         )]
         [Authorize(Roles =Actor.Student)]
         [HttpGet("Invite/Group/{groupId}")]
@@ -72,7 +72,7 @@ namespace API.Controllers
             {
                 return Unauthorized("Bạn không phải nhóm trưởng của nhóm này");
             }
-            IQueryable<GroupMemberInviteGetDto> mapped = services.GroupMembers.GetJoinInviteForGroup(groupId);
+            IQueryable<JoinInviteForGroupGetDto> mapped = services.GroupMembers.GetJoinInviteForGroup(groupId);
             if (mapped == null || !mapped.Any())
             {
                 return NotFound();
@@ -83,7 +83,7 @@ namespace API.Controllers
 
         //GET: api/GroupMember/Request/Group/groupId
         [SwaggerOperation(
-            Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Get all join request of group"
+            Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Get all join request of group for leader"
         )]
         [Authorize(Roles =Actor.Student)]
         [HttpGet("Request/Group/{groupId}")]
@@ -95,7 +95,7 @@ namespace API.Controllers
             {
                 return Unauthorized("Bạn không phải nhóm trưởng của nhóm này");
             }
-            IQueryable<GroupMemberRequestGetDto> mapped = services.GroupMembers.GetJoinRequestForGroup(groupId);
+            IQueryable<JoinRequestForGroupGetDto> mapped = services.GroupMembers.GetJoinRequestForGroup(groupId);
             if (mapped == null || !mapped.Any())
             {
                 return NotFound();
@@ -107,6 +107,9 @@ namespace API.Controllers
         //Post: api/GroupMember/Invite
         [SwaggerOperation(
             Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Create Invite to join group for leader"
+            , Description ="Nhóm trưởng tạo thư mời vào nhóm<br>" +
+                "groupId id của nhóm mời vào<br>" +
+                "accountId id của học sinh được mời vào"
         )]
         [Authorize(Roles = Actor.Student)]
         [HttpPost("Invite")]
@@ -151,38 +154,43 @@ namespace API.Controllers
             #endregion
             GroupMember exsited = await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId);
             if (exsited!=null) {
-                switch (exsited.State)
+                if (!exsited.IsActive)
                 {
-                    case GroupMemberState.Leader:
+                    GroupMemberGetDto getDto = mapper.Map<GroupMemberGetDto>(
+                              await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
+                    return BadRequest(new
+                    {
+                        Message = "Học sinh đã từ chối/bị từ chối tham gia nhóm này từ trước. Hãy đợi tới tháng sau để thử lại",
+                        Previous = getDto
+                    });
+                }
+                switch (exsited.MemberRole)
+                {
+                    case GroupMemberRole.Leader:
                         {
                             return BadRequest(new { Message = "Học sinh đã tham gia nhóm này" });
                         }
-                    case GroupMemberState.Member:
+                    case GroupMemberRole.Member:
                         {
                             return BadRequest(new { Message = "Học sinh đã tham gia nhóm này" });
                         }
-                    case GroupMemberState.Inviting:
-                        {
-                            GroupMemberInviteGetDto inviteGetDto = mapper.Map<GroupMemberInviteGetDto>(
-                                await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
-                            return BadRequest(new { Message = "Học sinh đã được mời tham gia nhóm này từ trước", Previous = inviteGetDto });
-                        }
-                    case GroupMemberState.Requesting:
-                        {
-                            GroupMemberRequestGetDto requestGetDto = mapper.Map<GroupMemberRequestGetDto>(
-                                await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
-                            return BadRequest(new { Message = "Học sinh đã yêu cầu tham gia nhóm này từ trước", Previous = requestGetDto });
-                        }
-                    case GroupMemberState.Declined:
-                        {
-                            GroupMemberGetDto getDto = mapper.Map<GroupMemberGetDto>(
-                                await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
-                            return BadRequest(new
-                            {
-                                Message = "Học sinh đã từ chối/bị từ chối tham gia nhóm này từ trước. Hãy đợi tới tháng sau để thử lại",
-                                Previous = getDto
-                            });
-                        }
+                        //Fix later
+                    //case GroupMemberState.Inviting:
+                    //    {
+                    //        GroupMemberInviteGetDto inviteGetDto = mapper.Map<GroupMemberInviteGetDto>(
+                    //            await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
+                    //        return BadRequest(new { Message = "Học sinh đã được mời tham gia nhóm này từ trước", Previous = inviteGetDto });
+                    //    }
+                    //case GroupMemberState.Requesting:
+                    //    {
+                    //        GroupMemberRequestGetDto requestGetDto = mapper.Map<GroupMemberRequestGetDto>(
+                    //            await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
+                    //        return BadRequest(new { Message = "Học sinh đã yêu cầu tham gia nhóm này từ trước", Previous = requestGetDto });
+                    //    }
+                    //case GroupMemberRole.Banned:
+                    //    {
+                            
+                    //    }
                     default:
                         {
                             GroupMemberGetDto getDto = mapper.Map<GroupMemberGetDto>(
@@ -205,69 +213,107 @@ namespace API.Controllers
             return Ok();
         }
 
-        //Put: api/GroupMember/Request/{inviteId}/Accept"
+        //Put: api/GroupMember/Request/{requestId}/Accept"
         [SwaggerOperation(
             Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Accept join request for leader"
+            , Description ="Nhóm trưởng chấp nhận request vào nhóm của học sinh"
         )]
         [Authorize(Roles = Actor.Student)]
-        [HttpPut("Request/{inviteId}/Accept")]
-        public async Task<IActionResult> AcceptRequest(int inviteId)
+        [HttpPut("Request/{requestId}/Accept")]
+        public async Task<IActionResult> AcceptRequest(int requestId)
         {
             int studentId = HttpContext.User.GetUserId();
-            GroupMember existed = await services.GroupMembers.GetByIdAsync(inviteId);
-            if (existed == null)
+            Request existedRequest = await services.GroupMembers.GetRequestByIdAsync(requestId);
+            if(existedRequest == null)
             {
-                return NotFound("Yêu cầu không tồn tại");
+                return BadRequest("Yêu cầu tham gia không tồn tại");
             }
-            if (!await services.Groups.IsStudentLeadingGroupAsync(studentId, existed.GroupId))
+            if (existedRequest.State == InviteRequestStateEnum.Approved)
+            {
+                return BadRequest("Yêu cầu tham gia đã được chấp nhận");
+            }
+            if (existedRequest.State == InviteRequestStateEnum.Decline)
+                {
+                return BadRequest("Yêu cầu tham gia đã bị từ chối");
+            }
+            GroupMember existedMember = await services.GroupMembers
+                .GetGroupMemberOfStudentAndGroupAsync(existedRequest.AccountId ,existedRequest.GroupId);
+            if (existedMember != null)
+            {
+                if (!existedMember.IsActive)
+                {
+                    return BadRequest("Học sinh đã bị đuổi khỏi nhóm");
+                }
+                return BadRequest("Học sinh đã tham gia nhóm nhóm");
+            }
+            if (!await services.Groups.IsStudentLeadingGroupAsync(studentId, existedRequest.GroupId))
             {
                 return BadRequest("Bạn không phải trưởng nhóm này");
             }
-            if (existed.State != GroupMemberState.Requesting)
-            {
-                return BadRequest("Đây không phải yêu cầu");
-            }
-            await services.GroupMembers.AcceptOrDeclineRequestAsync(existed, true);
+            //if (existed.State != GroupMemberState.Requesting)
+            //{
+            //    return BadRequest("Đây không phải yêu cầu");
+            //}
+            await services.GroupMembers.AcceptOrDeclineRequestAsync(existedRequest, true);
             return Ok();
         }
 
 
-        //Put: api/GroupMember/Invite/{inviteId}/Decline"
+        //Put: api/GroupMember/Request/{requestId}/Decline"
         [SwaggerOperation(
-            Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Get all join request of group"
+            Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Decline join request for leader"
+            , Description ="Nhóm trưởng từ chối request vào nhóm của học sinh"
         )]
         [Authorize(Roles = Actor.Student)]
-        [HttpPut("Request/{inviteId}/Decline")]
-        public async Task<IActionResult> DeclineRequest(int inviteId)
+        [HttpPut("Request/{requestId}/Decline")]
+        public async Task<IActionResult> DeclineRequest(int requestId)
         {
             int studentId = HttpContext.User.GetUserId();
-            GroupMember existed = await services.GroupMembers.GetByIdAsync(inviteId);
-            if (existed == null)
+            Request existedRequest = await services.GroupMembers.GetRequestByIdAsync(requestId);
+            if (existedRequest == null)
             {
-                return NotFound("Yêu cầu không tồn tại");
+                return BadRequest("Yêu cầu tham gia không tồn tại");
             }
-            if (!await services.Groups.IsStudentLeadingGroupAsync(studentId, existed.GroupId))
+            if (existedRequest.State == InviteRequestStateEnum.Approved)
+            {
+                return BadRequest("Yêu cầu tham gia đã được chấp nhận");
+            }
+            if (existedRequest.State == InviteRequestStateEnum.Decline)
+            {
+                return BadRequest("Yêu cầu tham gia đã bị từ chối");
+            }
+            GroupMember existedMember = await services.GroupMembers
+                .GetGroupMemberOfStudentAndGroupAsync(existedRequest.AccountId, existedRequest.GroupId);
+            if (existedMember != null)
+            {
+                if (!existedMember.IsActive)
+                {
+                    return BadRequest("Học sinh đã bị đuổi khỏi nhóm");
+                }
+                return BadRequest("Học sinh đã tham gia nhóm nhóm");
+            }
+            if (!await services.Groups.IsStudentLeadingGroupAsync(studentId, existedRequest.GroupId))
             {
                 return BadRequest("Bạn không phải trưởng nhóm này");
             }
-            if (existed.State != GroupMemberState.Requesting)
-            {
-                return BadRequest("Đây không phải yêu cầu");
-            }
-            await services.GroupMembers.AcceptOrDeclineRequestAsync(existed, false);
+            //if (existed.State != GroupMemberState.Requesting)
+            //{
+            //    return BadRequest("Đây không phải yêu cầu");
+            //}
+            await services.GroupMembers.AcceptOrDeclineRequestAsync(existedRequest, false);
             return Ok();
         }
 
         //GET: api/GroupMember/Invite/Student/{studentId}
         [SwaggerOperation(
-            Summary = $"[{Actor.Student}/{Finnished.True}/{Auth.True}] Get all join invite of group"
+            Summary = $"[{Actor.Student}/{Finnished.True}/{Auth.True}] Get all join invite of student"
         )]
         [Authorize(Roles =Actor.Student)]
         [HttpGet("Invite/Student")]
         public async Task<IActionResult> GetInviteForStudent()
         {
             int studentId = HttpContext.User.GetUserId();
-            IQueryable<GroupMemberInviteGetDto> mapped = services.GroupMembers.GetJoinInviteForStudent(studentId);
+            IQueryable<JoinInviteForStudentGetDto> mapped = services.GroupMembers.GetJoinInviteForStudent(studentId);
             if (mapped == null || !mapped.Any())
             {
                 return NotFound();
@@ -278,14 +324,14 @@ namespace API.Controllers
 
         //GET: api/GroupMember/Request/Student/{studentId}
         [SwaggerOperation(
-            Summary = $"[{Actor.Student}/{Finnished.True}/{Auth.True}] Get all request of group"
+            Summary = $"[{Actor.Student}/{Finnished.True}/{Auth.True}] Get all request of student"
         )]
         [Authorize(Roles =Actor.Student)]
         [HttpGet("Request/Student")]
         public async Task<IActionResult> GetRequestForStudent()
         {
             int studentId = HttpContext.User.GetUserId();
-            IQueryable<GroupMemberRequestGetDto> mapped = services.GroupMembers.GetJoinRequestForStudent(studentId);
+            IQueryable<JoinRequestForStudentGetDto> mapped = services.GroupMembers.GetJoinRequestForStudent(studentId);
             if (mapped == null || !mapped.Any())
             {
                 return NotFound();
@@ -296,7 +342,10 @@ namespace API.Controllers
 
         //POST: api/GroupMember/Request
         [SwaggerOperation(
-            Summary = $"[{Actor.Student}/{Finnished.True}/{Auth.True}] Get all request of group"
+            Summary = $"[{Actor.Student}/{Finnished.True}/{Auth.True}] Request to join new group for student"
+            , Description ="Học sinh tạo request vào nhóm mới<br>" +
+                "groupId: id của nhóm học sinh muốn vào<br>" +
+                "accountId: id của học sinh đang muốn vào"
         )]
         [Authorize(Roles = Actor.Student)]
         [HttpPost("Request")]
@@ -339,41 +388,52 @@ namespace API.Controllers
             //    });
             //}
             #endregion
-            GroupMember exsited = await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId);
-            if (exsited != null)
+            GroupMember exsitedGroupMember = await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId);
+            if (exsitedGroupMember != null)
             {
-                switch (exsited.State)
+                if (!exsitedGroupMember.IsActive)
                 {
-                    case GroupMemberState.Leader:
+                    GroupMemberGetDto getDto = mapper.Map<GroupMemberGetDto>(
+                             await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
+                    return BadRequest(new
+                    {
+                        Message = "Bạn đã từ chối/bị từ chối tham gia nhóm này từ trước. Hãy đợi tới tháng sau để thử lại",
+                        Previous = getDto
+                    });
+                }
+                switch (exsitedGroupMember.MemberRole)
+                {
+                    case GroupMemberRole.Leader:
                         {
                             return BadRequest(new { Message = "Bạn đã tham gia nhóm này" });
                         }
-                    case GroupMemberState.Member:
+                    case GroupMemberRole.Member:
                         {
                             return BadRequest(new { Message = "Bạn đã tham gia nhóm này" });
                         }
-                    case GroupMemberState.Inviting:
-                        {
-                            GroupMemberInviteGetDto inviteGetDto = mapper.Map<GroupMemberInviteGetDto>(
-                                await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
-                            return BadRequest(new { Message = "Bạn đã được mời tham gia nhóm này từ trước", Previous = inviteGetDto });
-                        }
-                    case GroupMemberState.Requesting:
-                        {
-                            GroupMemberRequestGetDto requestGetDto = mapper.Map<GroupMemberRequestGetDto>(
-                                await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
-                            return BadRequest(new { Message = "Bạn đã yêu cầu tham gia nhóm này từ trước", Previous = requestGetDto });
-                        }
-                    case GroupMemberState.Declined:
-                        {
-                            GroupMemberGetDto getDto = mapper.Map<GroupMemberGetDto>(
-                                await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
-                            return BadRequest(new
-                            {
-                                Message = "Bạn đã từ chối/bị từ chối tham gia nhóm này từ trước. Hãy đợi tới tháng sau để thử lại",
-                                Previous = getDto
-                            });
-                        }
+                        //Fix later
+                    //case GroupMemberState.Inviting:
+                    //    {
+                    //        GroupMemberInviteGetDto inviteGetDto = mapper.Map<GroupMemberInviteGetDto>(
+                    //            await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
+                    //        return BadRequest(new { Message = "Bạn đã được mời tham gia nhóm này từ trước", Previous = inviteGetDto });
+                    //    }
+                    //case GroupMemberState.Requesting:
+                    //    {
+                    //        GroupMemberRequestGetDto requestGetDto = mapper.Map<GroupMemberRequestGetDto>(
+                    //            await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
+                    //        return BadRequest(new { Message = "Bạn đã yêu cầu tham gia nhóm này từ trước", Previous = requestGetDto });
+                    //    }
+                    //case GroupMemberRole.Banned:
+                    //    {
+                    //        GroupMemberGetDto getDto = mapper.Map<GroupMemberGetDto>(
+                    //            await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
+                    //        return BadRequest(new
+                    //        {
+                    //            Message = "Bạn đã từ chối/bị từ chối tham gia nhóm này từ trước. Hãy đợi tới tháng sau để thử lại",
+                    //            Previous = getDto
+                    //        });
+                    //    }
                     default:
                         {
                             GroupMemberGetDto getDto = mapper.Map<GroupMemberGetDto>(
@@ -386,68 +446,179 @@ namespace API.Controllers
                         }
                 }
             }
+            Invite exsitedInvite = await services.GroupMembers.GetInviteOfStudentAndGroupAsync(dto.AccountId, dto.GroupId);
+            if (exsitedInvite != null)
+            {
+                JoinInviteForGroupGetDto inviteGetDto = mapper.Map<JoinInviteForGroupGetDto>(exsitedInvite);
+                return BadRequest(new { Message = "Bạn đã được mời tham gia nhóm này từ trước", Previous = inviteGetDto });
+            }
+            Request exsitedRequest = await services.GroupMembers.GetRequestOfStudentAndGroupAsync(dto.AccountId, dto.GroupId);
+            if (exsitedRequest != null)
+            {
+                JoinRequestForGroupGetDto requestGetDto = mapper.Map<JoinRequestForGroupGetDto>(exsitedRequest);
+                return BadRequest(new { Message = "Bạn đã yêu cầu tham gia nhóm này từ trước", Previous = requestGetDto });
+            }
+
             ValidatorResult valResult = await validators.GroupMembers.ValidateParamsAsync(dto);
             if (!valResult.IsValid)
             {
                 return BadRequest(valResult.Failures);
             }
             await services.GroupMembers.CreateJoinRequest(dto);
-
             return Ok();
         }
 
         //Put: api/GroupMember/Invite/{inviteId}/Accept"
         [SwaggerOperation(
-            Summary = $"[{Actor.Member}/{Finnished.True}/{Auth.True}] Get all join request of group"
+            Summary = $"[{Actor.Member}/{Finnished.True}/{Auth.True}] Accpet join invite for student"
+            , Description ="Học sinh chấp nhận lời mời vào nhóm"
         )]
         [Authorize(Roles = Actor.Student)]
         [HttpPut("Invite/{inviteId}/Accept")]
         public async Task<IActionResult> AcceptInvite(int inviteId)
         {
             int studentId = HttpContext.User.GetUserId();
-            GroupMember existed = await services.GroupMembers.GetByIdAsync(inviteId);
-            if (existed == null)
+            Invite existedInvite = await services.GroupMembers.GetInviteByIdAsync(inviteId);
+            if (existedInvite == null)
             {
-                return NotFound("Lời mời không tồn tại");
+                return BadRequest("Lời mời tham gia không tồn tại");
             }
-            if (existed.AccountId != studentId)
+            if (existedInvite.State == InviteRequestStateEnum.Approved)
+            {
+                return BadRequest("Lời mời tham gia đã được chấp nhận");
+            }
+            if (existedInvite.State == InviteRequestStateEnum.Decline)
+            {
+                return BadRequest("Lời mời tham gia đã bị từ chối");
+            }
+            GroupMember existedMember = await services.GroupMembers
+                .GetGroupMemberOfStudentAndGroupAsync(existedInvite.AccountId, existedInvite.GroupId);
+            if (existedMember != null)
+            {
+                if (!existedMember.IsActive)
+                {
+                    return BadRequest("Học sinh đã bị đuổi khỏi nhóm");
+                }
+                return BadRequest("Học sinh đã tham gia nhóm nhóm");
+            }
+            if (existedInvite.AccountId != studentId)
             {
                 return BadRequest("Đây không phải lời mời cho bạn");
             }
-            if (existed.State != GroupMemberState.Inviting)
-            {
-                return BadRequest("Đây không phải lời mời");
-            }
-            await services.GroupMembers.AcceptOrDeclineInviteAsync(existed, true);
+            //if (existed.State != GroupMemberState.Requesting)
+            //{
+            //    return BadRequest("Đây không phải yêu cầu");
+            //}
+            //int studentId = HttpContext.User.GetUserId();
+            //GroupMember existed = await services.GroupMembers.GetByIdAsync(inviteId);
+            //if (existed == null)
+            //{
+            //    return NotFound("Lời mời không tồn tại");
+            //}
+            //if (existed.AccountId != studentId)
+            //{
+            //    return BadRequest("Đây không phải lời mời cho bạn");
+            //}
+            ////Fix later
+            ////if (existed.State != GroupMemberState.Inviting)
+            ////{
+            ////    return BadRequest("Đây không phải lời mời");
+            ////}
+            await services.GroupMembers.AcceptOrDeclineInviteAsync(existedInvite, true);
             return Ok();
         }
 
 
         //Put: api/GroupMember/Invite/{inviteId}/Decline"
         [SwaggerOperation(
-            Summary = $"[{Actor.Member}/{Finnished.True}/{Auth.True}] Get all join request of group"
-        )]
+           Summary = $"[{Actor.Member}/{Finnished.True}/{Auth.True}] Decline join invite for student"
+           , Description = "Học sinh từ chối lời mời vào nhóm"
+       )]
         [Authorize(Roles = Actor.Student)]
         [HttpPut("Invite/{inviteId}/Decline")]
         public async Task<IActionResult> DeclineInvite(int inviteId)
         {
             int studentId = HttpContext.User.GetUserId();
-            GroupMember existed = await services.GroupMembers.GetByIdAsync(inviteId);
-            if (existed == null)
+            Invite existedInvite = await services.GroupMembers.GetInviteByIdAsync(inviteId);
+            if (existedInvite == null)
             {
-                return NotFound("Lời mời không tồn tại");
+                return BadRequest("Lời mời tham gia không tồn tại");
             }
-            if (existed.AccountId != studentId)
+            if (existedInvite.State == InviteRequestStateEnum.Approved)
+            {
+                return BadRequest("Lời mời tham gia đã được chấp nhận");
+            }
+            if (existedInvite.State == InviteRequestStateEnum.Decline)
+            {
+                return BadRequest("Lời mời tham gia đã bị từ chối");
+            }
+            GroupMember existedMember = await services.GroupMembers
+                .GetGroupMemberOfStudentAndGroupAsync(existedInvite.AccountId, existedInvite.GroupId);
+            if (existedMember != null)
+            {
+                if (!existedMember.IsActive)
+                {
+                    return BadRequest("Học sinh đã bị đuổi khỏi nhóm");
+                }
+                return BadRequest("Học sinh đã tham gia nhóm nhóm");
+            }
+            if (existedInvite.AccountId != studentId)
             {
                 return BadRequest("Đây không phải lời mời cho bạn");
             }
-            if (existed.State != GroupMemberState.Inviting)
-            {
-                return BadRequest("Đây không phải lời mời");
-            }
-            await services.GroupMembers.AcceptOrDeclineInviteAsync(existed, false);
+            //int studentId = HttpContext.User.GetUserId();
+            //Invite existedInvite = await services.GroupMembers.GetInviteByIdAsync(inviteId);
+            //if (existedInvite == null)
+            //{
+            //    return NotFound("Lời mời không tồn tại");
+            //}
+            //if (existedInvite.AccountId != studentId)
+            //{
+            //    return BadRequest("Đây không phải lời mời dành cho bạn");
+            //}
+            ////if (existed.State != GroupMemberState.Inviting)
+            ////{
+            ////    return BadRequest("Đây không phải lời mời");
+            ////}
+            await services.GroupMembers.AcceptOrDeclineInviteAsync(existedInvite, false);
             return Ok();
         }
+        //Delete
+        //: api/GroupMember/Invite/{inviteId}/Decline"
+        [SwaggerOperation(
+           Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Banned user from group for leader"
+           , Description = "Leader ban member khỏi nhóm<br>" +
+                "groupId: id của nhóm<br>" +
+                "banAccId: id của member bị ban"
+        )]
+        [Authorize(Roles =Actor.Student)]
+        [HttpDelete("Group/{groupId}/Account/{banAccId}")]
+        public async Task<IActionResult> BanMember(int groupId, int banAccId)
+        {
+            int studentId = HttpContext.User.GetUserId();
+            bool isLead = await services.Groups.IsStudentLeadingGroupAsync(studentId, groupId);
+            if (!isLead)
+            {
+                return Unauthorized("Bạn không phải nhóm trưởng của nhóm này");
+            }
+            if(studentId == banAccId)
+            {
+                return Unauthorized("Bạn không thể đuổi chính mình");
+            }
+            GroupMember exited= await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(banAccId, groupId);
+            if(exited == null) 
+            {
+                return BadRequest("Học sinh không tham gia nhóm này");    
+            }
+            if(!exited.IsActive)
+            {
+                return BadRequest("Học sinh đã bị đuổi khỏi nhóm này");
+            }
+            await services.GroupMembers.BanUserFromGroupAsync(exited);
+            return Ok();
+        }
+
+
 
         //////////////////////////////////////////////////////////////////// 
         //// GET: api/GroupMembers

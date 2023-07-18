@@ -27,5 +27,21 @@ namespace ShareResource.DTO
             set { phone = value?.Trim(); }
         }
 
+        private string? schhool { get; set; }
+        public string? Schhool
+        {
+            get { return schhool; }
+            set { schhool = value.Trim(); }
+        }
+
+
+        private DateTime? dateOfBirth;
+
+        public DateTime? DateOfBirth
+        {
+            get { return dateOfBirth; }
+            set { dateOfBirth = value.Value.Date; }
+        }
+
     }
 }

@@ -5,7 +5,7 @@ namespace ShareResource.DTO
     public class GroupMemberGetDto : BaseGetDto
     {
         public int Id { get; set; }
-        public GroupMemberState State { get; set; }
+        public GroupMemberRole State { get; set; }
         public string InviteMessage { get; set; }
         public string RequestMessage { get; set; }
         public int GroupId { get; set; }

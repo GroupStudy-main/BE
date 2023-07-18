@@ -17,7 +17,7 @@ namespace DataLayer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.16")
+                .HasAnnotation("ProductVersion", "6.0.18")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -29,6 +29,13 @@ namespace DataLayer.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("ClassId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DateOfBirth")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Dob");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -52,12 +59,17 @@ namespace DataLayer.Migrations
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Schhool")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(32)
                         .HasColumnType("nvarchar(32)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClassId");
 
                     b.HasIndex("Email")
                         .IsUnique();
@@ -73,46 +85,55 @@ namespace DataLayer.Migrations
                         new
                         {
                             Id = 1,
+                            DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "trankhaiminhkhoi10a3@gmail.com",
-                            FullName = "Nguyen Van A",
+                            FullName = "Tran Khai Minh Khoi",
                             Password = "123456789",
                             Phone = "0123456789",
                             RoleId = 2,
+                            Schhool = "THCS Minh Đức",
                             Username = "student1"
                         },
                         new
                         {
                             Id = 2,
+                            DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student2@gmail.com",
                             FullName = "Dao Thi B",
                             Password = "123456789",
                             Phone = "0123456789",
                             RoleId = 2,
+                            Schhool = "THCS Minh Đức",
                             Username = "student2"
                         },
                         new
                         {
                             Id = 3,
+                            DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student3@gmail.com",
                             FullName = "Tran Van C",
                             Password = "123456789",
                             Phone = "0123456789",
                             RoleId = 2,
+                            Schhool = "THCS Minh Đức",
                             Username = "student3"
                         },
                         new
                         {
                             Id = 4,
+                            DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student4@gmail.com",
                             FullName = "Li Thi D",
                             Password = "123456789",
                             Phone = "0123456789",
                             RoleId = 2,
+                            Schhool = "THCS Minh Đức",
                             Username = "student4"
                         },
                         new
                         {
                             Id = 5,
+                            DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student5@gmail.com",
                             FullName = "Tran Van E",
                             Password = "123456789",
@@ -123,26 +144,31 @@ namespace DataLayer.Migrations
                         new
                         {
                             Id = 6,
+                            DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student6@gmail.com",
                             FullName = "Li Chinh F",
                             Password = "123456789",
                             Phone = "0123456789",
                             RoleId = 2,
+                            Schhool = "THCS Minh Đức",
                             Username = "student6"
                         },
                         new
                         {
                             Id = 7,
+                            DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student7@gmail.com",
                             FullName = "Ngo Van G",
                             Password = "123456789",
                             Phone = "0123456789",
                             RoleId = 2,
+                            Schhool = "THCS Minh Đức",
                             Username = "student7"
                         },
                         new
                         {
                             Id = 8,
+                            DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student8@gmail.com",
                             FullName = "Tran Van H",
                             Password = "123456789",
@@ -153,26 +179,31 @@ namespace DataLayer.Migrations
                         new
                         {
                             Id = 9,
+                            DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student9@gmail.com",
                             FullName = "Tran Van I",
                             Password = "123456789",
                             Phone = "0123456789",
                             RoleId = 2,
+                            Schhool = "THCS Minh Đức",
                             Username = "student9"
                         },
                         new
                         {
                             Id = 10,
+                            DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student10@gmail.com",
                             FullName = "Tran Van J",
                             Password = "123456789",
                             Phone = "0123456789",
                             RoleId = 2,
+                            Schhool = "THCS Minh Đức",
                             Username = "student10"
                         },
                         new
                         {
                             Id = 11,
+                            DateOfBirth = new DateTime(1975, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "trankhaiminhkhoi@gmail.com",
                             FullName = "Tran Khoi",
                             Password = "123456789",
@@ -273,11 +304,11 @@ namespace DataLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("AccountId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("Approved")
                         .HasColumnType("bit");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -290,6 +321,8 @@ namespace DataLayer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
 
                     b.HasIndex("GroupId");
 
@@ -334,7 +367,25 @@ namespace DataLayer.Migrations
                         {
                             Id = 3,
                             ClassId = 8,
-                            Name = "Nhóm 1 của học sinh 2"
+                            Name = "Nhóm 3 của học sinh 2"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            ClassId = 8,
+                            Name = "Nhóm 4 của học sinh 2"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            ClassId = 8,
+                            Name = "Nhóm 5 của học sinh 3"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            ClassId = 8,
+                            Name = "Nhóm 6 của học sinh 3"
                         });
                 });
 
@@ -352,13 +403,10 @@ namespace DataLayer.Migrations
                     b.Property<int>("GroupId")
                         .HasColumnType("int");
 
-                    b.Property<string>("InviteMessage")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("RequestMessage")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("State")
+                    b.Property<int>("MemberRole")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -376,101 +424,80 @@ namespace DataLayer.Migrations
                             Id = 1,
                             AccountId = 1,
                             GroupId = 1,
-                            State = 0
+                            IsActive = true,
+                            MemberRole = 1
                         },
                         new
                         {
                             Id = 2,
                             AccountId = 2,
                             GroupId = 1,
-                            InviteMessage = "Nhóm của mình rất hay. Bạn vô nha",
-                            State = 1
+                            IsActive = true,
+                            MemberRole = 2
                         },
                         new
                         {
                             Id = 3,
-                            AccountId = 3,
+                            AccountId = 5,
                             GroupId = 1,
-                            InviteMessage = "Nhóm của mình rất hay. Bạn vô nha",
-                            State = 2
+                            IsActive = false,
+                            MemberRole = 2
                         },
                         new
                         {
                             Id = 4,
-                            AccountId = 4,
-                            GroupId = 1,
-                            RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha",
-                            State = 3
+                            AccountId = 1,
+                            GroupId = 2,
+                            IsActive = true,
+                            MemberRole = 1
                         },
                         new
                         {
                             Id = 5,
-                            AccountId = 5,
-                            GroupId = 1,
-                            RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha",
-                            State = 4
+                            AccountId = 2,
+                            GroupId = 2,
+                            IsActive = true,
+                            MemberRole = 2
                         },
                         new
                         {
                             Id = 6,
-                            AccountId = 1,
-                            GroupId = 2,
-                            State = 0
+                            AccountId = 2,
+                            GroupId = 3,
+                            IsActive = true,
+                            MemberRole = 1
                         },
                         new
                         {
                             Id = 7,
-                            AccountId = 2,
-                            GroupId = 2,
-                            InviteMessage = "Nhóm của mình rất hay. Bạn vô nha",
-                            State = 1
+                            AccountId = 1,
+                            GroupId = 3,
+                            IsActive = true,
+                            MemberRole = 2
                         },
                         new
                         {
                             Id = 8,
-                            AccountId = 3,
-                            GroupId = 2,
-                            InviteMessage = "Nhóm của mình rất hay. Bạn vô nha",
-                            State = 2
+                            AccountId = 2,
+                            GroupId = 4,
+                            IsActive = true,
+                            MemberRole = 1
                         },
                         new
                         {
                             Id = 9,
-                            AccountId = 4,
-                            GroupId = 2,
-                            RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha",
-                            State = 3
+                            AccountId = 3,
+                            GroupId = 5,
+                            IsActive = true,
+                            MemberRole = 1
                         },
                         new
                         {
                             Id = 10,
-                            AccountId = 2,
-                            GroupId = 3,
-                            State = 0
-                        },
-                        new
-                        {
-                            Id = 11,
-                            AccountId = 1,
-                            GroupId = 3,
-                            InviteMessage = "Nhóm của mình rất hay. Bạn vô nha",
-                            State = 1
-                        },
-                        new
-                        {
-                            Id = 12,
                             AccountId = 3,
-                            GroupId = 3,
-                            InviteMessage = "Nhóm của mình rất hay. Bạn vô nha",
-                            State = 2
-                        },
-                        new
-                        {
-                            Id = 13,
-                            AccountId = 4,
-                            GroupId = 3,
-                            RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha",
-                            State = 3
+                            GroupId = 6,
+                            IsActive = true,
+                            MemberRole = 1
                         });
                 });
 
@@ -544,12 +571,104 @@ namespace DataLayer.Migrations
                             Id = 8,
                             GroupId = 3,
                             SubjectId = 6
+                        });
+                });
+
+            modelBuilder.Entity("DataLayer.DBObject.Invite", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("AccountId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GroupId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("State")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("JoinInvites");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AccountId = 2,
+                            GroupId = 1,
+                            State = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AccountId = 3,
+                            GroupId = 1,
+                            State = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AccountId = 2,
+                            GroupId = 2,
+                            State = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AccountId = 3,
+                            GroupId = 2,
+                            State = 2
+                        },
+                        new
+                        {
+                            Id = 5,
+                            AccountId = 1,
+                            GroupId = 3,
+                            State = 1
+                        },
+                        new
+                        {
+                            Id = 6,
+                            AccountId = 3,
+                            GroupId = 3,
+                            State = 2
+                        },
+                        new
+                        {
+                            Id = 7,
+                            AccountId = 3,
+                            GroupId = 4,
+                            State = 2
+                        },
+                        new
+                        {
+                            Id = 8,
+                            AccountId = 3,
+                            GroupId = 5,
+                            State = 2
                         },
                         new
                         {
                             Id = 9,
-                            GroupId = 3,
-                            SubjectId = 9
+                            AccountId = 2,
+                            GroupId = 6,
+                            State = 2
+                        },
+                        new
+                        {
+                            Id = 10,
+                            AccountId = 1,
+                            GroupId = 6,
+                            State = 2
                         });
                 });
 
@@ -594,6 +713,76 @@ namespace DataLayer.Migrations
                     b.HasIndex("ScheduleId");
 
                     b.ToTable("Meetings");
+                });
+
+            modelBuilder.Entity("DataLayer.DBObject.Request", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("AccountId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GroupId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("State")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("JoinRequests");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AccountId = 4,
+                            GroupId = 1,
+                            State = 2
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AccountId = 3,
+                            GroupId = 2,
+                            State = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AccountId = 4,
+                            GroupId = 3,
+                            State = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AccountId = 4,
+                            GroupId = 4,
+                            State = 2
+                        },
+                        new
+                        {
+                            Id = 5,
+                            AccountId = 3,
+                            GroupId = 5,
+                            State = 2
+                        },
+                        new
+                        {
+                            Id = 6,
+                            AccountId = 1,
+                            GroupId = 6,
+                            State = 2
+                        });
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Review", b =>
@@ -772,41 +961,22 @@ namespace DataLayer.Migrations
                         {
                             Id = 8,
                             Name = "Anh"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Name = "Giáo dục công dân"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Name = "Công nghệ"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Name = "Quốc phòng"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Name = "Thể dục"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            Name = "Tin"
                         });
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Account", b =>
                 {
+                    b.HasOne("DataLayer.DBObject.Class", "Class")
+                        .WithMany()
+                        .HasForeignKey("ClassId");
+
                     b.HasOne("DataLayer.DBObject.Role", "Role")
                         .WithMany("Accounts")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Class");
 
                     b.Navigation("Role");
                 });
@@ -832,11 +1002,19 @@ namespace DataLayer.Migrations
 
             modelBuilder.Entity("DataLayer.DBObject.DocumentFile", b =>
                 {
+                    b.HasOne("DataLayer.DBObject.Account", "Account")
+                        .WithMany()
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DataLayer.DBObject.Group", "Group")
                         .WithMany()
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Account");
 
                     b.Navigation("Group");
                 });
@@ -890,6 +1068,25 @@ namespace DataLayer.Migrations
                     b.Navigation("Subject");
                 });
 
+            modelBuilder.Entity("DataLayer.DBObject.Invite", b =>
+                {
+                    b.HasOne("DataLayer.DBObject.Account", "Account")
+                        .WithMany("JoinInvites")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataLayer.DBObject.Group", "Group")
+                        .WithMany("JoinInvites")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+
+                    b.Navigation("Group");
+                });
+
             modelBuilder.Entity("DataLayer.DBObject.Meeting", b =>
                 {
                     b.HasOne("DataLayer.DBObject.Group", "Group")
@@ -905,6 +1102,25 @@ namespace DataLayer.Migrations
                     b.Navigation("Group");
 
                     b.Navigation("Schedule");
+                });
+
+            modelBuilder.Entity("DataLayer.DBObject.Request", b =>
+                {
+                    b.HasOne("DataLayer.DBObject.Account", "Account")
+                        .WithMany("JoinRequests")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataLayer.DBObject.Group", "Group")
+                        .WithMany("JoinRequests")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+
+                    b.Navigation("Group");
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Review", b =>
@@ -957,6 +1173,10 @@ namespace DataLayer.Migrations
             modelBuilder.Entity("DataLayer.DBObject.Account", b =>
                 {
                     b.Navigation("GroupMembers");
+
+                    b.Navigation("JoinInvites");
+
+                    b.Navigation("JoinRequests");
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Group", b =>
@@ -964,6 +1184,10 @@ namespace DataLayer.Migrations
                     b.Navigation("GroupMembers");
 
                     b.Navigation("GroupSubjects");
+
+                    b.Navigation("JoinInvites");
+
+                    b.Navigation("JoinRequests");
 
                     b.Navigation("Meetings");
 

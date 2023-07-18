@@ -6,7 +6,7 @@ namespace API.SignalRHub.Tracker
     {
         //Key dạng UserConnectionDto chứa Username và MeetingId
         //Value chứa list các MeetingHub và GroupHub ContextConnectionId
-        private static readonly Dictionary<UserConnectionSignalrDto, List<string>> OnlineUsers = new Dictionary<UserConnectionSignalrDto, List<string>>();
+        public static readonly Dictionary<UserConnectionSignalrDto, List<string>> OnlineUsers = new Dictionary<UserConnectionSignalrDto, List<string>>();
 
         /// <summary>
         /// Thêm connection cho người và meeting    <br/>

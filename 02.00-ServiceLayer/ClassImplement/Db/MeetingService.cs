@@ -6,6 +6,11 @@ using RepositoryLayer.Interface;
 using ServiceLayer.Interface.Db;
 using ShareResource.DTO;
 using ShareResource.UpdateApiExtension;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 
 namespace ServiceLayer.ClassImplement.Db
 {
@@ -37,20 +42,77 @@ namespace ServiceLayer.ClassImplement.Db
             await repos.Meetings.CreateAsync(meeting);
         }
 
-        public async Task<IEnumerable<Meeting>> MassCreateScheduleMeetingAsync(ScheduleMeetingMassCreateDto dto)
+        public async Task<Schedule> MassCreateScheduleMeetingAsync(ScheduleMeetingMassCreateDto dto)
         {
-            DateTime[] dates = Enumerable.Range(0, 1 + dto.ScheduleRangeEnd.Subtract(dto.ScheduleSRangeStart).Days)
-                .Select(offset => dto.ScheduleSRangeStart.AddDays(offset))
+            DateTime[] dates = Enumerable.Range(0, 1 + dto.ScheduleRangeEnd.Subtract(dto.ScheduleRangeStart).Days)
+                .Select(offset => dto.ScheduleRangeStart.AddDays(offset))
                 .Where(date => dto.DayOfWeeks.Contains(date.DayOfWeek + 1))
                 .ToArray();
-            IEnumerable<Meeting> creatingMeetings = dates.Select(date => new Meeting
+            List<Meeting> creatingMeetings = dates.Select(date => new Meeting
             {
                 Name = dto.Name + " " + date.ToString("d/M"),
                 GroupId = dto.GroupId,
                 ScheduleStart = date.Add(dto.ScheduleStartTime),
                 ScheduleEnd = date.Add(dto.ScheduleEndTime),
-            });
-            return await repos.Meetings.MassCreateAsync(creatingMeetings);
+            }).ToList();
+            string daysOfWeek = daysOfWeekToString(dto.DayOfWeeks);
+            Console.WriteLine($"+++===+++===+++===+++===+++===+++===\n{daysOfWeek}");
+            Schedule schedule = new Schedule
+            {
+                GroupId = dto.GroupId,
+                Name = dto.Name,
+                DaysOfWeek = daysOfWeek,
+                StartDate = dto.ScheduleRangeStart,
+                EndDate = dto.ScheduleRangeEnd,
+                StartTime = dto.ScheduleStartTime,
+                EndTime = dto.ScheduleEndTime,
+                Meetings = creatingMeetings
+            };
+            //return await repos.Meetings.MassCreateAsync(creatingMeetings);
+            await repos.Schedules.CreateAsync(schedule);
+            //return creatingMeetings;
+            return schedule;
+            string daysOfWeekToString(ICollection<DayOfWeek> daysOfWeek)
+            {
+                //var sorted = daysOfWeek.Select(dayInt => (int)dayInt == 1 ? 8 : (int)dayInt).AsEnumerable().ToImmutableSortedSet();
+                var sorted = daysOfWeek.Cast<int>().ToList();
+                sorted.Sort();
+                if (sorted[0] == 1)
+                {
+                    sorted.RemoveAt(0);
+                    sorted.Add(8);
+                }
+                string daysOfWeekString = "" + dayOfWeekConvert(sorted[0]);
+                for (int i = 1; i < sorted.Count; i++)
+                {
+                    daysOfWeekString += $", {dayOfWeekConvert(sorted[i])}";
+                }
+                return daysOfWeekString;
+
+            }
+            string dayOfWeekConvert(int intDay)
+            {
+                switch (intDay)
+                {
+                    case 1:
+                        return "Chủ Nhật";
+                    case 2:
+                        return "Thứ Hai";
+                    case 3:
+                        return "Thứ Ba";
+                    case 4:
+                        return "Thứ Tư";
+                    case 5:
+                        return "Thứ Năm";
+                    case 6:
+                        return "Thứ Sáu";
+                    case 7:
+                        return "Thứ Bảy";
+                    case 8:
+                        return "Chủ Nhật";
+                }
+                return "";
+            }
         }
 
         public async Task<Meeting> GetByIdAsync(int id)
@@ -82,6 +144,72 @@ namespace ServiceLayer.ClassImplement.Db
                 .Where(e => e.GroupId == groupId && e.ScheduleStart != null && e.ScheduleStart.Value.Date >= DateTime.Today && e.Start == null)
                 .ProjectTo<ScheduleMeetingGetDto>(mapper.ConfigurationProvider);
         }
+        public IQueryable<PastMeetingGetDto> GetPastMeetingsForStudent(int studentId)
+        {
+            //Nếu tháng này thì chỉ lấy past meeting
+            IQueryable<Meeting> allMeetingsOfJoinedGroups = repos.Meetings.GetList()
+                .Include(c => c.Connections)
+                .Include(m => m.Group).ThenInclude(g => g.GroupMembers)
+                .Where(e => e.Group.GroupMembers.Any(gm => gm.AccountId == studentId)
+                    //lấy past meeting
+                    && (e.End != null || e.ScheduleStart != null && e.ScheduleStart.Value.Date < DateTime.Today))  ;
+            return allMeetingsOfJoinedGroups.ProjectTo<PastMeetingGetDto>(mapper.ConfigurationProvider);
+        }
+
+        public IQueryable<PastMeetingGetDto> GetPastMeetingsForStudentByMonth(int studentId, DateTime month)
+        {
+            DateTime start = new DateTime(month.Year, month.Month, 1);
+            DateTime end = start.AddMonths(1);
+            //Nếu tháng này thì chỉ lấy past meeting
+            IQueryable<Meeting> allMeetingsOfJoinedGroups = month.Month == DateTime.Now.Month
+                ? repos.Meetings.GetList()
+                .Include(c => c.Connections)
+                .Include(m => m.Group).ThenInclude(g => g.GroupMembers)
+                .Where(e => ((e.ScheduleStart >= start && e.ScheduleStart.Value.Date < end)||(e.Start >= start && e.Start.Value.Date < end))
+                    && e.Group.GroupMembers.Any(gm => gm.AccountId == studentId)
+                    //lấy past meeting
+                    && (e.End != null || e.ScheduleStart != null && e.ScheduleStart.Value.Date < DateTime.Today))
+                : repos.Meetings.GetList()
+                .Include(c => c.Connections)
+                .Include(m => m.Group).ThenInclude(g => g.GroupMembers)
+                .Where(c => c.Start >= start && c.Start.Value.Date < end
+                    && c.Group.GroupMembers.Any(gm => gm.AccountId == studentId));
+            return allMeetingsOfJoinedGroups.ProjectTo<PastMeetingGetDto>(mapper.ConfigurationProvider);
+        }
+
+        public IQueryable<ScheduleMeetingGetDto> GetScheduleMeetingsForStudent(int studentId)
+        {
+            IQueryable<Meeting> scheduleMeetingsOfJoinedGroups = repos.Meetings.GetList()
+                .Include(c => c.Connections)
+                .Include(m => m.Group).ThenInclude(g => g.GroupMembers)
+                .Where(e => e.Group.GroupMembers.Any(gm => gm.AccountId == studentId)
+                    //lấy past meeting
+                    && (e.ScheduleStart != null && e.ScheduleStart.Value.Date >= DateTime.Today && e.Start == null));
+            return scheduleMeetingsOfJoinedGroups.ProjectTo<ScheduleMeetingGetDto>(mapper.ConfigurationProvider);
+        }
+
+        public IQueryable<ScheduleMeetingGetDto> GetScheduleMeetingsForStudentByDate(int studentId, DateTime date)
+        {
+            IQueryable<Meeting> scheduleMeetingsOfJoinedGroups = repos.Meetings.GetList()
+                .Include(c => c.Connections)
+                .Include(m => m.Group).ThenInclude(g => g.GroupMembers)
+                .Where(e => e.Group.GroupMembers.Any(gm => gm.AccountId == studentId)
+                    //lấy schedule meeting
+                    && (e.ScheduleStart != null && e.ScheduleStart.Value.Date >= DateTime.Today && e.Start == null)
+                    && e.ScheduleStart.Value.Date ==date);
+            return scheduleMeetingsOfJoinedGroups.ProjectTo<ScheduleMeetingGetDto>(mapper.ConfigurationProvider);
+        }
+
+        public IQueryable<LiveMeetingGetDto> GetLiveMeetingsForStudent(int studentId)
+        {
+            IQueryable<Meeting> scheduleMeetingsOfJoinedGroups = repos.Meetings.GetList()
+                .Include(c => c.Connections)
+                .Include(m => m.Group).ThenInclude(g => g.GroupMembers)
+                .Where(e => e.Group.GroupMembers.Any(gm => gm.AccountId == studentId)
+                //lấy live meeting
+                && e.Start != null && e.End == null);
+            return scheduleMeetingsOfJoinedGroups.ProjectTo<LiveMeetingGetDto>(mapper.ConfigurationProvider);
+        }
 
         public async Task UpdateScheduleMeetingAsync(ScheduleMeetingUpdateDto dto)
         {
@@ -107,5 +235,14 @@ namespace ServiceLayer.ClassImplement.Db
         {
             await repos.Meetings.RemoveAsync(meeting.Id);
         }
+
+        public IQueryable<ScheduleGetDto> GetSchedulesForGroup(int groupId)
+        {
+            IQueryable<Schedule> schedules = repos.Schedules.GetList()
+                .Include(e => e.Meetings);
+
+            return schedules.ProjectTo<ScheduleGetDto>(mapper.ConfigurationProvider);
+        }
+
     }
 }

@@ -177,15 +177,15 @@ namespace APIExtension.Validator
                     validatorResult.Failures.Add("Ngày trong tuần không hợp lí");
                 }
                 //Validate range
-                if (dto.ScheduleSRangeStart.Date==DateTime.Today && dto.ScheduleStartTime<DateTime.Now.TimeOfDay)
+                if (dto.ScheduleRangeStart.Date==DateTime.Today && dto.ScheduleStartTime<DateTime.Now.TimeOfDay)
                 {
                     validatorResult.Failures.Add("Thời gian bắt đầu buổi học không hợp lí");
                 }
-                else if (dto.ScheduleSRangeStart < DateTime.Now.Date)
+                else if (dto.ScheduleRangeStart < DateTime.Now.Date)
                 {
                     validatorResult.Failures.Add("Khoảng thời gian bắt đầu kế hoạch không hợp lí");
                 }
-                if (dto.ScheduleRangeEnd < dto.ScheduleSRangeStart)
+                if (dto.ScheduleRangeEnd < dto.ScheduleRangeStart)
                 {
                     validatorResult.Failures.Add("Khoảng thời gian lên kế hoạch không hợp lí");
                 }

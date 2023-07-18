@@ -9,7 +9,11 @@ public class DocumentFile
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
     public string HttpLink { get; set; }
-    public string? CreatedBy { get; set; }
+
+    [ForeignKey("AccountId")]
+    public int AccountId { get; set; } 
+    public Account Account { get; set; }
+
     public Boolean Approved { get; set; }
     public DateTime CreatedDate { get; set; }
     #region Group
