@@ -37,6 +37,8 @@ namespace ShareResource.Mapper
         private void MapReview()
         {
             CreateMap<Review, ReviewSignalrDTO>()
+                .ForMember(dest => dest.RevieweeUsername, opt => opt.MapFrom(
+                    src => src.Reviewee.Username))
                 .ForMember(dest=>dest.ReviewerUsernames, opt=>opt.MapFrom(
                     src=>src.Details.Select(d=>d.Reviewer.Username)))
                 .ForMember(dest => dest.ReviewerIds, opt => opt.MapFrom(

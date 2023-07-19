@@ -97,7 +97,7 @@ namespace API.Controllers
             {
                 return Unauthorized("Bạn không thể xem dữ liệu của học sinh khác");
             }
-            var mappedStaat = await services.Stats.GetStatForStudentInMonth(studentId, month);
+            StatGetDto mappedStaat = await services.Stats.GetStatForStudentInMonth(studentId, month);
             return Ok(mappedStaat);
         }
     }
