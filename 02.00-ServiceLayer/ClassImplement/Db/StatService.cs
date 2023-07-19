@@ -1,47 +1,26 @@
-﻿using APIExtension.ClaimsPrinciple;
-using APIExtension.Const;
+﻿using AutoMapper.QueryableExtensions;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using DataLayer.DBObject;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using RepositoryLayer.Interface;
-using ServiceLayer.Interface;
 using ShareResource.DTO;
-using Swashbuckle.AspNetCore.Annotations;
+using RepositoryLayer.Interface;
+using Microsoft.EntityFrameworkCore;
+using ServiceLayer.Interface;
 
-namespace API.Controllers
+namespace ServiceLayer.ClassImplement.Db
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class StatsController : ControllerBase
+    public class StatService : IStatService
     {
-        private readonly IRepoWrapper repos;
-        private readonly IServiceWrapper services;
+        private IRepoWrapper repos;
         private readonly IMapper mapper;
 
-        public StatsController(IRepoWrapper repos, IMapper mapper, IServiceWrapper services)
+        public StatService(IRepoWrapper repos, IMapper mapper)
         {
             this.repos = repos;
             this.mapper = mapper;
-            this.services = services;
         }
 
-        //Get: api/Accounts/search
-        [SwaggerOperation(
-            Summary = $"[{Actor.Student_Parent}/{Finnished.False}/{Auth.True}] Student's stat by month"
-            , Description = "lấy stat theo month" +
-            "<br>month (yyyy-mm-dd): chỉ cần năm với tháng, day nhập đại"
-        )]
-        [HttpGet("{studentId}/{month}")]
-        [Authorize(Roles = Actor.Student_Parent)]
-        public IActionResult GetStatForStudentInMonth(int studentId, DateTime month)
+        public async Task<StatGetDto> GetStatForStudentInMonth(int studentId, DateTime month)
         {
-            if (HttpContext.User.IsInRole(Actor.Student) && HttpContext.User.GetUserId() != studentId)
-            {
-                return Unauthorized("Bạn không thể xem dữ liệu của học sinh khác");
-            }
             DateTime start = new DateTime(month.Year, month.Month, 1, 0, 0, 0).Date;
             DateTime end = start.AddMonths(1);
             //Nếu tháng này thì chỉ lấy past meeting
@@ -72,7 +51,7 @@ namespace API.Controllers
             var timeSpan = new TimeSpan(totalMeetingTime);
             //var totalMeetingTime = allMeetingsOfJoinedGroups.SelectMany(m => m.Connections);//.Select(e=>e.End.Value-e.Start).Select(ts=>ts.Ticks).Sum(); 
 
-            return Ok(new
+            return new StatGetDto
             {
                 TotalMeetings = allMeetingsOfJoinedGroups.ProjectTo<PastMeetingGetDto>(mapper.ConfigurationProvider),
                 TotalMeetingsCount = totalMeetingsCount,
@@ -80,25 +59,7 @@ namespace API.Controllers
                 MissedMeetingsCount = totalMeetingsCount - atendedMeetingsCount,
                 TotalMeetingTme = totalMeetingTime == 0 ? "Chưa tham gia buổi học nào"
                     : $"{timeSpan.Hours} giờ {timeSpan.Minutes} phút {timeSpan.Seconds} giây"
-            });
-        }
-
-        //Get: api/Accounts/search
-        [SwaggerOperation(
-            Summary = $"[{Actor.Student_Parent}/{Finnished.False}/{Auth.True}] Student's stat by month"
-            , Description = "lấy stat theo month" +
-            "<br>month (yyyy-mm-dd): chỉ cần năm với tháng, day nhập đại"
-        )]
-        [HttpGet("{studentId}/{month}/New")]
-        [Authorize(Roles = Actor.Student_Parent)]
-        public async Task<IActionResult> GetStatForStudentInMonthNew(int studentId, DateTime month)
-        {
-            if (HttpContext.User.IsInRole(Actor.Student) && HttpContext.User.GetUserId() != studentId)
-            {
-                return Unauthorized("Bạn không thể xem dữ liệu của học sinh khác");
-            }
-            StatGetDto mappedStaat = await services.Stats.GetStatForStudentInMonth(studentId, month);
-            return Ok(mappedStaat);
+            };
         }
     }
 }

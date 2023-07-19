@@ -1,5 +1,4 @@
-﻿using DataLayer.DBObject;
-using ServiceLayer.Interface.Auth;
+﻿using ServiceLayer.Interface.Auth;
 using ServiceLayer.Interface.Db;
 
 namespace ServiceLayer.Interface
@@ -13,7 +12,8 @@ namespace ServiceLayer.Interface
         public ISubjectService Subjects { get; }
         public IMeetingService Meetings { get; }
         public IGroupMemberSerivce GroupMembers { get; }
-
         public IDocumentFileService DocumentFiles { get; }
+        public IStatService Stats { get; }
+
     }
 }
