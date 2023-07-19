@@ -119,17 +119,30 @@ namespace ServiceLayer.ClassImplement
                 return groupMembers;
             }
         }
-        private IDocumentFileService _documentFileService;
+        private IDocumentFileService documentFiles;
 
         public IDocumentFileService DocumentFiles
         {
             get
             {
-                if (_documentFileService is null)
+                if (documentFiles is null)
                 {
-                    _documentFileService = new DocumentFileService(repos);
+                    documentFiles = new DocumentFileService(repos);
                 }
-                return _documentFileService;
+                return documentFiles;
+            }
+        }
+
+        private IStatService stats;
+        public IStatService Stats
+        {
+            get
+            {
+                if (stats is null)
+                {
+                    stats = new StatService(repos, mapper);
+                }
+                return stats;
             }
         }
     }
