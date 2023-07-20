@@ -177,13 +177,15 @@ namespace API.Controllers
             {
                 return BadRequest(valResult.Failures);
             }
-            await services.Meetings.CreateInstantMeetingAsync(dto);
-            return Ok(dto);
+            Meeting created= await services.Meetings.CreateInstantMeetingAsync(dto);
+            LiveMeetingGetDto mappedCreated = mapper.Map<LiveMeetingGetDto>(created);
+            return Ok(mappedCreated);
         }
 
         [SwaggerOperation(
             Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Mass create many schedule meetings within a range of time",
-            Description = "ScheduleSRangeStart: chỉ cần date, time ko quan trọng nhưng vẫn phải điền (cho 00:00:00)<br/>"
+            Description = "ScheduleSRangeStart: chỉ cần date, time ko quan trọng nhưng vẫn phải điền (cho 00:00:00)<br/>" +
+                "chủ nhật là 1, thứ 2-7 là 2-7 "
         )]
         //[Authorize(Roles = Actor.Student)]
         [HttpPost("Mass-schedule")]
