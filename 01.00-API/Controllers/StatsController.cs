@@ -32,7 +32,7 @@ namespace API.Controllers
         [SwaggerOperation(
             Summary = $"[{Actor.Student_Parent}/{Finnished.False}/{Auth.True}] Student's stat by month"
             , Description = "lấy stat theo month" +
-            "<br>month (yyyy-mm-dd): chỉ cần năm với tháng, day nhập đại"
+            "<br>month (yyyy-mm-dd): chỉ cần năm với tháng, day nhập đại hoặc không nhập"
         )]
         [HttpGet("{studentId}/{month}")]
         [Authorize(Roles = Actor.Student_Parent)]

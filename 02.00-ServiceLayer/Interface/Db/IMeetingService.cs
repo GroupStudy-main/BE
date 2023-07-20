@@ -17,7 +17,7 @@ namespace ServiceLayer.Interface.Db
         public Task<Meeting> GetByIdAsync(int id);
         public Task CreateScheduleMeetingAsync(ScheduleMeetingCreateDto dto);
         public Task<Schedule> MassCreateScheduleMeetingAsync(ScheduleMeetingMassCreateDto dto);
-        public Task CreateInstantMeetingAsync(InstantMeetingCreateDto dto);
+        public Task<Meeting> CreateInstantMeetingAsync(InstantMeetingCreateDto dto);
         public Task UpdateScheduleMeetingAsync(ScheduleMeetingUpdateDto dto);
         public Task StartScheduleMeetingAsync(Meeting meeting);
         public Task DeleteScheduleMeetingAsync(Meeting meeting);

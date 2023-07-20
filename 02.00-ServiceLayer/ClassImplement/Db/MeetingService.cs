@@ -30,10 +30,11 @@ namespace ServiceLayer.ClassImplement.Db
             return await repos.Meetings.GetList().AnyAsync(e => e.Id == id);
         }
 
-        public async Task CreateInstantMeetingAsync(InstantMeetingCreateDto dto)
+        public async Task<Meeting> CreateInstantMeetingAsync(InstantMeetingCreateDto dto)
         {
             Meeting meeting = mapper.Map<Meeting>(dto);
             await repos.Meetings.CreateAsync(meeting);
+            return meeting;
         }
 
         public async Task CreateScheduleMeetingAsync(ScheduleMeetingCreateDto dto)

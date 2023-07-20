@@ -150,12 +150,12 @@ namespace API.Controllers
             {
                 return BadRequest();
             }
-            if (dto.Password != dto.ConfirmPassword)
+            var account = await services.Accounts.GetByIdAsync(accountId);
+            if (account.Password != dto.ConfirmPassword)
             {
                 return BadRequest(FAIL_CONFIRM_PASSWORD_MSG);
             }
 
-            var account = await services.Accounts.GetByIdAsync(accountId);
             if (account == null)
             {
                 return NotFound();
