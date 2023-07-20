@@ -16,6 +16,8 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using APIExtension.Validator;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System;
 
 namespace API.Controllers
 {
@@ -24,23 +26,19 @@ namespace API.Controllers
     [ApiController]
     public class AccountsController : ControllerBase
     {
-        private const string FAIL_CONFIRM_PASSWORD_MSG = "Xác nhận mật khẩu thất bại";
         private readonly IServiceWrapper services;
-        private readonly IRepoWrapper unitOfWork;
-        private readonly IHubContext<GroupHub> presenceHub;
-        private readonly PresenceTracker presenceTracker;
         private readonly IMapper mapper;
         private readonly IValidatorWrapper validators;
+        private readonly IAutoMailService mailService;
 
-        public AccountsController(IServiceWrapper services, IRepoWrapper unitOfWork, IHubContext<GroupHub> presenceHub, PresenceTracker presenceTracker, IMapper mapper, IValidatorWrapper validators)
+        public AccountsController(IServiceWrapper services, IMapper mapper, IValidatorWrapper validators, IAutoMailService mailService)
         {
             this.services = services;
-            this.unitOfWork = unitOfWork;
-            this.presenceHub = presenceHub;
-            this.presenceTracker = presenceTracker;
             this.mapper = mapper;
             this.validators = validators;
+            this.mailService = mailService;
         }
+        private static string FAIL_CONFIRM_PASSWORD_MSG => "Xác nhận mật khẩu thất bại";
 
         //Get: api/Accounts/search
         [SwaggerOperation(
@@ -181,6 +179,36 @@ namespace API.Controllers
                     throw;
                 }
             }
+        }
+        
+        [HttpGet("Password/Reset/Confirm")]
+
+        public async Task<IActionResult> ConfirmResetPassword(string email, string secret)
+        {
+            Account account = await services.Accounts.GetAccountByEmailAsync(email);
+            if (account == null)
+            {
+                return NotFound("Tài khoản không tồn tại");
+            }
+            //test secret
+            string correctSecrete = DateTime.Today.ToString("yyyy-MM-dd");
+            if(secret!=correctSecrete)
+            {
+                return Unauthorized("Incorrect secret");
+            }
+            //Random password
+            string newPassword = RandomPassword(9);
+            account.Password = newPassword;
+            await services.Accounts.UpdateAsync(account);
+
+            //string mailContent="<a href=\"localhost\"></a>" 
+            string mailContent = $"<div>Mật khẩu mới của bạn là {newPassword}</div>";
+            bool sendSuccessful = await mailService.SendEmailWithDefaultTemplateAsync(new List<String> { email }, "Reset password", mailContent, null);
+            if(!sendSuccessful)
+            {
+                return BadRequest($"Something went wrong with sending mail. The new password is {newPassword}");
+            }
+            return Ok($"Reset successfully, check {email} inbox for the new password {newPassword}");
         }
         /// ///////////////////////////////////////////////////////////////////////////////////////////////
         [Tags(Actor.Test)]
@@ -354,6 +382,29 @@ namespace API.Controllers
         //    }
         //    return dto;
         //}
+
+        private string RandomPassword(int size, bool lowerCase = false)
+        {
+            var builder = new StringBuilder(size);
+
+            // Unicode/ASCII Letters are divided into two blocks
+            // (Letters 65–90 / 97–122):
+            // The first group containing the uppercase letters and
+            // the second group containing the lowercase.
+
+            // char is a single Unicode character
+            char offset = lowerCase ? 'a' : 'A';
+            const int lettersOffset = 26; // A...Z or a..z: length = 26
+            var _random = new Random();
+
+            for (var i = 0; i < size; i++)
+            {
+                var @char = (char)_random.Next(offset, offset + lettersOffset);
+                builder.Append(@char);
+            }
+
+            return lowerCase ? builder.ToString().ToLower() : builder.ToString();
+        }
 
     }
 

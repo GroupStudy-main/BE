@@ -34,9 +34,9 @@ namespace API.Controllers
             , Description = "lấy stat theo month" +
             "<br>month (yyyy-mm-dd): chỉ cần năm với tháng, day nhập đại hoặc không nhập"
         )]
-        [HttpGet("{studentId}/{month}")]
+        [HttpGet("{studentId}/{month}/old")]
         [Authorize(Roles = Actor.Student_Parent)]
-        public IActionResult GetStatForStudentInMonth(int studentId, DateTime month)
+        public IActionResult GetStatForStudentInMonthOld(int studentId, DateTime month)
         {
             if (HttpContext.User.IsInRole(Actor.Student) && HttpContext.User.GetUserId() != studentId)
             {
@@ -89,7 +89,7 @@ namespace API.Controllers
             , Description = "lấy stat theo month" +
             "<br>month (yyyy-mm-dd): chỉ cần năm với tháng, day nhập đại"
         )]
-        [HttpGet("{studentId}/{month}/New")]
+        [HttpGet("{studentId}/{month}")]
         [Authorize(Roles = Actor.Student_Parent)]
         public async Task<IActionResult> GetStatForStudentInMonthNew(int studentId, DateTime month)
         {

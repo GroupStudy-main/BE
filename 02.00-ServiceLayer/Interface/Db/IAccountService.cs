@@ -21,6 +21,7 @@ namespace ServiceLayer.Interface.Db
         public Task UpdateAsync(Account account);
         public Task RemoveAsync(int id);
         public Task<Account> GetAccountByUserNameAsync(string userName);
+        public Task<Account> GetAccountByEmailAsync(string email);
         public Task<Account> GetProfileByIdAsync(int id);
         public IQueryable<Account> SearchStudents(string search, int? groupId);
         public Task<bool> ExistAsync(int id);
