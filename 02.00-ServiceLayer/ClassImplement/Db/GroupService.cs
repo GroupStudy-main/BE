@@ -106,6 +106,16 @@ namespace ServiceLayer.ClassImplement.Db
         public async Task UpdateAsync(GroupUpdateDto dto)
         {
             var group = await repos.Groups.GetByIdAsync(dto.Id);
+            //Remove subject, nếu dto ko có thì sẽ loại
+            group.PatchUpdate<Group, GroupUpdateDto>(dto);
+            List<GroupSubject> groupSubjects = group.GroupSubjects.ToList();
+            foreach (GroupSubject groupSubject in groupSubjects)
+            {
+                if (!dto.SubjectIds.Cast<int>().Contains(groupSubject.SubjectId))
+                {
+                    group.GroupSubjects.Remove(groupSubject);
+                }
+            }
             //Add new subject, nếu group ko có thì add
             foreach (int subjectId in dto.SubjectIds)
             {
@@ -114,20 +124,11 @@ namespace ServiceLayer.ClassImplement.Db
                     group.GroupSubjects.Add(new GroupSubject { GroupId = group.Id, SubjectId = subjectId });
                 }
             }
-            //Remove subject, nếu dto ko có thì sẽ loại
-            foreach (GroupSubject groupSubject in group.GroupSubjects)
-            {
-                if (!dto.SubjectIds.Cast<int>().Contains(groupSubject.SubjectId))
-                {
-                    group.GroupSubjects.Remove(groupSubject);
-                }
-            }
             //if (dto.())
             //{
             //    repos.G
             //}
                 //group.GroupSubjects = dto.SubjectIds.Select(subId => new GroupSubject { GroupId = dto.Id, SubjectId = (int)subId }).ToList();
-            group.PatchUpdate<Group, GroupUpdateDto>(dto);
             await repos.Groups.UpdateAsync(group);
         }
 

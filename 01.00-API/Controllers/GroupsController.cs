@@ -220,7 +220,8 @@ namespace API.Controllers
             {
                 
                 await services.Groups.UpdateAsync(dto);
-                return Ok(group);
+                var mapped = mapper.Map<GroupDetailForLeaderGetDto>(group);
+                return Ok(mapped);
             }
             catch (Exception ex)
             {
