@@ -73,16 +73,21 @@ namespace API.Controllers
         [HttpGet("Start")]
         public async Task<IActionResult> StartReviewForUserInMeeting(int meetingId)
         {
-            int revieweeId = HttpContext.User.GetUserId();
-            Review newReview = new Review
-            {
-                MeetingId = meetingId,
-                RevieweeId = revieweeId
-            };
-            await repos.Reviews.CreateAsync(newReview);
-            ReviewSignalrDTO mapped = mapper.Map<ReviewSignalrDTO>(newReview);
-            await meetingHub.Clients.Group(meetingId.ToString()).SendAsync(MeetingHub.OnStartVoteMsg, mapped);
-            return Ok(mapped);
+            #region old code
+            //int revieweeId = HttpContext.User.GetUserId();
+            //Review newReview = new Review
+            //{
+            //    MeetingId = meetingId,
+            //    RevieweeId = revieweeId
+            //};
+            //await repos.Reviews.CreateAsync(newReview);
+            //ReviewSignalrDTO mapped = mapper.Map<ReviewSignalrDTO>(newReview);
+            //await meetingHub.Clients.Group(meetingId.ToString()).SendAsync(MeetingHub.OnStartVoteMsg, mapped);
+            //return Ok(mapped);
+            #endregion
+            string revieweeUsername = HttpContext.User.GetUsername();
+            await meetingHub.Clients.Group(meetingId.ToString()).SendAsync(MeetingHub.OnStartVoteMsg, revieweeUsername);
+            return Ok($"{revieweeUsername} statrted reviewing");
         }
 
         [SwaggerOperation(
@@ -91,15 +96,36 @@ namespace API.Controllers
         )]
         [Authorize(Roles = Actor.Student)]
         [HttpGet("End")]
-        public async Task<IActionResult> EndVote(int reviewId)
+        public async Task<IActionResult> EndVote(int meetingId)
         {
-            string reviewee = HttpContext.User.GetUsername();
-            Review endReview = await repos.Reviews.GetList()
-                .Include(e => e.Reviewee)
-                .Include(r => r.Details).ThenInclude(d => d.Reviewer)
-                .SingleOrDefaultAsync(e => e.Id == reviewId);
-            ReviewSignalrDTO mapped = mapper.Map<ReviewSignalrDTO>(endReview);
-            await meetingHub.Clients.Group(endReview.MeetingId.ToString()).SendAsync(MeetingHub.OnEndVoteMsg, mapped);
+            #region old code
+            //string reviewee = HttpContext.User.GetUsername();
+            //Review endReview = await repos.Reviews.GetList()
+            //    .Include(e => e.Reviewee)
+            //    .Include(r => r.Details).ThenInclude(d => d.Reviewer)
+            //    .SingleOrDefaultAsync(e => e.Id == reviewId);
+            //ReviewSignalrDTO mapped = mapper.Map<ReviewSignalrDTO>(endReview);
+            //await meetingHub.Clients.Group(endReview.MeetingId.ToString()).SendAsync(MeetingHub.OnEndVoteMsg, mapped);
+            //return Ok(mapped);
+            #endregion
+            int revieweeId = HttpContext.User.GetUserId();
+            Review newReview = new Review
+            {
+                MeetingId = meetingId,
+                RevieweeId = revieweeId
+            };
+            await repos.Reviews.CreateAsync(newReview);
+            ReviewSignalrDTO mapped = mapper.Map<ReviewSignalrDTO>(newReview);
+            await meetingHub.Clients.Group(meetingId.ToString()).SendAsync(MeetingHub.OnEndVoteMsg, mapped);
+
+            await ReloadReviewForMeetingAsync(meetingId);
+            //var newMeetReviews = repos.Reviews.GetList()
+            //               .Where(e => e.MeetingId == meetingId)
+            //               .Include(e => e.Reviewee)
+            //               .Include(e => e.Details).ThenInclude(e => e.Reviewer);
+            //List<ReviewSignalrDTO> mappedNewReviews = newMeetReviews
+            //    .ProjectTo<ReviewSignalrDTO>(mapper.ConfigurationProvider).ToList();
+            //await meetingHub.Clients.Group(meetingId.ToString()).SendAsync(MeetingHub.OnReloadVoteMsg, mappedNewReviews);
             return Ok(mapped);
         }
 
@@ -127,7 +153,23 @@ namespace API.Controllers
                .Include(r => r.Details).ThenInclude(d => d.Reviewer)
                .SingleOrDefaultAsync(e => e.Id == dto.ReviewId);
             ReviewSignalrDTO mapped = mapper.Map<ReviewSignalrDTO>(changeReview);
+            await meetingHub.Clients.Group(changeReview.MeetingId.ToString()).SendAsync(MeetingHub.OnNewVoteResultMsg, mapped);
+
+            await ReloadReviewForMeetingAsync(changeReview.MeetingId);
+
             return Ok(new { newDetail = mappedDetail, changeReview = mapped });
+        }
+
+        private async Task<bool> ReloadReviewForMeetingAsync(int meetingId)
+        {
+            var newMeetReviews = repos.Reviews.GetList()
+                            .Where(e => e.MeetingId == meetingId)
+                            .Include(e => e.Reviewee)
+                            .Include(e => e.Details).ThenInclude(e => e.Reviewer);
+            List<ReviewSignalrDTO> mappedNewReviews = newMeetReviews
+                .ProjectTo<ReviewSignalrDTO>(mapper.ConfigurationProvider).ToList();
+            await meetingHub.Clients.Group(meetingId.ToString()).SendAsync(MeetingHub.OnReloadVoteMsg, mappedNewReviews);
+            return true;
         }
     }
 }
