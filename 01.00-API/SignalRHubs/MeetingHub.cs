@@ -71,6 +71,12 @@ namespace API.SignalRHub
         //Thông báo Review có thay đổi
         //BE SendAsync(OnStartVoteMsg, ReviewSignalrDTO);
         public static string OnVoteChangeMsg => "OnVoteChange";
+
+        //Thông báo để reload lại list vote của meeting
+        //BE SendAsync(OnReloadVoteMsg, List<ReviewSignalrDTO>);
+        public static string OnReloadVoteMsg => "OnReloadVote";
+
+        public static string OnNewVoteResultMsg => "OnNewVoteResult";
         #endregion
 
         IMapper mapper;
@@ -477,14 +483,14 @@ namespace API.SignalRHub
         public async Task StartVote(int meetingId)
         {
             string reviewee = Context.User.GetUsername();
-            Review newReview = new Review
-            {
-                MeetingId = meetingId,
-                RevieweeId = Context.User.GetUserId(),
-            };
-            await repos.Reviews.CreateAsync(newReview);
-            ReviewSignalrDTO mapped = mapper.Map<ReviewSignalrDTO>(newReview);
-            await Clients.Group(meetingId.ToString()).SendAsync(OnStartVoteMsg, mapped);
+            //Review newReview = new Review
+            //{
+            //    MeetingId = meetingId,
+            //    RevieweeId = Context.User.GetUserId(),
+            //};
+            //await repos.Reviews.CreateAsync(newReview);
+            //ReviewSignalrDTO mapped = mapper.Map<ReviewSignalrDTO>(newReview);
+            await Clients.Group(meetingId.ToString()).SendAsync(OnStartVoteMsg, reviewee);
         }
 
         //sẽ dc gọi khi có người xin dc vote (review)
@@ -580,8 +586,8 @@ namespace API.SignalRHub
             Rooms.Add(roomId, new List<string>());
             //Gửi cho thằng gọi CreateRoom thui
             await Clients.Caller.SendAsync("room-created", new { roomId = roomId });
-            //await JoinRoom(new JoinRoomInput { roomId = roomId, peerId = peerId });
-            await JoinRoom(JsonConvert.SerializeObject(new JoinRoomInput { roomId = roomId, peerId = input.peerId }));
+            await JoinRoom(new JoinRoomInput { roomId = roomId, peerId = peerId });
+            //await JoinRoom(JsonConvert.SerializeObject(new JoinRoomInput { roomId = roomId, peerId = input.peerId }));
             //await JoinRoom(newRoomId, input.peerId);
 
         }
@@ -590,11 +596,11 @@ namespace API.SignalRHub
             public string roomId { get; set; }
             public string peerId { get; set; }
         }
-        //public async Task JoinRoom(JoinRoomInput input)
-        public async Task JoinRoom(string json)
+        public async Task JoinRoom(JoinRoomInput input)
+        //public async Task JoinRoom(string json)
         //public async Task JoinRoom(string roomId, string peerId)
         {
-            var input = JsonConvert.DeserializeObject<JoinRoomInput>(json);
+            //var input = JsonConvert.DeserializeObject<JoinRoomInput>(json);
             string roomId = input.roomId;
             string peerId = input.peerId;
 
