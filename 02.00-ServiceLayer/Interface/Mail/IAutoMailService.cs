@@ -18,9 +18,6 @@ namespace ServiceLayer.Interface
         #region unsued code
 
         public Task<bool> SendEmailWithDefaultTemplateAsync(MailMessageEntity mail);
-        bool SendSimpleMail(MailMessageEntity message);
-        bool SendSimpleMail(IEnumerable<string> receivers, string subject, string content, IFormFileCollection attachments);
-        Task<bool> SendSimpleEmailAsync(MailMessageEntity message);
         Task<bool> SendSimpleMailAsync(IEnumerable<string> receivers, string subject, string content, IFormFileCollection attachments);
 
         #endregion

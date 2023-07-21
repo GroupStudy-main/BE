@@ -5,8 +5,6 @@
         public static string FOLDER = "MailTemplates";
 
         public static readonly string DEFAULT_TEMPLATE_FILE = "MailTemplate.html";
-        public static readonly string PAYMENT_REMINDER_TEMPLATE_FILE = "PaymentReminderTemplate.html";
-        public static readonly string PAYMENT_CONFIRM_TEMPLATE_FILE = "PaymentConfirmTemplate.html";
 
         public static string DEFAULT_TEMPLATE(string rootPath)
         {
@@ -14,22 +12,6 @@
                 default_template = GetTemplate(rootPath + Path.DirectorySeparatorChar + FOLDER +
                                                Path.DirectorySeparatorChar + DEFAULT_TEMPLATE_FILE);
             return default_template;
-        }
-
-        public static string PAYMENT_REMINDER_TEMPLATE(string rootPath)
-        {
-            if (string.IsNullOrEmpty(payment_reminder_template))
-                default_template = GetTemplate(rootPath + Path.DirectorySeparatorChar + FOLDER +
-                                               Path.DirectorySeparatorChar + PAYMENT_REMINDER_TEMPLATE_FILE);
-            return payment_confirm_template;
-        }
-
-        public static string PAYMENT_CONFIRM_TEMPLATE(string rootPath)
-        {
-            if (string.IsNullOrEmpty(default_template))
-                default_template = GetTemplate(rootPath + Path.DirectorySeparatorChar + FOLDER +
-                                               Path.DirectorySeparatorChar + PAYMENT_CONFIRM_TEMPLATE_FILE);
-            return payment_confirm_template;
         }
 
         public static string GetTemplate(string templatePath)
