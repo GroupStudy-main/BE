@@ -116,6 +116,7 @@ namespace API.Controllers
             };
             await repos.Reviews.CreateAsync(newReview);
             ReviewSignalrDTO mapped = mapper.Map<ReviewSignalrDTO>(newReview);
+            mapped.RevieweeUsername = HttpContext.User.GetUsername();
             await meetingHub.Clients.Group(meetingId.ToString()).SendAsync(MeetingHub.OnEndVoteMsg, mapped);
 
             await ReloadReviewForMeetingAsync(meetingId);
