@@ -197,18 +197,21 @@ namespace API.Controllers
                 return Unauthorized("Incorrect secret");
             }
             //Random password
-            string newPassword = RandomPassword(9);
-            account.Password = newPassword;
-            await services.Accounts.UpdateAsync(account);
+            //string newPassword = RandomPassword(9);
+            //account.Password = newPassword;
+            //await services.Accounts.UpdateAsync(account);
 
-            //string mailContent="<a href=\"localhost\"></a>" 
-            string mailContent = $"<div>Mật khẩu mới của bạn là {newPassword}</div>";
-            bool sendSuccessful = await mailService.SendEmailWithDefaultTemplateAsync(new List<String> { email }, "Reset password", mailContent, null);
+            ////string mailContent="<a href=\"localhost\"></a>" 
+            //string mailContent = $"<div>Mật khẩu mới của bạn là {newPassword}</div>";
+            //bool sendSuccessful = await mailService.SendEmailWithDefaultTemplateAsync(new List<String> { email }, "Reset password", mailContent, null);
+            bool sendSuccessful = await mailService.SendNewPasswordAsync(account);
             if(!sendSuccessful)
             {
-                return BadRequest($"Something went wrong with sending mail. The new password is {newPassword}");
+                //return BadRequest($"Something went wrong with sending mail. The new password is {newPassword}");
+                return BadRequest($"Something went wrong with sending mail.");
             }
-            return Ok($"Reset successfully, check {email} inbox for the new password {newPassword}");
+            //return Ok($"Reset successfully, check {email} inbox for the new password {newPassword}");
+            return Ok($"Reset successfully, check {email} inbox for the new password");
         }
         /// ///////////////////////////////////////////////////////////////////////////////////////////////
         [Tags(Actor.Test)]

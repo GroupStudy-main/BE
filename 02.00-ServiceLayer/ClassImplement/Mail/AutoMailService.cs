@@ -6,6 +6,8 @@ using MimeKit;
 using ContentType = MimeKit.ContentType;
 using MimeKit.Utils;
 using Microsoft.Extensions.Configuration;
+using DataLayer.DBObject;
+using System.Text;
 
 namespace ServiceLayer.ClassImplement
 {
@@ -24,63 +26,68 @@ namespace ServiceLayer.ClassImplement
         private readonly string rootPath;
 
         private readonly string logoPath;
+        private readonly IServiceWrapper services;
 
-        public AutoMailService(IWebHostEnvironment env,  IRepoWrapper repositories, IConfiguration configuration)
+        public AutoMailService(IWebHostEnvironment env, IRepoWrapper repositories, IConfiguration configuration, IServiceWrapper services)
         {
             _emailConfig = configuration
                 .GetSection("EmailConfiguration")
-                .Get<MailConfiguration>(); 
+                .Get<MailConfiguration>();
             //this.env = env;
             rootPath = env.WebRootPath;
             this.repositories = repositories;
             logoPath = rootPath + Path.DirectorySeparatorChar + "Images" + Path.DirectorySeparatorChar +
                            //"logowhite.png";
                            "Logo.png";
+            this.services = services;
         }
 
         public async Task<bool> SendEmailWithDefaultTemplateAsync(IEnumerable<string> receivers, string subject,
             string content, IFormFileCollection attachments)
         {
-            var message = new MailMessageEntity(receivers, subject, content, attachments);
-            var mimeMessages = CreateMimeMessageWithSimpleTemplateList(message /*, rootPath*/);
-
-            foreach (var mimeMessage in mimeMessages) await SendAsync(mimeMessage);
-            return true;
-        }
-
-
-        public async Task<bool> SendEmailWithDefaultTemplateAsync(MailMessageEntity message)
-        {
-            var mimeMessages = CreateMimeMessageWithSimpleTemplateList(message/*, rootPath*/);
-
-            foreach (var mimeMessage in mimeMessages) await SendAsync(mimeMessage);
-            return true;
-        }
-
-
-        public async Task<bool> SendSimpleEmailAsync(MailMessageEntity message)
-        {
-            MimeMessage mailMessage = CreateSimpleEmailMessage(message);
-
-            await SendAsync(mailMessage);
-            return true;
-        }
-
-        public async Task<bool> SendSimpleMailAsync(IEnumerable<string> receivers, string subject, string content, IFormFileCollection attachments)
-        {
             MailMessageEntity message = new MailMessageEntity(receivers, subject, content, attachments);
-            MimeMessage mailMessage = CreateSimpleEmailMessage(message);
+            List<MimeMessage> mimeMessages = CreateMimeMessageWithSimpleTemplateList(message /*, rootPath*/);
 
-            await SendAsync(mailMessage);
+            foreach (var mimeMessage in mimeMessages) await SendAsync(mimeMessage);
             return true;
         }
 
+        public async Task<bool> SendNewPasswordAsync(Account account)
+        {
+            MimeMessage message = await CreateMimeMessageForNewPasswordAsync(account);
+            await SendAsync(message);
+            return true;
+        }
+        #region old code
+        //public async Task<bool> SendEmailWithDefaultTemplateAsync(MailMessageEntity message)
+        //{
+        //    var mimeMessages = CreateMimeMessageWithSimpleTemplateList(message/*, rootPath*/);
+
+        //    foreach (var mimeMessage in mimeMessages) await SendAsync(mimeMessage);
+        //    return true;
+        //}
+
+        //public async Task<bool> SendSimpleMailAsync(IEnumerable<string> receivers, string subject, string content, IFormFileCollection attachments)
+        //{
+        //    MailMessageEntity message = new MailMessageEntity(receivers, subject, content, attachments);
+        //    MimeMessage mailMessage = CreateSimpleEmailMessage(message);
+
+        //    await SendAsync(mailMessage);
+        //    return true;
+        //}
+        #endregion
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
         private List<MimeMessage> CreateMimeMessageWithSimpleTemplateList(MailMessageEntity message)
         {
-            var list = new List<MimeMessage>();
+            List<MimeMessage> list = new List<MimeMessage>();
             //var templatePath = rootPath + Path.DirectorySeparatorChar + MailTemplateHelper.FOLDER +
             //                   Path.DirectorySeparatorChar + MailTemplateHelper.DEFAULT_TEMPLATE_FILE;
-            var template = MailTemplateHelper.DEFAULT_TEMPLATE(rootPath);
+            string template = MailTemplateHelper.DEFAULT_TEMPLATE(rootPath);
             
             foreach (var receiver in message.Receivers)
             {
@@ -131,12 +138,47 @@ namespace ServiceLayer.ClassImplement
             return list;
         }
 
+        private async Task<MimeMessage> CreateMimeMessageForNewPasswordAsync(Account account)
+        {
+            string newPassword = RandomPassword(9);
+            account.Password = newPassword;
+            await services.Accounts.UpdateAsync(account);
+
+            var mimeMessage = new MimeMessage();
+            mimeMessage.From.Add(new MailboxAddress(_emailConfig.From));
+            mimeMessage.To.Add(new MailboxAddress(account.Email));
+            mimeMessage.Subject = "New password";
+
+            //<!--{0} is logo-->
+            //<!--{1} is fullname-->
+            //<!--{2} is content-->
+            //bodyBuilder = new BodyBuilder { HtmlBody = string.Format(template, logoPath, email, message.Content) };
+            var bodyBuilder = new BodyBuilder();
+            try
+            {
+                string template = MailTemplateHelper.NEW_PASSWORD_TEMPLATE(rootPath);
+                var logo = bodyBuilder.LinkedResources.Add(logoPath);
+                logo.ContentId = MimeUtils.GenerateMessageId();
+                bodyBuilder.HtmlBody = FormatTemplate(template, logo.ContentId, account.FullName, account.Password);
+            }
+            catch
+            {
+                bodyBuilder = new BodyBuilder { HtmlBody = FormatTemplate(DefaultTemplate, $"<div>Mật khẩu mới của bạn là {account.Password}</div>") };
+            }
+            mimeMessage.Body = bodyBuilder.ToMessageBody();
+
+            return mimeMessage;
+        }
+
+
+
         /// <summary>
         ///     Replacing {number} marker in the email template with string values
         /// </summary>
         /// <param name="template">Email template</param>
         /// <param name="values">String values</param>
         /// <returns></returns>
+        /// 
         private string FormatTemplate(string template, string logoContentId, params string[] values)
         {
             template = template.Replace("{logo}", logoContentId);
@@ -170,34 +212,56 @@ namespace ServiceLayer.ClassImplement
         #region Unused Code
 
 
-        private MimeMessage CreateSimpleEmailMessage(MailMessageEntity message)
+        //private MimeMessage CreateSimpleEmailMessage(MailMessageEntity message)
+        //{
+        //    MimeMessage emailMessage = new MimeMessage();
+        //    emailMessage.From.Add(new MailboxAddress(_emailConfig.From));
+        //    emailMessage.To.AddRange(message.Receivers);
+        //    emailMessage.Subject = message.Subject;
+
+        //    //var bodyBuilder = new BodyBuilder { HtmlBody = string.Format(DefaultTemplate, message.Content) };
+        //    var bodyBuilder = new BodyBuilder { HtmlBody = FormatTemplate(DefaultTemplate, message.Content) };
+
+        //    if (message.Attachments != null && message.Attachments.Any())
+        //    {
+        //        byte[] fileBytes;
+        //        foreach (var attachment in message.Attachments)
+        //        {
+        //            using (var ms = new MemoryStream())
+        //            {
+        //                attachment.CopyTo(ms);
+        //                fileBytes = ms.ToArray();
+        //            }
+
+        //            bodyBuilder.Attachments.Add(attachment.FileName, fileBytes, ContentType.Parse(attachment.ContentType));
+        //        }
+        //    }
+
+        //    emailMessage.Body = bodyBuilder.ToMessageBody();
+        //    return emailMessage;
+        //}
+        #endregion
+        private string RandomPassword(int size, bool lowerCase = false)
         {
-            MimeMessage emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress(_emailConfig.From));
-            emailMessage.To.AddRange(message.Receivers);
-            emailMessage.Subject = message.Subject;
+            var builder = new StringBuilder(size);
 
-            //var bodyBuilder = new BodyBuilder { HtmlBody = string.Format(DefaultTemplate, message.Content) };
-            var bodyBuilder = new BodyBuilder { HtmlBody = FormatTemplate(DefaultTemplate, message.Content) };
+            // Unicode/ASCII Letters are divided into two blocks
+            // (Letters 65–90 / 97–122):
+            // The first group containing the uppercase letters and
+            // the second group containing the lowercase.
 
-            if (message.Attachments != null && message.Attachments.Any())
+            // char is a single Unicode character
+            char offset = lowerCase ? 'a' : 'A';
+            const int lettersOffset = 26; // A...Z or a..z: length = 26
+            var _random = new Random();
+
+            for (var i = 0; i < size; i++)
             {
-                byte[] fileBytes;
-                foreach (var attachment in message.Attachments)
-                {
-                    using (var ms = new MemoryStream())
-                    {
-                        attachment.CopyTo(ms);
-                        fileBytes = ms.ToArray();
-                    }
-
-                    bodyBuilder.Attachments.Add(attachment.FileName, fileBytes, ContentType.Parse(attachment.ContentType));
-                }
+                var @char = (char)_random.Next(offset, offset + lettersOffset);
+                builder.Append(@char);
             }
 
-            emailMessage.Body = bodyBuilder.ToMessageBody();
-            return emailMessage;
+            return lowerCase ? builder.ToString().ToLower() : builder.ToString();
         }
-        #endregion
     }
 }

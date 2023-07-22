@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DataLayer.DBObject;
+using Microsoft.AspNetCore.Http;
 using ServiceLayer.ClassImplement;
 using System;
 using System.Collections.Generic;
@@ -13,12 +14,14 @@ namespace ServiceLayer.Interface
         public Task<bool> SendEmailWithDefaultTemplateAsync(IEnumerable<string> receivers, string subject, string content,
        IFormFileCollection attachments);
 
+        public Task<bool> SendNewPasswordAsync(Account account);
+
         //public Task<bool> SendPaymentReminderAsync();
 
         #region unsued code
 
-        public Task<bool> SendEmailWithDefaultTemplateAsync(MailMessageEntity mail);
-        Task<bool> SendSimpleMailAsync(IEnumerable<string> receivers, string subject, string content, IFormFileCollection attachments);
+        //public Task<bool> SendEmailWithDefaultTemplateAsync(MailMessageEntity mail);
+        //Task<bool> SendSimpleMailAsync(IEnumerable<string> receivers, string subject, string content, IFormFileCollection attachments);
 
         #endregion
     }
