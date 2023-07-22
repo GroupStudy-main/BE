@@ -25,6 +25,7 @@ namespace ServiceLayer.ClassImplement
         //private readonly IWebHostEnvironment env;
         private readonly string rootPath;
 
+
         private readonly string logoPath;
         private readonly IServiceWrapper services;
 
@@ -52,9 +53,16 @@ namespace ServiceLayer.ClassImplement
             return true;
         }
 
-        public async Task<bool> SendNewPasswordAsync(Account account)
+        public async Task<bool> SendNewPasswordMailAsync(Account account)
         {
             MimeMessage message = await CreateMimeMessageForNewPasswordAsync(account);
+            await SendAsync(message);
+            return true;
+        }
+
+        public async Task<bool> SendConfirmResetPasswordMailAsync(Account account, string serverLink)
+        {
+            MimeMessage message = await CreateMimeMessageForResetPasswordAsync(account, serverLink);
             await SendAsync(message);
             return true;
         }
@@ -137,6 +145,36 @@ namespace ServiceLayer.ClassImplement
 
             return list;
         }
+
+        private async Task<MimeMessage> CreateMimeMessageForResetPasswordAsync(Account account, string serverLink)
+        {
+            var mimeMessage = new MimeMessage();
+            mimeMessage.From.Add(new MailboxAddress(_emailConfig.From));
+            mimeMessage.To.Add(new MailboxAddress(account.Email));
+            mimeMessage.Subject = "Reset password";
+
+            string secret = DateTime.Today.ToString("yyyy-MM-dd");
+            string resetLink = serverLink + $"/api/Accounts/Password/Reset/Confirm?email={account.Email}&secret={secret}";
+            //<!--{0} is logo-->
+            //<!--{1} is fullname-->
+            //<!--{2} is content-->
+            var bodyBuilder = new BodyBuilder();
+            try
+            {
+                string template = MailTemplateHelper.CONFIRM_RESET_PASSWORD_TEMPLATE(rootPath);
+                var logo = bodyBuilder.LinkedResources.Add(logoPath);
+                logo.ContentId = MimeUtils.GenerateMessageId();
+                bodyBuilder.HtmlBody = FormatTemplate(template, logo.ContentId, account.FullName, resetLink);
+            }
+            catch
+            {
+                bodyBuilder = new BodyBuilder { HtmlBody = FormatTemplate(DefaultTemplate, $"<div>Link để lấy mật khẩu là {resetLink}</div>") };
+            }
+            mimeMessage.Body = bodyBuilder.ToMessageBody();
+
+            return mimeMessage;
+        }
+
 
         private async Task<MimeMessage> CreateMimeMessageForNewPasswordAsync(Account account)
         {

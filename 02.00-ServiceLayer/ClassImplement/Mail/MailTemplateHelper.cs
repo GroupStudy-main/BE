@@ -5,7 +5,7 @@
         public static string FOLDER = "MailTemplates";
 
         public static readonly string DEFAULT_TEMPLATE_FILE = "MailTemplate.html";
-        public static readonly string CONFIRM_RESET_PASSWORD_TEMPLATE_FILE = "MailTemplate.html";
+        public static readonly string CONFIRM_RESET_PASSWORD_TEMPLATE_FILE = "ResetPassTemplate.html";
         public static readonly string NEW_PASSWORD_TEMPLATE_FILE = "NewPassTemplate.html";
 
         public static string DEFAULT_TEMPLATE(string rootPath)
@@ -17,13 +17,19 @@
             }
             return default_template;
         }
-
+        /// <summary>
+        /// {0} is logo <br/>
+        /// {1} is fullname <br/>
+        /// {2} is link
+        /// </summary>
+        /// <param name="rootPath"></param>
+        /// <returns></returns>
         public static string CONFIRM_RESET_PASSWORD_TEMPLATE(string rootPath)
         {
             if (string.IsNullOrEmpty(confirm_reset_password_template))
             {
                 confirm_reset_password_template = GetTemplate(rootPath + Path.DirectorySeparatorChar + FOLDER +
-                                               Path.DirectorySeparatorChar + NEW_PASSWORD_TEMPLATE_FILE);
+                                               Path.DirectorySeparatorChar + CONFIRM_RESET_PASSWORD_TEMPLATE_FILE);
             }
             return confirm_reset_password_template;
         }

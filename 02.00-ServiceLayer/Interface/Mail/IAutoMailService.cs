@@ -14,7 +14,8 @@ namespace ServiceLayer.Interface
         public Task<bool> SendEmailWithDefaultTemplateAsync(IEnumerable<string> receivers, string subject, string content,
        IFormFileCollection attachments);
 
-        public Task<bool> SendNewPasswordAsync(Account account);
+        public Task<bool> SendConfirmResetPasswordMailAsync(Account account, string serverLink);
+        public Task<bool> SendNewPasswordMailAsync(Account account);
 
         //public Task<bool> SendPaymentReminderAsync();
 
