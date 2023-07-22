@@ -28,6 +28,7 @@ namespace ServiceLayer.ClassImplement.Db
                 ? repos.Meetings.GetList()
                 .Include(c => c.Connections)
                 .Include(m => m.Group).ThenInclude(g => g.GroupMembers)
+                .Include(m=>m.Reviews).ThenInclude(r=>r.Details)
                 .Where(e => ((e.ScheduleStart >= start && e.ScheduleStart.Value.Date < end) || (e.Start >= start && e.Start.Value.Date < end))
                     && e.Group.GroupMembers.Any(gm => gm.AccountId == studentId)
                     //lấy past meeting
@@ -35,30 +36,40 @@ namespace ServiceLayer.ClassImplement.Db
                 : repos.Meetings.GetList()
                 .Include(c => c.Connections)
                 .Include(m => m.Group).ThenInclude(g => g.GroupMembers)
+                .Include(m=>m.Reviews).ThenInclude(r=>r.Details)
                 .Where(c => c.ScheduleStart >= start && c.ScheduleStart.Value.Date < end
                     && c.Group.GroupMembers.Any(gm => gm.AccountId == studentId));
             //int totalMeetingsCount = allMeetingsOfJoinedGroups.Count() == 0
             //    ? 0 : allMeetingsOfJoinedGroups.Count();
             int totalMeetingsCount = allMeetingsOfJoinedGroups.Count();
-            var atendedMeetings = allMeetingsOfJoinedGroups
+            IQueryable<Meeting> atendedMeetings = allMeetingsOfJoinedGroups
                 .Where(e => e.Connections.Any(c => c.AccountId == studentId));
+            //int atendedMeetingsCount = allMeetingsOfJoinedGroups.Count() == 0
+            //    ? 0 : allMeetingsOfJoinedGroups
+            //    .Where(e => e.Connections.Any(c => c.AccountId == studentId)).Count();
             int atendedMeetingsCount = allMeetingsOfJoinedGroups.Count() == 0
-                ? 0 : allMeetingsOfJoinedGroups
-                .Where(e => e.Connections.Any(c => c.AccountId == studentId)).Count();
-            long totalMeetingTime = allMeetingsOfJoinedGroups.Count() == 0 ? 0
-                : allMeetingsOfJoinedGroups.SelectMany(m => m.Connections)
+                ? 0 : atendedMeetings.Count();
+            long totalMeetingTime = atendedMeetings.Count() == 0 ? 0
+                : atendedMeetings.SelectMany(m => m.Connections)
                     .Select(e => e.End.Value - e.Start).Select(ts => ts.Ticks).Sum();
-            var timeSpan = new TimeSpan(totalMeetingTime);
+            TimeSpan timeSpan = new TimeSpan(totalMeetingTime);
+            IQueryable<ReviewDetail> reviewDetails = atendedMeetings
+                .SelectMany(m => m.Reviews)
+                .SelectMany(r => r.Details);
+            var averageVoteResult = !reviewDetails.Any()? 0
+                : await reviewDetails.Select(e => (int)e.Result).AverageAsync();
             //var totalMeetingTime = allMeetingsOfJoinedGroups.SelectMany(m => m.Connections);//.Select(e=>e.End.Value-e.Start).Select(ts=>ts.Ticks).Sum(); 
 
             return new StatGetDto
             {
                 TotalMeetings = allMeetingsOfJoinedGroups.ProjectTo<PastMeetingGetDto>(mapper.ConfigurationProvider),
                 TotalMeetingsCount = totalMeetingsCount,
+                AtendedMeetings = atendedMeetings.ProjectTo<PastMeetingGetDto>(mapper.ConfigurationProvider),
                 AtendedMeetingsCount = atendedMeetingsCount,
                 MissedMeetingsCount = totalMeetingsCount - atendedMeetingsCount,
                 TotalMeetingTme = totalMeetingTime == 0 ? "Chưa tham gia buổi học nào"
-                    : $"{timeSpan.Hours} giờ {timeSpan.Minutes} phút {timeSpan.Seconds} giây"
+                    : $"{timeSpan.Hours} giờ {timeSpan.Minutes} phút {timeSpan.Seconds} giây",
+                AverageVoteResult = averageVoteResult
             };
         }
     }

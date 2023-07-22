@@ -10,8 +10,10 @@ namespace ShareResource.DTO
     {
         public IQueryable TotalMeetings { get; set; }
         public int TotalMeetingsCount { get; set; }
+        public IQueryable AtendedMeetings { get; set; }
         public int AtendedMeetingsCount { get; set; }
         public int MissedMeetingsCount { get; set; }
         public string TotalMeetingTme { get; set; }
+        public double AverageVoteResult { get; set; } 
     }
 }
