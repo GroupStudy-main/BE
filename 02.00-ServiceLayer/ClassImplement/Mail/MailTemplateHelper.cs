@@ -5,13 +5,43 @@
         public static string FOLDER = "MailTemplates";
 
         public static readonly string DEFAULT_TEMPLATE_FILE = "MailTemplate.html";
+        public static readonly string CONFIRM_RESET_PASSWORD_TEMPLATE_FILE = "ResetPassTemplate.html";
+        public static readonly string NEW_PASSWORD_TEMPLATE_FILE = "NewPassTemplate.html";
 
         public static string DEFAULT_TEMPLATE(string rootPath)
         {
             if (string.IsNullOrEmpty(default_template))
+            {
                 default_template = GetTemplate(rootPath + Path.DirectorySeparatorChar + FOLDER +
                                                Path.DirectorySeparatorChar + DEFAULT_TEMPLATE_FILE);
+            }
             return default_template;
+        }
+        /// <summary>
+        /// {0} is logo <br/>
+        /// {1} is fullname <br/>
+        /// {2} is link
+        /// </summary>
+        /// <param name="rootPath"></param>
+        /// <returns></returns>
+        public static string CONFIRM_RESET_PASSWORD_TEMPLATE(string rootPath)
+        {
+            if (string.IsNullOrEmpty(confirm_reset_password_template))
+            {
+                confirm_reset_password_template = GetTemplate(rootPath + Path.DirectorySeparatorChar + FOLDER +
+                                               Path.DirectorySeparatorChar + CONFIRM_RESET_PASSWORD_TEMPLATE_FILE);
+            }
+            return confirm_reset_password_template;
+        }
+
+        public static string NEW_PASSWORD_TEMPLATE(string rootPath)
+        {
+            if (string.IsNullOrEmpty(new_password_template))
+            {
+                new_password_template = GetTemplate(rootPath + Path.DirectorySeparatorChar + FOLDER +
+                                               Path.DirectorySeparatorChar + NEW_PASSWORD_TEMPLATE_FILE);
+            }
+            return new_password_template;
         }
 
         public static string GetTemplate(string templatePath)
@@ -27,7 +57,10 @@
             catch
             {
                 Console.WriteLine($"Get Email Template {templatePath}: Not found");
-                return DEFAULT_TEMPLATE_FILE;
+                using (var streamReader = File.OpenText(DEFAULT_TEMPLATE_FILE))
+                {
+                    template = streamReader.ReadToEnd();
+                }
             }
 
             return template;
@@ -110,8 +143,10 @@
         #region field
 
         public static string default_template;
-        public static string payment_reminder_template;
-        private static string payment_confirm_template;
+        public static string confirm_reset_password_template;
+        public static string new_password_template;
+        //public static string payment_reminder_template;
+        //private static string payment_confirm_template;
 
         #endregion
     }

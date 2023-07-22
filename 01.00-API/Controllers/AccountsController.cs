@@ -18,6 +18,8 @@ using APIExtension.Validator;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System;
+using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Hosting.Server.Features;
 
 namespace API.Controllers
 {
@@ -30,13 +32,15 @@ namespace API.Controllers
         private readonly IMapper mapper;
         private readonly IValidatorWrapper validators;
         private readonly IAutoMailService mailService;
+        private readonly IServer server;
 
-        public AccountsController(IServiceWrapper services, IMapper mapper, IValidatorWrapper validators, IAutoMailService mailService)
+        public AccountsController(IServiceWrapper services, IMapper mapper, IValidatorWrapper validators, IAutoMailService mailService, IServer server)
         {
             this.services = services;
             this.mapper = mapper;
             this.validators = validators;
             this.mailService = mailService;
+            this.server=server;
         }
         private static string FAIL_CONFIRM_PASSWORD_MSG => "Xác nhận mật khẩu thất bại";
 
@@ -180,7 +184,41 @@ namespace API.Controllers
                 }
             }
         }
-        
+
+        [SwaggerOperation(
+            Summary = $"[{Actor.Guest}/{Finnished.True}/{Auth.False}] Send a link to email to reset password"
+            , Description = "gửi 1 link vào email để xác nhận reset password"
+        )]
+        [HttpGet("Password/Reset")]
+        public async Task<IActionResult> ConfirmResetPassword(string email)
+        {
+            Account account = await services.Accounts.GetAccountByEmailAsync(email);
+            if (account == null)
+            {
+                return NotFound("Tài khoản không tồn tại");
+            }
+            //Random password
+            //string newPassword = RandomPassword(9);
+            //account.Password = newPassword;
+            //await services.Accounts.UpdateAsync(account);
+
+            ////string mailContent="<a href=\"localhost\"></a>" 
+            //string mailContent = $"<div>Mật khẩu mới của bạn là {newPassword}</div>";
+            //bool sendSuccessful = await mailService.SendEmailWithDefaultTemplateAsync(new List<String> { email }, "Reset password", mailContent, null);
+            bool sendSuccessful = await mailService.SendConfirmResetPasswordMailAsync(account, server.Features.Get<IServerAddressesFeature>().Addresses.First());
+            if (!sendSuccessful)
+            {
+                //return BadRequest($"Something went wrong with sending mail. The new password is {newPassword}");
+                return BadRequest($"Something went wrong with sending mail.");
+            }
+            //return Ok($"Reset successfully, check {email} inbox for the new password {newPassword}");
+            return Ok($"Reset successfully, check {email} inbox for the new password");
+        }
+
+        [SwaggerOperation(
+            Summary = $"[{Actor.Guest}/{Finnished.True}/{Auth.False}] DO NOT USE. Reset and send new password to email. Call the above api"
+            , Description = "Không sử dụng. Gọi api trên để nhận được mail chứa 1 link gọi api này"
+        )]
         [HttpGet("Password/Reset/Confirm")]
 
         public async Task<IActionResult> ConfirmResetPassword(string email, string secret)
@@ -197,18 +235,21 @@ namespace API.Controllers
                 return Unauthorized("Incorrect secret");
             }
             //Random password
-            string newPassword = RandomPassword(9);
-            account.Password = newPassword;
-            await services.Accounts.UpdateAsync(account);
+            //string newPassword = RandomPassword(9);
+            //account.Password = newPassword;
+            //await services.Accounts.UpdateAsync(account);
 
-            //string mailContent="<a href=\"localhost\"></a>" 
-            string mailContent = $"<div>Mật khẩu mới của bạn là {newPassword}</div>";
-            bool sendSuccessful = await mailService.SendEmailWithDefaultTemplateAsync(new List<String> { email }, "Reset password", mailContent, null);
+            ////string mailContent="<a href=\"localhost\"></a>" 
+            //string mailContent = $"<div>Mật khẩu mới của bạn là {newPassword}</div>";
+            //bool sendSuccessful = await mailService.SendEmailWithDefaultTemplateAsync(new List<String> { email }, "Reset password", mailContent, null);
+            bool sendSuccessful = await mailService.SendNewPasswordMailAsync(account);
             if(!sendSuccessful)
             {
-                return BadRequest($"Something went wrong with sending mail. The new password is {newPassword}");
+                //return BadRequest($"Something went wrong with sending mail. The new password is {newPassword}");
+                return BadRequest($"Something went wrong with sending mail.");
             }
-            return Ok($"Reset successfully, check {email} inbox for the new password {newPassword}");
+            //return Ok($"Reset successfully, check {email} inbox for the new password {newPassword}");
+            return Ok($"Reset successfully, check {email} inbox for the new password");
         }
         /// ///////////////////////////////////////////////////////////////////////////////////////////////
         [Tags(Actor.Test)]
