@@ -23,7 +23,8 @@ namespace ShareResource.DTO
         public DateTime? DateOfBirth { get; set; }
 
         //Parent
-        public virtual ICollection<AccountProfileDto> Parents { get; set; }
+        public virtual ICollection<string> Parents { get; set; }
+        public virtual ICollection<string> Students { get; set; }
 
         // Group Member
         public virtual ICollection<GroupGetListDto> LeadGroups { get; set; }// = new Collection<GroupGetListDto>();

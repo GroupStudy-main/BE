@@ -65,7 +65,7 @@ namespace DataLayer.DBObject
 
         #region Supervision
         public virtual ICollection<Supervision> SupervisionsForStudent { get; set; } = new Collection<Supervision>();
-        //public virtual ICollection<Supervision> SupervisionsForParent { get; set; } = new Collection<Supervision>();
+        public virtual ICollection<Supervision> SupervisionsForParent { get; set; } = new Collection<Supervision>();
         #endregion
 
     }

@@ -274,7 +274,9 @@ namespace ShareResource.Mapper
                 .ForMember(dest => dest.JoinGroups, opt => opt.MapFrom(
                     src => src.GroupMembers.Where(e => e.MemberRole == GroupMemberRole.Member).Select(e => e.Group)))
                 .ForMember(dest => dest.Parents, opt => opt.MapFrom(
-                    src => src.SupervisionsForStudent.Select(e => e.Parent)))
+                    src => src.SupervisionsForStudent.Select(e => e.Parent.FullName)))
+                .ForMember(dest => dest.Students, opt => opt.MapFrom(
+                    src => src.SupervisionsForParent.Select(e => e.Student.FullName)))
                 .PreserveReferences();
         }
 

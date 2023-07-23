@@ -40,6 +40,7 @@ namespace RepositoryLayer.ClassImplement
                  .Include(e => e.Role)
                  .Include(e => e.GroupMembers).ThenInclude(e => e.Group).ThenInclude(e=>e.GroupMembers)
                  .Include(e=>e.SupervisionsForStudent).ThenInclude(e=>e.Parent)
+                 .Include(e=>e.SupervisionsForParent).ThenInclude(e=>e.Student)
                  .SingleOrDefaultAsync(e => e.Id == id);
         } 
         public async Task<Account> GetByUsernameAsync(string username)

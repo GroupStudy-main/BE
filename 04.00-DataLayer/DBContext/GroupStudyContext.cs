@@ -48,10 +48,11 @@ namespace DataLayer.DBContext
                 .HasOne(su => su.Student)
                 .WithMany(st => st.SupervisionsForStudent)
                 .HasForeignKey(su => su.StudentId);
-            //modelBuilder.Entity<Supervision>()
-            //    .HasOne(su => su.Student)
-            //    .WithMany(p => p.SupervisionsForParent)
-            //    .HasForeignKey(su => su.ParentId);
+            modelBuilder.Entity<Supervision>()
+                .HasOne(su => su.Parent)
+                .WithMany(p => p.SupervisionsForParent)
+                .HasForeignKey(su => su.ParentId);
+                //.OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<GroupMember>()
                 .HasIndex(gm => new {  gm.AccountId, gm.GroupId }).IsUnique();
             //
