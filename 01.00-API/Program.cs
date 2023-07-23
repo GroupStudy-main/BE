@@ -16,6 +16,7 @@ using ServiceLayer.ClassImplement;
 using ServiceLayer.Interface;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Utilities.ServiceExtensions.Scheduler;
 
 var builder = WebApplication.CreateBuilder(args);
 IConfiguration configuration = builder.Configuration;
@@ -66,6 +67,8 @@ builder.Services.AddCors(options =>
 
 });
 #endregion
+
+builder.Services.AddSchedulerService(builder.Environment);
 
 #region SignalR
 builder.Services.AddSignalR();
