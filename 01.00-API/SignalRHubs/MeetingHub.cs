@@ -201,8 +201,15 @@ namespace API.SignalRHub
 
             //var usersOnline = await _unitOfWork.UserRepository.GetUsersOnlineAsync(currentUsers);
             //Step 4: Thông báo với meetHub.Group(meetingId) là mày đã online  SendAsync(UserOnlineInGroupMsg, MemberSignalrDto)
-            MemberSignalrDto currentUserDto = await repos.Accounts.GetMemberSignalrAsync(username);
-            await Clients.Group(meetingIdString).SendAsync(UserOnlineInMeetingMsg, currentUserDto);
+            
+            //MemberSignalrDto currentUserDto = await repos.Accounts.GetMemberSignalrAsync(username);
+            //await Clients.Group(meetingIdString).SendAsync(UserOnlineInMeetingMsg, currentUserDto);
+            
+            var usersInMeeting = repos.Connections.GetList()
+                .Where(e=>e.MeetingId==meetingIdInt && e.End == null)
+                .Select(e=>e.UserName).ToHashSet();
+            await Clients.Group(meetingIdString).SendAsync(UserOnlineInMeetingMsg, usersInMeeting);
+
             Console.WriteLine("2.1     " + new String('+', 50));
             Console.WriteLine("2.1     Hub/ChatSend: UserOnlineInGroupMsg, MemberSignalrDto");
             FunctionTracker.Instance().AddHubFunc("Hub/ChatSend: UserOnlineInGroupMsg, MemberSignalrDto");
@@ -301,6 +308,12 @@ namespace API.SignalRHub
                 await groupHub.Clients.All.SendAsync(GroupHub.CountMemberInGroupMsg,
                        new { meetingId = meeting.Id, countMember = currentUsersInMeeting.Length });
             }
+
+            var usersInMeeting = repos.Connections.GetList()
+               .Where(e => e.MeetingId == meeting.Id && e.End == null)
+               .Select(e => e.UserName).ToHashSet();
+            await Clients.Group(meeting.Id.ToString()).SendAsync(UserOnlineInMeetingMsg, usersInMeeting);
+
             //step 9: Disconnect khỏi meetHub
             await base.OnDisconnectedAsync(exception);
         }
@@ -567,42 +580,87 @@ namespace API.SignalRHub
         //Key dạng string chứa roomId do FE đẻ ra const roomId = uuidV4();
         //Value chứa list các peerId
 
-        public static readonly Dictionary<string, List<string>> Rooms = new Dictionary<string, List<string>>();
+        //public static readonly Dictionary<string, List<string>> Rooms = new Dictionary<string, List<string>>();
+        public static readonly Dictionary<string, Dictionary<string, string>> Rooms = new Dictionary<string, Dictionary<string, string>>();
         public class CreateRoomInput
         {
             public string peerId { get; set; }
-            public string roomId { get; set; } = "default";
-            //public string roomId { get; set; } = Guid.NewGuid().ToString();
+            public string username { get; set; }
+
+            //public string roomId { get; set; } = "default";
+            public string roomId { get; set; } = Guid.NewGuid().ToString();
         }
         //public async Task CreateRoom(CreateRoomInput input)
         public async Task CreateRoom(CreateRoomInput input)
         {
+            #region old code
+            //string roomId = input.roomId;
+            //string peerId = input.peerId;
+            //Console.WriteLine($"\n\n==++==++===+++\n CreateRoom");
+            //Console.WriteLine(input.peerId);
+            ////string newRoomId = Guid.NewGuid().ToString();
+            ////RoomPeerIds.Add(roomId, new List<string>() { input.peerId});
+            //Rooms.Add(roomId, new List<string>());
+            ////Gửi cho thằng gọi CreateRoom thui
+            //await Clients.Caller.SendAsync("room-created", new { roomId = roomId });
+            //await JoinRoom(new JoinRoomInput { roomId = roomId, peerId = peerId });
+            ////await JoinRoom(JsonConvert.SerializeObject(new JoinRoomInput { roomId = roomId, peerId = input.peerId }));
+            ////await JoinRoom(newRoomId, input.peerId);
+            #endregion
+
             string roomId = input.roomId;
             string peerId = input.peerId;
+            string username = input.username;
             Console.WriteLine($"\n\n==++==++===+++\n CreateRoom");
             Console.WriteLine(input.peerId);
             //string newRoomId = Guid.NewGuid().ToString();
             //RoomPeerIds.Add(roomId, new List<string>() { input.peerId});
-            Rooms.Add(roomId, new List<string>());
+            Dictionary<string, string> uname_peer = new Dictionary<string, string>();
+            uname_peer.Add(username, peerId);
+            Rooms.Add(roomId, uname_peer);
             //Gửi cho thằng gọi CreateRoom thui
             await Clients.Caller.SendAsync("room-created", new { roomId = roomId });
-            await JoinRoom(new JoinRoomInput { roomId = roomId, peerId = peerId });
+            await JoinRoom(new JoinRoomInput { roomId = roomId, peerId = peerId , username = username});
             //await JoinRoom(JsonConvert.SerializeObject(new JoinRoomInput { roomId = roomId, peerId = input.peerId }));
             //await JoinRoom(newRoomId, input.peerId);
-
         }
         public class JoinRoomInput
         {
             public string roomId { get; set; }
+            public string username { get; set; }
             public string peerId { get; set; }
         }
         public async Task JoinRoom(JoinRoomInput input)
         //public async Task JoinRoom(string json)
         //public async Task JoinRoom(string roomId, string peerId)
         {
+            #region old code
+            //var input = JsonConvert.DeserializeObject<JoinRoomInput>(json);
+            //string roomId = input.roomId;
+            //string peerId = input.peerId;
+            //string username = input.username;
+
+            //Console.WriteLine($"\n\n==++==++===+++\n JoinRoom");
+            //Console.WriteLine(peerId);
+            //Console.WriteLine(roomId);
+            //bool isRoomExisted = Rooms.ContainsKey(roomId);
+            //if (isRoomExisted)
+            //{
+            //    Rooms[roomId].Add(peerId);
+            //    await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
+            //    await Clients.GroupExcept(roomId, Context.ConnectionId).SendAsync("user-joined", new { roomId = roomId, peerId = peerId });
+            //    await Clients.Caller.SendAsync("get-users", new { roomId = roomId, participants = Rooms[roomId] });
+            //}
+            //else
+            //{
+            //    await CreateRoom(new CreateRoomInput {  peerId = peerId, roomId=roomId });
+            //}
+            #endregion
+
             //var input = JsonConvert.DeserializeObject<JoinRoomInput>(json);
             string roomId = input.roomId;
             string peerId = input.peerId;
+            string username = input.username;
 
             Console.WriteLine($"\n\n==++==++===+++\n JoinRoom");
             Console.WriteLine(peerId);
@@ -610,15 +668,25 @@ namespace API.SignalRHub
             bool isRoomExisted = Rooms.ContainsKey(roomId);
             if (isRoomExisted)
             {
-                Rooms[roomId].Add(peerId);
+                bool isUsernameExisted = Rooms[roomId].ContainsKey(username);
+                if(isUsernameExisted) 
+                {
+                    Rooms[roomId][username] = peerId;
+                }
+                else
+                {
+                    
+                    Rooms[roomId].Add(username, peerId);
+                }
                 await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
                 await Clients.GroupExcept(roomId, Context.ConnectionId).SendAsync("user-joined", new { roomId = roomId, peerId = peerId });
-                await Clients.Caller.SendAsync("get-users", new { roomId = roomId, participants = Rooms[roomId] });
+                await Clients.Caller.SendAsync("get-users", new { roomId = roomId, participants = Rooms[roomId].Select(e=>new {username=e.Key, peerId=e.Value}) });
             }
             else
             {
-                await CreateRoom(new CreateRoomInput {  peerId = peerId, roomId=roomId });
+                await CreateRoom(new CreateRoomInput { peerId = peerId, roomId = roomId, username = username });
             }
+
         }
         public class LeaveRoomInput
         {
