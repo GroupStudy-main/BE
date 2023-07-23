@@ -33,6 +33,7 @@ namespace DataLayer.DBContext
         public virtual DbSet<Schedule> Schedules { get; set; }
         public virtual DbSet<Review> Reviews { get; set; }
         public virtual DbSet<ReviewDetail> ReviewDetails { get; set; }
+        public virtual DbSet<Supervision> Supervisions { get; set; }
 
         public virtual DbSet<DocumentFile> DocumentFiles { get; set; }
 
@@ -43,6 +44,14 @@ namespace DataLayer.DBContext
             //    .HasIndex(a => a.Username).IsUnique();
             //modelBuilder.Entity<Account>()
             //    .HasIndex(a => a.Email).IsUnique();
+            modelBuilder.Entity<Supervision>()
+                .HasOne(su => su.Student)
+                .WithMany(st => st.SupervisionsForStudent)
+                .HasForeignKey(su => su.StudentId);
+            //modelBuilder.Entity<Supervision>()
+            //    .HasOne(su => su.Student)
+            //    .WithMany(p => p.SupervisionsForParent)
+            //    .HasForeignKey(su => su.ParentId);
             modelBuilder.Entity<GroupMember>()
                 .HasIndex(gm => new {  gm.AccountId, gm.GroupId }).IsUnique();
             //

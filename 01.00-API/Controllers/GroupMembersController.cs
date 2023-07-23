@@ -228,11 +228,11 @@ namespace API.Controllers
             {
                 return BadRequest("Yêu cầu tham gia không tồn tại");
             }
-            if (existedRequest.State == InviteRequestStateEnum.Approved)
+            if (existedRequest.State == RequestStateEnum.Approved)
             {
                 return BadRequest("Yêu cầu tham gia đã được chấp nhận");
             }
-            if (existedRequest.State == InviteRequestStateEnum.Decline)
+            if (existedRequest.State == RequestStateEnum.Decline)
                 {
                 return BadRequest("Yêu cầu tham gia đã bị từ chối");
             }
@@ -274,11 +274,11 @@ namespace API.Controllers
             {
                 return BadRequest("Yêu cầu tham gia không tồn tại");
             }
-            if (existedRequest.State == InviteRequestStateEnum.Approved)
+            if (existedRequest.State == RequestStateEnum.Approved)
             {
                 return BadRequest("Yêu cầu tham gia đã được chấp nhận");
             }
-            if (existedRequest.State == InviteRequestStateEnum.Decline)
+            if (existedRequest.State == RequestStateEnum.Decline)
             {
                 return BadRequest("Yêu cầu tham gia đã bị từ chối");
             }
@@ -483,11 +483,11 @@ namespace API.Controllers
             {
                 return BadRequest("Lời mời tham gia không tồn tại");
             }
-            if (existedInvite.State == InviteRequestStateEnum.Approved)
+            if (existedInvite.State == RequestStateEnum.Approved)
             {
                 return BadRequest("Lời mời tham gia đã được chấp nhận");
             }
-            if (existedInvite.State == InviteRequestStateEnum.Decline)
+            if (existedInvite.State == RequestStateEnum.Decline)
             {
                 return BadRequest("Lời mời tham gia đã bị từ chối");
             }
@@ -544,11 +544,11 @@ namespace API.Controllers
             {
                 return BadRequest("Lời mời tham gia không tồn tại");
             }
-            if (existedInvite.State == InviteRequestStateEnum.Approved)
+            if (existedInvite.State == RequestStateEnum.Approved)
             {
                 return BadRequest("Lời mời tham gia đã được chấp nhận");
             }
-            if (existedInvite.State == InviteRequestStateEnum.Decline)
+            if (existedInvite.State == RequestStateEnum.Decline)
             {
                 return BadRequest("Lời mời tham gia đã bị từ chối");
             }

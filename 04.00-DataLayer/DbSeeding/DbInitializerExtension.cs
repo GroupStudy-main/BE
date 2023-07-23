@@ -56,6 +56,16 @@ namespace DataLayer.ImMemorySeeding
                 }
                 #endregion
 
+                #region seed Supervision
+                if (!context.Supervisions.Any())
+                {
+
+                    context.Supervisions.AddRange(DbSeed.Supervisions);
+
+                }
+                #endregion
+
+
                 #region seed class
                 if (!context.Classes.Any())
                 {

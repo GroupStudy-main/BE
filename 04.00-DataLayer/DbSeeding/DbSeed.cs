@@ -151,6 +151,15 @@ namespace DataLayer.DbSeeding
                 RoleId = 1
             }
         };
+        public static Supervision[] Supervisions = new Supervision[]
+        {
+            new Supervision
+            {
+                Id = 1,
+                StudentId=1,
+                ParentId=11      
+            }
+        };
         public static Class[] Classes = new Class[]
         {
             new Class
@@ -539,14 +548,14 @@ namespace DataLayer.DbSeeding
                 Id = 1,
                 GroupId= 1,
                 AccountId=2,
-                State = InviteRequestStateEnum.Approved
+                State = RequestStateEnum.Approved
             },
             new Invite
             {
                 Id = 2,
                 GroupId = 1,
                 AccountId = 3,
-                State = InviteRequestStateEnum.Waiting,
+                State = RequestStateEnum.Waiting,
             },
             #endregion
 
@@ -556,14 +565,14 @@ namespace DataLayer.DbSeeding
                 Id = 3,
                 GroupId = 2,
                 AccountId = 2,
-                State = InviteRequestStateEnum.Approved,
+                State = RequestStateEnum.Approved,
             },
             new Invite
             {
                 Id = 4,
                 GroupId = 2,
                 AccountId = 3,
-                State = InviteRequestStateEnum.Waiting,
+                State = RequestStateEnum.Waiting,
             },
             #endregion 
 
@@ -573,14 +582,14 @@ namespace DataLayer.DbSeeding
                 Id = 5,
                 GroupId = 3,
                 AccountId = 1,
-                State = InviteRequestStateEnum.Approved,
+                State = RequestStateEnum.Approved,
             },
             new Invite
             {
                 Id = 6,
                 GroupId = 3,
                 AccountId = 3,
-                State = InviteRequestStateEnum.Waiting,
+                State = RequestStateEnum.Waiting,
             },
             #endregion
                         
@@ -590,7 +599,7 @@ namespace DataLayer.DbSeeding
                 Id = 7,
                 GroupId = 4,
                 AccountId = 3,
-                State = InviteRequestStateEnum.Waiting,
+                State = RequestStateEnum.Waiting,
             },
             #endregion
                         
@@ -600,7 +609,7 @@ namespace DataLayer.DbSeeding
                 Id = 8,
                 GroupId = 5,
                 AccountId = 3,
-                State = InviteRequestStateEnum.Waiting,
+                State = RequestStateEnum.Waiting,
             },
             #endregion
                         
@@ -610,14 +619,14 @@ namespace DataLayer.DbSeeding
                 Id = 9,
                 GroupId = 6,
                 AccountId = 2,
-                State = InviteRequestStateEnum.Waiting,
+                State = RequestStateEnum.Waiting,
             },
             new Invite
             {
                 Id = 10,
                 GroupId = 6,
                 AccountId = 1,
-                State = InviteRequestStateEnum.Waiting,
+                State = RequestStateEnum.Waiting,
             },
             #endregion
 
@@ -631,7 +640,7 @@ namespace DataLayer.DbSeeding
                 Id = 1,
                 GroupId = 1,
                 AccountId = 4,
-                State = InviteRequestStateEnum.Waiting,
+                State = RequestStateEnum.Waiting,
             },
             #endregion
                         
@@ -641,7 +650,7 @@ namespace DataLayer.DbSeeding
                 Id = 2,
                 GroupId = 2,
                 AccountId = 3,
-                State = InviteRequestStateEnum.Waiting,
+                State = RequestStateEnum.Waiting,
             },
             #endregion
                         
@@ -651,7 +660,7 @@ namespace DataLayer.DbSeeding
                 Id = 3,
                 GroupId = 3,
                 AccountId = 4,
-                State = InviteRequestStateEnum.Waiting,
+                State = RequestStateEnum.Waiting,
             },
             #endregion
                         
@@ -661,7 +670,7 @@ namespace DataLayer.DbSeeding
                 Id = 4,
                 GroupId = 4,
                 AccountId = 4,
-                State = InviteRequestStateEnum.Waiting,
+                State = RequestStateEnum.Waiting,
             },
             #endregion
                         
@@ -671,7 +680,7 @@ namespace DataLayer.DbSeeding
                 Id = 5,
                 GroupId = 5,
                 AccountId = 3,
-                State = InviteRequestStateEnum.Waiting,
+                State = RequestStateEnum.Waiting,
             },
             #endregion
                         
@@ -681,7 +690,7 @@ namespace DataLayer.DbSeeding
                 Id = 6,
                 GroupId = 6,
                 AccountId = 1,
-                State = InviteRequestStateEnum.Waiting,
+                State = RequestStateEnum.Waiting,
             },
             #endregion
         };

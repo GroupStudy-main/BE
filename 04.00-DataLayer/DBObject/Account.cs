@@ -63,6 +63,11 @@ namespace DataLayer.DBObject
         public virtual ICollection<Request> JoinRequests { get; set; } = new Collection<Request>();
         #endregion
 
+        #region Supervision
+        public virtual ICollection<Supervision> SupervisionsForStudent { get; set; } = new Collection<Supervision>();
+        //public virtual ICollection<Supervision> SupervisionsForParent { get; set; } = new Collection<Supervision>();
+        #endregion
+
     }
 
 }

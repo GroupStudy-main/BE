@@ -165,7 +165,7 @@ namespace ServiceLayer.ClassImplement.Db
         {
             return await repos.Requests.GetList()
               .AnyAsync(e => e.AccountId == studentId && e.GroupId == groupId 
-                && (e.State == InviteRequestStateEnum.Waiting)
+                && (e.State == RequestStateEnum.Waiting)
               );
         }
          //Fix later

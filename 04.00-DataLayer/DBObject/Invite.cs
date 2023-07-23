@@ -10,7 +10,7 @@ namespace DataLayer.DBObject
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public InviteRequestStateEnum State { get; set; } = InviteRequestStateEnum.Waiting;
+        public RequestStateEnum State { get; set; } = RequestStateEnum.Waiting;
 
         //Group
         public int GroupId { get; set; }

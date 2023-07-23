@@ -43,7 +43,7 @@ namespace ServiceLayer.ClassImplement.Db
         public IQueryable<JoinRequestForGroupGetDto> GetJoinRequestForGroup(int groupId)
         {
             IQueryable<Request> list = repos.Requests.GetList()
-                .Where(e => e.GroupId == groupId && e.State == InviteRequestStateEnum.Waiting)
+                .Where(e => e.GroupId == groupId && e.State == RequestStateEnum.Waiting)
                 .Include(e => e.Account)
                 .Include(e => e.Group);
             //Console.WriteLine("+_+_+_+_+_+_ " + list.Count());
@@ -54,7 +54,7 @@ namespace ServiceLayer.ClassImplement.Db
         public IQueryable<JoinInviteForGroupGetDto> GetJoinInviteForGroup(int groupId)
         {
             IQueryable<Invite> list = repos.Invites.GetList()
-                .Where(e => e.GroupId == groupId && e.State == InviteRequestStateEnum.Waiting)
+                .Where(e => e.GroupId == groupId && e.State == RequestStateEnum.Waiting)
                 .Include(e => e.Account)
                 .Include(e => e.Group);
             return list.ProjectTo<JoinInviteForGroupGetDto>(mapper.ConfigurationProvider);
@@ -64,7 +64,7 @@ namespace ServiceLayer.ClassImplement.Db
         public IQueryable<JoinRequestForStudentGetDto> GetJoinRequestForStudent(int studentId)
         {
             IQueryable<Request> list = repos.Requests.GetList()
-                .Where(e => e.AccountId == studentId && e.State == InviteRequestStateEnum.Waiting)
+                .Where(e => e.AccountId == studentId && e.State == RequestStateEnum.Waiting)
                 .Include(e => e.Account)
                 .Include(e => e.Group).ThenInclude(e => e.GroupSubjects).ThenInclude(e => e.Subject)
                 .Include(e => e.Group).ThenInclude(e => e.GroupMembers);
@@ -78,7 +78,7 @@ namespace ServiceLayer.ClassImplement.Db
                 .Include(e => e.Account)
                 .Include(e => e.Group)
                 .SingleOrDefaultAsync(e => e.AccountId == accountId
-                    && e.GroupId == groupId && e.State == InviteRequestStateEnum.Waiting);
+                    && e.GroupId == groupId && e.State == RequestStateEnum.Waiting);
             return invite;
 
         }
@@ -89,7 +89,7 @@ namespace ServiceLayer.ClassImplement.Db
                 .Include(e => e.Account)
                 .Include(e => e.Group)
                 .SingleOrDefaultAsync(e => e.AccountId == accountId
-                    && e.GroupId == groupId && e.State == InviteRequestStateEnum.Waiting);
+                    && e.GroupId == groupId && e.State == RequestStateEnum.Waiting);
             return request;
         }
 
@@ -115,7 +115,7 @@ namespace ServiceLayer.ClassImplement.Db
         public IQueryable<JoinInviteForStudentGetDto> GetJoinInviteForStudent(int studentId)
         {
             IQueryable<Invite> list = repos.Invites.GetList()
-                .Where(e => e.AccountId == studentId && e.State == InviteRequestStateEnum.Waiting)
+                .Where(e => e.AccountId == studentId && e.State == RequestStateEnum.Waiting)
                 .Include(e => e.Account)
                 .Include(e => e.Group).ThenInclude(e => e.GroupSubjects).ThenInclude(e => e.Subject)
                 .Include(e => e.Group).ThenInclude(e => e.GroupMembers);
@@ -152,7 +152,7 @@ namespace ServiceLayer.ClassImplement.Db
             //}
             //existed.State = isAccepted ? GroupMemberState.Member : GroupMemberState.Banned;
             //await repos.GroupMembers.UpdateAsync(existed);
-            existedInvite.State = isAccepted ? InviteRequestStateEnum.Approved : InviteRequestStateEnum.Decline;
+            existedInvite.State = isAccepted ? RequestStateEnum.Approved : RequestStateEnum.Decline;
             await repos.Invites.UpdateAsync(existedInvite);
             if (isAccepted)
             {
@@ -173,7 +173,7 @@ namespace ServiceLayer.ClassImplement.Db
             //{
             //    throw new Exception("Yêu cầu đã được xử lí");
             //}
-            existedRequest.State = isAccepted ? InviteRequestStateEnum.Approved : InviteRequestStateEnum.Decline;
+            existedRequest.State = isAccepted ? RequestStateEnum.Approved : RequestStateEnum.Decline;
             await repos.Requests.UpdateAsync(existedRequest);
             if (isAccepted)
             {

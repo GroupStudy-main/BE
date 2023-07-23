@@ -150,7 +150,7 @@ namespace ShareResource.Mapper
             //CreateMap<GroupMemberInviteCreateDto, GroupMember>()
             //    .ForMember(dest => dest.State, opt => opt.MapFrom(src => GroupMemberState.Inviting));
             CreateMap<GroupMemberInviteCreateDto, Invite>()
-                .ForMember(dest => dest.State, opt => opt.MapFrom(src => InviteRequestStateEnum.Waiting));
+                .ForMember(dest => dest.State, opt => opt.MapFrom(src => RequestStateEnum.Waiting));
             
             //Request
 
@@ -187,7 +187,7 @@ namespace ShareResource.Mapper
             //CreateMap<GroupMemberRequestCreateDto, GroupMember>()   
             //    .ForMember(dest => dest.State, opt => opt.MapFrom(src => GroupMemberState.Requesting));
             CreateMap<GroupMemberRequestCreateDto, Request>()
-                .ForMember(dest => dest.State, opt => opt.MapFrom(src => InviteRequestStateEnum.Waiting));
+                .ForMember(dest => dest.State, opt => opt.MapFrom(src => RequestStateEnum.Waiting));
         }
 
         private void MapRole()
@@ -219,14 +219,14 @@ namespace ShareResource.Mapper
 
                 .ForMember(dest => dest.JoinRequest, opt => opt.MapFrom(
                     src => src.JoinRequests
-                        .Where(e => e.State == InviteRequestStateEnum.Waiting)))
+                        .Where(e => e.State == RequestStateEnum.Waiting)))
                 .ForMember(dest => dest.JoinInvite, opt => opt.MapFrom(
                     src => src.JoinInvites
-                        .Where(e => e.State == InviteRequestStateEnum.Waiting)))
+                        .Where(e => e.State == RequestStateEnum.Waiting)))
 
                 .ForMember(dest => dest.DeclineRequest, opt => opt.MapFrom(
                     src => src.JoinRequests
-                        .Where(e => e.State == InviteRequestStateEnum.Decline)))
+                        .Where(e => e.State == RequestStateEnum.Decline)))
                 .ForMember(dest => dest.Subjects, opt => opt.MapFrom(
                     src => src.GroupSubjects.Select(gs => gs.Subject)))
 
@@ -273,6 +273,8 @@ namespace ShareResource.Mapper
                     src => src.GroupMembers.Where(e => e.MemberRole == GroupMemberRole.Leader).Select(e => e.Group)))
                 .ForMember(dest => dest.JoinGroups, opt => opt.MapFrom(
                     src => src.GroupMembers.Where(e => e.MemberRole == GroupMemberRole.Member).Select(e => e.Group)))
+                .ForMember(dest => dest.Parents, opt => opt.MapFrom(
+                    src => src.SupervisionsForStudent.Select(e => e.Parent)))
                 .PreserveReferences();
         }
 

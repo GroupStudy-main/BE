@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ShareResource.Enums
 {
-    public enum InviteRequestStateEnum
+    public enum RequestStateEnum
     {
         Decline = 0,
         Approved,
