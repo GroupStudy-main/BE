@@ -6,6 +6,7 @@ using ServiceLayer.ClassImplement.Auth;
 using Microsoft.Extensions.Configuration;
 using ServiceLayer.ClassImplement.Db;
 using AutoMapper;
+using Microsoft.AspNetCore.Hosting;
 
 namespace ServiceLayer.ClassImplement
 {
@@ -14,12 +15,15 @@ namespace ServiceLayer.ClassImplement
         private readonly IRepoWrapper repos;
         private readonly IConfiguration configuration;
         private readonly IMapper mapper;
+        private readonly IWebHostEnvironment env;
 
-        public ServiceWrapper(IRepoWrapper repos, IConfiguration configuration, IMapper mapper)
+
+        public ServiceWrapper(IRepoWrapper repos, IConfiguration configuration, IMapper mapper, IWebHostEnvironment env)
         {
             this.repos = repos;
             this.configuration = configuration;
             this.mapper = mapper;
+            this.env = env;
             accounts = new AccountService(repos);
             auth = new AuthService(repos, configuration);
             groups = new GroupService(repos);
@@ -27,6 +31,8 @@ namespace ServiceLayer.ClassImplement
             subjects = new SubjectService(repos);
             meetings = new MeetingService(repos, mapper);
             groupMembers = new GroupMemberSerivce(repos, mapper);
+            documentFiles = new DocumentFileService(repos);
+            stats = new StatService(repos, mapper);
         }
 
         private IAccountService accounts;
@@ -143,6 +149,19 @@ namespace ServiceLayer.ClassImplement
                     stats = new StatService(repos, mapper);
                 }
                 return stats;
+            }
+        }
+
+        private IAutoMailService mails;
+        public IAutoMailService Mails
+        {
+            get
+            {
+                if (mails is null)
+                {
+                    mails = new AutoMailService(env, repos, configuration, Accounts);
+                }
+                return mails;
             }
         }
     }

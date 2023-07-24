@@ -17,7 +17,8 @@ internal class ThirtySecondJob :  IJob
         var scope = service.CreateScope();
         //mailService = scope.ServiceProvider.GetRequiredService<IServiceWrapper>().Mails;
         //invoiceService = scope.ServiceProvider.GetRequiredService<IServiceWrapper>().Invoices;
-        this.mailService = scope.ServiceProvider.GetRequiredService<IAutoMailService>();
+        //this.mailService = scope.ServiceProvider.GetRequiredService<IAutoMailService>();
+        this.mailService = scope.ServiceProvider.GetRequiredService<IServiceWrapper>().Mails;
     }
 
     public async Task Execute(IJobExecutionContext context)

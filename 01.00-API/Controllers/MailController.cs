@@ -11,17 +11,16 @@ namespace API.Controllers
     {
         //private readonly IMapper _mapper;
         //private readonly IWebHostEnvironment env;
-        private readonly IAutoMailService mailService;
-        //private readonly IServiceWrapper serviceWrapper;
+        private readonly IServiceWrapper services;
 
         //private readonly IWebHostEnvironment env;
-        public MailController(IAutoMailService emailSender, /*IWebHostEnvironment env,*/ IMapper mapper,
+        public MailController(/*IAutoMailService emailSender,*/ /*IWebHostEnvironment env,*/ IMapper mapper,
             IServiceWrapper serviceWrapper)
         {
-            mailService = emailSender;
+            //mailService = emailSender;
             //this.env = env;
             //_mapper = mapper;
-            //this.serviceWrapper = serviceWrapper;
+            this.services = serviceWrapper;
         }
 
 
@@ -43,7 +42,7 @@ namespace API.Controllers
             //MailMessageEntity mail = new MailMessageEntity( receivers, subject, content, attachments);
             //var result = await mailService.SendEmailWithDefaultTemplateAsync(mail, rootPath);
             var result =
-                await mailService.SendEmailWithDefaultTemplateAsync(receivers, subject, content,
+                await services.Mails.SendEmailWithDefaultTemplateAsync(receivers, subject, content,
                     attachments /*, rootPath*/);
 
             return result ? Ok("Send mail successfully") : BadRequest("Somthing went wrong");

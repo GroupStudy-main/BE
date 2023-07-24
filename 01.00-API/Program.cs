@@ -68,7 +68,6 @@ builder.Services.AddCors(options =>
 });
 #endregion
 
-builder.Services.AddSchedulerService(builder.Environment);
 
 #region SignalR
 builder.Services.AddSignalR();
@@ -82,8 +81,10 @@ builder.Services.AddSingleton<PresenceTracker>();
 builder.Services.AddSingleton<ShareScreenTracker>();
 builder.Services.AddScoped<IRepoWrapper, RepoWrapper>();
 builder.Services.AddScoped<IServiceWrapper, ServiceWrapper>();
-builder.Services.AddScoped<IAutoMailService, AutoMailService>();
+//builder.Services.AddScoped<IAutoMailService, AutoMailService>();
 #endregion
+
+builder.Services.AddSchedulerService(builder.Environment);
 
 #region validator
 builder.Services.AddScoped<IValidatorWrapper, ValidatorWrapper>();

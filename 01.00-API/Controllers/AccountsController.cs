@@ -31,15 +31,15 @@ namespace API.Controllers
         private readonly IServiceWrapper services;
         private readonly IMapper mapper;
         private readonly IValidatorWrapper validators;
-        private readonly IAutoMailService mailService;
+        //private readonly IAutoMailService mailService;
         private readonly IServer server;
 
-        public AccountsController(IServiceWrapper services, IMapper mapper, IValidatorWrapper validators, IAutoMailService mailService, IServer server)
+        public AccountsController(IServiceWrapper services, IMapper mapper, IValidatorWrapper validators, /*IAutoMailService mailService,*/ IServer server)
         {
             this.services = services;
             this.mapper = mapper;
             this.validators = validators;
-            this.mailService = mailService;
+            //this.mailService = mailService;
             this.server=server;
         }
         private static string FAIL_CONFIRM_PASSWORD_MSG => "Xác nhận mật khẩu thất bại";
@@ -205,7 +205,7 @@ namespace API.Controllers
             ////string mailContent="<a href=\"localhost\"></a>" 
             //string mailContent = $"<div>Mật khẩu mới của bạn là {newPassword}</div>";
             //bool sendSuccessful = await mailService.SendEmailWithDefaultTemplateAsync(new List<String> { email }, "Reset password", mailContent, null);
-            bool sendSuccessful = await mailService.SendConfirmResetPasswordMailAsync(account, server.Features.Get<IServerAddressesFeature>().Addresses.First());
+            bool sendSuccessful = await services.Mails.SendConfirmResetPasswordMailAsync(account, server.Features.Get<IServerAddressesFeature>().Addresses.First());
             if (!sendSuccessful)
             {
                 //return BadRequest($"Something went wrong with sending mail. The new password is {newPassword}");
@@ -242,7 +242,7 @@ namespace API.Controllers
             ////string mailContent="<a href=\"localhost\"></a>" 
             //string mailContent = $"<div>Mật khẩu mới của bạn là {newPassword}</div>";
             //bool sendSuccessful = await mailService.SendEmailWithDefaultTemplateAsync(new List<String> { email }, "Reset password", mailContent, null);
-            bool sendSuccessful = await mailService.SendNewPasswordMailAsync(account);
+            bool sendSuccessful = await services.Mails.SendNewPasswordMailAsync(account);
             if(!sendSuccessful)
             {
                 //return BadRequest($"Something went wrong with sending mail. The new password is {newPassword}");

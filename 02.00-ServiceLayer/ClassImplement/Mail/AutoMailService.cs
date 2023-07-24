@@ -8,28 +8,17 @@ using MimeKit.Utils;
 using Microsoft.Extensions.Configuration;
 using DataLayer.DBObject;
 using System.Text;
+using ServiceLayer.Interface.Db;
 
 namespace ServiceLayer.ClassImplement
 {
     public class AutoMailService : IAutoMailService
     {
-        /// <summary>
-        ///     The default Email Template. {0}: email content
-        /// </summary>
-        private const string DefaultTemplate = "<h2 style='color:red;'>{0}</h2>";
-
-        private readonly MailConfiguration _emailConfig;
-
         private readonly IRepoWrapper repositories;
+        private readonly IAccountService accountsService;
+        //private readonly IServiceWrapper services;
 
-        //private readonly IWebHostEnvironment env;
-        private readonly string rootPath;
-
-
-        private readonly string logoPath;
-        private readonly IServiceWrapper services;
-
-        public AutoMailService(IWebHostEnvironment env, IRepoWrapper repositories, IConfiguration configuration, IServiceWrapper services)
+        public AutoMailService(IWebHostEnvironment env, IRepoWrapper repositories, IConfiguration configuration/*, IServiceWrapper services*/, IAccountService accountsService)
         {
             _emailConfig = configuration
                 .GetSection("EmailConfiguration")
@@ -40,8 +29,18 @@ namespace ServiceLayer.ClassImplement
             logoPath = rootPath + Path.DirectorySeparatorChar + "Images" + Path.DirectorySeparatorChar +
                            //"logowhite.png";
                            "Logo.png";
-            this.services = services;
+            this.accountsService = accountsService;
+            //this.services = services;
         }
+
+        /// <summary>
+        ///     The default Email Template. {0}: email content
+        /// </summary>
+        private const string DefaultTemplate = "<h2 style='color:red;'>{0}</h2>";
+        private readonly MailConfiguration _emailConfig;
+        //private readonly IWebHostEnvironment env;
+        private readonly string rootPath;
+        private readonly string logoPath;
 
         public async Task<bool> SendEmailWithDefaultTemplateAsync(IEnumerable<string> receivers, string subject,
             string content, IFormFileCollection attachments)
@@ -180,7 +179,7 @@ namespace ServiceLayer.ClassImplement
         {
             string newPassword = RandomPassword(9);
             account.Password = newPassword;
-            await services.Accounts.UpdateAsync(account);
+            await accountsService.UpdateAsync(account);
 
             var mimeMessage = new MimeMessage();
             mimeMessage.From.Add(new MailboxAddress(_emailConfig.From));

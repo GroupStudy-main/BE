@@ -13,6 +13,7 @@ namespace ServiceLayer.Interface
         public IMeetingService Meetings { get; }
         public IGroupMemberSerivce GroupMembers { get; }
         public IDocumentFileService DocumentFiles { get; }
+        public IAutoMailService Mails { get; }
         public IStatService Stats { get; }
 
     }

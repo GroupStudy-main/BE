@@ -19,7 +19,8 @@ public class StartMonthlyJob :  IJob
         var scope = service.CreateScope();
         //mailService = scope.ServiceProvider.GetRequiredService<IServiceWrapper>().Mails;
         //invoiceService = scope.ServiceProvider.GetRequiredService<IServiceWrapper>().Invoices;
-        this.mailService = scope.ServiceProvider.GetRequiredService<IAutoMailService>();
+        //this.mailService = scope.ServiceProvider.GetRequiredService<IAutoMailService>();
+        this.mailService = scope.ServiceProvider.GetRequiredService<IServiceWrapper>().Mails;
         //this.mailService = mailService;
     }
 

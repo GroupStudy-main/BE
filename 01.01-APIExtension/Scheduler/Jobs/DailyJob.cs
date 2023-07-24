@@ -15,7 +15,8 @@ public class DailyJob : IJob
     {
         var scope = service.CreateScope();
         //mailService = scope.ServiceProvider.GetRequiredService<IServiceWrapper>().Mails;
-        this.mailService = mailService;
+        this.mailService = scope.ServiceProvider.GetRequiredService<IServiceWrapper>().Mails;
+        //this.mailService = mailService;
     }
 
     public async Task Execute(IJobExecutionContext context)
