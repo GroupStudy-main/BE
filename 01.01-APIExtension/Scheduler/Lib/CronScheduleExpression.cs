@@ -14,6 +14,9 @@ public static class CronScheduleExpression
     /// </summary>
     public const string EndMonthly = "0 0 L * ? *";
 
+    public const string Weekly = "0 0 0 ? * WED *";
+    //public const string Weekly = "0 0 0 ? * Mon*";
+
     /// <summary>
     ///     Every Day
     ///     Start at 00:00:00

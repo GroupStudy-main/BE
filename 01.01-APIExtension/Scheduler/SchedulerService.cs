@@ -21,8 +21,10 @@ public static class SchedulerService
         if (environment.IsProduction())
         {
             services.AddSingleton<DailyJob>();
+            services.AddSingleton<WeeklyJob>();
             services.AddSingleton<EndMonthlyJob>();
             services.AddSingleton(new ScheduledJob(typeof(DailyJob), DailyJob.schedule));
+            services.AddSingleton(new ScheduledJob(typeof(WeeklyJob), WeeklyJob.schedule));
             services.AddSingleton(new ScheduledJob(typeof(EndMonthlyJob), EndMonthlyJob.schedule));
         }
         //easy testing
