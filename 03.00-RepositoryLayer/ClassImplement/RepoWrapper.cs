@@ -28,6 +28,7 @@ namespace RepositoryLayer.ClassImplement
             reviews = new ReviewRepository(dbContext);
             reviewDetails = new ReviewDetailRepository(dbContext);
             schedules = new ScheduleRepository(dbContext);
+            supervisions = new SupervisionRepository(dbContext);
         }
 
         private IAccountRepo users;
@@ -214,6 +215,20 @@ namespace RepositoryLayer.ClassImplement
                     requests = new RequestReposity(dbContext);
                 }
                 return requests;
+            }
+
+        }
+
+        private ISupervisionRepository supervisions;
+        public ISupervisionRepository Supervisions
+        {
+            get
+            {
+                if (supervisions is null)
+                {
+                    supervisions = new SupervisionRepository(dbContext);
+                }
+                return supervisions;
             }
 
         }

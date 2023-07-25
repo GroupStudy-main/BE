@@ -13,6 +13,8 @@ namespace ShareResource.Mapper
             //CreateMap<src, dest>
             MapAccount();
 
+            MapSupervision();
+
             MapGroup();
 
             MapRole();
@@ -32,6 +34,12 @@ namespace ShareResource.Mapper
             //.ForMember(dest => dest.DisplayName, opt => opt.MapFrom(src => src.AppUser.DisplayName))
             //.ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.AppUser.UserName));
 
+        }
+
+        private void MapSupervision()
+        {
+            CreateMap<Supervision, WaitingSupervisonGetDto>()
+                .PreserveReferences();
         }
 
         private void MapReview()
@@ -274,9 +282,13 @@ namespace ShareResource.Mapper
                 .ForMember(dest => dest.JoinGroups, opt => opt.MapFrom(
                     src => src.GroupMembers.Where(e => e.MemberRole == GroupMemberRole.Member).Select(e => e.Group)))
                 .ForMember(dest => dest.Parents, opt => opt.MapFrom(
-                    src => src.SupervisionsForStudent.Select(e => e.Parent.FullName)))
+                    src => src.SupervisionsForStudent
+                    .Where(e => e.State == RequestStateEnum.Approved)
+                    .Select(e => e.Parent.FullName)))
                 .ForMember(dest => dest.Students, opt => opt.MapFrom(
-                    src => src.SupervisionsForParent.Select(e => e.Student.FullName)))
+                    src => src.SupervisionsForParent
+                    .Where(e => e.State == RequestStateEnum.Approved)
+                    .Select(e => e.Student.FullName)))
                 .PreserveReferences();
         }
 

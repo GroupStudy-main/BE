@@ -157,7 +157,8 @@ namespace DataLayer.DbSeeding
             {
                 Id = 1,
                 StudentId=1,
-                ParentId=11      
+                ParentId=11,
+                State=RequestStateEnum.Approved
             }
         };
         public static Class[] Classes = new Class[]

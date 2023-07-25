@@ -23,5 +23,6 @@ namespace RepositoryLayer.Interface
         public IReviewDetailRepository ReviewDetails { get; }
         public IDocumentFileRepository DocumentFiles { get; }
         public IScheduleRepository Schedules { get; }
+        public ISupervisionRepository Supervisions { get; }
     }
 }

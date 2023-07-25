@@ -48,13 +48,16 @@ namespace API.Controllers
         [SwaggerOperation(
             Summary = $"[{Actor.Student_Parent}/{Finnished.False}/{Auth.True}] Search students by id, username, mail, Full Name"
             , Description = "Search theo tên, username, id" +
-            "<br>Để search thêm thành viên mới cho group, thêm groupId để loại ra hết những student đã liên quan đến nhóm"
+            "<br/>Để search thêm thành viên mới cho group, thêm groupId để loại ra hết những student đã liên quan đến nhóm" +
+            "<br/>Để phụ huynh search để tìm con, chỉ cần có token của parent là dc, sẽ ko search ra con của mình"
         )]
         [Authorize(Roles = Actor.Student_Parent)]
         [HttpGet("search")]
         public async Task<IActionResult> SearchStudent(string search, int? groupId)
         {
-            var list = services.Accounts.SearchStudents(search, groupId);//.ToList();
+            bool isParent = HttpContext.User.IsInRole(Actor.Parent);
+            int? parentId = isParent ? HttpContext.User.GetUserId() : null;
+            var list = services.Accounts.SearchStudents(search, groupId, parentId);//.ToList();
 
             if (list == null)
             {
@@ -197,6 +200,7 @@ namespace API.Controllers
             {
                 return NotFound("Tài khoản không tồn tại");
             }
+            #region old code
             //Random password
             //string newPassword = RandomPassword(9);
             //account.Password = newPassword;
@@ -205,6 +209,7 @@ namespace API.Controllers
             ////string mailContent="<a href=\"localhost\"></a>" 
             //string mailContent = $"<div>Mật khẩu mới của bạn là {newPassword}</div>";
             //bool sendSuccessful = await mailService.SendEmailWithDefaultTemplateAsync(new List<String> { email }, "Reset password", mailContent, null);
+            #endregion
             bool sendSuccessful = await services.Mails.SendConfirmResetPasswordMailAsync(account, server.Features.Get<IServerAddressesFeature>().Addresses.First());
             if (!sendSuccessful)
             {
@@ -234,6 +239,7 @@ namespace API.Controllers
             {
                 return Unauthorized("Incorrect secret");
             }
+            #region old code
             //Random password
             //string newPassword = RandomPassword(9);
             //account.Password = newPassword;
@@ -242,6 +248,7 @@ namespace API.Controllers
             ////string mailContent="<a href=\"localhost\"></a>" 
             //string mailContent = $"<div>Mật khẩu mới của bạn là {newPassword}</div>";
             //bool sendSuccessful = await mailService.SendEmailWithDefaultTemplateAsync(new List<String> { email }, "Reset password", mailContent, null);
+            #endregion
             bool sendSuccessful = await services.Mails.SendNewPasswordMailAsync(account);
             if(!sendSuccessful)
             {
@@ -250,6 +257,105 @@ namespace API.Controllers
             }
             //return Ok($"Reset successfully, check {email} inbox for the new password {newPassword}");
             return Ok($"Reset successfully, check {email} inbox for the new password");
+        }
+
+        [Authorize(Roles = Actor.Student)]
+        [SwaggerOperation(
+            Summary = $"[{Actor.Student}/{Finnished.False}/{Auth.True}]Student claim a student is their children"
+        )]
+        [HttpGet("Superise/Student")]
+        public async Task<IActionResult> GetSuperViseRequestForStudent()
+        {
+            int studentId = HttpContext.User.GetUserId();
+            //bool isParentStudentRelated = await services.Accounts.IsParentStudentRelated(parentId, studentId);
+            IQueryable<Supervision> list = services.Accounts.GetSupervisionForStudent(studentId);
+            
+            return Ok(list.ProjectTo<WaitingSupervisonGetDto>(mapper.ConfigurationProvider));
+        }
+
+        [SwaggerOperation(
+            Summary = $"[{Actor.Parent}/{Finnished.False}/{Auth.True}]Parent claim a student is their children"
+        )]
+        [HttpPost("Superise/{studentId}")]
+        public async Task<IActionResult> RequestSuperVise(int studentId)
+        {
+            int parentId = HttpContext.User.GetUserId();
+            //bool isParentStudentRelated = await services.Accounts.IsParentStudentRelated(parentId, studentId);
+            Supervision parentStudentRelation = await services.Accounts.GetParentStudentRelationAsync(parentId, studentId);
+            if (parentStudentRelation != null)
+            {
+                if (parentStudentRelation.State == RequestStateEnum.Approved)
+                {
+                    return BadRequest("Học sinh đã dưới sự quản lí của bạn");
+                }
+                if (parentStudentRelation.State == RequestStateEnum.Decline)
+                {
+                    return BadRequest("Học sinh đã từ chối");
+                }
+                //if (parentStudentRelation.State == RequestStateEnum.Waiting)
+                //{
+                    return BadRequest("Đang chờ học sinh trả lời");
+                //}
+            }
+            Supervision created = await services.Accounts.CreateSuperviseRequestAsync(parentId, studentId);
+            return Ok(created);
+        }
+
+        [Authorize(Roles =Actor.Student)]
+        [SwaggerOperation(
+            Summary = $"[{Actor.Student}/{Finnished.False}/{Auth.True}]Student accept parent"
+        )]
+        [HttpPut("Superise/{supervisionId}/Accept")]
+        public async Task<IActionResult> AcceptSuperVise(int supervisionId)
+        {
+            Supervision updated = await services.Accounts.GetSupervisionByIdAsync(supervisionId);
+            if(updated != null)
+            {
+                return NotFound();
+            }
+            if (updated.StudentId != HttpContext.User.GetUserId())
+            {
+                return Unauthorized("Lời yêu cầu này không dành cho bạn");
+            }
+            if(updated.State== RequestStateEnum.Approved)
+            {
+                return BadRequest("Bạn đã đồng ý rồi");
+            }
+            if (updated.State == RequestStateEnum.Decline)
+            {
+                return BadRequest("Bạn đã từ chối rồi");
+            }
+            updated.State = RequestStateEnum.Approved;
+            await services.Accounts.UpdateSupervisionAsync(updated);
+            return Ok(updated);
+        }
+
+        [SwaggerOperation(
+           Summary = $"[{Actor.Student}/{Finnished.True}/{Auth.True}]Student Decline parent"
+       )]
+        [HttpPut("Superise/{supervisionId}/Decline")]
+        public async Task<IActionResult> DeclineSuperVise(int supervisionId)
+        {
+            Supervision updated = await services.Accounts.GetSupervisionByIdAsync(supervisionId);
+            if (updated != null)
+            {
+                return NotFound();
+            }
+            if (updated.StudentId != HttpContext.User.GetUserId())
+            {
+                return Unauthorized("Lời yêu cầu này không dành cho bạn");
+            }
+            if (updated.State == RequestStateEnum.Approved)
+            {
+                return BadRequest("Bạn đã đồng ý rồi");
+            }
+            if (updated.State == RequestStateEnum.Decline)
+            {
+                return BadRequest("Bạn đã từ chối rồi");
+            }
+            updated.State = RequestStateEnum.Decline;
+            await services.Accounts.UpdateSupervisionAsync(updated);
+            return Ok(updated);
         }
         /// ///////////////////////////////////////////////////////////////////////////////////////////////
         [Tags(Actor.Test)]
@@ -268,6 +374,8 @@ namespace API.Controllers
             var mapped = list.ProjectTo<StudentGetDto>(mapper.ConfigurationProvider);
             return Ok(mapped);
         }
+
+
         // GET: api/Accounts/Student
         [Tags(Actor.Test)]
         [SwaggerOperation(
