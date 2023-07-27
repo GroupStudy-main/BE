@@ -1,6 +1,7 @@
 ﻿using API.SignalRHub.Tracker;
 using APIExtension.ClaimsPrinciple;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using DataLayer.DBObject;
 using DataLayer.Migrations;
 using Microsoft.AspNetCore.Authorization;
@@ -541,15 +542,36 @@ namespace API.SignalRHub
 
         //sẽ dc gọi khi có người xin dc vote (review)
         //sẽ dc gọi khi FE gọi chatHubConnection.invoke('StartVote', reviewee: username)
-        public async Task EndVote(int reviewId)
+        public async Task EndVote(int meetingId)
         {
-            string reviewee = Context.User.GetUsername();
-            Review endReview = await repos.Reviews.GetList()
-                .Include(e => e.Reviewee)
-                .Include(r => r.Details).ThenInclude(d => d.Reviewer)
-                .SingleOrDefaultAsync(e => e.Id == reviewId);
-            ReviewSignalrDTO mapped = mapper.Map<ReviewSignalrDTO>(endReview);
-            await Clients.Group(endReview.MeetingId.ToString()).SendAsync(OnEndVoteMsg, mapped);
+            #region old code
+            //string reviewee = Context.User.GetUsername();
+            //Review endReview = await repos.Reviews.GetList()
+            //    .Include(e => e.Reviewee)
+            //    .Include(r => r.Details).ThenInclude(d => d.Reviewer)
+            //    .SingleOrDefaultAsync(e => e.Id == meetingId);
+            //ReviewSignalrDTO mapped = mapper.Map<ReviewSignalrDTO>(endReview);
+            //await Clients.Group(endReview.MeetingId.ToString()).SendAsync(OnEndVoteMsg, mapped);
+            #endregion
+            int revieweeId = Context.User.GetUserId();
+            Review newReview = new Review
+            {
+                MeetingId = meetingId,
+                RevieweeId = revieweeId
+            };
+            await repos.Reviews.CreateAsync(newReview);
+            ReviewSignalrDTO mapped = mapper.Map<ReviewSignalrDTO>(newReview);
+            mapped.RevieweeUsername = Context.User.GetUsername();
+            await Clients.Group(meetingId.ToString()).SendAsync(OnEndVoteMsg, mapped);
+
+            var newMeetReviews = repos.Reviews.GetList()
+                            .Where(e => e.MeetingId == meetingId)
+                            .Include(e => e.Reviewee)
+                            .Include(e => e.Details).ThenInclude(e => e.Reviewer);
+            List<ReviewSignalrDTO> mappedNewReviews = newMeetReviews
+                .ProjectTo<ReviewSignalrDTO>(mapper.ConfigurationProvider).ToList();
+            await Clients.Group(meetingId.ToString()).SendAsync(OnReloadVoteMsg, mappedNewReviews);
+
         }
 
         //sẽ dc gọi khi có người xin dc vote (review)
