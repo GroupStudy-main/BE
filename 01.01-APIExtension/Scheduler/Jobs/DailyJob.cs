@@ -11,7 +11,7 @@ public class DailyJob : IJob
     private readonly IAutoMailService mailService;
 
 
-    public DailyJob(IServiceProvider service, IAutoMailService mailService)
+    public DailyJob(IServiceProvider service)
     {
         var scope = service.CreateScope();
         //mailService = scope.ServiceProvider.GetRequiredService<IServiceWrapper>().Mails;

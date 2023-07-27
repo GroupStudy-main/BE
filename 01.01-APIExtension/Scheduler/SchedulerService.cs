@@ -18,6 +18,7 @@ public static class SchedulerService
         services.AddHostedService<QuarztHostedService>();
         services.AddSingleton<IJobFactory, CustomeJobFactory>();
         services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+        //if (environment.IsDevelopment())
         if (environment.IsProduction())
         {
             services.AddSingleton<DailyJob>();

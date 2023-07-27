@@ -12,7 +12,7 @@ public static class CronScheduleExpression
     ///     Last day of every months
     ///     Start at 00:00:00
     /// </summary>
-    public const string EndMonthly = "0 0 L * ? *";
+    public const string EndMonthly = "0 0 0 L 1/1 ? *";
 
     public const string Weekly = "0 0 0 ? * WED *";
     //public const string Weekly = "0 0 0 ? * Mon*";

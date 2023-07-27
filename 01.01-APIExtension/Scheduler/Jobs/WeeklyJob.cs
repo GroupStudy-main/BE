@@ -11,13 +11,13 @@ using Utilities.ServiceExtensions.Scheduler.Lib;
 namespace APIExtension.Scheduler.Jobs
 {
     //0 0 ** Wed    
-    public class WeeklyJob
+    public class WeeklyJob: IJob
     {
         public static readonly string schedule = CronScheduleExpression.Weekly;
         private readonly IAutoMailService mailService;
 
 
-        public WeeklyJob(IServiceProvider service, IAutoMailService mailService)
+        public WeeklyJob(IServiceProvider service)
         {
             var scope = service.CreateScope();
             //mailService = scope.ServiceProvider.GetRequiredService<IServiceWrapper>().Mails;
