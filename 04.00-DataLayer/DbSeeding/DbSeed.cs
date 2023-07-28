@@ -1,5 +1,6 @@
 ﻿using DataLayer.DBObject;
 using ShareResource.Enums;
+using ShareResource.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +29,8 @@ namespace DataLayer.DbSeeding
                 Username = "student1",
                 FullName = "Tran Khai Minh Khoi",
                 Email = "trankhaiminhkhoi10a3@gmail.com",
-                Password = "123456789",
+                //Password = StringUtils.CustomHash("123456789"),
+                Password = StringUtils.CustomHash("123456789"),
                 Phone = "0123456789",
                 Schhool="THCS Minh Đức",
                 DateOfBirth = new DateTime(2009,5, 5),
@@ -40,7 +42,7 @@ namespace DataLayer.DbSeeding
                 Username = "student2",
                 FullName = "Dao Thi B",
                 Email = "student2@gmail.com",
-                Password = "123456789",
+                Password = StringUtils.CustomHash("123456789"),
                 Phone = "0123456789",
                 Schhool="THCS Minh Đức",
                 DateOfBirth = new DateTime(2009,5, 5),
@@ -52,7 +54,7 @@ namespace DataLayer.DbSeeding
                 Username = "student3",
                 FullName = "Tran Van C",
                 Email = "student3@gmail.com",
-                Password = "123456789",
+                Password = StringUtils.CustomHash("123456789"),
                 Phone = "0123456789",
                 Schhool="THCS Minh Đức",
                 DateOfBirth = new DateTime(2009,5, 5),
@@ -64,7 +66,7 @@ namespace DataLayer.DbSeeding
                 Username = "student4",
                 FullName = "Li Thi D",
                 Email = "student4@gmail.com",
-                Password = "123456789",
+                Password = StringUtils.CustomHash("123456789"),
                 Phone = "0123456789",
                 Schhool="THCS Minh Đức",
                 DateOfBirth = new DateTime(2009,5, 5),
@@ -76,7 +78,7 @@ namespace DataLayer.DbSeeding
                 Username = "student5",
                 FullName = "Tran Van E",
                 Email = "student5@gmail.com",
-                Password = "123456789",
+                Password = StringUtils.CustomHash("123456789"),
                 Phone = "0123456789",
                 DateOfBirth = new DateTime(2009,5, 5),
                 RoleId = 2
@@ -87,7 +89,7 @@ namespace DataLayer.DbSeeding
                 Username = "student6",
                 FullName = "Li Chinh F",
                 Email = "student6@gmail.com",
-                Password = "123456789",
+                Password = StringUtils.CustomHash("123456789"),
                 Phone = "0123456789",
                 Schhool="THCS Minh Đức",
                 DateOfBirth = new DateTime(2009,5, 5),
@@ -99,7 +101,7 @@ namespace DataLayer.DbSeeding
                 Username = "student7",
                 FullName = "Ngo Van G",
                 Email = "student7@gmail.com",
-                Password = "123456789",
+                Password = StringUtils.CustomHash("123456789"),
                 Phone = "0123456789",
                 Schhool="THCS Minh Đức",
                 DateOfBirth = new DateTime(2009,5, 5),
@@ -111,7 +113,7 @@ namespace DataLayer.DbSeeding
                 Username = "student8",
                 FullName = "Tran Van H",
                 Email = "student8@gmail.com",
-                Password = "123456789",
+                Password = StringUtils.CustomHash("123456789"),
                 Phone = "0123456789",
                 DateOfBirth = new DateTime(2009,5, 5),
                 RoleId = 2
@@ -122,7 +124,7 @@ namespace DataLayer.DbSeeding
                 Username = "student9",
                 FullName = "Tran Van I",
                 Email = "student9@gmail.com",
-                Password = "123456789",
+                Password = StringUtils.CustomHash("123456789"),
                 Phone = "0123456789",
                 Schhool="THCS Minh Đức",
                 DateOfBirth = new DateTime(2009,5, 5),
@@ -133,7 +135,7 @@ namespace DataLayer.DbSeeding
                 Username = "student10",
                 FullName = "Tran Van J",
                 Email = "student10@gmail.com",
-                Password = "123456789",
+                Password = StringUtils.CustomHash("123456789"),
                 Phone = "0123456789",
                 Schhool="THCS Minh Đức",
                 DateOfBirth = new DateTime(2009,5, 5),
@@ -145,7 +147,7 @@ namespace DataLayer.DbSeeding
                 Username = "parent1",
                 FullName = "Tran Khoi",
                 Email = "trankhaiminhkhoi@gmail.com",
-                Password = "123456789",
+                Password = StringUtils.CustomHash("123456789"),
                 Phone = "0123456789",
                 DateOfBirth = new DateTime(1975,5, 5),
                 RoleId = 1

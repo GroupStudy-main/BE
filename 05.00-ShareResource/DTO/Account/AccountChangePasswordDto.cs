@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ShareResource.Utils;
+using System.ComponentModel.DataAnnotations;
 
 namespace ShareResource.DTO
 {
@@ -6,10 +7,33 @@ namespace ShareResource.DTO
     {
         [Key]
         public int Id { get; set; }
-      
-        public string OldPassword { get; set; }
-        public string Password { get; set; }
-        public string ConfirmPassword { get; set; }
+        private string oldPassword;
+
+        public string OldPassword
+        {
+            get { return oldPassword; }
+            set { oldPassword = value.CustomHash(); }
+        }
+
+        //public string OldPassword { get; set }
+        private string password;
+
+        public string Password
+        {
+            get { return password; }
+            set { password = value.CustomHash(); }
+        }
+
+        //public string Password { get; set; }
+        private string confirmPassword;
+
+        public string ConfirmPassword
+        {
+            get { return confirmPassword; }
+            set { confirmPassword = value.CustomHash(); }
+        }
+
+        //public string ConfirmPassword { get; set; }
 
     }
 }

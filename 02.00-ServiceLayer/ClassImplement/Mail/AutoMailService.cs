@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using DataLayer.DBObject;
 using System.Text;
 using ServiceLayer.Interface.Db;
+using ShareResource.Utils;
 
 namespace ServiceLayer.ClassImplement
 {
@@ -152,7 +153,7 @@ namespace ServiceLayer.ClassImplement
             mimeMessage.To.Add(new MailboxAddress(account.Email));
             mimeMessage.Subject = "Reset password";
 
-            string secret = DateTime.Today.ToString("yyyy-MM-dd");
+            string secret = DateTime.Today.ToString("yyyy-MM-dd").CustomHash();
             string resetLink = serverLink + $"/api/Accounts/Password/Reset/Confirm?email={account.Email}&secret={secret}";
             //<!--{0} is logo-->
             //<!--{1} is fullname-->
@@ -178,7 +179,7 @@ namespace ServiceLayer.ClassImplement
         private async Task<MimeMessage> CreateMimeMessageForNewPasswordAsync(Account account)
         {
             string newPassword = RandomPassword(9);
-            account.Password = newPassword;
+            account.Password = newPassword.CustomHash();
             await accountsService.UpdateAsync(account);
 
             var mimeMessage = new MimeMessage();
@@ -196,7 +197,7 @@ namespace ServiceLayer.ClassImplement
                 string template = MailTemplateHelper.NEW_PASSWORD_TEMPLATE(rootPath);
                 var logo = bodyBuilder.LinkedResources.Add(logoPath);
                 logo.ContentId = MimeUtils.GenerateMessageId();
-                bodyBuilder.HtmlBody = FormatTemplate(template, logo.ContentId, account.FullName, account.Password);
+                bodyBuilder.HtmlBody = FormatTemplate(template, logo.ContentId, account.FullName, newPassword);
             }
             catch
             {

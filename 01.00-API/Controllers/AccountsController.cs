@@ -20,6 +20,7 @@ using System.Text;
 using System;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
+using ShareResource.Utils;
 
 namespace API.Controllers
 {
@@ -156,7 +157,7 @@ namespace API.Controllers
                 return BadRequest();
             }
             var account = await services.Accounts.GetByIdAsync(accountId);
-            if (account.Password != dto.ConfirmPassword)
+            if (dto.Password != dto.ConfirmPassword)
             {
                 return BadRequest(FAIL_CONFIRM_PASSWORD_MSG);
             }
@@ -165,7 +166,7 @@ namespace API.Controllers
             {
                 return NotFound();
             }
-            if(dto.OldPassword != dto.Password)
+            if(dto.OldPassword != account.Password)
             {
                 return Unauthorized("Nhập mật khẩu cũ thất bại");
             }
@@ -234,7 +235,7 @@ namespace API.Controllers
                 return NotFound("Tài khoản không tồn tại");
             }
             //test secret
-            string correctSecrete = DateTime.Today.ToString("yyyy-MM-dd");
+            string correctSecrete = DateTime.Today.ToString("yyyy-MM-dd").CustomHash();
             if(secret!=correctSecrete)
             {
                 return Unauthorized("Incorrect secret");
@@ -256,6 +257,7 @@ namespace API.Controllers
                 return BadRequest($"Something went wrong with sending mail.");
             }
             //return Ok($"Reset successfully, check {email} inbox for the new password {newPassword}");
+            //return Ok();
             return Ok($"Reset successfully, check {email} inbox for the new password");
         }
 
