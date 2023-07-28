@@ -197,7 +197,7 @@ namespace API.Controllers
             {
                 return Unauthorized("Bạn không phải nhóm trưởng của nhóm này");
             }
-            ValidatorResult valResult = await validators.Meetings.ValidateParams(dto, 1 /*studentId*/);
+            ValidatorResult valResult = await validators.Meetings.ValidateParams(dto, studentId);
             if (!valResult.IsValid)
             {
                 return BadRequest(valResult.Failures);
