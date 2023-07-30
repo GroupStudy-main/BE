@@ -28,10 +28,16 @@ namespace ServiceLayer.Interface.Db
         public Task<bool> ExistUsernameAsync(string username);
         public Task<bool> ExistEmailAsync(string email);
         public Task<bool> IsParentStudentRelated(int parentId, int studentId);
-        public Task<Supervision> GetParentStudentRelationAsync(int parentId, int studentId);
+        public Task<Supervision> GetParentStudentRelationAsync(int parentId, int studentIsd);
         public Task<Supervision> CreateSuperviseRequestAsync(int parentId, int studentId);
-        public IQueryable<Supervision> GetSupervisionForStudent(int parentId);
+        public IQueryable<Supervision> GetWaitingSupervisionForStudent(int parentId);
+        public Task<Supervision> GetWaitingSupervisionByIdAsync(int supervisionId);
         public Task<Supervision> GetSupervisionByIdAsync(int supervisionId);
         public Task UpdateSupervisionAsync(Supervision updated);
+        public IQueryable<Account> GetParentsOfStudent(int studentId);
+        public IQueryable<Account> GetStudentsOfParent(int parentId);
+        public IQueryable<Supervision> GetAcceptedSupervisionForStudent(int studentId);
+        public IQueryable<Supervision> GetAcceptedSupervisionForParent(int parentId);
+        public Task<bool> DeleteSupervisionAsync(Supervision delete);
     }
 }

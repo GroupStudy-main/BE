@@ -144,10 +144,15 @@ namespace ServiceLayer.ClassImplement.Db
             return created;
         }
 
-        public IQueryable<Supervision> GetSupervisionForStudent(int studentId)
+        public IQueryable<Supervision> GetWaitingSupervisionForStudent(int studentId)
         {
             return repos.Supervisions.GetList()
                 .Where(e => e.StudentId == studentId&&e.State==RequestStateEnum.Waiting);
+        }
+
+        public async Task<Supervision> GetWaitingSupervisionByIdAsync(int supervisionId)
+        {
+            return await repos.Supervisions.GetByIdAsync(supervisionId);
         }
 
         public async Task<Supervision> GetSupervisionByIdAsync(int supervisionId)
@@ -158,6 +163,43 @@ namespace ServiceLayer.ClassImplement.Db
         public async Task UpdateSupervisionAsync(Supervision updated)
         {
             await repos.Supervisions.UpdateAsync(updated);
+        }
+
+        public async Task<bool> DeleteSupervisionAsync(Supervision delete)
+        {
+            try
+            {
+                await repos.Supervisions.RemoveAsync(delete.Id);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public IQueryable<Account> GetParentsOfStudent(int studentId)
+        {
+            return repos.Accounts.GetList()
+                .Where(a => a.SupervisionsForParent.Any(s => s.StudentId == studentId));
+        }
+
+        public IQueryable<Account> GetStudentsOfParent(int parentId)
+        {
+            return repos.Accounts.GetList()
+                .Where(a => a.SupervisionsForStudent.Any(s => s.ParentId == parentId));
+        }
+
+        public IQueryable<Supervision> GetAcceptedSupervisionForStudent(int studentId)
+        {
+            return repos.Supervisions.GetList()
+                 .Where(e => e.StudentId == studentId && e.State == RequestStateEnum.Approved);
+        }
+
+        public IQueryable<Supervision> GetAcceptedSupervisionForParent(int parentId)
+        {
+            return repos.Supervisions.GetList()
+                  .Where(e => e.ParentId == parentId && e.State == RequestStateEnum.Approved);
         }
     }
 }

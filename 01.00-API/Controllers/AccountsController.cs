@@ -265,20 +265,21 @@ namespace API.Controllers
         [SwaggerOperation(
             Summary = $"[{Actor.Student}/{Finnished.False}/{Auth.True}]Student claim a student is their children"
         )]
-        [HttpGet("Superise/Student")]
+        [HttpGet("Supervise/Student")]
         public async Task<IActionResult> GetSuperViseRequestForStudent()
         {
             int studentId = HttpContext.User.GetUserId();
             //bool isParentStudentRelated = await services.Accounts.IsParentStudentRelated(parentId, studentId);
-            IQueryable<Supervision> list = services.Accounts.GetSupervisionForStudent(studentId);
-            
-            return Ok(list.ProjectTo<WaitingSupervisonGetDto>(mapper.ConfigurationProvider));
+            IQueryable<Supervision> list = services.Accounts.GetWaitingSupervisionForStudent(studentId);
+
+            IQueryable<WaitingSupervisonGetDto> mapped = list.ProjectTo<WaitingSupervisonGetDto>(mapper.ConfigurationProvider);
+            return Ok(mapped);
         }
 
         [SwaggerOperation(
             Summary = $"[{Actor.Parent}/{Finnished.False}/{Auth.True}]Parent claim a student is their children"
         )]
-        [HttpPost("Superise/{studentId}")]
+        [HttpPost("Supervise/{studentId}")]
         public async Task<IActionResult> RequestSuperVise(int studentId)
         {
             int parentId = HttpContext.User.GetUserId();
@@ -310,8 +311,8 @@ namespace API.Controllers
         [HttpPut("Superise/{supervisionId}/Accept")]
         public async Task<IActionResult> AcceptSuperVise(int supervisionId)
         {
-            Supervision updated = await services.Accounts.GetSupervisionByIdAsync(supervisionId);
-            if(updated != null)
+            Supervision updated = await services.Accounts.GetWaitingSupervisionByIdAsync(supervisionId);
+            if(updated == null)
             {
                 return NotFound();
             }
@@ -334,12 +335,12 @@ namespace API.Controllers
 
         [SwaggerOperation(
            Summary = $"[{Actor.Student}/{Finnished.True}/{Auth.True}]Student Decline parent"
-       )]
+        )]
         [HttpPut("Superise/{supervisionId}/Decline")]
         public async Task<IActionResult> DeclineSuperVise(int supervisionId)
         {
-            Supervision updated = await services.Accounts.GetSupervisionByIdAsync(supervisionId);
-            if (updated != null)
+            Supervision updated = await services.Accounts.GetWaitingSupervisionByIdAsync(supervisionId);
+            if (updated == null)
             {
                 return NotFound();
             }
@@ -359,6 +360,80 @@ namespace API.Controllers
             await services.Accounts.UpdateSupervisionAsync(updated);
             return Ok(updated);
         }
+
+        [SwaggerOperation(
+           Summary = $"[{Actor.Student}/{Finnished.True}/{Auth.True}]Student Decline parent"
+        )]
+        [HttpDelete("Superise/{supervisionId}")]
+        public async Task<IActionResult> DeleteSuperVise(int supervisionId)
+        {
+            //Supervision delete = await services.Accounts.GetWaitingSupervisionByIdAsync(supervisionId);
+            Supervision delete = await services.Accounts.GetSupervisionByIdAsync(supervisionId);
+            if (delete == null)
+            {
+                return NotFound();
+            }
+            if (HttpContext.User.IsInRole(Actor.Student) && delete.StudentId != HttpContext.User.GetUserId())
+            {
+                return Unauthorized("Bạn không thể xóa phụ huynh này");
+            }
+            if (HttpContext.User.IsInRole(Actor.Parent) && delete.ParentId != HttpContext.User.GetUserId())
+            {
+                return Unauthorized("Bạn không thể xóa học sinh này");
+            }
+            await services.Accounts.DeleteSupervisionAsync(delete);
+            return Ok();
+        }
+
+        [Authorize(Roles =Actor.Student)]
+        [SwaggerOperation(
+            Summary = $"[{Actor.Student}/{Finnished.True}/{Auth.True}]Get parents list for student"
+        )]
+        [HttpGet("Parents")]
+        public async Task<IActionResult> GetParentsForStudents()
+        {
+            //int studentId = HttpContext.User.GetUserId();
+            //IQueryable<Account> list = services.Accounts.GetParentsOfStudent(studentId);
+            //if (list == null || !list.Any())
+            //{
+            //    return NotFound();
+            //}
+            //var mapped = list.ProjectTo<StudentGetDto>(mapper.ConfigurationProvider);
+            //return Ok(mapped);
+
+            int studentId = HttpContext.User.GetUserId();
+            IQueryable<Supervision> list = services.Accounts.GetAcceptedSupervisionForStudent(studentId);
+
+            IQueryable<WaitingSupervisonGetDto> mapped = list.ProjectTo<WaitingSupervisonGetDto>(mapper.ConfigurationProvider);
+            return Ok(mapped);
+            //return Ok();
+        }
+
+        [Authorize(Roles = Actor.Parent)]
+        [SwaggerOperation(
+            Summary = $"[{Actor.Parent}/{Finnished.True}/{Auth.True}]Get students list for parent"
+        )]
+        [HttpGet("Students")]
+        public async Task<IActionResult> GetStudentsForParents()
+        {
+            //int parentId = HttpContext.User.GetUserId();
+            //IQueryable<Account> list = services.Accounts.GetStudentsOfParent(parentId);
+            //if (list == null || !list.Any())
+            //{
+            //    return NotFound();
+            //}
+            //var mapped = list.ProjectTo<StudentGetDto>(mapper.ConfigurationProvider);
+            //return Ok(mapped);
+
+            int parentId = HttpContext.User.GetUserId();
+            IQueryable<Supervision> list = services.Accounts.GetAcceptedSupervisionForParent(parentId);
+
+            IQueryable<WaitingSupervisonGetDto> mapped = list.ProjectTo<WaitingSupervisonGetDto>(mapper.ConfigurationProvider);
+            return Ok(mapped);
+            //return Ok();
+        }
+
+
         /// ///////////////////////////////////////////////////////////////////////////////////////////////
         [Tags(Actor.Test)]
         [SwaggerOperation(
@@ -378,38 +453,38 @@ namespace API.Controllers
         }
 
 
-        // GET: api/Accounts/Student
-        [Tags(Actor.Test)]
-        [SwaggerOperation(
-          Summary = $"[{Actor.Test}/{Finnished.False}] Get all the student account"
-      )]
-        [HttpGet("Student")]
-        public async Task<IActionResult> GetStudents()
-        {
-            IQueryable<Account> list = services.Accounts.GetList().Where(e => e.RoleId == (int)RoleNameEnum.Student);
-            if (list == null || !list.Any())
-            {
-                return NotFound();
-            }
-            var mapped = list.ProjectTo<StudentGetDto>(mapper.ConfigurationProvider);
-            return Ok(mapped);
-        }
+      //  // GET: api/Accounts/Student
+      //  [Tags(Actor.Test)]
+      //  [SwaggerOperation(
+      //    Summary = $"[{Actor.Test}/{Finnished.False}] Get all the student account"
+      //)]
+      //  [HttpGet("Student")]
+      //  public async Task<IActionResult> GetStudents()
+      //  {
+      //      IQueryable<Account> list = services.Accounts.GetList().Where(e => e.RoleId == (int)RoleNameEnum.Student);
+      //      if (list == null || !list.Any())
+      //      {
+      //          return NotFound();
+      //      }
+      //      var mapped = list.ProjectTo<StudentGetDto>(mapper.ConfigurationProvider);
+      //      return Ok(mapped);
+      //  }
 
-        // GET: api/Accounts/Student
-        [Tags(Actor.Test)]
-        [SwaggerOperation(
-          Summary = $"[{Actor.Test}/{Finnished.False}] Get all the parent account"
-        )]
-        [HttpGet("Parent")]
-        public async Task<IActionResult> GetParents()
-        {
-            IQueryable<Account> list = services.Accounts.GetList().Where(e => e.RoleId == (int)RoleNameEnum.Parent);
-            if (list == null || !list.Any())
-            {
-                return NotFound();
-            }
-            return Ok(list);
-        }
+        //// GET: api/Accounts/Student
+        //[Tags(Actor.Test)]
+        //[SwaggerOperation(
+        //  Summary = $"[{Actor.Test}/{Finnished.False}] Get all the parent account"
+        //)]
+        //[HttpGet("Parent")]
+        //public async Task<IActionResult> GetParents()
+        //{
+        //    IQueryable<Account> list = services.Accounts.GetList().Where(e => e.RoleId == (int)RoleNameEnum.Parent);
+        //    if (list == null || !list.Any())
+        //    {
+        //        return NotFound();
+        //    }
+        //    return Ok(list);
+        //}
 
         // GET: api/Accounts/5
         [Tags(Actor.Test)]
