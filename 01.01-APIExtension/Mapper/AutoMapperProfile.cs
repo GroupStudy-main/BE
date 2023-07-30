@@ -81,9 +81,18 @@ namespace ShareResource.Mapper
         private void MapMeeting()
         {
             CreateMap<Meeting, ScheduleMeetingGetDto>()
+               .ForMember(dest => dest.GroupName, opt => opt.MapFrom(
+                   src => src.Group.Name))
+               .PreserveReferences();
+            CreateMap<Meeting, ScheduleMeetingGetDto>()
                 .ForMember(dest => dest.GroupName, opt => opt.MapFrom(
                     src => src.Group.Name))
                 .PreserveReferences();
+            CreateMap<Meeting, ScheduleMeetingForLeaderGetDto>()
+                .ForMember(dest => dest.GroupName, opt => opt.MapFrom(
+                    src => src.Group.Name))
+                .PreserveReferences();
+
             CreateMap<Meeting, LiveMeetingGetDto>()
                 .ForMember(dest => dest.GroupName, opt => opt.MapFrom(
                     src => src.Group.Name))

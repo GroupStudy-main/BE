@@ -17,6 +17,7 @@ using APIExtension.Validator;
 using AutoMapper;
 using System.Collections;
 using DataLayer.DBContext;
+using AutoMapper.QueryableExtensions;
 
 namespace API.Controllers
 {
@@ -69,8 +70,18 @@ namespace API.Controllers
             {
                 return Unauthorized("Bạn không phải là thành viên nhóm này");
             }
-            var mapped = services.Meetings.GetScheduleMeetingsForGroup(groupId);
-            return Ok(mapped);
+            IQueryable<Meeting> list = services.Meetings.GetScheduleMeetingsForGroup(groupId);
+            if (await services.Groups.IsStudentLeadingGroupAsync(studentId, groupId))
+            {
+                IQueryable<ScheduleMeetingForLeaderGetDto> mapped = list.ProjectTo<ScheduleMeetingForLeaderGetDto>(mapper.ConfigurationProvider);
+                return Ok(mapped);
+            }
+            else
+            {
+                //return Ok(list);
+                IQueryable<ScheduleMeetingGetDto> mapped = list.ProjectTo<ScheduleMeetingGetDto>(mapper.ConfigurationProvider);
+                return Ok(mapped);
+            }
         }
 
         //GET: api/Meetings/Schedule/Group/id
