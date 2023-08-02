@@ -48,8 +48,8 @@ namespace DataLayer.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("nvarchar(32)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Phone")
                         .IsRequired()
@@ -79,7 +79,7 @@ namespace DataLayer.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("Accounts", (string)null);
+                    b.ToTable("Accounts");
 
                     b.HasData(
                         new
@@ -88,7 +88,7 @@ namespace DataLayer.Migrations
                             DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "trankhaiminhkhoi10a3@gmail.com",
                             FullName = "Tran Khai Minh Khoi",
-                            Password = "123456789",
+                            Password = "15E2B0D3C33891EBB0F1EF609EC419420C20E320CE94C65FBC8C3312448EB225",
                             Phone = "0123456789",
                             RoleId = 2,
                             Schhool = "THCS Minh Đức",
@@ -100,7 +100,7 @@ namespace DataLayer.Migrations
                             DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student2@gmail.com",
                             FullName = "Dao Thi B",
-                            Password = "123456789",
+                            Password = "15E2B0D3C33891EBB0F1EF609EC419420C20E320CE94C65FBC8C3312448EB225",
                             Phone = "0123456789",
                             RoleId = 2,
                             Schhool = "THCS Minh Đức",
@@ -112,7 +112,7 @@ namespace DataLayer.Migrations
                             DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student3@gmail.com",
                             FullName = "Tran Van C",
-                            Password = "123456789",
+                            Password = "15E2B0D3C33891EBB0F1EF609EC419420C20E320CE94C65FBC8C3312448EB225",
                             Phone = "0123456789",
                             RoleId = 2,
                             Schhool = "THCS Minh Đức",
@@ -124,7 +124,7 @@ namespace DataLayer.Migrations
                             DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student4@gmail.com",
                             FullName = "Li Thi D",
-                            Password = "123456789",
+                            Password = "15E2B0D3C33891EBB0F1EF609EC419420C20E320CE94C65FBC8C3312448EB225",
                             Phone = "0123456789",
                             RoleId = 2,
                             Schhool = "THCS Minh Đức",
@@ -136,7 +136,7 @@ namespace DataLayer.Migrations
                             DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student5@gmail.com",
                             FullName = "Tran Van E",
-                            Password = "123456789",
+                            Password = "15E2B0D3C33891EBB0F1EF609EC419420C20E320CE94C65FBC8C3312448EB225",
                             Phone = "0123456789",
                             RoleId = 2,
                             Username = "student5"
@@ -147,7 +147,7 @@ namespace DataLayer.Migrations
                             DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student6@gmail.com",
                             FullName = "Li Chinh F",
-                            Password = "123456789",
+                            Password = "15E2B0D3C33891EBB0F1EF609EC419420C20E320CE94C65FBC8C3312448EB225",
                             Phone = "0123456789",
                             RoleId = 2,
                             Schhool = "THCS Minh Đức",
@@ -159,7 +159,7 @@ namespace DataLayer.Migrations
                             DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student7@gmail.com",
                             FullName = "Ngo Van G",
-                            Password = "123456789",
+                            Password = "15E2B0D3C33891EBB0F1EF609EC419420C20E320CE94C65FBC8C3312448EB225",
                             Phone = "0123456789",
                             RoleId = 2,
                             Schhool = "THCS Minh Đức",
@@ -171,7 +171,7 @@ namespace DataLayer.Migrations
                             DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student8@gmail.com",
                             FullName = "Tran Van H",
-                            Password = "123456789",
+                            Password = "15E2B0D3C33891EBB0F1EF609EC419420C20E320CE94C65FBC8C3312448EB225",
                             Phone = "0123456789",
                             RoleId = 2,
                             Username = "student8"
@@ -182,7 +182,7 @@ namespace DataLayer.Migrations
                             DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student9@gmail.com",
                             FullName = "Tran Van I",
-                            Password = "123456789",
+                            Password = "15E2B0D3C33891EBB0F1EF609EC419420C20E320CE94C65FBC8C3312448EB225",
                             Phone = "0123456789",
                             RoleId = 2,
                             Schhool = "THCS Minh Đức",
@@ -194,7 +194,7 @@ namespace DataLayer.Migrations
                             DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student10@gmail.com",
                             FullName = "Tran Van J",
-                            Password = "123456789",
+                            Password = "15E2B0D3C33891EBB0F1EF609EC419420C20E320CE94C65FBC8C3312448EB225",
                             Phone = "0123456789",
                             RoleId = 2,
                             Schhool = "THCS Minh Đức",
@@ -206,7 +206,7 @@ namespace DataLayer.Migrations
                             DateOfBirth = new DateTime(1975, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "trankhaiminhkhoi@gmail.com",
                             FullName = "Tran Khoi",
-                            Password = "123456789",
+                            Password = "15E2B0D3C33891EBB0F1EF609EC419420C20E320CE94C65FBC8C3312448EB225",
                             Phone = "0123456789",
                             RoleId = 1,
                             Username = "parent1"
@@ -226,7 +226,7 @@ namespace DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Classes", (string)null);
+                    b.ToTable("Classes");
 
                     b.HasData(
                         new
@@ -293,7 +293,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("MeetingId");
 
-                    b.ToTable("MeetingParticipations", (string)null);
+                    b.ToTable("MeetingParticipations");
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.DocumentFile", b =>
@@ -326,7 +326,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("DocumentFiles", (string)null);
+                    b.ToTable("DocumentFiles");
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Group", b =>
@@ -348,7 +348,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("ClassId");
 
-                    b.ToTable("Groups", (string)null);
+                    b.ToTable("Groups");
 
                     b.HasData(
                         new
@@ -416,7 +416,7 @@ namespace DataLayer.Migrations
                     b.HasIndex("AccountId", "GroupId")
                         .IsUnique();
 
-                    b.ToTable("GroupMembers", (string)null);
+                    b.ToTable("GroupMembers");
 
                     b.HasData(
                         new
@@ -521,7 +521,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("GroupSubjects", (string)null);
+                    b.ToTable("GroupSubjects");
 
                     b.HasData(
                         new
@@ -597,7 +597,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("JoinInvites", (string)null);
+                    b.ToTable("JoinInvites");
 
                     b.HasData(
                         new
@@ -712,7 +712,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("ScheduleId");
 
-                    b.ToTable("Meetings", (string)null);
+                    b.ToTable("Meetings");
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Request", b =>
@@ -738,7 +738,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("JoinRequests", (string)null);
+                    b.ToTable("JoinRequests");
 
                     b.HasData(
                         new
@@ -805,7 +805,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("RevieweeId");
 
-                    b.ToTable("Reviews", (string)null);
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.ReviewDetail", b =>
@@ -835,7 +835,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("ReviewerId");
 
-                    b.ToTable("ReviewDetails", (string)null);
+                    b.ToTable("ReviewDetails");
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Role", b =>
@@ -852,7 +852,7 @@ namespace DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
 
                     b.HasData(
                         new
@@ -902,7 +902,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("Schedules", (string)null);
+                    b.ToTable("Schedules");
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Subject", b =>
@@ -919,7 +919,7 @@ namespace DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Subjects", (string)null);
+                    b.ToTable("Subjects");
 
                     b.HasData(
                         new
@@ -987,7 +987,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("Supervisions", (string)null);
+                    b.ToTable("Supervisions");
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Account", b =>
@@ -1199,9 +1199,9 @@ namespace DataLayer.Migrations
             modelBuilder.Entity("DataLayer.DBObject.Supervision", b =>
                 {
                     b.HasOne("DataLayer.DBObject.Account", "Parent")
-                        .WithMany()
+                        .WithMany("SupervisionsForParent")
                         .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("DataLayer.DBObject.Account", "Student")
@@ -1222,6 +1222,8 @@ namespace DataLayer.Migrations
                     b.Navigation("JoinInvites");
 
                     b.Navigation("JoinRequests");
+
+                    b.Navigation("SupervisionsForParent");
 
                     b.Navigation("SupervisionsForStudent");
                 });

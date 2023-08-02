@@ -51,8 +51,8 @@ namespace DataLayer.DBContext
             modelBuilder.Entity<Supervision>()
                 .HasOne(su => su.Parent)
                 .WithMany(p => p.SupervisionsForParent)
-                .HasForeignKey(su => su.ParentId);
-                //.OnDelete(DeleteBehavior.NoAction);
+                .HasForeignKey(su => su.ParentId)
+                .OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<GroupMember>()
                 .HasIndex(gm => new {  gm.AccountId, gm.GroupId }).IsUnique();
             //

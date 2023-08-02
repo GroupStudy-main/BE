@@ -26,7 +26,7 @@ namespace DataLayer.DBObject
         [EmailAddress]
         public string Email { get; set; }
 
-        [StringLength(32)]
+        [StringLength(255)]
         public string Password { get; set; }
 
         [StringLength(50)]

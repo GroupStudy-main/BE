@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(GroupStudyContext))]
-    [Migration("20230723064450_AddParentSupervision")]
-    partial class AddParentSupervision
+    [Migration("20230802111004_AddSupervisionAndHashPassword")]
+    partial class AddSupervisionAndHashPassword
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -50,8 +50,8 @@ namespace DataLayer.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("nvarchar(32)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Phone")
                         .IsRequired()
@@ -90,7 +90,7 @@ namespace DataLayer.Migrations
                             DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "trankhaiminhkhoi10a3@gmail.com",
                             FullName = "Tran Khai Minh Khoi",
-                            Password = "123456789",
+                            Password = "15E2B0D3C33891EBB0F1EF609EC419420C20E320CE94C65FBC8C3312448EB225",
                             Phone = "0123456789",
                             RoleId = 2,
                             Schhool = "THCS Minh Đức",
@@ -102,7 +102,7 @@ namespace DataLayer.Migrations
                             DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student2@gmail.com",
                             FullName = "Dao Thi B",
-                            Password = "123456789",
+                            Password = "15E2B0D3C33891EBB0F1EF609EC419420C20E320CE94C65FBC8C3312448EB225",
                             Phone = "0123456789",
                             RoleId = 2,
                             Schhool = "THCS Minh Đức",
@@ -114,7 +114,7 @@ namespace DataLayer.Migrations
                             DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student3@gmail.com",
                             FullName = "Tran Van C",
-                            Password = "123456789",
+                            Password = "15E2B0D3C33891EBB0F1EF609EC419420C20E320CE94C65FBC8C3312448EB225",
                             Phone = "0123456789",
                             RoleId = 2,
                             Schhool = "THCS Minh Đức",
@@ -126,7 +126,7 @@ namespace DataLayer.Migrations
                             DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student4@gmail.com",
                             FullName = "Li Thi D",
-                            Password = "123456789",
+                            Password = "15E2B0D3C33891EBB0F1EF609EC419420C20E320CE94C65FBC8C3312448EB225",
                             Phone = "0123456789",
                             RoleId = 2,
                             Schhool = "THCS Minh Đức",
@@ -138,7 +138,7 @@ namespace DataLayer.Migrations
                             DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student5@gmail.com",
                             FullName = "Tran Van E",
-                            Password = "123456789",
+                            Password = "15E2B0D3C33891EBB0F1EF609EC419420C20E320CE94C65FBC8C3312448EB225",
                             Phone = "0123456789",
                             RoleId = 2,
                             Username = "student5"
@@ -149,7 +149,7 @@ namespace DataLayer.Migrations
                             DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student6@gmail.com",
                             FullName = "Li Chinh F",
-                            Password = "123456789",
+                            Password = "15E2B0D3C33891EBB0F1EF609EC419420C20E320CE94C65FBC8C3312448EB225",
                             Phone = "0123456789",
                             RoleId = 2,
                             Schhool = "THCS Minh Đức",
@@ -161,7 +161,7 @@ namespace DataLayer.Migrations
                             DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student7@gmail.com",
                             FullName = "Ngo Van G",
-                            Password = "123456789",
+                            Password = "15E2B0D3C33891EBB0F1EF609EC419420C20E320CE94C65FBC8C3312448EB225",
                             Phone = "0123456789",
                             RoleId = 2,
                             Schhool = "THCS Minh Đức",
@@ -173,7 +173,7 @@ namespace DataLayer.Migrations
                             DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student8@gmail.com",
                             FullName = "Tran Van H",
-                            Password = "123456789",
+                            Password = "15E2B0D3C33891EBB0F1EF609EC419420C20E320CE94C65FBC8C3312448EB225",
                             Phone = "0123456789",
                             RoleId = 2,
                             Username = "student8"
@@ -184,7 +184,7 @@ namespace DataLayer.Migrations
                             DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student9@gmail.com",
                             FullName = "Tran Van I",
-                            Password = "123456789",
+                            Password = "15E2B0D3C33891EBB0F1EF609EC419420C20E320CE94C65FBC8C3312448EB225",
                             Phone = "0123456789",
                             RoleId = 2,
                             Schhool = "THCS Minh Đức",
@@ -196,7 +196,7 @@ namespace DataLayer.Migrations
                             DateOfBirth = new DateTime(2009, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "student10@gmail.com",
                             FullName = "Tran Van J",
-                            Password = "123456789",
+                            Password = "15E2B0D3C33891EBB0F1EF609EC419420C20E320CE94C65FBC8C3312448EB225",
                             Phone = "0123456789",
                             RoleId = 2,
                             Schhool = "THCS Minh Đức",
@@ -208,7 +208,7 @@ namespace DataLayer.Migrations
                             DateOfBirth = new DateTime(1975, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "trankhaiminhkhoi@gmail.com",
                             FullName = "Tran Khoi",
-                            Password = "123456789",
+                            Password = "15E2B0D3C33891EBB0F1EF609EC419420C20E320CE94C65FBC8C3312448EB225",
                             Phone = "0123456789",
                             RoleId = 1,
                             Username = "parent1"
@@ -1201,9 +1201,9 @@ namespace DataLayer.Migrations
             modelBuilder.Entity("DataLayer.DBObject.Supervision", b =>
                 {
                     b.HasOne("DataLayer.DBObject.Account", "Parent")
-                        .WithMany()
+                        .WithMany("SupervisionsForParent")
                         .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("DataLayer.DBObject.Account", "Student")
@@ -1224,6 +1224,8 @@ namespace DataLayer.Migrations
                     b.Navigation("JoinInvites");
 
                     b.Navigation("JoinRequests");
+
+                    b.Navigation("SupervisionsForParent");
 
                     b.Navigation("SupervisionsForStudent");
                 });
