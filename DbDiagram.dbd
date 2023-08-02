@@ -57,12 +57,12 @@
               <Parent>0</Parent>
             </CustomProperties>
             <Location>
-              <X>980 px</X>
-              <Y>170 px</Y>
+              <X>1700 px</X>
+              <Y>60 px</Y>
             </Location>
             <Size>
               <Width>201 px</Width>
-              <Height>161 px</Height>
+              <Height>212 px</Height>
             </Size>
             <DbOid>
               <Path>GroupStudySU23.dbo.Accounts</Path>
@@ -80,8 +80,8 @@
               <Parent>0</Parent>
             </CustomProperties>
             <Location>
-              <X>340 px</X>
-              <Y>330 px</Y>
+              <X>1520 px</X>
+              <Y>350 px</Y>
             </Location>
             <Size>
               <Width>132 px</Width>
@@ -103,12 +103,12 @@
               <Parent>0</Parent>
             </CustomProperties>
             <Location>
-              <X>752 px</X>
-              <Y>154 px</Y>
+              <X>1460 px</X>
+              <Y>40 px</Y>
             </Location>
             <Size>
               <Width>187 px</Width>
-              <Height>110 px</Height>
+              <Height>127 px</Height>
             </Size>
             <DbOid>
               <Path>GroupStudySU23.dbo.GroupMembers</Path>
@@ -134,19 +134,7 @@
               <Port>
                 <Location>
                   <X>0 px</X>
-                  <Y>55.5 px</Y>
-                </Location>
-                <Anchors>Top Bottom</Anchors>
-                <Align>Left</Align>
-                <CustomProperties>
-                  <OID>7</OID>
-                  <PortType>FloatAnchor</PortType>
-                </CustomProperties>
-              </Port>
-              <Port>
-                <Location>
-                  <X>Undefined</X>
-                  <Y>71.5 px</Y>
+                  <Y>82.55 px</Y>
                 </Location>
                 <Anchors>Top Bottom</Anchors>
                 <Align>Right</Align>
@@ -155,7 +143,29 @@
                   <PortType>FloatAnchor</PortType>
                 </CustomProperties>
               </Port>
+              <Port>
+                <Location>
+                  <X>10.67786689898 px</X>
+                  <Y>62.8104887554166 px</Y>
+                </Location>
+                <Anchors>None</Anchors>
+                <Align>Left</Align>
+                <CustomProperties>
+                  <OID>7</OID>
+                  <PortType>FixedAnchor</PortType>
+                </CustomProperties>
+              </Port>
             </PortAnchors>
+            <BendPoints>
+              <PointD>
+                <X>1679 px</X>
+                <Y>122.55 px</Y>
+              </PointD>
+              <PointD>
+                <X>1679 px</X>
+                <Y>122.810488755417 px</Y>
+              </PointD>
+            </BendPoints>
             <IsManuallyRouted>false</IsManuallyRouted>
             <DbOid>
               <Path>GroupStudySU23.dbo.GroupMembers.FK_GroupMembers_Accounts_AccountId</Path>
@@ -172,8 +182,8 @@
             <PortAnchors>
               <Port xsi:type="LinkPort">
                 <Location>
-                  <X>-20.5 px</X>
-                  <Y>0 px</Y>
+                  <X>-16 px</X>
+                  <Y>-3.05175781534217E-06 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
                 <Align>Right</Align>
@@ -195,8 +205,8 @@
               <Parent>0</Parent>
             </CustomProperties>
             <Location>
-              <X>491 px</X>
-              <Y>173 px</Y>
+              <X>1211 px</X>
+              <Y>63 px</Y>
             </Location>
             <Size>
               <Width>184 px</Width>
@@ -225,8 +235,8 @@
             <PortAnchors>
               <Port>
                 <Location>
-                  <X>38.6049046091609 px</X>
-                  <Y>63.3630481191243 px</Y>
+                  <X>100.904985763745 px</X>
+                  <Y>75.703610829647 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
                 <Align>Bottom</Align>
@@ -237,11 +247,11 @@
               </Port>
               <Port>
                 <Location>
-                  <X>93.5429171382869 px</X>
-                  <Y>8.74490318676641 px</Y>
+                  <X>8.62937768506822 px</X>
+                  <Y>39.7971257421911 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
-                <Align>Top</Align>
+                <Align>Left</Align>
                 <CustomProperties>
                   <OID>13</OID>
                   <PortType>FixedAnchor</PortType>
@@ -250,12 +260,8 @@
             </PortAnchors>
             <BendPoints>
               <PointD>
-                <X>529.604919433594 px</X>
-                <Y>286 px</Y>
-              </PointD>
-              <PointD>
-                <X>433.542907714844 px</X>
-                <Y>286 px</Y>
+                <X>1311.90502929688 px</X>
+                <Y>389.797119140625 px</Y>
               </PointD>
             </BendPoints>
             <IsManuallyRouted>false</IsManuallyRouted>
@@ -274,8 +280,8 @@
             <PortAnchors>
               <Port xsi:type="LinkPort">
                 <Location>
-                  <X>48.0309910349422 px</X>
-                  <Y>-20 px</Y>
+                  <X>-4.3533130110518E-05 px</X>
+                  <Y>-116.898559570313 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
                 <Align>Bottom</Align>
@@ -304,6 +310,18 @@
             <PortAnchors>
               <Port>
                 <Location>
+                  <X>5.05688938814683 px</X>
+                  <Y>68.3621959606617 px</Y>
+                </Location>
+                <Anchors>None</Anchors>
+                <Align>Left</Align>
+                <CustomProperties>
+                  <OID>17</OID>
+                  <PortType>FixedAnchor</PortType>
+                </CustomProperties>
+              </Port>
+              <Port>
+                <Location>
                   <X>0 px</X>
                   <Y>46.5 px</Y>
                 </Location>
@@ -314,19 +332,17 @@
                   <PortType>FloatAnchor</PortType>
                 </CustomProperties>
               </Port>
-              <Port>
-                <Location>
-                  <X>Undefined</X>
-                  <Y>65.5 px</Y>
-                </Location>
-                <Anchors>Top Bottom</Anchors>
-                <Align>Left</Align>
-                <CustomProperties>
-                  <OID>17</OID>
-                  <PortType>FloatAnchor</PortType>
-                </CustomProperties>
-              </Port>
             </PortAnchors>
+            <BendPoints>
+              <PointD>
+                <X>1452 px</X>
+                <Y>108.362195960662 px</Y>
+              </PointD>
+              <PointD>
+                <X>1452 px</X>
+                <Y>109.5 px</Y>
+              </PointD>
+            </BendPoints>
             <IsManuallyRouted>false</IsManuallyRouted>
             <DbOid>
               <Path>GroupStudySU23.dbo.GroupMembers.FK_GroupMembers_Groups_GroupId</Path>
@@ -343,8 +359,8 @@
             <PortAnchors>
               <Port xsi:type="LinkPort">
                 <Location>
-                  <X>38.5 px</X>
-                  <Y>0 px</Y>
+                  <X>36.5 px</X>
+                  <Y>-1.13780403933826 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
                 <Align>Left</Align>
@@ -366,12 +382,12 @@
               <Parent>0</Parent>
             </CustomProperties>
             <Location>
-              <X>510 px</X>
-              <Y>330 px</Y>
+              <X>1070 px</X>
+              <Y>250 px</Y>
             </Location>
             <Size>
               <Width>182 px</Width>
-              <Height>90 px</Height>
+              <Height>93 px</Height>
             </Size>
             <DbOid>
               <Path>GroupStudySU23.dbo.GroupSubjects</Path>
@@ -396,8 +412,8 @@
             <PortAnchors>
               <Port>
                 <Location>
-                  <X>128.306627273571 px</X>
-                  <Y>17.5927178222417 px</Y>
+                  <X>162.439375392593 px</X>
+                  <Y>17.2934167029657 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
                 <Align>Top</Align>
@@ -408,27 +424,17 @@
               </Port>
               <Port>
                 <Location>
-                  <X>147 px</X>
-                  <Y>0 px</Y>
+                  <X>21.4393753925929 px</X>
+                  <Y>77.1484401091225 px</Y>
                 </Location>
-                <Anchors>Left Right</Anchors>
+                <Anchors>None</Anchors>
                 <Align>Bottom</Align>
                 <CustomProperties>
                   <OID>24</OID>
-                  <PortType>FloatAnchor</PortType>
+                  <PortType>FixedAnchor</PortType>
                 </CustomProperties>
               </Port>
             </PortAnchors>
-            <BendPoints>
-              <PointD>
-                <X>638.306627273571 px</X>
-                <Y>310 px</Y>
-              </PointD>
-              <PointD>
-                <X>638 px</X>
-                <Y>310 px</Y>
-              </PointD>
-            </BendPoints>
             <IsManuallyRouted>false</IsManuallyRouted>
             <DbOid>
               <Path>GroupStudySU23.dbo.GroupSubjects.FK_GroupSubjects_Groups_GroupId</Path>
@@ -445,8 +451,8 @@
             <PortAnchors>
               <Port xsi:type="LinkPort">
                 <Location>
-                  <X>0.306627273571053 px</X>
-                  <Y>42 px</Y>
+                  <X>4.43379053649551E-05 px</X>
+                  <Y>47 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
                 <Align>Top</Align>
@@ -468,12 +474,12 @@
               <Parent>0</Parent>
             </CustomProperties>
             <Location>
-              <X>-100 px</X>
-              <Y>160 px</Y>
+              <X>620 px</X>
+              <Y>50 px</Y>
             </Location>
             <Size>
               <Width>208 px</Width>
-              <Height>144 px</Height>
+              <Height>195 px</Height>
             </Size>
             <DbOid>
               <Path>GroupStudySU23.dbo.Meetings</Path>
@@ -491,8 +497,8 @@
               <Parent>0</Parent>
             </CustomProperties>
             <Location>
-              <X>1220 px</X>
-              <Y>210 px</Y>
+              <X>2020 px</X>
+              <Y>220 px</Y>
             </Location>
             <Size>
               <Width>175 px</Width>
@@ -521,26 +527,26 @@
             <PortAnchors>
               <Port>
                 <Location>
-                  <X>0 px</X>
-                  <Y>85 px</Y>
+                  <X>185.502209715514 px</X>
+                  <Y>182.731318951882 px</Y>
                 </Location>
-                <Anchors>Top Bottom</Anchors>
+                <Anchors>None</Anchors>
                 <Align>Right</Align>
                 <CustomProperties>
                   <OID>30</OID>
-                  <PortType>FloatAnchor</PortType>
+                  <PortType>FixedAnchor</PortType>
                 </CustomProperties>
               </Port>
               <Port>
                 <Location>
-                  <X>0 px</X>
-                  <Y>45 px</Y>
+                  <X>2.76099126568579 px</X>
+                  <Y>22.7313189518823 px</Y>
                 </Location>
-                <Anchors>Top Bottom</Anchors>
+                <Anchors>None</Anchors>
                 <Align>Left</Align>
                 <CustomProperties>
                   <OID>31</OID>
-                  <PortType>FloatAnchor</PortType>
+                  <PortType>FixedAnchor</PortType>
                 </CustomProperties>
               </Port>
             </PortAnchors>
@@ -560,8 +566,8 @@
             <PortAnchors>
               <Port xsi:type="LinkPort">
                 <Location>
-                  <X>-19.5 px</X>
-                  <Y>0 px</Y>
+                  <X>-59.5 px</X>
+                  <Y>-4.29030518489526E-06 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
                 <Align>Right</Align>
@@ -583,8 +589,8 @@
               <Parent>0</Parent>
             </CustomProperties>
             <Location>
-              <X>510 px</X>
-              <Y>510 px</Y>
+              <X>1100 px</X>
+              <Y>440 px</Y>
             </Location>
             <Size>
               <Width>175 px</Width>
@@ -613,14 +619,14 @@
             <PortAnchors>
               <Port>
                 <Location>
-                  <X>87.5 px</X>
-                  <Y>0 px</Y>
+                  <X>117.649667728853 px</X>
+                  <Y>70.7521000435588 px</Y>
                 </Location>
-                <Anchors>Left Right</Anchors>
+                <Anchors>None</Anchors>
                 <Align>Bottom</Align>
                 <CustomProperties>
                   <OID>36</OID>
-                  <PortType>FloatAnchor</PortType>
+                  <PortType>FixedAnchor</PortType>
                 </CustomProperties>
               </Port>
               <Port>
@@ -636,6 +642,16 @@
                 </CustomProperties>
               </Port>
             </PortAnchors>
+            <BendPoints>
+              <PointD>
+                <X>1187.64966772885 px</X>
+                <Y>360 px</Y>
+              </PointD>
+              <PointD>
+                <X>1187.5 px</X>
+                <Y>360 px</Y>
+              </PointD>
+            </BendPoints>
             <IsManuallyRouted>false</IsManuallyRouted>
             <DbOid>
               <Path>GroupStudySU23.dbo.GroupSubjects.FK_GroupSubjects_Subjects_SubjectId</Path>
@@ -652,8 +668,8 @@
             <PortAnchors>
               <Port xsi:type="LinkPort">
                 <Location>
-                  <X>0 px</X>
-                  <Y>-45 px</Y>
+                  <X>0.149667728852592 px</X>
+                  <Y>-57 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
                 <Align>Bottom</Align>
@@ -682,14 +698,14 @@
             <PortAnchors>
               <Port>
                 <Location>
-                  <X>0 px</X>
-                  <Y>59.5 px</Y>
+                  <X>203.552689301029 px</X>
+                  <Y>59.8070252401372 px</Y>
                 </Location>
-                <Anchors>Top Bottom</Anchors>
+                <Anchors>None</Anchors>
                 <Align>Right</Align>
                 <CustomProperties>
                   <OID>41</OID>
-                  <PortType>FloatAnchor</PortType>
+                  <PortType>FixedAnchor</PortType>
                 </CustomProperties>
               </Port>
               <Port>
@@ -705,6 +721,16 @@
                 </CustomProperties>
               </Port>
             </PortAnchors>
+            <BendPoints>
+              <PointD>
+                <X>848 px</X>
+                <Y>109.807025240137 px</Y>
+              </PointD>
+              <PointD>
+                <X>848 px</X>
+                <Y>109.5 px</Y>
+              </PointD>
+            </BendPoints>
             <IsManuallyRouted>false</IsManuallyRouted>
             <DbOid>
               <Path>GroupStudySU23.dbo.Meetings.FK_Meetings_Groups_GroupId</Path>
@@ -721,8 +747,8 @@
             <PortAnchors>
               <Port xsi:type="LinkPort">
                 <Location>
-                  <X>-191.5 px</X>
-                  <Y>0 px</Y>
+                  <X>-201.5 px</X>
+                  <Y>0.307025240137236 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
                 <Align>Right</Align>
@@ -744,8 +770,8 @@
               <Parent>0</Parent>
             </CustomProperties>
             <Location>
-              <X>720 px</X>
-              <Y>-170 px</Y>
+              <X>1440 px</X>
+              <Y>-280 px</Y>
             </Location>
             <Size>
               <Width>216 px</Width>
@@ -799,11 +825,11 @@
             </PortAnchors>
             <BendPoints>
               <PointD>
-                <X>1085.75329589844 px</X>
-                <Y>-96.0619888305664 px</Y>
+                <X>1805.75325312475 px</X>
+                <Y>-206.061987470874 px</Y>
               </PointD>
             </BendPoints>
-            <IsManuallyRouted>false</IsManuallyRouted>
+            <IsManuallyRouted>true</IsManuallyRouted>
             <DbOid>
               <Path>GroupStudySU23.dbo.DocumentFiles.FK_DocumentFiles_Accounts_AccountId</Path>
               <TypeName>ForeignKey</TypeName>
@@ -874,8 +900,8 @@
             </PortAnchors>
             <BendPoints>
               <PointD>
-                <X>572.580017089844 px</X>
-                <Y>-79.6303329467773 px</Y>
+                <X>1292.57995605469 px</X>
+                <Y>-189.630325317383 px</Y>
               </PointD>
             </BendPoints>
             <IsManuallyRouted>false</IsManuallyRouted>
@@ -894,8 +920,8 @@
             <PortAnchors>
               <Port xsi:type="LinkPort">
                 <Location>
-                  <X>147.419982910156 px</X>
-                  <Y>-126.315161431191 px</Y>
+                  <X>147.420043945313 px</X>
+                  <Y>-126.315169060586 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
                 <Align>Left</Align>
@@ -917,15 +943,15 @@
               <Parent>0</Parent>
             </CustomProperties>
             <Location>
-              <X>780 px</X>
-              <Y>-10 px</Y>
+              <X>640 px</X>
+              <Y>-400 px</Y>
             </Location>
             <Size>
-              <Width>129 px</Width>
-              <Height>110 px</Height>
+              <Width>232 px</Width>
+              <Height>144 px</Height>
             </Size>
             <DbOid>
-              <Path>GroupStudySU23.dbo.Invites</Path>
+              <Path>GroupStudySU23.dbo.MeetingParticipations</Path>
               <TypeName>Table</TypeName>
             </DbOid>
             <Compartments>
@@ -947,38 +973,38 @@
             <PortAnchors>
               <Port>
                 <Location>
-                  <X>0 px</X>
-                  <Y>55 px</Y>
+                  <X>206.397351935361 px</X>
+                  <Y>94.4537727809139 px</Y>
                 </Location>
-                <Anchors>Top Bottom</Anchors>
+                <Anchors>None</Anchors>
                 <Align>Right</Align>
                 <CustomProperties>
                   <OID>58</OID>
-                  <PortType>FloatAnchor</PortType>
+                  <PortType>FixedAnchor</PortType>
                 </CustomProperties>
               </Port>
               <Port>
                 <Location>
-                  <X>50.25 px</X>
-                  <Y>0 px</Y>
+                  <X>184.119611324671 px</X>
+                  <Y>10.7482132675657 px</Y>
                 </Location>
-                <Anchors>Left Right</Anchors>
+                <Anchors>None</Anchors>
                 <Align>Top</Align>
                 <CustomProperties>
                   <OID>59</OID>
-                  <PortType>FloatAnchor</PortType>
+                  <PortType>FixedAnchor</PortType>
                 </CustomProperties>
               </Port>
             </PortAnchors>
             <BendPoints>
               <PointD>
-                <X>1030.25 px</X>
-                <Y>45 px</Y>
+                <X>1884.11962890625 px</X>
+                <Y>-305.546234130859 px</Y>
               </PointD>
             </BendPoints>
             <IsManuallyRouted>false</IsManuallyRouted>
             <DbOid>
-              <Path>GroupStudySU23.dbo.Invites.FK_Invites_Accounts_AccountId</Path>
+              <Path>GroupStudySU23.dbo.MeetingParticipations.FK_MeetingParticipations_Accounts_AccountId</Path>
               <TypeName>ForeignKey</TypeName>
             </DbOid>
           </Model>
@@ -992,8 +1018,8 @@
             <PortAnchors>
               <Port xsi:type="LinkPort">
                 <Location>
-                  <X>-121.25 px</X>
-                  <Y>-62.5 px</Y>
+                  <X>-506.059814453125 px</X>
+                  <Y>6.91177325506942E-06 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
                 <Align>Right</Align>
@@ -1014,7 +1040,7 @@
               <OID>61</OID>
               <Comment>62</Comment>
               <OutModel>55</OutModel>
-              <InModel>9</InModel>
+              <InModel>26</InModel>
               <OutPort>63</OutPort>
               <InPort>64</InPort>
               <Parent>0</Parent>
@@ -1022,11 +1048,11 @@
             <PortAnchors>
               <Port>
                 <Location>
-                  <X>0 px</X>
-                  <Y>82.5 px</Y>
+                  <X>141 px</X>
+                  <Y>0 px</Y>
                 </Location>
-                <Anchors>Top Bottom</Anchors>
-                <Align>Left</Align>
+                <Anchors>Left Right</Anchors>
+                <Align>Bottom</Align>
                 <CustomProperties>
                   <OID>63</OID>
                   <PortType>FloatAnchor</PortType>
@@ -1034,7 +1060,7 @@
               </Port>
               <Port>
                 <Location>
-                  <X>138 px</X>
+                  <X>161 px</X>
                   <Y>0 px</Y>
                 </Location>
                 <Anchors>Left Right</Anchors>
@@ -1045,15 +1071,9 @@
                 </CustomProperties>
               </Port>
             </PortAnchors>
-            <BendPoints>
-              <PointD>
-                <X>629 px</X>
-                <Y>72.5 px</Y>
-              </PointD>
-            </BendPoints>
             <IsManuallyRouted>false</IsManuallyRouted>
             <DbOid>
-              <Path>GroupStudySU23.dbo.Invites.FK_Invites_Groups_GroupId</Path>
+              <Path>GroupStudySU23.dbo.MeetingParticipations.FK_MeetingParticipations_Meetings_MeetingId</Path>
               <TypeName>ForeignKey</TypeName>
             </DbOid>
           </Model>
@@ -1067,11 +1087,11 @@
             <PortAnchors>
               <Port xsi:type="LinkPort">
                 <Location>
-                  <X>75.5 px</X>
-                  <Y>0 px</Y>
+                  <X>0 px</X>
+                  <Y>-153 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
-                <Align>Left</Align>
+                <Align>Bottom</Align>
                 <CustomProperties>
                   <OID>65</OID>
                   <PortType>FixedAnchor</PortType>
@@ -1090,15 +1110,15 @@
               <Parent>0</Parent>
             </CustomProperties>
             <Location>
-              <X>-80 px</X>
-              <Y>-290 px</Y>
+              <X>1860 px</X>
+              <Y>500 px</Y>
             </Location>
             <Size>
-              <Width>232 px</Width>
-              <Height>144 px</Height>
+              <Width>208 px</Width>
+              <Height>127 px</Height>
             </Size>
             <DbOid>
-              <Path>GroupStudySU23.dbo.MeetingParticipations</Path>
+              <Path>GroupStudySU23.dbo.ReviewDetails</Path>
               <TypeName>Table</TypeName>
             </DbOid>
             <Compartments>
@@ -1120,11 +1140,11 @@
             <PortAnchors>
               <Port>
                 <Location>
-                  <X>206.397351935361 px</X>
-                  <Y>94.4537727809139 px</Y>
+                  <X>34.2313994794999 px</X>
+                  <Y>10.1295415670689 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
-                <Align>Right</Align>
+                <Align>Top</Align>
                 <CustomProperties>
                   <OID>69</OID>
                   <PortType>FixedAnchor</PortType>
@@ -1132,26 +1152,20 @@
               </Port>
               <Port>
                 <Location>
-                  <X>184.119611324671 px</X>
-                  <Y>10.7482132675657 px</Y>
+                  <X>194.2313994795 px</X>
+                  <Y>0 px</Y>
                 </Location>
-                <Anchors>None</Anchors>
-                <Align>Top</Align>
+                <Anchors>Left Right</Anchors>
+                <Align>Bottom</Align>
                 <CustomProperties>
                   <OID>70</OID>
-                  <PortType>FixedAnchor</PortType>
+                  <PortType>FloatAnchor</PortType>
                 </CustomProperties>
               </Port>
             </PortAnchors>
-            <BendPoints>
-              <PointD>
-                <X>1164.11962890625 px</X>
-                <Y>-195.546234130859 px</Y>
-              </PointD>
-            </BendPoints>
             <IsManuallyRouted>false</IsManuallyRouted>
             <DbOid>
-              <Path>GroupStudySU23.dbo.MeetingParticipations.FK_MeetingParticipations_Accounts_AccountId</Path>
+              <Path>GroupStudySU23.dbo.ReviewDetails.FK_ReviewDetails_Accounts_ReviewerId</Path>
               <TypeName>ForeignKey</TypeName>
             </DbOid>
           </Model>
@@ -1165,11 +1179,11 @@
             <PortAnchors>
               <Port xsi:type="LinkPort">
                 <Location>
-                  <X>-506.059814453125 px</X>
-                  <Y>6.91177325506942E-06 px</Y>
+                  <X>-4.58330000583373E-05 px</X>
+                  <Y>114 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
-                <Align>Right</Align>
+                <Align>Top</Align>
                 <CustomProperties>
                   <OID>71</OID>
                   <PortType>FixedAnchor</PortType>
@@ -1182,90 +1196,21 @@
               <Y>2 px</Y>
             </CommentOffset>
           </Model>
-          <Model xsi:type="RelationLinkModel">
-            <CustomProperties>
-              <OID>72</OID>
-              <Comment>73</Comment>
-              <OutModel>66</OutModel>
-              <InModel>26</InModel>
-              <OutPort>74</OutPort>
-              <InPort>75</InPort>
-              <Parent>0</Parent>
-            </CustomProperties>
-            <PortAnchors>
-              <Port>
-                <Location>
-                  <X>141 px</X>
-                  <Y>0 px</Y>
-                </Location>
-                <Anchors>Left Right</Anchors>
-                <Align>Bottom</Align>
-                <CustomProperties>
-                  <OID>74</OID>
-                  <PortType>FloatAnchor</PortType>
-                </CustomProperties>
-              </Port>
-              <Port>
-                <Location>
-                  <X>161 px</X>
-                  <Y>0 px</Y>
-                </Location>
-                <Anchors>Left Right</Anchors>
-                <Align>Top</Align>
-                <CustomProperties>
-                  <OID>75</OID>
-                  <PortType>FloatAnchor</PortType>
-                </CustomProperties>
-              </Port>
-            </PortAnchors>
-            <IsManuallyRouted>false</IsManuallyRouted>
-            <DbOid>
-              <Path>GroupStudySU23.dbo.MeetingParticipations.FK_MeetingParticipations_Meetings_MeetingId</Path>
-              <TypeName>ForeignKey</TypeName>
-            </DbOid>
-          </Model>
-          <Model xsi:type="RelationCommentModel">
-            <CustomProperties>
-              <OID>73</OID>
-              <HolderModel>72</HolderModel>
-              <Port>76</Port>
-              <Parent>0</Parent>
-            </CustomProperties>
-            <PortAnchors>
-              <Port xsi:type="LinkPort">
-                <Location>
-                  <X>0 px</X>
-                  <Y>-153 px</Y>
-                </Location>
-                <Anchors>None</Anchors>
-                <Align>Bottom</Align>
-                <CustomProperties>
-                  <OID>76</OID>
-                  <PortType>FixedAnchor</PortType>
-                </CustomProperties>
-                <LinkPortAnchor>OutPoint</LinkPortAnchor>
-              </Port>
-            </PortAnchors>
-            <CommentOffset>
-              <X>22 px</X>
-              <Y>2 px</Y>
-            </CommentOffset>
-          </Model>
           <Model xsi:type="TableModel">
             <CustomProperties>
-              <OID>77</OID>
+              <OID>72</OID>
               <Parent>0</Parent>
             </CustomProperties>
             <Location>
-              <X>730 px</X>
-              <Y>310 px</Y>
+              <X>1680 px</X>
+              <Y>510 px</Y>
             </Location>
             <Size>
-              <Width>145 px</Width>
-              <Height>110 px</Height>
+              <Width>139 px</Width>
+              <Height>93 px</Height>
             </Size>
             <DbOid>
-              <Path>GroupStudySU23.dbo.Requests</Path>
+              <Path>GroupStudySU23.dbo.Reviews</Path>
               <TypeName>Table</TypeName>
             </DbOid>
             <Compartments>
@@ -1276,10 +1221,79 @@
           </Model>
           <Model xsi:type="RelationLinkModel">
             <CustomProperties>
+              <OID>73</OID>
+              <Comment>74</Comment>
+              <OutModel>72</OutModel>
+              <InModel>1</InModel>
+              <OutPort>75</OutPort>
+              <InPort>76</InPort>
+              <Parent>0</Parent>
+            </CustomProperties>
+            <PortAnchors>
+              <Port>
+                <Location>
+                  <X>128.926257903313 px</X>
+                  <Y>5.15585818757336 px</Y>
+                </Location>
+                <Anchors>None</Anchors>
+                <Align>Top</Align>
+                <CustomProperties>
+                  <OID>75</OID>
+                  <PortType>FixedAnchor</PortType>
+                </CustomProperties>
+              </Port>
+              <Port>
+                <Location>
+                  <X>108.926257903313 px</X>
+                  <Y>142.276099126569 px</Y>
+                </Location>
+                <Anchors>None</Anchors>
+                <Align>Bottom</Align>
+                <CustomProperties>
+                  <OID>76</OID>
+                  <PortType>FixedAnchor</PortType>
+                </CustomProperties>
+              </Port>
+            </PortAnchors>
+            <IsManuallyRouted>false</IsManuallyRouted>
+            <DbOid>
+              <Path>GroupStudySU23.dbo.Reviews.FK_Reviews_Accounts_RevieweeId</Path>
+              <TypeName>ForeignKey</TypeName>
+            </DbOid>
+          </Model>
+          <Model xsi:type="RelationCommentModel">
+            <CustomProperties>
+              <OID>74</OID>
+              <HolderModel>73</HolderModel>
+              <Port>77</Port>
+              <Parent>0</Parent>
+            </CustomProperties>
+            <PortAnchors>
+              <Port xsi:type="LinkPort">
+                <Location>
+                  <X>-1.1627936601144E-05 px</X>
+                  <Y>119 px</Y>
+                </Location>
+                <Anchors>None</Anchors>
+                <Align>Top</Align>
+                <CustomProperties>
+                  <OID>77</OID>
+                  <PortType>FixedAnchor</PortType>
+                </CustomProperties>
+                <LinkPortAnchor>OutPoint</LinkPortAnchor>
+              </Port>
+            </PortAnchors>
+            <CommentOffset>
+              <X>22 px</X>
+              <Y>2 px</Y>
+            </CommentOffset>
+          </Model>
+          <Model xsi:type="RelationLinkModel">
+            <CustomProperties>
               <OID>78</OID>
               <Comment>79</Comment>
-              <OutModel>77</OutModel>
-              <InModel>1</InModel>
+              <OutModel>72</OutModel>
+              <InModel>26</InModel>
               <OutPort>80</OutPort>
               <InPort>81</InPort>
               <Parent>0</Parent>
@@ -1288,10 +1302,10 @@
               <Port>
                 <Location>
                   <X>0 px</X>
-                  <Y>10.5 px</Y>
+                  <Y>46.5 px</Y>
                 </Location>
                 <Anchors>Top Bottom</Anchors>
-                <Align>Right</Align>
+                <Align>Left</Align>
                 <CustomProperties>
                   <OID>80</OID>
                   <PortType>FloatAnchor</PortType>
@@ -1299,20 +1313,26 @@
               </Port>
               <Port>
                 <Location>
-                  <X>0 px</X>
-                  <Y>150.5 px</Y>
+                  <X>156 px</X>
+                  <Y>0 px</Y>
                 </Location>
-                <Anchors>Top Bottom</Anchors>
-                <Align>Left</Align>
+                <Anchors>Left Right</Anchors>
+                <Align>Bottom</Align>
                 <CustomProperties>
                   <OID>81</OID>
                   <PortType>FloatAnchor</PortType>
                 </CustomProperties>
               </Port>
             </PortAnchors>
+            <BendPoints>
+              <PointD>
+                <X>776 px</X>
+                <Y>556.5 px</Y>
+              </PointD>
+            </BendPoints>
             <IsManuallyRouted>false</IsManuallyRouted>
             <DbOid>
-              <Path>GroupStudySU23.dbo.Requests.FK_Requests_Accounts_AccountId</Path>
+              <Path>GroupStudySU23.dbo.Reviews.FK_Reviews_Meetings_MeetingId</Path>
               <TypeName>ForeignKey</TypeName>
             </DbOid>
           </Model>
@@ -1326,11 +1346,11 @@
             <PortAnchors>
               <Port xsi:type="LinkPort">
                 <Location>
-                  <X>-52.5 px</X>
+                  <X>452 px</X>
                   <Y>0 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
-                <Align>Right</Align>
+                <Align>Left</Align>
                 <CustomProperties>
                   <OID>82</OID>
                   <PortType>FixedAnchor</PortType>
@@ -1347,8 +1367,8 @@
             <CustomProperties>
               <OID>83</OID>
               <Comment>84</Comment>
-              <OutModel>77</OutModel>
-              <InModel>9</InModel>
+              <OutModel>66</OutModel>
+              <InModel>72</InModel>
               <OutPort>85</OutPort>
               <InPort>86</InPort>
               <Parent>0</Parent>
@@ -1356,42 +1376,32 @@
             <PortAnchors>
               <Port>
                 <Location>
-                  <X>0 px</X>
-                  <Y>33 px</Y>
+                  <X>8.95192909242792 px</X>
+                  <Y>72.0642440153956 px</Y>
                 </Location>
-                <Anchors>Top Bottom</Anchors>
+                <Anchors>None</Anchors>
                 <Align>Left</Align>
                 <CustomProperties>
                   <OID>85</OID>
-                  <PortType>FloatAnchor</PortType>
+                  <PortType>FixedAnchor</PortType>
                 </CustomProperties>
               </Port>
               <Port>
                 <Location>
-                  <X>0 px</X>
-                  <Y>60 px</Y>
+                  <X>119.803053808702 px</X>
+                  <Y>62.0642440153956 px</Y>
                 </Location>
-                <Anchors>Top Bottom</Anchors>
+                <Anchors>None</Anchors>
                 <Align>Right</Align>
                 <CustomProperties>
                   <OID>86</OID>
-                  <PortType>FloatAnchor</PortType>
+                  <PortType>FixedAnchor</PortType>
                 </CustomProperties>
               </Port>
             </PortAnchors>
-            <BendPoints>
-              <PointD>
-                <X>710 px</X>
-                <Y>343 px</Y>
-              </PointD>
-              <PointD>
-                <X>710 px</X>
-                <Y>233 px</Y>
-              </PointD>
-            </BendPoints>
             <IsManuallyRouted>false</IsManuallyRouted>
             <DbOid>
-              <Path>GroupStudySU23.dbo.Requests.FK_Requests_Groups_GroupId</Path>
+              <Path>GroupStudySU23.dbo.ReviewDetails.FK_ReviewDetails_Reviews_ReviewId</Path>
               <TypeName>ForeignKey</TypeName>
             </DbOid>
           </Model>
@@ -1405,8 +1415,8 @@
             <PortAnchors>
               <Port xsi:type="LinkPort">
                 <Location>
-                  <X>20 px</X>
-                  <Y>55 px</Y>
+                  <X>20.5 px</X>
+                  <Y>-2.60041356341389E-05 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
                 <Align>Left</Align>
@@ -1428,346 +1438,8 @@
               <Parent>0</Parent>
             </CustomProperties>
             <Location>
-              <X>1140 px</X>
-              <Y>680 px</Y>
-            </Location>
-            <Size>
-              <Width>208 px</Width>
-              <Height>127 px</Height>
-            </Size>
-            <DbOid>
-              <Path>GroupStudySU23.dbo.ReviewDetails</Path>
-              <TypeName>Table</TypeName>
-            </DbOid>
-            <Compartments>
-              <ConstraintsCollapsed>True</ConstraintsCollapsed>
-              <IndexesCollapsed>True</IndexesCollapsed>
-              <TriggersCollapsed>True</TriggersCollapsed>
-            </Compartments>
-          </Model>
-          <Model xsi:type="RelationLinkModel">
-            <CustomProperties>
-              <OID>89</OID>
-              <Comment>90</Comment>
-              <OutModel>88</OutModel>
-              <InModel>1</InModel>
-              <OutPort>91</OutPort>
-              <InPort>92</InPort>
-              <Parent>0</Parent>
-            </CustomProperties>
-            <PortAnchors>
-              <Port>
-                <Location>
-                  <X>34.2313994794999 px</X>
-                  <Y>10.1295415670689 px</Y>
-                </Location>
-                <Anchors>None</Anchors>
-                <Align>Top</Align>
-                <CustomProperties>
-                  <OID>91</OID>
-                  <PortType>FixedAnchor</PortType>
-                </CustomProperties>
-              </Port>
-              <Port>
-                <Location>
-                  <X>194.2313994795 px</X>
-                  <Y>Undefined</Y>
-                </Location>
-                <Anchors>Left Right</Anchors>
-                <Align>Bottom</Align>
-                <CustomProperties>
-                  <OID>92</OID>
-                  <PortType>FloatAnchor</PortType>
-                </CustomProperties>
-              </Port>
-            </PortAnchors>
-            <IsManuallyRouted>false</IsManuallyRouted>
-            <DbOid>
-              <Path>GroupStudySU23.dbo.ReviewDetails.FK_ReviewDetails_Accounts_ReviewerId</Path>
-              <TypeName>ForeignKey</TypeName>
-            </DbOid>
-          </Model>
-          <Model xsi:type="RelationCommentModel">
-            <CustomProperties>
-              <OID>90</OID>
-              <HolderModel>89</HolderModel>
-              <Port>93</Port>
-              <Parent>0</Parent>
-            </CustomProperties>
-            <PortAnchors>
-              <Port xsi:type="LinkPort">
-                <Location>
-                  <X>-4.58330000583373E-05 px</X>
-                  <Y>174.5 px</Y>
-                </Location>
-                <Anchors>None</Anchors>
-                <Align>Top</Align>
-                <CustomProperties>
-                  <OID>93</OID>
-                  <PortType>FixedAnchor</PortType>
-                </CustomProperties>
-                <LinkPortAnchor>OutPoint</LinkPortAnchor>
-              </Port>
-            </PortAnchors>
-            <CommentOffset>
-              <X>22 px</X>
-              <Y>2 px</Y>
-            </CommentOffset>
-          </Model>
-          <Model xsi:type="TableModel">
-            <CustomProperties>
-              <OID>94</OID>
-              <Parent>0</Parent>
-            </CustomProperties>
-            <Location>
-              <X>880 px</X>
-              <Y>690 px</Y>
-            </Location>
-            <Size>
-              <Width>139 px</Width>
-              <Height>93 px</Height>
-            </Size>
-            <DbOid>
-              <Path>GroupStudySU23.dbo.Reviews</Path>
-              <TypeName>Table</TypeName>
-            </DbOid>
-            <Compartments>
-              <ConstraintsCollapsed>True</ConstraintsCollapsed>
-              <IndexesCollapsed>True</IndexesCollapsed>
-              <TriggersCollapsed>True</TriggersCollapsed>
-            </Compartments>
-          </Model>
-          <Model xsi:type="RelationLinkModel">
-            <CustomProperties>
-              <OID>95</OID>
-              <Comment>96</Comment>
-              <OutModel>94</OutModel>
-              <InModel>1</InModel>
-              <OutPort>97</OutPort>
-              <InPort>98</InPort>
-              <Parent>0</Parent>
-            </CustomProperties>
-            <PortAnchors>
-              <Port>
-                <Location>
-                  <X>36.2347095602993 px</X>
-                  <Y>132.089671125512 px</Y>
-                </Location>
-                <Anchors>None</Anchors>
-                <Align>Bottom</Align>
-                <CustomProperties>
-                  <OID>98</OID>
-                  <PortType>FixedAnchor</PortType>
-                </CustomProperties>
-              </Port>
-              <Port>
-                <Location>
-                  <X>104.25 px</X>
-                  <Y>0 px</Y>
-                </Location>
-                <Anchors>Left Right</Anchors>
-                <Align>Top</Align>
-                <CustomProperties>
-                  <OID>97</OID>
-                  <PortType>FloatAnchor</PortType>
-                </CustomProperties>
-              </Port>
-            </PortAnchors>
-            <BendPoints>
-              <PointD>
-                <X>984.25 px</X>
-                <Y>351 px</Y>
-              </PointD>
-              <PointD>
-                <X>1016.2347095603 px</X>
-                <Y>351 px</Y>
-              </PointD>
-            </BendPoints>
-            <IsManuallyRouted>false</IsManuallyRouted>
-            <DbOid>
-              <Path>GroupStudySU23.dbo.Reviews.FK_Reviews_Accounts_RevieweeId</Path>
-              <TypeName>ForeignKey</TypeName>
-            </DbOid>
-          </Model>
-          <Model xsi:type="RelationCommentModel">
-            <CustomProperties>
-              <OID>96</OID>
-              <HolderModel>95</HolderModel>
-              <Port>99</Port>
-              <Parent>0</Parent>
-            </CustomProperties>
-            <PortAnchors>
-              <Port xsi:type="LinkPort">
-                <Location>
-                  <X>0 px</X>
-                  <Y>169.5 px</Y>
-                </Location>
-                <Anchors>None</Anchors>
-                <Align>Top</Align>
-                <CustomProperties>
-                  <OID>99</OID>
-                  <PortType>FixedAnchor</PortType>
-                </CustomProperties>
-                <LinkPortAnchor>OutPoint</LinkPortAnchor>
-              </Port>
-            </PortAnchors>
-            <CommentOffset>
-              <X>22 px</X>
-              <Y>2 px</Y>
-            </CommentOffset>
-          </Model>
-          <Model xsi:type="RelationLinkModel">
-            <CustomProperties>
-              <OID>100</OID>
-              <Comment>101</Comment>
-              <OutModel>94</OutModel>
-              <InModel>26</InModel>
-              <OutPort>102</OutPort>
-              <InPort>103</InPort>
-              <Parent>0</Parent>
-            </CustomProperties>
-            <PortAnchors>
-              <Port>
-                <Location>
-                  <X>0 px</X>
-                  <Y>46.5 px</Y>
-                </Location>
-                <Anchors>Top Bottom</Anchors>
-                <Align>Left</Align>
-                <CustomProperties>
-                  <OID>102</OID>
-                  <PortType>FloatAnchor</PortType>
-                </CustomProperties>
-              </Port>
-              <Port>
-                <Location>
-                  <X>156 px</X>
-                  <Y>0 px</Y>
-                </Location>
-                <Anchors>Left Right</Anchors>
-                <Align>Bottom</Align>
-                <CustomProperties>
-                  <OID>103</OID>
-                  <PortType>FloatAnchor</PortType>
-                </CustomProperties>
-              </Port>
-            </PortAnchors>
-            <BendPoints>
-              <PointD>
-                <X>56 px</X>
-                <Y>736.5 px</Y>
-              </PointD>
-            </BendPoints>
-            <IsManuallyRouted>false</IsManuallyRouted>
-            <DbOid>
-              <Path>GroupStudySU23.dbo.Reviews.FK_Reviews_Meetings_MeetingId</Path>
-              <TypeName>ForeignKey</TypeName>
-            </DbOid>
-          </Model>
-          <Model xsi:type="RelationCommentModel">
-            <CustomProperties>
-              <OID>101</OID>
-              <HolderModel>100</HolderModel>
-              <Port>104</Port>
-              <Parent>0</Parent>
-            </CustomProperties>
-            <PortAnchors>
-              <Port xsi:type="LinkPort">
-                <Location>
-                  <X>412 px</X>
-                  <Y>0 px</Y>
-                </Location>
-                <Anchors>None</Anchors>
-                <Align>Left</Align>
-                <CustomProperties>
-                  <OID>104</OID>
-                  <PortType>FixedAnchor</PortType>
-                </CustomProperties>
-                <LinkPortAnchor>OutPoint</LinkPortAnchor>
-              </Port>
-            </PortAnchors>
-            <CommentOffset>
-              <X>22 px</X>
-              <Y>2 px</Y>
-            </CommentOffset>
-          </Model>
-          <Model xsi:type="RelationLinkModel">
-            <CustomProperties>
-              <OID>105</OID>
-              <Comment>106</Comment>
-              <OutModel>88</OutModel>
-              <InModel>94</InModel>
-              <OutPort>107</OutPort>
-              <InPort>108</InPort>
-              <Parent>0</Parent>
-            </CustomProperties>
-            <PortAnchors>
-              <Port>
-                <Location>
-                  <X>8.95192909242792 px</X>
-                  <Y>72.0642440153956 px</Y>
-                </Location>
-                <Anchors>None</Anchors>
-                <Align>Left</Align>
-                <CustomProperties>
-                  <OID>107</OID>
-                  <PortType>FixedAnchor</PortType>
-                </CustomProperties>
-              </Port>
-              <Port>
-                <Location>
-                  <X>119.803053808702 px</X>
-                  <Y>62.0642440153956 px</Y>
-                </Location>
-                <Anchors>None</Anchors>
-                <Align>Right</Align>
-                <CustomProperties>
-                  <OID>108</OID>
-                  <PortType>FixedAnchor</PortType>
-                </CustomProperties>
-              </Port>
-            </PortAnchors>
-            <IsManuallyRouted>false</IsManuallyRouted>
-            <DbOid>
-              <Path>GroupStudySU23.dbo.ReviewDetails.FK_ReviewDetails_Reviews_ReviewId</Path>
-              <TypeName>ForeignKey</TypeName>
-            </DbOid>
-          </Model>
-          <Model xsi:type="RelationCommentModel">
-            <CustomProperties>
-              <OID>106</OID>
-              <HolderModel>105</HolderModel>
-              <Port>109</Port>
-              <Parent>0</Parent>
-            </CustomProperties>
-            <PortAnchors>
-              <Port xsi:type="LinkPort">
-                <Location>
-                  <X>60.5 px</X>
-                  <Y>-2.60041356341389E-05 px</Y>
-                </Location>
-                <Anchors>None</Anchors>
-                <Align>Left</Align>
-                <CustomProperties>
-                  <OID>109</OID>
-                  <PortType>FixedAnchor</PortType>
-                </CustomProperties>
-                <LinkPortAnchor>OutPoint</LinkPortAnchor>
-              </Port>
-            </PortAnchors>
-            <CommentOffset>
-              <X>22 px</X>
-              <Y>2 px</Y>
-            </CommentOffset>
-          </Model>
-          <Model xsi:type="TableModel">
-            <CustomProperties>
-              <OID>110</OID>
-              <Parent>0</Parent>
-            </CustomProperties>
-            <Location>
-              <X>190 px</X>
-              <Y>-30 px</Y>
+              <X>910 px</X>
+              <Y>-140 px</Y>
             </Location>
             <Size>
               <Width>218 px</Width>
@@ -1785,12 +1457,12 @@
           </Model>
           <Model xsi:type="RelationLinkModel">
             <CustomProperties>
-              <OID>111</OID>
-              <Comment>112</Comment>
-              <OutModel>110</OutModel>
+              <OID>89</OID>
+              <Comment>90</Comment>
+              <OutModel>88</OutModel>
               <InModel>9</InModel>
-              <OutPort>113</OutPort>
-              <InPort>114</InPort>
+              <OutPort>91</OutPort>
+              <InPort>92</InPort>
               <Parent>0</Parent>
             </CustomProperties>
             <PortAnchors>
@@ -1802,7 +1474,7 @@
                 <Anchors>Top Bottom</Anchors>
                 <Align>Right</Align>
                 <CustomProperties>
-                  <OID>113</OID>
+                  <OID>91</OID>
                   <PortType>FloatAnchor</PortType>
                 </CustomProperties>
               </Port>
@@ -1814,26 +1486,18 @@
                 <Anchors>Left Right</Anchors>
                 <Align>Top</Align>
                 <CustomProperties>
-                  <OID>114</OID>
+                  <OID>92</OID>
                   <PortType>FloatAnchor</PortType>
                 </CustomProperties>
               </Port>
             </PortAnchors>
             <BendPoints>
               <PointD>
-                <X>428 px</X>
-                <Y>59 px</Y>
-              </PointD>
-              <PointD>
-                <X>428 px</X>
-                <Y>153 px</Y>
-              </PointD>
-              <PointD>
-                <X>537 px</X>
-                <Y>153 px</Y>
+                <X>1257 px</X>
+                <Y>-51 px</Y>
               </PointD>
             </BendPoints>
-            <IsManuallyRouted>false</IsManuallyRouted>
+            <IsManuallyRouted>true</IsManuallyRouted>
             <DbOid>
               <Path>GroupStudySU23.dbo.Schedules.FK_Schedules_Groups_GroupId</Path>
               <TypeName>ForeignKey</TypeName>
@@ -1841,21 +1505,21 @@
           </Model>
           <Model xsi:type="RelationCommentModel">
             <CustomProperties>
-              <OID>112</OID>
-              <HolderModel>111</HolderModel>
-              <Port>115</Port>
+              <OID>90</OID>
+              <HolderModel>89</HolderModel>
+              <Port>93</Port>
               <Parent>0</Parent>
             </CustomProperties>
             <PortAnchors>
               <Port xsi:type="LinkPort">
                 <Location>
-                  <X>-74.5 px</X>
-                  <Y>-94 px</Y>
+                  <X>-64.5 px</X>
+                  <Y>0 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
                 <Align>Right</Align>
                 <CustomProperties>
-                  <OID>115</OID>
+                  <OID>93</OID>
                   <PortType>FixedAnchor</PortType>
                 </CustomProperties>
                 <LinkPortAnchor>OutPoint</LinkPortAnchor>
@@ -1868,10 +1532,350 @@
           </Model>
           <Model xsi:type="RelationLinkModel">
             <CustomProperties>
+              <OID>94</OID>
+              <Comment>95</Comment>
+              <OutModel>26</OutModel>
+              <InModel>88</InModel>
+              <OutPort>96</OutPort>
+              <InPort>97</InPort>
+              <Parent>0</Parent>
+            </CustomProperties>
+            <PortAnchors>
+              <Port>
+                <Location>
+                  <X>190.54922578575 px</X>
+                  <Y>-3.76546305678433 px</Y>
+                </Location>
+                <Anchors>None</Anchors>
+                <Align>Top</Align>
+                <CustomProperties>
+                  <OID>96</OID>
+                  <PortType>FixedAnchor</PortType>
+                </CustomProperties>
+              </Port>
+              <Port>
+                <Location>
+                  <X>23.3597145411665 px</X>
+                  <Y>90.8758044978333 px</Y>
+                </Location>
+                <Anchors>None</Anchors>
+                <Align>Left</Align>
+                <CustomProperties>
+                  <OID>97</OID>
+                  <PortType>FixedAnchor</PortType>
+                </CustomProperties>
+              </Port>
+            </PortAnchors>
+            <BendPoints>
+              <PointD>
+                <X>810.549255371094 px</X>
+                <Y>-49.124195098877 px</Y>
+              </PointD>
+            </BendPoints>
+            <IsManuallyRouted>false</IsManuallyRouted>
+            <DbOid>
+              <Path>GroupStudySU23.dbo.Meetings.FK_Meetings_Schedules_ScheduleId</Path>
+              <TypeName>ForeignKey</TypeName>
+            </DbOid>
+          </Model>
+          <Model xsi:type="RelationCommentModel">
+            <CustomProperties>
+              <OID>95</OID>
+              <HolderModel>94</HolderModel>
+              <Port>98</Port>
+              <Parent>0</Parent>
+            </CustomProperties>
+            <PortAnchors>
+              <Port xsi:type="LinkPort">
+                <Location>
+                  <X>-49.7254324173751 px</X>
+                  <Y>99.124195098877 px</Y>
+                </Location>
+                <Anchors>None</Anchors>
+                <Align>Top</Align>
+                <CustomProperties>
+                  <OID>98</OID>
+                  <PortType>FixedAnchor</PortType>
+                </CustomProperties>
+                <LinkPortAnchor>OutPoint</LinkPortAnchor>
+              </Port>
+            </PortAnchors>
+            <CommentOffset>
+              <X>22 px</X>
+              <Y>2 px</Y>
+            </CommentOffset>
+          </Model>
+          <Model xsi:type="RelationLinkModel">
+            <CustomProperties>
+              <OID>99</OID>
+              <Comment>100</Comment>
+              <OutModel>1</OutModel>
+              <InModel>2</InModel>
+              <OutPort>101</OutPort>
+              <InPort>102</InPort>
+              <Parent>0</Parent>
+            </CustomProperties>
+            <PortAnchors>
+              <Port>
+                <Location>
+                  <X>81.474501593279 px</X>
+                  <Y>142.276099126569 px</Y>
+                </Location>
+                <Anchors>None</Anchors>
+                <Align>Bottom</Align>
+                <CustomProperties>
+                  <OID>101</OID>
+                  <PortType>FixedAnchor</PortType>
+                </CustomProperties>
+              </Port>
+              <Port>
+                <Location>
+                  <X>0 px</X>
+                  <Y>45 px</Y>
+                </Location>
+                <Anchors>Top Bottom</Anchors>
+                <Align>Right</Align>
+                <CustomProperties>
+                  <OID>102</OID>
+                  <PortType>FloatAnchor</PortType>
+                </CustomProperties>
+              </Port>
+            </PortAnchors>
+            <BendPoints>
+              <PointD>
+                <X>1781.47450159328 px</X>
+                <Y>395 px</Y>
+              </PointD>
+            </BendPoints>
+            <IsManuallyRouted>false</IsManuallyRouted>
+            <DbOid>
+              <Path>GroupStudySU23.dbo.Accounts.FK_Accounts_Classes_ClassId</Path>
+              <TypeName>ForeignKey</TypeName>
+            </DbOid>
+          </Model>
+          <Model xsi:type="RelationCommentModel">
+            <CustomProperties>
+              <OID>100</OID>
+              <HolderModel>99</HolderModel>
+              <Port>103</Port>
+              <Parent>0</Parent>
+            </CustomProperties>
+            <PortAnchors>
+              <Port xsi:type="LinkPort">
+                <Location>
+                  <X>64.737196905779 px</X>
+                  <Y>-123 px</Y>
+                </Location>
+                <Anchors>None</Anchors>
+                <Align>Bottom</Align>
+                <CustomProperties>
+                  <OID>103</OID>
+                  <PortType>FixedAnchor</PortType>
+                </CustomProperties>
+                <LinkPortAnchor>OutPoint</LinkPortAnchor>
+              </Port>
+            </PortAnchors>
+            <CommentOffset>
+              <X>22 px</X>
+              <Y>2 px</Y>
+            </CommentOffset>
+          </Model>
+          <Model xsi:type="TableModel">
+            <CustomProperties>
+              <OID>104</OID>
+              <Parent>0</Parent>
+            </CustomProperties>
+            <Location>
+              <X>1450 px</X>
+              <Y>200 px</Y>
+            </Location>
+            <Size>
+              <Width>158 px</Width>
+              <Height>110 px</Height>
+            </Size>
+            <DbOid>
+              <Path>GroupStudySU23.dbo.JoinInvites</Path>
+              <TypeName>Table</TypeName>
+            </DbOid>
+            <Compartments>
+              <ConstraintsCollapsed>True</ConstraintsCollapsed>
+              <IndexesCollapsed>True</IndexesCollapsed>
+              <TriggersCollapsed>True</TriggersCollapsed>
+            </Compartments>
+          </Model>
+          <Model xsi:type="RelationLinkModel">
+            <CustomProperties>
+              <OID>105</OID>
+              <Comment>106</Comment>
+              <OutModel>104</OutModel>
+              <InModel>1</InModel>
+              <OutPort>107</OutPort>
+              <InPort>108</InPort>
+              <Parent>0</Parent>
+            </CustomProperties>
+            <PortAnchors>
+              <Port>
+                <Location>
+                  <X>17.9020132963574 px</X>
+                  <Y>168.283026157127 px</Y>
+                </Location>
+                <Anchors>None</Anchors>
+                <Align>Left</Align>
+                <CustomProperties>
+                  <OID>108</OID>
+                  <PortType>FixedAnchor</PortType>
+                </CustomProperties>
+              </Port>
+              <Port>
+                <Location>
+                  <X>Undefined</X>
+                  <Y>28.2830261571274 px</Y>
+                </Location>
+                <Anchors>Top Bottom</Anchors>
+                <Align>Right</Align>
+                <CustomProperties>
+                  <OID>107</OID>
+                  <PortType>FloatAnchor</PortType>
+                </CustomProperties>
+              </Port>
+            </PortAnchors>
+            <IsManuallyRouted>false</IsManuallyRouted>
+            <DbOid>
+              <Path>GroupStudySU23.dbo.JoinInvites.FK_JoinInvites_Accounts_AccountId</Path>
+              <TypeName>ForeignKey</TypeName>
+            </DbOid>
+          </Model>
+          <Model xsi:type="RelationCommentModel">
+            <CustomProperties>
+              <OID>106</OID>
+              <HolderModel>105</HolderModel>
+              <Port>109</Port>
+              <Parent>0</Parent>
+            </CustomProperties>
+            <PortAnchors>
+              <Port xsi:type="LinkPort">
+                <Location>
+                  <X>-46 px</X>
+                  <Y>6.13759615930576E-06 px</Y>
+                </Location>
+                <Anchors>None</Anchors>
+                <Align>Right</Align>
+                <CustomProperties>
+                  <OID>109</OID>
+                  <PortType>FixedAnchor</PortType>
+                </CustomProperties>
+                <LinkPortAnchor>OutPoint</LinkPortAnchor>
+              </Port>
+            </PortAnchors>
+            <CommentOffset>
+              <X>22 px</X>
+              <Y>2 px</Y>
+            </CommentOffset>
+          </Model>
+          <Model xsi:type="RelationLinkModel">
+            <CustomProperties>
+              <OID>110</OID>
+              <Comment>111</Comment>
+              <OutModel>104</OutModel>
+              <InModel>9</InModel>
+              <OutPort>112</OutPort>
+              <InPort>113</InPort>
+              <Parent>0</Parent>
+            </CustomProperties>
+            <PortAnchors>
+              <Port>
+                <Location>
+                  <X>144.249864148009 px</X>
+                  <Y>64.1449765938431 px</Y>
+                </Location>
+                <Anchors>None</Anchors>
+                <Align>Bottom</Align>
+                <CustomProperties>
+                  <OID>113</OID>
+                  <PortType>FixedAnchor</PortType>
+                </CustomProperties>
+              </Port>
+              <Port>
+                <Location>
+                  <X>0 px</X>
+                  <Y>55 px</Y>
+                </Location>
+                <Anchors>Top Bottom</Anchors>
+                <Align>Left</Align>
+                <CustomProperties>
+                  <OID>112</OID>
+                  <PortType>FloatAnchor</PortType>
+                </CustomProperties>
+              </Port>
+            </PortAnchors>
+            <BendPoints>
+              <PointD>
+                <X>1355.24987792969 px</X>
+                <Y>255 px</Y>
+              </PointD>
+            </BendPoints>
+            <IsManuallyRouted>false</IsManuallyRouted>
+            <DbOid>
+              <Path>GroupStudySU23.dbo.JoinInvites.FK_JoinInvites_Groups_GroupId</Path>
+              <TypeName>ForeignKey</TypeName>
+            </DbOid>
+          </Model>
+          <Model xsi:type="RelationCommentModel">
+            <CustomProperties>
+              <OID>111</OID>
+              <HolderModel>110</HolderModel>
+              <Port>114</Port>
+              <Parent>0</Parent>
+            </CustomProperties>
+            <PortAnchors>
+              <Port xsi:type="LinkPort">
+                <Location>
+                  <X>94.7501220703125 px</X>
+                  <Y>49.5 px</Y>
+                </Location>
+                <Anchors>None</Anchors>
+                <Align>Left</Align>
+                <CustomProperties>
+                  <OID>114</OID>
+                  <PortType>FixedAnchor</PortType>
+                </CustomProperties>
+                <LinkPortAnchor>OutPoint</LinkPortAnchor>
+              </Port>
+            </PortAnchors>
+            <CommentOffset>
+              <X>22 px</X>
+              <Y>2 px</Y>
+            </CommentOffset>
+          </Model>
+          <Model xsi:type="TableModel">
+            <CustomProperties>
+              <OID>115</OID>
+              <Parent>0</Parent>
+            </CustomProperties>
+            <Location>
+              <X>1470 px</X>
+              <Y>-90 px</Y>
+            </Location>
+            <Size>
+              <Width>173 px</Width>
+              <Height>110 px</Height>
+            </Size>
+            <DbOid>
+              <Path>GroupStudySU23.dbo.JoinRequests</Path>
+              <TypeName>Table</TypeName>
+            </DbOid>
+            <Compartments>
+              <ConstraintsCollapsed>True</ConstraintsCollapsed>
+              <IndexesCollapsed>True</IndexesCollapsed>
+              <TriggersCollapsed>True</TriggersCollapsed>
+            </Compartments>
+          </Model>
+          <Model xsi:type="RelationLinkModel">
+            <CustomProperties>
               <OID>116</OID>
               <Comment>117</Comment>
-              <OutModel>26</OutModel>
-              <InModel>110</InModel>
+              <OutModel>115</OutModel>
+              <InModel>1</InModel>
               <OutPort>118</OutPort>
               <InPort>119</InPort>
               <Parent>0</Parent>
@@ -1879,38 +1883,38 @@
             <PortAnchors>
               <Port>
                 <Location>
-                  <X>0 px</X>
-                  <Y>36 px</Y>
+                  <X>138.09498805622 px</X>
+                  <Y>53.8792680131127 px</Y>
                 </Location>
-                <Anchors>Top Bottom</Anchors>
+                <Anchors>None</Anchors>
                 <Align>Right</Align>
                 <CustomProperties>
                   <OID>118</OID>
-                  <PortType>FloatAnchor</PortType>
+                  <PortType>FixedAnchor</PortType>
                 </CustomProperties>
               </Port>
               <Port>
                 <Location>
-                  <X>109 px</X>
-                  <Y>0 px</Y>
+                  <X>33.7951353705878 px</X>
+                  <Y>9.35180541482352 px</Y>
                 </Location>
-                <Anchors>Left Right</Anchors>
-                <Align>Bottom</Align>
+                <Anchors>None</Anchors>
+                <Align>Top</Align>
                 <CustomProperties>
                   <OID>119</OID>
-                  <PortType>FloatAnchor</PortType>
+                  <PortType>FixedAnchor</PortType>
                 </CustomProperties>
               </Port>
             </PortAnchors>
             <BendPoints>
               <PointD>
-                <X>299 px</X>
-                <Y>196 px</Y>
+                <X>1733.79516601563 px</X>
+                <Y>-36.1207313537598 px</Y>
               </PointD>
             </BendPoints>
             <IsManuallyRouted>false</IsManuallyRouted>
             <DbOid>
-              <Path>GroupStudySU23.dbo.Meetings.FK_Meetings_Schedules_ScheduleId</Path>
+              <Path>GroupStudySU23.dbo.JoinRequests.FK_JoinRequests_Accounts_AccountId</Path>
               <TypeName>ForeignKey</TypeName>
             </DbOid>
           </Model>
@@ -1924,8 +1928,8 @@
             <PortAnchors>
               <Port xsi:type="LinkPort">
                 <Location>
-                  <X>-95.5 px</X>
-                  <Y>0 px</Y>
+                  <X>-90.795166015625 px</X>
+                  <Y>-48.060368217356 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
                 <Align>Right</Align>
@@ -1941,13 +1945,269 @@
               <Y>2 px</Y>
             </CommentOffset>
           </Model>
+          <Model xsi:type="RelationLinkModel">
+            <CustomProperties>
+              <OID>121</OID>
+              <Comment>122</Comment>
+              <OutModel>115</OutModel>
+              <InModel>9</InModel>
+              <OutPort>123</OutPort>
+              <InPort>124</InPort>
+              <Parent>0</Parent>
+            </CustomProperties>
+            <PortAnchors>
+              <Port>
+                <Location>
+                  <X>0 px</X>
+                  <Y>82.5 px</Y>
+                </Location>
+                <Anchors>Top Bottom</Anchors>
+                <Align>Left</Align>
+                <CustomProperties>
+                  <OID>123</OID>
+                  <PortType>FloatAnchor</PortType>
+                </CustomProperties>
+              </Port>
+              <Port>
+                <Location>
+                  <X>115 px</X>
+                  <Y>0 px</Y>
+                </Location>
+                <Anchors>Left Right</Anchors>
+                <Align>Top</Align>
+                <CustomProperties>
+                  <OID>124</OID>
+                  <PortType>FloatAnchor</PortType>
+                </CustomProperties>
+              </Port>
+            </PortAnchors>
+            <BendPoints>
+              <PointD>
+                <X>1326 px</X>
+                <Y>-7.5 px</Y>
+              </PointD>
+            </BendPoints>
+            <IsManuallyRouted>false</IsManuallyRouted>
+            <DbOid>
+              <Path>GroupStudySU23.dbo.JoinRequests.FK_JoinRequests_Groups_GroupId</Path>
+              <TypeName>ForeignKey</TypeName>
+            </DbOid>
+          </Model>
+          <Model xsi:type="RelationCommentModel">
+            <CustomProperties>
+              <OID>122</OID>
+              <HolderModel>121</HolderModel>
+              <Port>125</Port>
+              <Parent>0</Parent>
+            </CustomProperties>
+            <PortAnchors>
+              <Port xsi:type="LinkPort">
+                <Location>
+                  <X>72 px</X>
+                  <Y>0 px</Y>
+                </Location>
+                <Anchors>None</Anchors>
+                <Align>Left</Align>
+                <CustomProperties>
+                  <OID>125</OID>
+                  <PortType>FixedAnchor</PortType>
+                </CustomProperties>
+                <LinkPortAnchor>OutPoint</LinkPortAnchor>
+              </Port>
+            </PortAnchors>
+            <CommentOffset>
+              <X>22 px</X>
+              <Y>2 px</Y>
+            </CommentOffset>
+          </Model>
+          <Model xsi:type="TableModel">
+            <CustomProperties>
+              <OID>126</OID>
+              <Parent>0</Parent>
+            </CustomProperties>
+            <Location>
+              <X>2060 px</X>
+              <Y>40 px</Y>
+            </Location>
+            <Size>
+              <Width>169 px</Width>
+              <Height>110 px</Height>
+            </Size>
+            <DbOid>
+              <Path>GroupStudySU23.dbo.Supervisions</Path>
+              <TypeName>Table</TypeName>
+            </DbOid>
+            <Compartments>
+              <ConstraintsCollapsed>True</ConstraintsCollapsed>
+              <IndexesCollapsed>True</IndexesCollapsed>
+              <TriggersCollapsed>True</TriggersCollapsed>
+            </Compartments>
+          </Model>
+          <Model xsi:type="RelationLinkModel">
+            <CustomProperties>
+              <OID>127</OID>
+              <Comment>128</Comment>
+              <OutModel>126</OutModel>
+              <InModel>1</InModel>
+              <OutPort>129</OutPort>
+              <InPort>130</InPort>
+              <Parent>0</Parent>
+            </CustomProperties>
+            <PortAnchors>
+              <Port>
+                <Location>
+                  <X>16.2196746062791 px</X>
+                  <Y>29.3518054148235 px</Y>
+                </Location>
+                <Anchors>None</Anchors>
+                <Align>Left</Align>
+                <CustomProperties>
+                  <OID>129</OID>
+                  <PortType>FixedAnchor</PortType>
+                </CustomProperties>
+              </Port>
+              <Port>
+                <Location>
+                  <X>0 px</X>
+                  <Y>13.167701863354 px</Y>
+                </Location>
+                <Anchors>Top Bottom</Anchors>
+                <Align>Right</Align>
+                <CustomProperties>
+                  <OID>130</OID>
+                  <PortType>FloatAnchor</PortType>
+                </CustomProperties>
+              </Port>
+            </PortAnchors>
+            <BendPoints>
+              <PointD>
+                <X>2040 px</X>
+                <Y>69.3518054148235 px</Y>
+              </PointD>
+              <PointD>
+                <X>2040 px</X>
+                <Y>73.167701863354 px</Y>
+              </PointD>
+            </BendPoints>
+            <IsManuallyRouted>false</IsManuallyRouted>
+            <DbOid>
+              <Path>GroupStudySU23.dbo.Supervisions.FK_Supervisions_Accounts_ParentId</Path>
+              <TypeName>ForeignKey</TypeName>
+            </DbOid>
+          </Model>
+          <Model xsi:type="RelationCommentModel">
+            <CustomProperties>
+              <OID>128</OID>
+              <HolderModel>127</HolderModel>
+              <Port>131</Port>
+              <Parent>0</Parent>
+            </CustomProperties>
+            <PortAnchors>
+              <Port xsi:type="LinkPort">
+                <Location>
+                  <X>89.5 px</X>
+                  <Y>-3.81589630636789 px</Y>
+                </Location>
+                <Anchors>None</Anchors>
+                <Align>Left</Align>
+                <CustomProperties>
+                  <OID>131</OID>
+                  <PortType>FixedAnchor</PortType>
+                </CustomProperties>
+                <LinkPortAnchor>OutPoint</LinkPortAnchor>
+              </Port>
+            </PortAnchors>
+            <CommentOffset>
+              <X>22 px</X>
+              <Y>2 px</Y>
+            </CommentOffset>
+          </Model>
+          <Model xsi:type="RelationLinkModel">
+            <CustomProperties>
+              <OID>132</OID>
+              <Comment>133</Comment>
+              <OutModel>126</OutModel>
+              <InModel>1</InModel>
+              <OutPort>134</OutPort>
+              <InPort>135</InPort>
+              <Parent>0</Parent>
+            </CustomProperties>
+            <PortAnchors>
+              <Port>
+                <Location>
+                  <X>10.4403574883772 px</X>
+                  <Y>98.703610829647 px</Y>
+                </Location>
+                <Anchors>None</Anchors>
+                <Align>Left</Align>
+                <CustomProperties>
+                  <OID>134</OID>
+                  <PortType>FixedAnchor</PortType>
+                </CustomProperties>
+              </Port>
+              <Port>
+                <Location>
+                  <X>182.612551156563 px</X>
+                  <Y>78.9019627431722 px</Y>
+                </Location>
+                <Anchors>None</Anchors>
+                <Align>Right</Align>
+                <CustomProperties>
+                  <OID>135</OID>
+                  <PortType>FixedAnchor</PortType>
+                </CustomProperties>
+              </Port>
+            </PortAnchors>
+            <BendPoints>
+              <PointD>
+                <X>2040 px</X>
+                <Y>138.703610829647 px</Y>
+              </PointD>
+              <PointD>
+                <X>2040 px</X>
+                <Y>138.901962743172 px</Y>
+              </PointD>
+            </BendPoints>
+            <IsManuallyRouted>false</IsManuallyRouted>
+            <DbOid>
+              <Path>GroupStudySU23.dbo.Supervisions.FK_Supervisions_Accounts_StudentId</Path>
+              <TypeName>ForeignKey</TypeName>
+            </DbOid>
+          </Model>
+          <Model xsi:type="RelationCommentModel">
+            <CustomProperties>
+              <OID>133</OID>
+              <HolderModel>132</HolderModel>
+              <Port>136</Port>
+              <Parent>0</Parent>
+            </CustomProperties>
+            <PortAnchors>
+              <Port xsi:type="LinkPort">
+                <Location>
+                  <X>89.5 px</X>
+                  <Y>-0.198351450626404 px</Y>
+                </Location>
+                <Anchors>None</Anchors>
+                <Align>Left</Align>
+                <CustomProperties>
+                  <OID>136</OID>
+                  <PortType>FixedAnchor</PortType>
+                </CustomProperties>
+                <LinkPortAnchor>OutPoint</LinkPortAnchor>
+              </Port>
+            </PortAnchors>
+            <CommentOffset>
+              <X>22 px</X>
+              <Y>2 px</Y>
+            </CommentOffset>
+          </Model>
         </Children>
         <ViewPort>
           <ScaleMode>Free</ScaleMode>
-          <Scale>0.7911558</Scale>
+          <Scale>0.6921233</Scale>
           <Location>
-            <X>-420.903181944751 px</X>
-            <Y>-345.064769348301 px</Y>
+            <X>-236.95200183398 px</X>
+            <Y>-564.928250000847 px</Y>
           </Location>
         </ViewPort>
       </Model>
