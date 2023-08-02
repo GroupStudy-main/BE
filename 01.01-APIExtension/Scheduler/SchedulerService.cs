@@ -19,7 +19,7 @@ public static class SchedulerService
         services.AddSingleton<IJobFactory, CustomeJobFactory>();
         services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
         //if (environment.IsDevelopment())
-        if (environment.IsProduction())
+        if (environment.IsProduction() || environment.IsDevelopment())
         {
             services.AddSingleton<DailyJob>();
             services.AddSingleton<WeeklyJob>();
@@ -29,7 +29,7 @@ public static class SchedulerService
             services.AddSingleton(new ScheduledJob(typeof(EndMonthlyJob), EndMonthlyJob.schedule));
         }
         //easy testing
-        else if (environment.IsDevelopment())
+        if (environment.IsDevelopment())
         {
             services.AddSingleton<ThirtySecondJob>();
             services.AddSingleton(new ScheduledJob(typeof(ThirtySecondJob), ThirtySecondJob.schedule));
