@@ -38,7 +38,7 @@ internal class ThirtySecondJob :  IJob
         //    $"Email sent at {DateTime.Now.ToString("dd/MM/yy hh.mm.ss")}",
         //    null
         //);
-        //await mailService.SendPaymentReminderAsync();
+        //await mailService.SendMonthlyStatAsync();
         Console.WriteLine($"\n\nThirty Second Task completed at {DateTime.Now.ToString("dd/MM/yy hh.mm.ss")}");
         //return Task.CompletedTask;
     }

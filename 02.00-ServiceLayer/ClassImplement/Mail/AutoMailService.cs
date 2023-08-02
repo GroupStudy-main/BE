@@ -10,27 +10,31 @@ using DataLayer.DBObject;
 using System.Text;
 using ServiceLayer.Interface.Db;
 using ShareResource.Utils;
+using Microsoft.EntityFrameworkCore;
+using ShareResource.DTO;
 
 namespace ServiceLayer.ClassImplement
 {
     public class AutoMailService : IAutoMailService
     {
-        private readonly IRepoWrapper repositories;
+        private readonly IRepoWrapper repos;
         private readonly IAccountService accountsService;
+        private readonly IStatService statService;
         //private readonly IServiceWrapper services;
 
-        public AutoMailService(IWebHostEnvironment env, IRepoWrapper repositories, IConfiguration configuration/*, IServiceWrapper services*/, IAccountService accountsService)
+        public AutoMailService(IWebHostEnvironment env, IRepoWrapper repositories, IConfiguration configuration/*, IServiceWrapper services*/, IAccountService accountsService, IStatService statService)
         {
             _emailConfig = configuration
                 .GetSection("EmailConfiguration")
                 .Get<MailConfiguration>();
             //this.env = env;
             rootPath = env.WebRootPath;
-            this.repositories = repositories;
+            this.repos = repositories;
             logoPath = rootPath + Path.DirectorySeparatorChar + "Images" + Path.DirectorySeparatorChar +
                            //"logowhite.png";
                            "Logo.png";
             this.accountsService = accountsService;
+            this.statService = statService;
             //this.services = services;
         }
 
@@ -65,6 +69,77 @@ namespace ServiceLayer.ClassImplement
             MimeMessage message = await CreateMimeMessageForResetPasswordAsync(account, serverLink);
             await SendAsync(message);
             return true;
+        }
+
+        public async Task<bool> SendMonthlyStatAsync()
+        {
+            var students = repos.Accounts.GetList()
+                .Include(a=>a.SupervisionsForStudent).ThenInclude(s=>s.Parent);
+            List<MimeMessage> mimeMessages = new List<MimeMessage>();
+            foreach (var student in students) 
+            {
+                StatGetDto stat = await statService.GetStatForStudentInMonth(student.Id, DateTime.Now);
+                mimeMessages.AddRange( CreateMimeMessageForMonthlyStat(student, stat));
+            }
+            foreach (var mimeMessage in mimeMessages)
+            {
+                await SendAsync(mimeMessage);
+            }
+            return true;
+        }
+        private List<MimeMessage> CreateMimeMessageForMonthlyStat(Account student, StatGetDto stat)
+        {
+            List<MimeMessage> list = new List<MimeMessage>();
+            List<Account> receivers = new List<Account>() { student};
+            receivers.AddRange(student.SupervisionsForStudent.Select(e => e.Parent));
+            string template = MailTemplateHelper.DEFAULT_TEMPLATE(rootPath);
+
+            foreach (var receiver in receivers)
+            {
+                var mimeMessage = new MimeMessage();
+                mimeMessage.From.Add(new MailboxAddress(_emailConfig.From));
+                mimeMessage.To.Add(new MailboxAddress(receiver.Email));
+                mimeMessage.Subject = "Chi tiết học tập của tháng";
+
+
+                var bodyBuilder = new BodyBuilder();
+                try
+                {
+                    //var email = receiver.Address;
+                    //<!--{0} is logo-->
+                    //<!--{1} is username-->
+                    //<!--{2} is content-->
+                    //bodyBuilder = new BodyBuilder { HtmlBody = string.Format(template, logoPath, email, message.Content) };
+                    var logo = bodyBuilder.LinkedResources.Add(logoPath);
+                    logo.ContentId = MimeUtils.GenerateMessageId();
+                    bodyBuilder.HtmlBody = FormatTemplate(template, logo.ContentId, receiver.FullName, stat.ToHtml()/*message.Content*/);
+                }
+                catch
+                {
+                    //bodyBuilder = new BodyBuilder { HtmlBody = string.Format(DefaultTemplate, message.Content) };
+                    bodyBuilder = new BodyBuilder { HtmlBody = FormatTemplate(DefaultTemplate, stat.ToHtml()) };
+                }
+
+                //if (message.Attachments != null && message.Attachments.Any())
+                //{
+                //    byte[] fileBytes;
+                //    foreach (var attachment in message.Attachments)
+                //    {
+                //        using (var ms = new MemoryStream())
+                //        {
+                //            attachment.CopyTo(ms);
+                //            fileBytes = ms.ToArray();
+                //        }
+
+                //        bodyBuilder.Attachments.Add(attachment.FileName, fileBytes,
+                //            ContentType.Parse(attachment.ContentType));
+                //    }
+                //}
+
+                mimeMessage.Body = bodyBuilder.ToMessageBody();
+                list.Add(mimeMessage);
+            }
+            return list;
         }
         #region old code
         //public async Task<bool> SendEmailWithDefaultTemplateAsync(MailMessageEntity message)

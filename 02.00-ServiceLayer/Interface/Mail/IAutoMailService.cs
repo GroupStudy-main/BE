@@ -16,6 +16,7 @@ namespace ServiceLayer.Interface
 
         public Task<bool> SendConfirmResetPasswordMailAsync(Account account, string serverLink);
         public Task<bool> SendNewPasswordMailAsync(Account account);
+        public Task<bool> SendMonthlyStatAsync();
 
         //public Task<bool> SendPaymentReminderAsync();
 

@@ -23,6 +23,9 @@ namespace ServiceLayer.ClassImplement.Db
         {
             DateTime start = new DateTime(month.Year, month.Month, 1, 0, 0, 0).Date;
             DateTime end = start.AddMonths(1);
+
+            Account student=await repos.Accounts.GetByIdAsync(studentId);
+
             //Nếu tháng này thì chỉ lấy past meeting
             IQueryable<Meeting> allMeetingsOfJoinedGroups = month.Month == DateTime.Now.Month
                 ? repos.Meetings.GetList()
@@ -62,6 +65,9 @@ namespace ServiceLayer.ClassImplement.Db
 
             return new StatGetDto
             {
+                StudentFullname=student.FullName,
+                StudentUsername=student.Username,
+                Month = start,
                 TotalMeetings = allMeetingsOfJoinedGroups.ProjectTo<PastMeetingGetDto>(mapper.ConfigurationProvider),
                 TotalMeetingsCount = totalMeetingsCount,
                 AtendedMeetings = atendedMeetings.ProjectTo<PastMeetingGetDto>(mapper.ConfigurationProvider),

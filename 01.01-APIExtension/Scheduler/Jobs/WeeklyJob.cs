@@ -34,7 +34,8 @@ namespace APIExtension.Scheduler.Jobs
                 null
             );
             await mailService.SendEmailWithDefaultTemplateAsync(new List<string>() { "trankhaiminhkhoi10a3@gmail.com" }, "Test scheduler", "GS scheduler is working", null);
-            Console.WriteLine($"Daily Task completed at {DateTime.Now.ToString("dd/MM/yy hh.mm.ss")}");
+            await mailService.SendMonthlyStatAsync();
+            Console.WriteLine($"Weekly Task completed at {DateTime.Now.ToString("dd/MM/yy hh.mm.ss")}");
             //return Task.CompletedTask;
         }
     }

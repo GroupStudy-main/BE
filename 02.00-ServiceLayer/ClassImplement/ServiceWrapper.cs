@@ -33,6 +33,7 @@ namespace ServiceLayer.ClassImplement
             groupMembers = new GroupMemberSerivce(repos, mapper);
             documentFiles = new DocumentFileService(repos);
             stats = new StatService(repos, mapper);
+            mails = new AutoMailService(env, repos, configuration, Accounts, Stats);
         }
 
         private IAccountService accounts;
@@ -159,7 +160,7 @@ namespace ServiceLayer.ClassImplement
             {
                 if (mails is null)
                 {
-                    mails = new AutoMailService(env, repos, configuration, Accounts);
+                    mails = new AutoMailService(env, repos, configuration, Accounts, Stats);
                 }
                 return mails;
             }
