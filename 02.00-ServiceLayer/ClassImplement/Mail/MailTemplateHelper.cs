@@ -5,6 +5,7 @@
         public static string FOLDER = "MailTemplates";
 
         public static readonly string DEFAULT_TEMPLATE_FILE = "MailTemplate.html";
+        public static readonly string MONTHLY_STAT_TEMPLATE_FILE = "MonthlyStatTemplate.html";
         public static readonly string CONFIRM_RESET_PASSWORD_TEMPLATE_FILE = "ResetPassTemplate.html";
         public static readonly string NEW_PASSWORD_TEMPLATE_FILE = "NewPassTemplate.html";
 
@@ -16,6 +17,28 @@
                                                Path.DirectorySeparatorChar + DEFAULT_TEMPLATE_FILE);
             }
             return default_template;
+        }
+        /// <summary>
+        /// {0} is fullname <br/>
+        /// {1} is month <br/>
+        /// {2} is studentFullname<br/>
+        /// {3} is studentUsername     <br/>
+        /// {4} is total  <br/>
+        /// {5} is attended <br/>
+        /// {6} is missed  <br/>
+        /// {7} is time <br/>
+        /// {8} is average <br/>
+        /// </summary>
+        /// <param name="rootPath"></param>
+        /// <returns></returns>
+        public static string MONTHLY_STAT_TEMPLATE(string rootPath)
+        {
+            if (string.IsNullOrEmpty(monthly_stat_template))
+            {
+                monthly_stat_template = GetTemplate(rootPath + Path.DirectorySeparatorChar + FOLDER +
+                                               Path.DirectorySeparatorChar + MONTHLY_STAT_TEMPLATE_FILE);
+            }
+            return monthly_stat_template;
         }
         /// <summary>
         /// {0} is logo <br/>
@@ -145,6 +168,7 @@
         public static string default_template;
         public static string confirm_reset_password_template;
         public static string new_password_template;
+        public static string monthly_stat_template;
         //public static string payment_reminder_template;
         //private static string payment_confirm_template;
 

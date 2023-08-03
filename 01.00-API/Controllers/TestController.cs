@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryLayer.Interface;
+using ServiceLayer.Interface;
 
 namespace API.Controllers
 {
@@ -11,10 +12,19 @@ namespace API.Controllers
     public class TestController : ControllerBase
     {
         private readonly IRepoWrapper repos;
+        private readonly IServiceWrapper services;
 
-        public TestController(IRepoWrapper repos)
+        public TestController(IRepoWrapper repos, IServiceWrapper services)
         {
             this.repos = repos;
+            this.services = services;
+        }
+
+        [HttpGet("MonthlyMail")]
+        public async Task<IActionResult> MonthlyMail()
+        {
+            await services.Mails.SendMonthlyStatAsync();
+            return Ok();
         }
 
         [HttpGet("Accounts")]   

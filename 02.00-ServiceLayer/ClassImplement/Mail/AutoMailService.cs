@@ -12,6 +12,7 @@ using ServiceLayer.Interface.Db;
 using ShareResource.Utils;
 using Microsoft.EntityFrameworkCore;
 using ShareResource.DTO;
+using ShareResource.Enums;
 
 namespace ServiceLayer.ClassImplement
 {
@@ -74,7 +75,8 @@ namespace ServiceLayer.ClassImplement
         public async Task<bool> SendMonthlyStatAsync()
         {
             var students = repos.Accounts.GetList()
-                .Include(a=>a.SupervisionsForStudent).ThenInclude(s=>s.Parent);
+                .Include(a=>a.SupervisionsForStudent).ThenInclude(s=>s.Parent)
+                .Where(e => e.RoleId == (int)RoleNameEnum.Student);
             List<MimeMessage> mimeMessages = new List<MimeMessage>();
             foreach (var student in students) 
             {
@@ -92,7 +94,7 @@ namespace ServiceLayer.ClassImplement
             List<MimeMessage> list = new List<MimeMessage>();
             List<Account> receivers = new List<Account>() { student};
             receivers.AddRange(student.SupervisionsForStudent.Select(e => e.Parent));
-            string template = MailTemplateHelper.DEFAULT_TEMPLATE(rootPath);
+            string template = MailTemplateHelper.MONTHLY_STAT_TEMPLATE(rootPath);
 
             foreach (var receiver in receivers)
             {
@@ -112,7 +114,10 @@ namespace ServiceLayer.ClassImplement
                     //bodyBuilder = new BodyBuilder { HtmlBody = string.Format(template, logoPath, email, message.Content) };
                     var logo = bodyBuilder.LinkedResources.Add(logoPath);
                     logo.ContentId = MimeUtils.GenerateMessageId();
-                    bodyBuilder.HtmlBody = FormatTemplate(template, logo.ContentId, receiver.FullName, stat.ToHtml()/*message.Content*/);
+                    //bodyBuilder.HtmlBody = FormatTemplate(template, logo.ContentId, receiver.FullName, stat.Month.ToString("MM/yyyy"),stat.ToHtml()/*message.Content*/);
+                    bodyBuilder.HtmlBody = FormatTemplate(template, logo.ContentId, receiver.FullName,
+                        stat.Month.ToString("MM/yyyy"),stat.StudentFullname, stat.StudentUsername, stat.TotalMeetingsCount.ToString(),
+                        stat.AtendedMeetingsCount.ToString(), stat.MissedMeetingsCount.ToString(), stat.TotalMeetingTme,stat.AverageVoteResult.ToString());
                 }
                 catch
                 {

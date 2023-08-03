@@ -27,6 +27,7 @@ namespace APIExtension.Scheduler.Jobs
 
         public async Task Execute(IJobExecutionContext context)
         {
+            Console.WriteLine($"Weekly Task started at {DateTime.Now.ToString("dd/MM/yy hh.mm.ss")}");
             await mailService.SendEmailWithDefaultTemplateAsync(
                 new[] { "trankhaiminhkhoi@gmail.com", "trankhaiminhkhoi10a3@gmail.com" },
                 "Test Weekly Job Scheduler",
