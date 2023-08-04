@@ -30,10 +30,18 @@ namespace ShareResource.Mapper
             MapReview();
 
             MapDocumentFile();
+
+            MapChat();
             //CreateMap<MeetingRoom, MeetingDto>();
             //.ForMember(dest => dest.DisplayName, opt => opt.MapFrom(src => src.AppUser.DisplayName))
             //.ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.AppUser.UserName));
 
+        }
+
+        private void MapChat()
+        {
+            CreateMap<Chat, ChatGetDto>()
+                 .PreserveReferences();
         }
 
         private void MapSupervision()

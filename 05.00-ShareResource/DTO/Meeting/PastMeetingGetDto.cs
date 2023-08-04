@@ -17,5 +17,6 @@ namespace ShareResource.DTO
         public int GroupId { get; set; }
         public string GroupName { get; set; }
         public int CountMember { get; set; }
+        public ICollection<ChatGetDto> Chats { get; set; }
     }
 }

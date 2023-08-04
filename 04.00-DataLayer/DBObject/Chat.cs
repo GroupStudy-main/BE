@@ -11,6 +11,8 @@ namespace DataLayer.DBObject
 
         public string Content { get; set; }
 
+        public DateTime Time { get; set; }
+
         #region Account
         //Account
         [ForeignKey("AccountId")]

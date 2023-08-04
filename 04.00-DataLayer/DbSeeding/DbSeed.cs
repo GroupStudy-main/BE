@@ -834,6 +834,25 @@ namespace DataLayer.DbSeeding
                 Comment="Bạn thuộc bài khá"
             }
         };
+        public static Chat[] Chats = new Chat[]
+        {
+            new Chat
+            {
+                Id=1,
+                Content="Chào mọi người",
+                MeetingId=2,
+                AccountId=1,
+                Time = DateTime.Now.AddDays(-2).AddHours(1).AddMinutes(1),
+            } ,
+            new Chat
+            {
+                Id=2,
+                Content="Mình mới vào",
+                MeetingId=2,
+                AccountId=1,
+                Time = DateTime.Now.AddDays(-2).AddHours(1).AddMinutes(1).AddSeconds(10),
+            }
 
+        };
     }
 }

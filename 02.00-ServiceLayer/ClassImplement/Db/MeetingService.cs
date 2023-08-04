@@ -124,7 +124,8 @@ namespace ServiceLayer.ClassImplement.Db
         public IQueryable<PastMeetingGetDto> GetPastMeetingsForGroup(int groupId)
         {
             return repos.Meetings.GetList()
-               //.Where(e => e.GroupId == groupId && (e.End != null || (e.ScheduleStart != null && e.ScheduleStart.Value.Date < DateTime.Today && e.Start == null)))
+                .Include(m=>m.Chats).ThenInclude(c=>c.Account)
+                //.Where(e => e.GroupId == groupId && (e.End != null || (e.ScheduleStart != null && e.ScheduleStart.Value.Date < DateTime.Today && e.Start == null)))
                .Where(e => e.GroupId == groupId && (e.End != null || e.ScheduleStart != null && e.ScheduleStart.Value.Date < DateTime.Today))
                .ProjectTo<PastMeetingGetDto>(mapper.ConfigurationProvider);
         }
@@ -152,6 +153,7 @@ namespace ServiceLayer.ClassImplement.Db
         {
             //Nếu tháng này thì chỉ lấy past meeting
             IQueryable<Meeting> allMeetingsOfJoinedGroups = repos.Meetings.GetList()
+                .Include(m=>m.Chats).ThenInclude(c=>c.Account)
                 .Include(c => c.Connections)
                 .Include(m => m.Group).ThenInclude(g => g.GroupMembers)
                 .Where(e => e.Group.GroupMembers.Any(gm => gm.AccountId == studentId)

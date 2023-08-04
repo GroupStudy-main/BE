@@ -143,6 +143,13 @@ namespace DataLayer.ImMemorySeeding
                 //    context.ReviewDetails.AddRange(DbSeed.ReviewDetails);
                 //}
                 //#endregion
+
+                #region seed Chat
+                if (!context.Chats.Any())
+                {
+                    context.Chats.AddRange(DbSeed.Chats);
+                }
+                #endregion
                 context.SaveChanges();
             }
         }

@@ -29,6 +29,7 @@ namespace ServiceLayer.ClassImplement.Db
             //Nếu tháng này thì chỉ lấy past meeting
             IQueryable<Meeting> allMeetingsOfJoinedGroups = month.Month == DateTime.Now.Month
                 ? repos.Meetings.GetList()
+                .Include(m=>m.Chats).ThenInclude(c=>c.Account)
                 .Include(c => c.Connections)
                 .Include(m => m.Group).ThenInclude(g => g.GroupMembers)
                 .Include(m=>m.Reviews).ThenInclude(r=>r.Details)
@@ -37,6 +38,7 @@ namespace ServiceLayer.ClassImplement.Db
                     //lấy past meeting
                     && (e.End != null || e.ScheduleStart != null && e.ScheduleStart.Value.Date < DateTime.Today))
                 : repos.Meetings.GetList()
+                .Include(m=>m.Chats).ThenInclude(c=>c.Account)
                 .Include(c => c.Connections)
                 .Include(m => m.Group).ThenInclude(g => g.GroupMembers)
                 .Include(m=>m.Reviews).ThenInclude(r=>r.Details)

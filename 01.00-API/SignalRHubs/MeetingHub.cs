@@ -480,7 +480,8 @@ namespace API.SignalRHub
                 {
                      Content=message.Content,
                      AccountId=Context.User.GetUserId(),
-                     MeetingId=meeting.Id
+                     MeetingId=meeting.Id,
+                     Time = message.MessageSent
                 };
                 await repos.Chats.CreateAsync(newChat);
                 //code here

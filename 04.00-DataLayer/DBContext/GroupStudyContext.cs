@@ -34,9 +34,9 @@ namespace DataLayer.DBContext
         public virtual DbSet<Review> Reviews { get; set; }
         public virtual DbSet<ReviewDetail> ReviewDetails { get; set; }
         public virtual DbSet<Supervision> Supervisions { get; set; }
+        public virtual DbSet<Chat> Chats { get; set; }
 
         public virtual DbSet<DocumentFile> DocumentFiles { get; set; }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
