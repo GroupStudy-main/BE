@@ -280,7 +280,7 @@
             <PortAnchors>
               <Port xsi:type="LinkPort">
                 <Location>
-                  <X>-4.3533130110518E-05 px</X>
+                  <X>-4.35331298831443E-05 px</X>
                   <Y>-116.898559570313 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
@@ -360,7 +360,7 @@
               <Port xsi:type="LinkPort">
                 <Location>
                   <X>36.5 px</X>
-                  <Y>-1.13780403933826 px</Y>
+                  <Y>-1.13780403933831 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
                 <Align>Left</Align>
@@ -451,7 +451,7 @@
             <PortAnchors>
               <Port xsi:type="LinkPort">
                 <Location>
-                  <X>4.43379053649551E-05 px</X>
+                  <X>4.43379055923288E-05 px</X>
                   <Y>47 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
@@ -567,7 +567,7 @@
               <Port xsi:type="LinkPort">
                 <Location>
                   <X>-59.5 px</X>
-                  <Y>-4.29030518489526E-06 px</Y>
+                  <Y>-4.29030549753406E-06 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
                 <Align>Right</Align>
@@ -668,7 +668,7 @@
             <PortAnchors>
               <Port xsi:type="LinkPort">
                 <Location>
-                  <X>0.149667728852592 px</X>
+                  <X>0.149667728853046 px</X>
                   <Y>-57 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
@@ -748,7 +748,7 @@
               <Port xsi:type="LinkPort">
                 <Location>
                   <X>-201.5 px</X>
-                  <Y>0.307025240137236 px</Y>
+                  <Y>0.307025240137193 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
                 <Align>Right</Align>
@@ -943,7 +943,7 @@
               <Parent>0</Parent>
             </CustomProperties>
             <Location>
-              <X>640 px</X>
+              <X>750 px</X>
               <Y>-400 px</Y>
             </Location>
             <Size>
@@ -985,8 +985,8 @@
               </Port>
               <Port>
                 <Location>
-                  <X>184.119611324671 px</X>
-                  <Y>10.7482132675657 px</Y>
+                  <X>129.107199218107 px</X>
+                  <Y>6.17363707746398 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
                 <Align>Top</Align>
@@ -998,7 +998,7 @@
             </PortAnchors>
             <BendPoints>
               <PointD>
-                <X>1884.11962890625 px</X>
+                <X>1829.10717773438 px</X>
                 <Y>-305.546234130859 px</Y>
               </PointD>
             </BendPoints>
@@ -1018,7 +1018,7 @@
             <PortAnchors>
               <Port xsi:type="LinkPort">
                 <Location>
-                  <X>-506.059814453125 px</X>
+                  <X>-423.553588867188 px</X>
                   <Y>6.91177325506942E-06 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
@@ -1048,14 +1048,14 @@
             <PortAnchors>
               <Port>
                 <Location>
-                  <X>141 px</X>
-                  <Y>0 px</Y>
+                  <X>31.3559669353826 px</X>
+                  <Y>123.728801278813 px</Y>
                 </Location>
-                <Anchors>Left Right</Anchors>
+                <Anchors>None</Anchors>
                 <Align>Bottom</Align>
                 <CustomProperties>
                   <OID>63</OID>
-                  <PortType>FloatAnchor</PortType>
+                  <PortType>FixedAnchor</PortType>
                 </CustomProperties>
               </Port>
               <Port>
@@ -1071,6 +1071,16 @@
                 </CustomProperties>
               </Port>
             </PortAnchors>
+            <BendPoints>
+              <PointD>
+                <X>781.355966935383 px</X>
+                <Y>-236 px</Y>
+              </PointD>
+              <PointD>
+                <X>781 px</X>
+                <Y>-236 px</Y>
+              </PointD>
+            </BendPoints>
             <IsManuallyRouted>false</IsManuallyRouted>
             <DbOid>
               <Path>GroupStudySU23.dbo.MeetingParticipations.FK_MeetingParticipations_Meetings_MeetingId</Path>
@@ -1087,8 +1097,8 @@
             <PortAnchors>
               <Port xsi:type="LinkPort">
                 <Location>
-                  <X>0 px</X>
-                  <Y>-153 px</Y>
+                  <X>0.355966935382639 px</X>
+                  <Y>-163 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
                 <Align>Bottom</Align>
@@ -1271,7 +1281,7 @@
             <PortAnchors>
               <Port xsi:type="LinkPort">
                 <Location>
-                  <X>-1.1627936601144E-05 px</X>
+                  <X>-1.16279370558914E-05 px</X>
                   <Y>119 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
@@ -1588,7 +1598,7 @@
             <PortAnchors>
               <Port xsi:type="LinkPort">
                 <Location>
-                  <X>-49.7254324173751 px</X>
+                  <X>-49.725432417375 px</X>
                   <Y>99.124195098877 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
@@ -1728,7 +1738,7 @@
               </Port>
               <Port>
                 <Location>
-                  <X>Undefined</X>
+                  <X>0 px</X>
                   <Y>28.2830261571274 px</Y>
                 </Location>
                 <Anchors>Top Bottom</Anchors>
@@ -1929,7 +1939,7 @@
               <Port xsi:type="LinkPort">
                 <Location>
                   <X>-90.795166015625 px</X>
-                  <Y>-48.060368217356 px</Y>
+                  <Y>-48.0603682173561 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
                 <Align>Right</Align>
@@ -2106,7 +2116,7 @@
               <Port xsi:type="LinkPort">
                 <Location>
                   <X>89.5 px</X>
-                  <Y>-3.81589630636789 px</Y>
+                  <Y>-3.8158963063679 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
                 <Align>Left</Align>
@@ -2185,7 +2195,7 @@
               <Port xsi:type="LinkPort">
                 <Location>
                   <X>89.5 px</X>
-                  <Y>-0.198351450626404 px</Y>
+                  <Y>-0.198351450626433 px</Y>
                 </Location>
                 <Anchors>None</Anchors>
                 <Align>Left</Align>
@@ -2201,13 +2211,190 @@
               <Y>2 px</Y>
             </CommentOffset>
           </Model>
+          <Model xsi:type="TableModel">
+            <CustomProperties>
+              <OID>137</OID>
+              <Parent>0</Parent>
+            </CustomProperties>
+            <Location>
+              <X>1700 px</X>
+              <Y>-470 px</Y>
+            </Location>
+            <Size>
+              <Width>201 px</Width>
+              <Height>127 px</Height>
+            </Size>
+            <DbOid>
+              <Path>GroupStudySU23.dbo.Chats</Path>
+              <TypeName>Table</TypeName>
+            </DbOid>
+            <Compartments>
+              <ConstraintsCollapsed>True</ConstraintsCollapsed>
+              <IndexesCollapsed>True</IndexesCollapsed>
+              <TriggersCollapsed>True</TriggersCollapsed>
+            </Compartments>
+          </Model>
+          <Model xsi:type="RelationLinkModel">
+            <CustomProperties>
+              <OID>138</OID>
+              <Comment>139</Comment>
+              <OutModel>137</OutModel>
+              <InModel>1</InModel>
+              <OutPort>140</OutPort>
+              <InPort>141</InPort>
+              <Parent>0</Parent>
+            </CustomProperties>
+            <PortAnchors>
+              <Port>
+                <Location>
+                  <X>184.8484666916 px</X>
+                  <Y>115.757579844334 px</Y>
+                </Location>
+                <Anchors>None</Anchors>
+                <Align>Bottom</Align>
+                <CustomProperties>
+                  <OID>140</OID>
+                  <PortType>FixedAnchor</PortType>
+                </CustomProperties>
+              </Port>
+              <Port>
+                <Location>
+                  <X>185.100276745192 px</X>
+                  <Y>1.08335730227444 px</Y>
+                </Location>
+                <Anchors>None</Anchors>
+                <Align>Top</Align>
+                <CustomProperties>
+                  <OID>141</OID>
+                  <PortType>FixedAnchor</PortType>
+                </CustomProperties>
+              </Port>
+            </PortAnchors>
+            <BendPoints>
+              <PointD>
+                <X>1884.8484666916 px</X>
+                <Y>55 px</Y>
+              </PointD>
+              <PointD>
+                <X>1885.10027674519 px</X>
+                <Y>55 px</Y>
+              </PointD>
+            </BendPoints>
+            <IsManuallyRouted>false</IsManuallyRouted>
+            <DbOid>
+              <Path>GroupStudySU23.dbo.Chats.FK_Chats_Accounts_AccountId</Path>
+              <TypeName>ForeignKey</TypeName>
+            </DbOid>
+          </Model>
+          <Model xsi:type="RelationCommentModel">
+            <CustomProperties>
+              <OID>139</OID>
+              <HolderModel>138</HolderModel>
+              <Port>142</Port>
+              <Parent>0</Parent>
+            </CustomProperties>
+            <PortAnchors>
+              <Port xsi:type="LinkPort">
+                <Location>
+                  <X>-4.40505871210917E-05 px</X>
+                  <Y>-199 px</Y>
+                </Location>
+                <Anchors>None</Anchors>
+                <Align>Bottom</Align>
+                <CustomProperties>
+                  <OID>142</OID>
+                  <PortType>FixedAnchor</PortType>
+                </CustomProperties>
+                <LinkPortAnchor>OutPoint</LinkPortAnchor>
+              </Port>
+            </PortAnchors>
+            <CommentOffset>
+              <X>22 px</X>
+              <Y>2 px</Y>
+            </CommentOffset>
+          </Model>
+          <Model xsi:type="RelationLinkModel">
+            <CustomProperties>
+              <OID>143</OID>
+              <Comment>144</Comment>
+              <OutModel>137</OutModel>
+              <InModel>26</InModel>
+              <OutPort>145</OutPort>
+              <InPort>146</InPort>
+              <Parent>0</Parent>
+            </CustomProperties>
+            <PortAnchors>
+              <Port>
+                <Location>
+                  <X>0 px</X>
+                  <Y>63.5 px</Y>
+                </Location>
+                <Anchors>Top Bottom</Anchors>
+                <Align>Left</Align>
+                <CustomProperties>
+                  <OID>145</OID>
+                  <PortType>FloatAnchor</PortType>
+                </CustomProperties>
+              </Port>
+              <Port>
+                <Location>
+                  <X>104 px</X>
+                  <Y>0 px</Y>
+                </Location>
+                <Anchors>Left Right</Anchors>
+                <Align>Top</Align>
+                <CustomProperties>
+                  <OID>146</OID>
+                  <PortType>FloatAnchor</PortType>
+                </CustomProperties>
+              </Port>
+            </PortAnchors>
+            <BendPoints>
+              <PointD>
+                <X>724 px</X>
+                <Y>-406.5 px</Y>
+              </PointD>
+            </BendPoints>
+            <IsManuallyRouted>false</IsManuallyRouted>
+            <DbOid>
+              <Path>GroupStudySU23.dbo.Chats.FK_Chats_Meetings_MeetingId</Path>
+              <TypeName>ForeignKey</TypeName>
+            </DbOid>
+          </Model>
+          <Model xsi:type="RelationCommentModel">
+            <CustomProperties>
+              <OID>144</OID>
+              <HolderModel>143</HolderModel>
+              <Port>147</Port>
+              <Parent>0</Parent>
+            </CustomProperties>
+            <PortAnchors>
+              <Port xsi:type="LinkPort">
+                <Location>
+                  <X>488 px</X>
+                  <Y>0 px</Y>
+                </Location>
+                <Anchors>None</Anchors>
+                <Align>Left</Align>
+                <CustomProperties>
+                  <OID>147</OID>
+                  <PortType>FixedAnchor</PortType>
+                </CustomProperties>
+                <LinkPortAnchor>OutPoint</LinkPortAnchor>
+              </Port>
+            </PortAnchors>
+            <CommentOffset>
+              <X>22 px</X>
+              <Y>2 px</Y>
+            </CommentOffset>
+          </Model>
         </Children>
         <ViewPort>
           <ScaleMode>Free</ScaleMode>
-          <Scale>0.6921233</Scale>
+          <Scale>0.59</Scale>
           <Location>
-            <X>-236.95200183398 px</X>
-            <Y>-564.928250000847 px</Y>
+            <X>642.37290991 px</X>
+            <Y>-940.678007915699 px</Y>
           </Location>
         </ViewPort>
       </Model>
