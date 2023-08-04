@@ -24,5 +24,6 @@ namespace RepositoryLayer.Interface
         public IDocumentFileRepository DocumentFiles { get; }
         public IScheduleRepository Schedules { get; }
         public ISupervisionRepository Supervisions { get; }
+        public IChatRepository Chats { get; }
     }
 }

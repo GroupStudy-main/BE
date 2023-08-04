@@ -454,6 +454,13 @@ namespace API.SignalRHub
                     MessageSent = DateTime.Now
                 };
                 //Luu message vao db
+                Chat newChat = new Chat 
+                {
+                     Content=message.Content,
+                     AccountId=Context.User.GetUserId(),
+                     MeetingId=meeting.Id
+                };
+                await repos.Chats.CreateAsync(newChat);
                 //code here
                 //send meaasge to group
                 await Clients.Group(meeting.Id.ToString()).SendAsync(NewMessageMsg, message);

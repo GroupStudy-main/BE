@@ -29,6 +29,7 @@ namespace RepositoryLayer.ClassImplement
             reviewDetails = new ReviewDetailRepository(dbContext);
             schedules = new ScheduleRepository(dbContext);
             supervisions = new SupervisionRepository(dbContext);
+            chats = new ChatRepository(dbContext);
         }
 
         private IAccountRepo users;
@@ -229,6 +230,20 @@ namespace RepositoryLayer.ClassImplement
                     supervisions = new SupervisionRepository(dbContext);
                 }
                 return supervisions;
+            }
+
+        }
+
+        private IChatRepository chats;
+        public IChatRepository Chats
+        {
+            get
+            {
+                if (chats is null)
+                {
+                    chats = new ChatRepository(dbContext);
+                }
+                return chats;
             }
 
         }

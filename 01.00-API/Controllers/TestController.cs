@@ -34,6 +34,13 @@ namespace API.Controllers
              return Ok(list);
         }
 
+        [HttpGet("Chats")]
+        public async Task<IActionResult> Chats()
+        {
+            var list = repos.Chats.GetList();
+            return Ok(list);
+        }
+
         [HttpGet("Classes")]
         public async Task<IActionResult> Classes()
         {

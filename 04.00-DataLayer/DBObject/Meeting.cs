@@ -35,6 +35,10 @@ namespace DataLayer.DBObject
 
         #region Review
         public virtual ICollection<Review> Reviews { get; set; } = new Collection<Review>();
+        #endregion  
+
+        #region Chat
+        public virtual ICollection<Chat> Chats { get; set; } = new Collection<Chat>();
         #endregion
     }
 }
