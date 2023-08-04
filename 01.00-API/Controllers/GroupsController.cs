@@ -149,18 +149,27 @@ namespace API.Controllers
         {
             int studentId = HttpContext.User.GetUserId();
             bool isLeader = await services.Groups.IsStudentLeadingGroupAsync(studentId, id);
-            if (!isLeader)
-            {
-                 return Unauthorized("Bạn không phải nhóm trưởng của nhóm này");
-            }
+            //if (!isLeader)
+            //{
+            //     return Unauthorized("Bạn không phải nhóm trưởng của nhóm này");
+            //}
             Group group = await services.Groups.GetFullByIdAsync(id);
 
             if (group == null)
             {
                 return NotFound();
             }
-            GroupDetailForLeaderGetDto dto = mapper.Map<GroupDetailForLeaderGetDto>(group);
-            return Ok(dto);
+            if (isLeader)
+            {
+                GroupDetailForLeaderGetDto dto = mapper.Map<GroupDetailForLeaderGetDto>(group);
+                return Ok(dto);
+            }
+            else
+            {
+                GroupGetDetailForMemberDto dto = mapper.Map<GroupGetDetailForMemberDto>(group);
+                return Ok(dto); 
+            }
+            
         }
 
         // POST: api/Groups

@@ -192,10 +192,17 @@ namespace API.SignalRHub
                 UserName = username,
                 Start = DateTime.Now
             };
+            UserConnectionSignalrDto[] currentUsersInMeeting = await presenceTracker.GetOnlineUsersInMeet(meetingIdInt);
             if (meeting != null)
             {
                 //meeting.Connections.Add(connection);
                 repos.Connections.CreateConnectionSignalrAsync(connection);
+                if (meeting.Start == null)
+                {
+                    meeting.Start = DateTime.Now;
+                }
+                meeting.CountMember = currentUsersInMeeting.Length;
+                await repos.Meetings.UpdateAsync(meeting);
             }
             Console.WriteLine("++==++==++++++++++++++++");
             #endregion
@@ -216,8 +223,9 @@ namespace API.SignalRHub
             FunctionTracker.Instance().AddHubFunc("Hub/ChatSend: UserOnlineInGroupMsg, MemberSignalrDto");
 
             //Step 5: Update số người trong meeting lên db
-            UserConnectionSignalrDto[] currentUsersInMeeting = await presenceTracker.GetOnlineUsersInMeet(meetingIdInt);
-            await repos.Meetings.UpdateCountMemberSignalr(meetingIdInt, currentUsersInMeeting.Length);
+            //UserConnectionSignalrDto[] currentUsersInMeeting = await presenceTracker.GetOnlineUsersInMeet(meetingIdInt);
+
+            //await repos.Meetings.UpdateCountMemberSignalr(meetingIdInt, currentUsersInMeeting.Length);
 
             //Test
             await Clients.Group(meetingIdString).SendAsync(OnConnectMeetHubSuccessfullyMsg, $"Connect meethub dc r! {username} vô dc r ae ơi!!!");
@@ -315,6 +323,11 @@ namespace API.SignalRHub
                .Select(e => e.UserName).ToHashSet();
             await Clients.Group(meeting.Id.ToString()).SendAsync(UserOnlineInMeetingMsg, usersInMeeting);
 
+            if(usersInMeeting.Count == 0)
+            {
+                meeting.End = DateTime.Now;
+                await repos.Meetings.UpdateAsync(meeting);
+            }
             try
             {
                 Connection connection = await repos.Connections.GetList().SingleOrDefaultAsync(e => e.Id == Context.ConnectionId);
@@ -326,6 +339,15 @@ namespace API.SignalRHub
                 {
                     connection.End = DateTime.Now;
                     await repos.Connections.UpdateAsync(connection);
+                    //Hot fix duplicate connection
+                    Connection dupConnection = await repos.Connections.GetList()
+                    .SingleOrDefaultAsync(e => e.AccountId == connection.AccountId && e.MeetingId == connection.MeetingId
+                        && e.Start.Date == connection.Start.Date && e.Start.Hour == connection.Start.Hour
+                        && e.Start.Minute == connection.Start.Minute);
+                    if (dupConnection != null)
+                    {
+                        await repos.Connections.RemoveAsync(dupConnection.Id);
+                    }
                 }
             }
             catch
@@ -608,6 +630,17 @@ namespace API.SignalRHub
             Meeting meeting = await repos.Meetings.GetMeetingForConnectionSignalr(Context.ConnectionId);
             Connection? connection = meeting.Connections.FirstOrDefault(x => x.Id == Context.ConnectionId);
             await repos.Meetings.EndConnectionSignalr(connection);
+            
+            //hot fix duplicate connection
+            Connection dupConnection = await repos.Connections.GetList()
+                .SingleOrDefaultAsync(e => e.AccountId == connection.AccountId && e.MeetingId == connection.MeetingId
+                    && e.Start.Date == connection.Start.Date && e.Start.Hour == connection.Start.Hour
+                    && e.Start.Minute == connection.Start.Minute && e.Id != connection.Id);
+            if (dupConnection != null)
+            {
+                await repos.Connections.RemoveAsync(dupConnection.Id);
+            }
+
             IQueryable<Connection> activeConnections = repos.Meetings.GetActiveConnectionsForMeetingSignalr(meeting.Id);
             if (activeConnections.Count() == 0)
             {
@@ -782,6 +815,29 @@ namespace API.SignalRHub
             string peerId = input.peerId;
             await Clients.Group(roomId).SendAsync("user-disconnected", new { peerId = peerId });
             Rooms[roomId].Remove(peerId);
+
+            //code mới
+            Meeting meeting = await RemoveConnectionFromMeeting();
+            var usersInMeeting = repos.Connections.GetList()
+               .Where(e => e.MeetingId == meeting.Id && e.End == null)
+               .Select(e => e.UserName).ToHashSet();
+            await Clients.Group(meeting.Id.ToString()).SendAsync(UserOnlineInMeetingMsg, usersInMeeting);
+            if (usersInMeeting.Count == 0)
+            {
+                meeting.End = DateTime.Now;
+                await repos.Meetings.UpdateAsync(meeting);
+            }
+            Connection connection = await repos.Connections.GetList().SingleOrDefaultAsync(e => e.Id == Context.ConnectionId);
+            if (connection == null)
+            {
+                Console.WriteLine("\n\n+++++++++++++\nEnd connection fail");
+            }
+            else
+            {
+                connection.End = DateTime.Now;
+                await repos.Connections.UpdateAsync(connection);
+               
+            }
         }
 
     }
