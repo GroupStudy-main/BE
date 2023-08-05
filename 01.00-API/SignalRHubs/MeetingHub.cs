@@ -252,6 +252,15 @@ namespace API.SignalRHub
                 await Clients.Caller.SendAsync(OnUserIsSharingMsg, userIsSharing.Username);
             }
             //Console.WriteLine("_+_+_+_+__+_+_+_+_+_+_+_+_+_+_+_++++++++++++++++++++++++\nConnect dc r !!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+            //Code xử lí db xóa duplicate connection
+            IQueryable<Connection> dupCons = repos.Connections.GetList()
+                .Where(c => c.Id != Context.ConnectionId && c.AccountId == Context.User.GetUserId() && c.End == null);
+            foreach (var con in dupCons)
+            {
+                con.End = DateTime.Now;
+                await repos.Connections.UpdateAsync(con);
+            }
         }
 
         #region old code
@@ -458,7 +467,7 @@ namespace API.SignalRHub
         //}
         #endregion
         //sẽ dc gọi khi FE gọi chatHubConnection.invoke('SendMessage', { content: string })
-        public async Task SendMessage(MessageSignalrCreateDto createMessageDto)
+        public async Task SendMessageOld(MessageSignalrCreateDto createMessageDto)
         {
             FunctionTracker.Instance().AddHubFunc("Hub/Chat: SendMessage(CreateMessageDto)");
             string userName = Context.User.GetUsername();
@@ -663,7 +672,17 @@ namespace API.SignalRHub
         //Value chứa list các peerId
 
         //public static readonly Dictionary<string, List<string>> Rooms = new Dictionary<string, List<string>>();
+        public class IMessage
+        {
+            public string RoomId { get; set; }
+            public string Content { get; set; }
+            public string TimeStamp { get; set; }
+            public string Username { get; set; }
+            public string Author { get; set; }
+        }
         public static readonly Dictionary<string, Dictionary<string, Peer>> Rooms = new Dictionary<string, Dictionary<string, Peer>>();
+        public static readonly Dictionary<string, List<IMessage>> Chats = new Dictionary<string, List<IMessage>> ();
+        public static readonly Dictionary<string, bool> IsSharing = new Dictionary<string, bool> ();
         public class CreateRoomInput
         {
             public string peerId { get; set; }
@@ -673,58 +692,67 @@ namespace API.SignalRHub
             public string roomId { get; set; } = Guid.NewGuid().ToString();
         }
         //public async Task CreateRoom(CreateRoomInput input)
-        public async Task CreateRoom(CreateRoomInput input)
-        {
-            #region old code
-            //string roomId = input.roomId;
-            //string peerId = input.peerId;
-            //Console.WriteLine($"\n\n==++==++===+++\n CreateRoom");
-            //Console.WriteLine(input.peerId);
-            ////string newRoomId = Guid.NewGuid().ToString();
-            ////RoomPeerIds.Add(roomId, new List<string>() { input.peerId});
-            //Rooms.Add(roomId, new List<string>());
-            ////Gửi cho thằng gọi CreateRoom thui
-            //await Clients.Caller.SendAsync("room-created", new { roomId = roomId });
-            //await JoinRoom(new JoinRoomInput { roomId = roomId, peerId = peerId });
-            ////await JoinRoom(JsonConvert.SerializeObject(new JoinRoomInput { roomId = roomId, peerId = input.peerId }));
-            ////await JoinRoom(newRoomId, input.peerId);
-            #endregion
+        //public async Task CreateRoomOld(CreateRoomInput input)
+        //{
+        //    #region old code
+        //    //string roomId = input.roomId;
+        //    //string peerId = input.peerId;
+        //    //Console.WriteLine($"\n\n==++==++===+++\n CreateRoom");
+        //    //Console.WriteLine(input.peerId);
+        //    ////string newRoomId = Guid.NewGuid().ToString();
+        //    ////RoomPeerIds.Add(roomId, new List<string>() { input.peerId});
+        //    //Rooms.Add(roomId, new List<string>());
+        //    ////Gửi cho thằng gọi CreateRoom thui
+        //    //await Clients.Caller.SendAsync("room-created", new { roomId = roomId });
+        //    //await JoinRoom(new JoinRoomInput { roomId = roomId, peerId = peerId });
+        //    ////await JoinRoom(JsonConvert.SerializeObject(new JoinRoomInput { roomId = roomId, peerId = input.peerId }));
+        //    ////await JoinRoom(newRoomId, input.peerId);
+        //    #endregion
 
-            string roomId = input.roomId;
-            string peerId = input.peerId;
-            string username = input.username;
-            Console.WriteLine($"\n\n==++==++===+++\n CreateRoom");
-            Console.WriteLine(input.peerId);
-            //string newRoomId = Guid.NewGuid().ToString();
-            //RoomPeerIds.Add(roomId, new List<string>() { input.peerId});
-            Peer peer = new Peer();
-            peer.userName = username;
-            peer.peerId = peerId;
-            bool isRoomExisted = Rooms.ContainsKey(roomId);
-            if (isRoomExisted)
-            {
-                bool isUsernameExisted = Rooms[roomId].ContainsKey(username);
-                if (isUsernameExisted)
-                {
-                    Rooms[roomId][username] = peer;
-                }
-                else
-                {
-                    Rooms[roomId].Add(username, peer);
-                }
-            }
-            else
-            {
-                Dictionary<string, Peer> uname_peer = new Dictionary<string, Peer>();
-                uname_peer.Add(username, peer);
-                Rooms.Add(roomId, uname_peer);
-            }
-            //Gửi cho thằng gọi CreateRoom thui
-            await Clients.Caller.SendAsync("room-created", new { roomId = roomId });
-            await JoinRoom(new JoinRoomInput { roomId = roomId, peerId = peerId, username = username });
-            //await JoinRoom(JsonConvert.SerializeObject(new JoinRoomInput { roomId = roomId, peerId = input.peerId }));
-            //await JoinRoom(newRoomId, input.peerId);
+        //    string roomId = input.roomId;
+        //    string peerId = input.peerId;
+        //    string username = input.username;
+        //    Console.WriteLine($"\n\n==++==++===+++\n CreateRoom");
+        //    Console.WriteLine(input.peerId);
+        //    //string newRoomId = Guid.NewGuid().ToString();
+        //    //RoomPeerIds.Add(roomId, new List<string>() { input.peerId});
+        //    Peer peer = new Peer();
+        //    peer.userName = username;
+        //    peer.peerId = peerId;
+        //    bool isRoomExisted = Rooms.ContainsKey(roomId);
+        //    if (isRoomExisted)
+        //    {
+        //        bool isUsernameExisted = Rooms[roomId].ContainsKey(username);
+        //        if (isUsernameExisted)
+        //        {
+        //            Rooms[roomId][username] = peer;
+        //        }
+        //        else
+        //        {
+        //            Rooms[roomId].Add(username, peer);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        Dictionary<string, Peer> uname_peer = new Dictionary<string, Peer>();
+        //        uname_peer.Add(username, peer);
+        //        Rooms.Add(roomId, uname_peer);
+        //    }
+        //    //Gửi cho thằng gọi CreateRoom thui
+        //    await Clients.Caller.SendAsync("room-created", new { roomId = roomId });
+        //    //await JoinRoomOld(new JoinRoomInput { roomId = roomId, peerId = peerId, username = username });
+        //    //await JoinRoom(JsonConvert.SerializeObject(new JoinRoomInput { roomId = roomId, peerId = input.peerId }));
+        //    //await JoinRoom(newRoomId, input.peerId);
+        //}
+        public async Task CreateRoom()
+        {
+            HttpContext httpContext = Context.GetHttpContext();
+            //string roomId = httpContext.Request.Query["meetingId"].ToString();
+            string roomId  = Guid.NewGuid().ToString();
+
+            Clients.All.SendAsync("room-created", roomId);
         }
+
         public class JoinRoomInput
         {
             public string roomId { get; set; }
@@ -736,32 +764,76 @@ namespace API.SignalRHub
             public string peerId { get; set; }
             public string userName { get; set; }
         }
-        public async Task JoinRoom(JoinRoomInput input)
-        //public async Task JoinRoom(string json)
-        //public async Task JoinRoom(string roomId, string peerId)
-        {
-            #region old code
-            //var input = JsonConvert.DeserializeObject<JoinRoomInput>(json);
-            //string roomId = input.roomId;
-            //string peerId = input.peerId;
-            //string username = input.username;
+        #region old code
+        //public async Task JoinRoomOld(JoinRoomInput input)
+        ////public async Task JoinRoom(string json)
+        ////public async Task JoinRoom(string roomId, string peerId)
+        //{
+        //    #region old code
+        //    //var input = JsonConvert.DeserializeObject<JoinRoomInput>(json);
+        //    //string roomId = input.roomId;
+        //    //string peerId = input.peerId;
+        //    //string username = input.username;
 
-            //Console.WriteLine($"\n\n==++==++===+++\n JoinRoom");
-            //Console.WriteLine(peerId);
-            //Console.WriteLine(roomId);
-            //bool isRoomExisted = Rooms.ContainsKey(roomId);
-            //if (isRoomExisted)
-            //{
-            //    Rooms[roomId].Add(peerId);
-            //    await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
-            //    await Clients.GroupExcept(roomId, Context.ConnectionId).SendAsync("user-joined", new { roomId = roomId, peerId = peerId });
-            //    await Clients.Caller.SendAsync("get-users", new { roomId = roomId, participants = Rooms[roomId] });
-            //}
-            //else
-            //{
-            //    await CreateRoom(new CreateRoomInput {  peerId = peerId, roomId=roomId });
-            //}
-            #endregion
+        //    //Console.WriteLine($"\n\n==++==++===+++\n JoinRoom");
+        //    //Console.WriteLine(peerId);
+        //    //Console.WriteLine(roomId);
+        //    //bool isRoomExisted = Rooms.ContainsKey(roomId);
+        //    //if (isRoomExisted)
+        //    //{
+        //    //    Rooms[roomId].Add(peerId);
+        //    //    await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
+        //    //    await Clients.GroupExcept(roomId, Context.ConnectionId).SendAsync("user-joined", new { roomId = roomId, peerId = peerId });
+        //    //    await Clients.Caller.SendAsync("get-users", new { roomId = roomId, participants = Rooms[roomId] });
+        //    //}
+        //    //else
+        //    //{
+        //    //    await CreateRoom(new CreateRoomInput {  peerId = peerId, roomId=roomId });
+        //    //}
+        //    #endregion
+
+        //    //var input = JsonConvert.DeserializeObject<JoinRoomInput>(json);
+        //    string roomId = input.roomId;
+        //    string peerId = input.peerId;
+        //    string username = input.username;
+
+        //    Console.WriteLine($"\n\n==++==++===+++\n JoinRoom");
+        //    Console.WriteLine(peerId);
+        //    Console.WriteLine(roomId);
+        //    Console.WriteLine(username);
+        //    bool isRoomExisted = Rooms.ContainsKey(roomId);
+        //    if (isRoomExisted)
+        //    {
+        //        bool isUsernameExisted = Rooms[roomId].ContainsKey(username);
+        //        if (isUsernameExisted)
+        //        {
+        //            Peer peer = new Peer();
+        //            peer.peerId = peerId;
+        //            peer.userName = username;
+        //            Rooms[roomId][username] = peer;
+        //        }
+        //        else
+        //        {
+        //            Peer peer = new Peer();
+        //            peer.peerId = peerId;
+        //            peer.userName = username;
+        //            Rooms[roomId].Add(username, peer);
+        //        }
+
+        //        await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
+        //        await Clients.GroupExcept(roomId, Context.ConnectionId).SendAsync("user-joined", new { roomId = roomId, peerId = peerId });
+        //        Console.WriteLine(Rooms[roomId]);
+        //        await Clients.Caller.SendAsync("get-users", new { roomId = roomId, participants = Rooms[roomId] });
+        //    }
+        //    else
+        //    {
+        //        await CreateRoom(new CreateRoomInput { peerId = peerId, roomId = roomId, username = username });
+        //    }
+
+        //}
+        #endregion
+        public async Task JoinRoom(JoinRoomInput input)
+        {
 
             //var input = JsonConvert.DeserializeObject<JoinRoomInput>(json);
             string roomId = input.roomId;
@@ -773,40 +845,79 @@ namespace API.SignalRHub
             Console.WriteLine(roomId);
             Console.WriteLine(username);
             bool isRoomExisted = Rooms.ContainsKey(roomId);
-            if (isRoomExisted)
+            if (!isRoomExisted)
             {
-                bool isUsernameExisted = Rooms[roomId].ContainsKey(username);
-                if (isUsernameExisted)
-                {
-                    Peer peer = new Peer();
-                    peer.peerId = peerId;
-                    peer.userName = username;
-                    Rooms[roomId][username] = peer;
-                }
-                else
-                {
-                    Peer peer = new Peer();
-                    peer.peerId = peerId;
-                    peer.userName = username;
-                    Rooms[roomId].Add(username, peer);
-                }
-
-                await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
-                await Clients.GroupExcept(roomId, Context.ConnectionId).SendAsync("user-joined", new { roomId = roomId, peerId = peerId });
-                Console.WriteLine(Rooms[roomId]);
-                await Clients.Caller.SendAsync("get-users", new { roomId = roomId, participants = Rooms[roomId] });
+                Rooms.Add(roomId, new Dictionary<string, Peer>());
+            }
+            bool isChatExisted = Chats.ContainsKey(roomId);
+            if (!isChatExisted)
+            {
+                Chats.Add(roomId, new List<IMessage>());
+            }
+            bool isUsernameExisted = Rooms[roomId].ContainsKey(username);
+            Peer peer = new Peer
+            {
+                peerId = peerId,
+                userName = username,
+            };
+            if (isUsernameExisted)
+            {
+                Rooms[roomId][username] = peer;
             }
             else
             {
-                await CreateRoom(new CreateRoomInput { peerId = peerId, roomId = roomId, username = username });
+                Rooms[roomId].Add(username, peer);
             }
+            await Groups.AddToGroupAsync(Context.ConnectionId, roomId);//khi user click vao room se join vao
+            await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
+            //await Clients.GroupExcept(roomId, Context.ConnectionId).SendAsync("user-joined", new{ roomId = roomId, peerId = peerId });
+            //await Clients.GroupExcept(roomId, Context.ConnectionId).SendAsync("user-joined", peer);
+            await Clients.Group(roomId).SendAsync("user-joined", peer);
+            await Clients.Group(roomId).SendAsync("get-users", new { roomId = roomId, participants = Rooms[roomId] });
 
         }
+
         public class LeaveRoomInput
         {
             public string roomId { get; set; }
             public string peerId { get; set; }
         }
+        #region old code
+        //public async Task LeaveRoomOld(LeaveRoomInput input)
+        //{
+        //    Console.WriteLine($"\n\n==++==++===+++\n LeaveRoom");
+        //    Console.WriteLine(input.peerId);
+        //    Console.WriteLine(input.roomId);
+        //    string roomId = input.roomId;
+        //    string peerId = input.peerId;
+        //    string username = Context.User.GetUsername();
+        //    Rooms[roomId].Remove(username);
+
+        //    await Clients.Group(roomId).SendAsync("user-disconnected", new { peerId = peerId });
+
+        //    //code mới xử lí db
+        //    Meeting meeting = await RemoveConnectionFromMeeting();
+        //    var usersInMeeting = repos.Connections.GetList()
+        //       .Where(e => e.MeetingId == meeting.Id && e.End == null)
+        //       .Select(e => e.UserName).ToHashSet();
+        //    await Clients.Group(meeting.Id.ToString()).SendAsync(UserOnlineInMeetingMsg, usersInMeeting);
+        //    if (usersInMeeting.Count == 0)
+        //    {
+        //        meeting.End = DateTime.Now;
+        //        await repos.Meetings.UpdateAsync(meeting);
+        //    }
+        //    Connection connection = await repos.Connections.GetList().SingleOrDefaultAsync(e => e.Id == Context.ConnectionId);
+        //    if (connection == null)
+        //    {
+        //        Console.WriteLine("\n\n+++++++++++++\nEnd connection fail");
+        //    }
+        //    else
+        //    {
+        //        connection.End = DateTime.Now;
+        //        await repos.Connections.UpdateAsync(connection);
+        //    }
+        //}
+        #endregion
         public async Task LeaveRoom(LeaveRoomInput input)
         {
             Console.WriteLine($"\n\n==++==++===+++\n LeaveRoom");
@@ -814,10 +925,12 @@ namespace API.SignalRHub
             Console.WriteLine(input.roomId);
             string roomId = input.roomId;
             string peerId = input.peerId;
-            await Clients.Group(roomId).SendAsync("user-disconnected", new { peerId = peerId });
-            Rooms[roomId].Remove(peerId);
+            string username = Context.User.GetUsername();
+            Rooms[roomId].Remove(username);
 
-            //code mới
+            await Clients.Group(roomId).SendAsync("user-disconnected", new { peerId = peerId });
+
+            //code mới xử lí db
             Meeting meeting = await RemoveConnectionFromMeeting();
             var usersInMeeting = repos.Connections.GetList()
                .Where(e => e.MeetingId == meeting.Id && e.End == null)
@@ -837,8 +950,35 @@ namespace API.SignalRHub
             {
                 connection.End = DateTime.Now;
                 await repos.Connections.UpdateAsync(connection);
-               
             }
+        }
+
+        public async Task SendMessage(IMessage message)
+        {
+            HttpContext httpContext = Context.GetHttpContext();
+            int meetingId = int.Parse(httpContext.Request.Query["meetingId"].ToString());
+            string roomId = message.RoomId;
+            Chats[roomId].Add(message);
+            Clients.Group(roomId).SendAsync("add-message", message);
+
+
+            //xử lí db
+            Chat newChat = new Chat {
+                Content= message.Content,
+                //MeetingId = int.Parse(roomId),
+                MeetingId = meetingId,
+                AccountId = Context.User.GetUserId(),
+                Time = DateTime.Now,
+            };
+            await repos.Chats.CreateAsync(newChat);
+        }
+
+
+        public async Task TestLocaion(string msg)
+        {
+            Console.WriteLine($"\n\n\n\n==++==++===+++\n TestLocaion");
+            Console.WriteLine(msg);
+
         }
 
     }
