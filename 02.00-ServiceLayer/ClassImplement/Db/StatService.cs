@@ -70,7 +70,7 @@ namespace ServiceLayer.ClassImplement.Db
                 StudentFullname=student.FullName,
                 StudentUsername=student.Username,
                 Month = start,
-                TotalMeetings = allMeetingsOfJoinedGroups.ProjectTo<PastMeetingGetDto>(mapper.ConfigurationProvider),
+                //TotalMeetings = allMeetingsOfJoinedGroups.ProjectTo<PastMeetingGetDto>(mapper.ConfigurationProvider),
                 TotalMeetingsCount = totalMeetingsCount,
                 AtendedMeetings = atendedMeetings.ProjectTo<PastMeetingGetDto>(mapper.ConfigurationProvider),
                 AtendedMeetingsCount = atendedMeetingsCount,

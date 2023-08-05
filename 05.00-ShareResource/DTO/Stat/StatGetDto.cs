@@ -11,7 +11,7 @@ namespace ShareResource.DTO
         public string StudentUsername { get; set; }
         public string StudentFullname { get; set; }
         public DateTime Month { get; set; }
-        public IQueryable TotalMeetings { get; set; }
+        //public IQueryable TotalMeetings { get; set; }
         public int TotalMeetingsCount { get; set; }
         public IQueryable AtendedMeetings { get; set; }
         public int AtendedMeetingsCount { get; set; }

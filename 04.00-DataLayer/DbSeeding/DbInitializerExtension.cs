@@ -130,19 +130,19 @@ namespace DataLayer.ImMemorySeeding
                 }
                 #endregion
 
-                //#region seed Review
-                //if (!context.Reviews.Any())
-                //{
-                //    context.Reviews.AddRange(DbSeed.Reviews);
-                //}
-                //#endregion
+                #region seed Review
+                if (!context.Reviews.Any())
+                {
+                    context.Reviews.AddRange(DbSeed.Reviews);
+                }
+                #endregion
 
-                //#region seed ReviewDetail
-                //if (!context.ReviewDetails.Any())
-                //{
-                //    context.ReviewDetails.AddRange(DbSeed.ReviewDetails);
-                //}
-                //#endregion
+                #region seed ReviewDetail
+                if (!context.ReviewDetails.Any())
+                {
+                    context.ReviewDetails.AddRange(DbSeed.ReviewDetails);
+                }
+                #endregion
 
                 #region seed Chat
                 if (!context.Chats.Any())

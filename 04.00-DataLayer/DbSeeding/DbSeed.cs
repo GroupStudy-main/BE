@@ -805,13 +805,13 @@ namespace DataLayer.DbSeeding
             new Review
             {
                 Id = 1,
-                MeetingId=4,
+                MeetingId=2,
                 RevieweeId=1,
             } ,
              new Review
             {
                 Id = 2,
-                MeetingId=5,
+                MeetingId=2,
                 RevieweeId=1,
             }
         };
