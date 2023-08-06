@@ -5,6 +5,7 @@ using AutoMapper.QueryableExtensions;
 using DataLayer.DBObject;
 using DataLayer.Migrations;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -158,6 +159,14 @@ namespace API.SignalRHub
             HttpContext httpContext = Context.GetHttpContext();
             string meetingIdString = httpContext.Request.Query["meetingId"].ToString();
             int meetingIdInt = int.Parse(meetingIdString);
+
+            string isTempConnection = httpContext.Request.Query["tempConnection"].ToString();
+            if (isTempConnection != null && isTempConnection.Length != 0 && isTempConnection == "ok")
+            {
+                await Groups.AddToGroupAsync(Context.ConnectionId, meetingIdString);
+                base.OnConnectedAsync();
+                return;
+            }
 
             string username;
             int accountId;
@@ -638,8 +647,18 @@ namespace API.SignalRHub
         {
             FunctionTracker.Instance().AddHubFunc("Hub/Chat: RemoveConnectionFromMeeting()");
             Meeting meeting = await repos.Meetings.GetMeetingForConnectionSignalr(Context.ConnectionId);
-            Connection? connection = meeting.Connections.FirstOrDefault(x => x.Id == Context.ConnectionId);
-            await repos.Meetings.EndConnectionSignalr(connection);
+            if(meeting == null)
+            {
+                int id = int.Parse(Context.GetHttpContext().Request.Query["meetingId"].ToString());
+                meeting = repos.Meetings.GetList()
+                    .Include(m=>m.Connections)
+                    .SingleOrDefault(e => e.Id == id);
+            }
+            Connection? connection = repos.Connections.GetList()
+                .SingleOrDefault(x => x.Id == Context.ConnectionId);
+            if (connection != null) { 
+                await repos.Meetings.EndConnectionSignalr(connection);
+            }
             
             //hot fix duplicate connection
             Connection dupConnection = await repos.Connections.GetList()
@@ -960,6 +979,7 @@ namespace API.SignalRHub
             string roomId = message.RoomId;
             Chats[roomId].Add(message);
             Clients.Group(roomId).SendAsync("add-message", message);
+            //Clients.Group(meetingId.ToString()).SendAsync("add-message", message);
 
 
             //xử lí db
