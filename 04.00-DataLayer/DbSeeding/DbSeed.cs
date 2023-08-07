@@ -151,6 +151,17 @@ namespace DataLayer.DbSeeding
                 Phone = "0123456789",
                 DateOfBirth = new DateTime(1975,5, 5),
                 RoleId = 1
+            }  ,
+            new Account
+            {
+                Id = 12,
+                Username = "parent2",
+                FullName = "Parent 2",
+                Email = "parent2@gmail.com",
+                Password = StringUtils.CustomHash("123456789"),
+                Phone = "0123456789",
+                DateOfBirth = new DateTime(1975,5, 5),
+                RoleId = 1
             }
         };
         public static Supervision[] Supervisions = new Supervision[]
@@ -161,7 +172,42 @@ namespace DataLayer.DbSeeding
                 StudentId=1,
                 ParentId=11,
                 State=RequestStateEnum.Approved
-            }
+            },
+            new Supervision
+            {
+                Id = 2,
+                StudentId=2,
+                ParentId=11,
+                State=RequestStateEnum.Waiting
+            },
+            new Supervision
+            {
+                Id = 3,
+                StudentId=1,
+                ParentId=12,
+                State=RequestStateEnum.Waiting
+            },
+            new Supervision
+            {
+                Id = 4,
+                StudentId=2,
+                ParentId=12,
+                State=RequestStateEnum.Waiting
+            },
+            new Supervision
+            {
+                Id = 5,
+                StudentId=3,
+                ParentId=12,
+                State=RequestStateEnum.Waiting
+            },
+            new Supervision
+            {
+                Id = 6,
+                StudentId=4,
+                ParentId=12,
+                State=RequestStateEnum.Waiting
+            },
         };
         public static Class[] Classes = new Class[]
         {

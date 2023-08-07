@@ -263,7 +263,7 @@ namespace API.Controllers
 
         [Authorize(Roles = Actor.Student)]
         [SwaggerOperation(
-            Summary = $"[{Actor.Student}/{Finnished.False}/{Auth.True}]Student claim a student is their children"
+            Summary = $"[{Actor.Student}/{Finnished.True}/{Auth.True}]Get waiting supervision list for student"
         )]
         [HttpGet("Supervise/Student")]
         public async Task<IActionResult> GetSuperViseRequestForStudent()
@@ -277,7 +277,7 @@ namespace API.Controllers
         }
 
         [SwaggerOperation(
-            Summary = $"[{Actor.Parent}/{Finnished.False}/{Auth.True}]Parent claim a student is their children"
+            Summary = $"[{Actor.Parent}/{Finnished.True}/{Auth.True}]Parent claim a student is their children"
         )]
         [HttpPost("Supervise/{studentId}")]
         public async Task<IActionResult> RequestSuperVise(int studentId)

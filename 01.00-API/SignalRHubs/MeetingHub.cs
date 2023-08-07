@@ -358,13 +358,18 @@ namespace API.SignalRHub
                     connection.End = DateTime.Now;
                     await repos.Connections.UpdateAsync(connection);
                     //Hot fix duplicate connection
-                    Connection dupConnection = await repos.Connections.GetList()
-                    .SingleOrDefaultAsync(e => e.AccountId == connection.AccountId && e.MeetingId == connection.MeetingId
+                    var dupConnections = repos.Connections.GetList()
+                    .Where(e => e.AccountId == connection.AccountId && e.MeetingId == connection.MeetingId
                         && e.Start.Date == connection.Start.Date && e.Start.Hour == connection.Start.Hour
                         && e.Start.Minute == connection.Start.Minute);
-                    if (dupConnection != null)
+                    //if (dupConnections != null)
+                    //{
+                    //    await repos.Connections.RemoveAsync(dupConnections.Id);
+                    //}
+                    foreach (var dupCon in dupConnections)
                     {
-                        await repos.Connections.RemoveAsync(dupConnection.Id);
+                        dupCon.End= DateTime.Now;
+                        await repos.Connections.UpdateAsync(dupCon);
                     }
                 }
             }
@@ -661,13 +666,18 @@ namespace API.SignalRHub
             }
             
             //hot fix duplicate connection
-            Connection dupConnection = await repos.Connections.GetList()
-                .SingleOrDefaultAsync(e => e.AccountId == connection.AccountId && e.MeetingId == connection.MeetingId
+            var dupConnections = repos.Connections.GetList()
+                .Where(e => e.AccountId == connection.AccountId && e.MeetingId == connection.MeetingId
                     && e.Start.Date == connection.Start.Date && e.Start.Hour == connection.Start.Hour
                     && e.Start.Minute == connection.Start.Minute && e.Id != connection.Id);
-            if (dupConnection != null)
+            //if (dupConnections != null)
+            //{
+            //    await repos.Connections.RemoveAsync(dupConnections.Id);
+            //}
+            foreach(var dupCon in dupConnections)
             {
-                await repos.Connections.RemoveAsync(dupConnection.Id);
+                dupCon.End = DateTime.Now;
+                await repos.Connections.UpdateAsync(dupCon);
             }
 
             IQueryable<Connection> activeConnections = repos.Meetings.GetActiveConnectionsForMeetingSignalr(meeting.Id);
@@ -887,11 +897,11 @@ namespace API.SignalRHub
             {
                 Rooms[roomId].Add(username, peer);
             }
-            await Groups.AddToGroupAsync(Context.ConnectionId, roomId);//khi user click vao room se join vao
+            //await Groups.AddToGroupAsync(Context.ConnectionId, roomId);//khi user click vao room se join vao
             await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
             //await Clients.GroupExcept(roomId, Context.ConnectionId).SendAsync("user-joined", new{ roomId = roomId, peerId = peerId });
             //await Clients.GroupExcept(roomId, Context.ConnectionId).SendAsync("user-joined", peer);
-            await Clients.Group(roomId).SendAsync("user-joined", peer);
+            await Clients.GroupExcept(roomId, Context.ConnectionId).SendAsync("user-joined", peer);
             await Clients.Group(roomId).SendAsync("get-users", new { roomId = roomId, participants = Rooms[roomId] });
 
         }

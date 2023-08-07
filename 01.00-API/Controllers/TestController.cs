@@ -51,7 +51,8 @@ namespace API.Controllers
         [HttpGet("Connections")]
         public async Task<IActionResult> Connections()
         {
-            var list = repos.Connections.GetList();
+            var list = repos.Connections.GetList()
+                .OrderByDescending(e=>e.Start);
             return Ok(list);
         }
 
