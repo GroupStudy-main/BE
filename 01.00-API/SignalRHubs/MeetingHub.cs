@@ -970,6 +970,12 @@ namespace API.SignalRHub
                 meeting.End = DateTime.Now;
                 await repos.Meetings.UpdateAsync(meeting);
             }
+            else
+            {
+                meeting.CountMember = usersInMeeting.Count;
+                await repos.Meetings.UpdateAsync(meeting);
+            }
+
             Connection connection = await repos.Connections.GetList().SingleOrDefaultAsync(e => e.Id == Context.ConnectionId);
             if (connection == null)
             {
