@@ -957,7 +957,7 @@ namespace API.SignalRHub
             string username = Context.User.GetUsername();
             Rooms[roomId].Remove(username);
 
-            await Clients.Group(roomId).SendAsync("user-disconnected", new { peerId = peerId });
+            await Clients.Group(roomId).SendAsync("user-disconnected", peerId);
 
             //code mới xử lí db
             Meeting meeting = await RemoveConnectionFromMeeting();
