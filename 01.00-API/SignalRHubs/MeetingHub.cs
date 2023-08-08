@@ -903,6 +903,7 @@ namespace API.SignalRHub
             //await Clients.GroupExcept(roomId, Context.ConnectionId).SendAsync("user-joined", peer);
             await Clients.GroupExcept(roomId, Context.ConnectionId).SendAsync("user-joined", peer);
             await Clients.Group(roomId).SendAsync("get-users", new { roomId = roomId, participants = Rooms[roomId] });
+            await Clients.Group(roomId).SendAsync("get-messages", Chats[roomId]);
 
         }
 

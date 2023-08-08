@@ -75,7 +75,7 @@ namespace APIExtension.Validator
                     validatorResult.Failures.Add("Ngày không hợp lí");
                 }
                 //validate time
-                if (dto.ScheduleEndTime < dto.ScheduleStartTime)
+                if (dto.ScheduleEndTime <= dto.ScheduleStartTime)
                 {
                     validatorResult.Failures.Add("Thời gian kết thúc buổi học không hợp lí");
                 }
@@ -131,7 +131,7 @@ namespace APIExtension.Validator
                     validatorResult.Failures.Add("Ngày không hợp lí");
                 }
                 //validate time
-                if (dto.ScheduleEndTime < dto.ScheduleStartTime)
+                if (dto.ScheduleEndTime <= dto.ScheduleStartTime)
                 {
                     validatorResult.Failures.Add("Thời gian kết thúc buổi học không hợp lí");
                 }
