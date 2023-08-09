@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using RepositoryLayer.Interface;
 using ShareResource.DTO;
 using ShareResource.DTO.Connection;
+using System.Net.Http;
 
 namespace API.SignalRHub
 {
@@ -164,6 +165,7 @@ namespace API.SignalRHub
             if (isTempConnection != null && isTempConnection.Length != 0 && isTempConnection == "ok")
             {
                 await Groups.AddToGroupAsync(Context.ConnectionId, meetingIdString);
+                Clients.Caller.SendAsync("get-drawings", Drawings[meetingIdString]);
                 base.OnConnectedAsync();
                 return;
             }
@@ -883,6 +885,11 @@ namespace API.SignalRHub
             {
                 Chats.Add(roomId, new List<IMessage>());
             }
+            bool isDrawExisted = Drawings.ContainsKey(roomId);
+            if (!isDrawExisted)
+            {
+                Drawings.Add(roomId, new List<Drawing>());
+            }
             bool isUsernameExisted = Rooms[roomId].ContainsKey(username);
             Peer peer = new Peer
             {
@@ -970,6 +977,9 @@ namespace API.SignalRHub
             {
                 meeting.End = DateTime.Now;
                 await repos.Meetings.UpdateAsync(meeting);
+                Rooms.Remove(roomId);
+                Chats.Remove(roomId);
+                Drawings.Remove(roomId);
             }
             else
             {
@@ -1009,8 +1019,31 @@ namespace API.SignalRHub
             };
             await repos.Chats.CreateAsync(newChat);
         }
+        public async Task Draw(int prevX, int prevY, int currentX, int currentY, string color)
+        {
+            HttpContext httpContext = Context.GetHttpContext();
+            int meetingId = int.Parse(httpContext.Request.Query["meetingId"].ToString());
+            Drawings[meetingId.ToString()]
+                .Add(new Drawing {
+                    PrevX=prevX,
+                    PrevY=prevY, 
+                    CurrentX=currentX, 
+                    CurrentY=currentY, 
+                    Color=color
+                }
+            );
 
-
+            await Clients.GroupExcept(meetingId.ToString(), Context.ConnectionId).SendAsync("draw", prevX, prevY, currentX, currentY, color);
+        }
+        public static readonly Dictionary<string, List<Drawing>> Drawings = new Dictionary<string, List<Drawing>>();
+        public class Drawing
+        {
+            public int PrevX { get; set; }
+            public int PrevY { get; set; }
+            public int CurrentX { get; set; }
+            public int CurrentY { get; set; }
+            public string Color { get; set; }
+        }
         public async Task TestLocaion(string msg)
         {
             Console.WriteLine($"\n\n\n\n==++==++===+++\n TestLocaion");
