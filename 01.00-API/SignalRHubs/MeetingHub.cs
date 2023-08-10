@@ -722,59 +722,7 @@ namespace API.SignalRHub
             //public string roomId { get; set; } = "default";
             public string roomId { get; set; } = Guid.NewGuid().ToString();
         }
-        //public async Task CreateRoom(CreateRoomInput input)
-        //public async Task CreateRoomOld(CreateRoomInput input)
-        //{
-        //    #region old code
-        //    //string roomId = input.roomId;
-        //    //string peerId = input.peerId;
-        //    //Console.WriteLine($"\n\n==++==++===+++\n CreateRoom");
-        //    //Console.WriteLine(input.peerId);
-        //    ////string newRoomId = Guid.NewGuid().ToString();
-        //    ////RoomPeerIds.Add(roomId, new List<string>() { input.peerId});
-        //    //Rooms.Add(roomId, new List<string>());
-        //    ////Gửi cho thằng gọi CreateRoom thui
-        //    //await Clients.Caller.SendAsync("room-created", new { roomId = roomId });
-        //    //await JoinRoom(new JoinRoomInput { roomId = roomId, peerId = peerId });
-        //    ////await JoinRoom(JsonConvert.SerializeObject(new JoinRoomInput { roomId = roomId, peerId = input.peerId }));
-        //    ////await JoinRoom(newRoomId, input.peerId);
-        //    #endregion
 
-        //    string roomId = input.roomId;
-        //    string peerId = input.peerId;
-        //    string username = input.username;
-        //    Console.WriteLine($"\n\n==++==++===+++\n CreateRoom");
-        //    Console.WriteLine(input.peerId);
-        //    //string newRoomId = Guid.NewGuid().ToString();
-        //    //RoomPeerIds.Add(roomId, new List<string>() { input.peerId});
-        //    Peer peer = new Peer();
-        //    peer.userName = username;
-        //    peer.peerId = peerId;
-        //    bool isRoomExisted = Rooms.ContainsKey(roomId);
-        //    if (isRoomExisted)
-        //    {
-        //        bool isUsernameExisted = Rooms[roomId].ContainsKey(username);
-        //        if (isUsernameExisted)
-        //        {
-        //            Rooms[roomId][username] = peer;
-        //        }
-        //        else
-        //        {
-        //            Rooms[roomId].Add(username, peer);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        Dictionary<string, Peer> uname_peer = new Dictionary<string, Peer>();
-        //        uname_peer.Add(username, peer);
-        //        Rooms.Add(roomId, uname_peer);
-        //    }
-        //    //Gửi cho thằng gọi CreateRoom thui
-        //    await Clients.Caller.SendAsync("room-created", new { roomId = roomId });
-        //    //await JoinRoomOld(new JoinRoomInput { roomId = roomId, peerId = peerId, username = username });
-        //    //await JoinRoom(JsonConvert.SerializeObject(new JoinRoomInput { roomId = roomId, peerId = input.peerId }));
-        //    //await JoinRoom(newRoomId, input.peerId);
-        //}
         public async Task CreateRoom()
         {
             HttpContext httpContext = Context.GetHttpContext();
@@ -884,6 +832,11 @@ namespace API.SignalRHub
             if (!isChatExisted)
             {
                 Chats.Add(roomId, new List<IMessage>());
+            }
+            bool isSharingExisted = IsSharing.ContainsKey(roomId);
+            if (!isSharingExisted)
+            {
+                IsSharing.Add(roomId, false);
             }
             bool isDrawExisted = Drawings.ContainsKey(roomId);
             if (!isDrawExisted)
@@ -1019,6 +972,20 @@ namespace API.SignalRHub
             };
             await repos.Chats.CreateAsync(newChat);
         }
+        public async Task StartSharing(JoinRoomInput input)
+        {
+            IsSharing[input.roomId] = true;
+            Clients.Group(input.roomId).SendAsync("isSharing", IsSharing[input.roomId]);
+            Clients.Group(input.roomId).SendAsync("user-started-sharing", IsSharing[input.roomId]);
+        }
+
+        public async Task StopSharing(string roomId)
+        {
+            IsSharing[roomId] = false;
+            Clients.Group(roomId).SendAsync("isSharing", IsSharing[roomId]);
+            Clients.Group(roomId).SendAsync("user-stopped-sharing", IsSharing[roomId]);
+        }
+
         public async Task Draw(int prevX, int prevY, int currentX, int currentY, string color)
         {
             HttpContext httpContext = Context.GetHttpContext();

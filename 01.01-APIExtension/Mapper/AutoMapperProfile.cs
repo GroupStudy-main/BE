@@ -92,7 +92,7 @@ namespace ShareResource.Mapper
                .ForMember(dest => dest.GroupName, opt => opt.MapFrom(
                    src => src.Group.Name))
                .PreserveReferences();
-            CreateMap<Meeting, ScheduleMeetingGetDto>()
+            CreateMap<Meeting, ScheduleMeetingForMemberGetDto>()
                 .ForMember(dest => dest.GroupName, opt => opt.MapFrom(
                     src => src.Group.Name))
                 .PreserveReferences();

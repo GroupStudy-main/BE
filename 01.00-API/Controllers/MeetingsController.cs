@@ -107,6 +107,21 @@ namespace API.Controllers
             Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Get all past meetings of student"
         )]
         [Authorize(Roles = Actor.Student)]
+        [HttpGet("All/Student")]
+        public async Task<IActionResult> GetAllMeetingForStudent()
+        {
+            int studentId = HttpContext.User.GetUserId();
+            var mappedPast = services.Meetings.GetPastMeetingsForStudent(studentId);
+            var mappedLive = services.Meetings.GetLiveMeetingsForStudent(studentId);
+            var mappedSchedule = services.Meetings.GetScheduleMeetingsForStudent(studentId);
+
+            return Ok(new { Past = mappedPast, Live = mappedLive, Schedule = mappedSchedule}); 
+        }
+        //GET: api/Meetings/Past/Student
+        [SwaggerOperation(
+            Summary = $"[{Actor.Leader}/{Finnished.True}/{Auth.True}] Get all past meetings of student"
+        )]
+        [Authorize(Roles = Actor.Student)]
         [HttpGet("Past/Student")]
         public async Task<IActionResult> GetPastMeetingForStudent()
         {
