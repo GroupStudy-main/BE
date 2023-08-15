@@ -39,20 +39,27 @@ public class DocumentFileService : IDocumentFileService
         return repos.DocumentFiles.RemoveAsync(id);
     }
 
-    public IQueryable<DocumentFile> GetListByGroupId(int groupId, bool? approved)
+    public IQueryable<DocumentFile> GetListByGroupId(int groupId)
     {
         var result = repos.DocumentFiles.GetList().Where(file => file.GroupId == groupId);
-        if (null != approved && approved == true)
-        {
-            result = result.Where(file => file.Approved == true);
-        }
+        //if (null != approved && approved == true)
+        //{
+        //    result = result.Where(file => file.Approved == true);
+        //}
         
         return result;
     }
-    
+
     public IQueryable<DocumentFile> GetListByAccountId(int accountId)
     {
         var result = repos.DocumentFiles.GetList().Where(file => file.AccountId == accountId);
+        return result;
+    }
+
+    public IQueryable<DocumentFile> GetListFileByDate(int groupId, DateTime month)
+    {
+        var result = repos.DocumentFiles.GetList().Where(file => file.GroupId == groupId && file.CreatedDate == month);
+
         return result;
     }
 }

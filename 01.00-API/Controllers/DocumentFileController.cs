@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using APIExtension.ClaimsPrinciple;
+using APIExtension.Const;
+using AutoMapper;
 using DataLayer.DBObject;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -38,19 +40,20 @@ public class DocumentFileController : ControllerBase
         {
             if (file.Length > 0)
             {
-                if (!Directory.Exists(path))
+                var groupPath = path + "\\" + groupId;
+                if (!Directory.Exists(groupPath))
                 {
-                    Directory.CreateDirectory(path);
+                    Directory.CreateDirectory(groupPath);
                 }
 
-                using (var fileStream = new FileStream(Path.Combine(path, file.FileName), FileMode.Create))
+                using (var fileStream = new FileStream(Path.Combine(groupPath, file.FileName), FileMode.Create))
                 {
                     await file.CopyToAsync(fileStream);
-                    httpFilePath = HostUploadFile + file.FileName;
+                    httpFilePath = HostUploadFile + groupId + "/" + file.FileName;
                 }
             }
 
-            if (!String.IsNullOrEmpty(httpFilePath))
+            if (!string.IsNullOrEmpty(httpFilePath))
             {
                 documentFile.HttpLink = httpFilePath;
                 documentFile.Approved = false;
@@ -76,8 +79,29 @@ public class DocumentFileController : ControllerBase
 
         return Ok(result);
     }
-    
-   
+    [HttpGet("/get-list-file-by-date")]
+    public async Task<ActionResult<DocumentFile>> GetListFileByDate([FromQuery] int groupId, DateTime month)
+    {
+        var group = _service.Groups.GetFullByIdAsync(groupId).Result;
+        if (null == group)
+        {
+            return NotFound();
+        }
+
+        var result = _service.DocumentFiles.GetListFileByDate(groupId, month);
+
+
+        List<DocumentFileDto> resultDto = new List<DocumentFileDto>();
+        foreach (var documentFile in result)
+        
+        {
+            var dto = _mapper.Map<DocumentFileDto>(documentFile);
+            resultDto.Add(dto);
+        }
+        return Ok(resultDto);
+    }
+
+
     [HttpGet("/get-detail")]
     public async Task<ActionResult<DocumentFile>> GetFileDetail([FromQuery] int id)
     {
@@ -91,14 +115,14 @@ public class DocumentFileController : ControllerBase
 
  
     [HttpGet("/get-file-by-group")]
-    public async Task<ActionResult<DocumentFile>> GetListFileByGroupId([FromQuery] int groupId, bool? approved)
+    public async Task<ActionResult<DocumentFile>> GetListFileByGroupId([FromQuery] int id)
     {
-        var group = _service.Groups.GetFullByIdAsync(groupId).Result;
+        var group = _service.Groups.GetFullByIdAsync(id).Result;
         if (null == group)
         {
             return NotFound();
         }
-        var result = _service.DocumentFiles.GetListByGroupId(groupId, approved);
+        var result = _service.DocumentFiles.GetListByGroupId(id);
         List<DocumentFileDto> resultDto = new List<DocumentFileDto>();
         foreach (var documentFile in result)
         {
@@ -109,6 +133,7 @@ public class DocumentFileController : ControllerBase
     }
 
     [HttpPut("/accept-file")]
+    [Authorize(Roles = Actor.Leader)]
     public async Task<IActionResult> UpdateFile(int id, bool approved)
     {
         var file = _service.DocumentFiles.GetById(id).Result;
@@ -128,6 +153,7 @@ public class DocumentFileController : ControllerBase
 
     [HttpDelete("/delete-file")]
     //chỗ này thêm Authen
+    [Authorize(Roles = Actor.Leader)]
     public async Task<IActionResult> DeleteFIle(int id)
     {
         var file = _service.DocumentFiles.GetById(id).Result;

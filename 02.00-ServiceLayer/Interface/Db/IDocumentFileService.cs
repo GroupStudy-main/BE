@@ -6,8 +6,10 @@ public interface IDocumentFileService
 {
     IQueryable<DocumentFile> GetList();
     
-    IQueryable<DocumentFile> GetListByGroupId(int groupId, bool? approved);
-    
+    IQueryable<DocumentFile> GetListByGroupId(int groupId);
+
+    IQueryable<DocumentFile> GetListFileByDate(int groupId, DateTime month);
+
     IQueryable<DocumentFile> GetListByAccountId(int accountId);
 
 
@@ -18,4 +20,5 @@ public interface IDocumentFileService
     Task<DocumentFile> GetById(int id);
     
     Task DeleteDocumentFile(int id);
+
 }
