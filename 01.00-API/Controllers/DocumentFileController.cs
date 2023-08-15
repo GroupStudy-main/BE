@@ -49,7 +49,7 @@ public class DocumentFileController : ControllerBase
                 using (var fileStream = new FileStream(Path.Combine(groupPath, file.FileName), FileMode.Create))
                 {
                     await file.CopyToAsync(fileStream);
-                    httpFilePath = HostUploadFile + groupId + "/" + file.FileName;
+                    httpFilePath = HostUploadFile + file.FileName;
                 }
             }
 
@@ -133,7 +133,7 @@ public class DocumentFileController : ControllerBase
     }
 
     [HttpPut("/accept-file")]
-    [Authorize(Roles = Actor.Leader)]
+    //[Authorize(Roles = Actor.Leader)]
     public async Task<IActionResult> UpdateFile(int id, bool approved)
     {
         var file = _service.DocumentFiles.GetById(id).Result;
@@ -153,7 +153,7 @@ public class DocumentFileController : ControllerBase
 
     [HttpDelete("/delete-file")]
     //chỗ này thêm Authen
-    [Authorize(Roles = Actor.Leader)]
+    //[Authorize(Roles = Actor.Leader)]
     public async Task<IActionResult> DeleteFIle(int id)
     {
         var file = _service.DocumentFiles.GetById(id).Result;
