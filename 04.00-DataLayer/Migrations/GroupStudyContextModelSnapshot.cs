@@ -210,6 +210,17 @@ namespace DataLayer.Migrations
                             Phone = "0123456789",
                             RoleId = 1,
                             Username = "parent1"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            DateOfBirth = new DateTime(1975, 5, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "parent2@gmail.com",
+                            FullName = "Parent 2",
+                            Password = "15E2B0D3C33891EBB0F1EF609EC419420C20E320CE94C65FBC8C3312448EB225",
+                            Phone = "0123456789",
+                            RoleId = 1,
+                            Username = "parent2"
                         });
                 });
 

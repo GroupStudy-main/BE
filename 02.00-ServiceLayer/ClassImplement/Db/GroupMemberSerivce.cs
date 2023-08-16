@@ -190,8 +190,9 @@ namespace ServiceLayer.ClassImplement.Db
 
         public async Task BanUserFromGroupAsync(GroupMember banned)
         {
-            banned.IsActive = false;
-            await repos.GroupMembers.UpdateAsync(banned);
+            //banned.IsActive = false;
+            //await repos.GroupMembers.UpdateAsync(banned);
+            await repos.GroupMembers.RemoveAsync(banned.Id);
         }
     }
 }

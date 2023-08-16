@@ -986,7 +986,7 @@ namespace API.SignalRHub
             Clients.Group(roomId).SendAsync("user-stopped-sharing", IsSharing[roomId]);
         }
 
-        public async Task Draw(int prevX, int prevY, int currentX, int currentY, string color)
+        public async Task Draw(int prevX, int prevY, int currentX, int currentY, string color, int size)
         {
             HttpContext httpContext = Context.GetHttpContext();
             int meetingId = int.Parse(httpContext.Request.Query["meetingId"].ToString());
@@ -996,11 +996,12 @@ namespace API.SignalRHub
                     PrevY=prevY, 
                     CurrentX=currentX, 
                     CurrentY=currentY, 
-                    Color=color
+                    Color=color,
+                    Size=size
                 }
             );
 
-            await Clients.GroupExcept(meetingId.ToString(), Context.ConnectionId).SendAsync("draw", prevX, prevY, currentX, currentY, color);
+            await Clients.GroupExcept(meetingId.ToString(), Context.ConnectionId).SendAsync("draw", prevX, prevY, currentX, currentY, color, size);
         }
         public static readonly Dictionary<string, List<Drawing>> Drawings = new Dictionary<string, List<Drawing>>();
         public class Drawing
@@ -1010,6 +1011,7 @@ namespace API.SignalRHub
             public int CurrentX { get; set; }
             public int CurrentY { get; set; }
             public string Color { get; set; }
+            public int Size { get; set; }
         }
         public async Task TestLocaion(string msg)
         {
