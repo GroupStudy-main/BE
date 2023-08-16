@@ -22,7 +22,12 @@ public class DocumentFileController : ControllerBase
     private const string path = "D:\\UploadFile";
 
     // dòng này đổi thành host của máy
-    private const string HostUploadFile = "http://192.168.1.5:8080/";
+    // bỏ comment dòng này nếu chạy trên local
+    //private const string HostUploadFile = "http://127.0.0.1:8080/";
+
+    // dòng này dùng với ngrok, copy link của ngrok thay biến bên dưới
+    // host do ngrok thay đổi mỗi lần chạy lại ngrok
+    private const string HostUploadFile = "https://6072-118-69-233-165.ngrok-free.app/";
 
     public DocumentFileController(IServiceWrapper services, IMapper mapper)
     {
@@ -49,7 +54,7 @@ public class DocumentFileController : ControllerBase
                 using (var fileStream = new FileStream(Path.Combine(groupPath, file.FileName), FileMode.Create))
                 {
                     await file.CopyToAsync(fileStream);
-                    httpFilePath = HostUploadFile + file.FileName;
+                    httpFilePath = HostUploadFile + groupId + "/" + file.FileName;
                 }
             }
 
