@@ -51,9 +51,10 @@ namespace RepositoryLayer.ClassImplement
             return base.RemoveAsync(id);
         }
         
-        public override Task UpdateAsync(Meeting entity)
+        public async override Task UpdateAsync(Meeting entity)
         {
-            return base.UpdateAsync(entity);
+            dbContext.Meetings.Update(entity);
+            await dbContext.SaveChangesAsync();
         }
 
         ///SignalR

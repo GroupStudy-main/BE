@@ -345,6 +345,11 @@ namespace API.SignalRHub
 
             if(usersInMeeting.Count == 0)
             {
+                var usersJoined = repos.Connections.GetList()
+                  .Where(e => e.MeetingId == meeting.Id)
+                  .Select(e => e.UserName).ToHashSet();
+                //meeting.CountMember = 5;
+                meeting.CountMember = usersJoined.Count;
                 meeting.End = DateTime.Now;
                 await repos.Meetings.UpdateAsync(meeting);
             }
@@ -928,6 +933,11 @@ namespace API.SignalRHub
             await Clients.Group(meeting.Id.ToString()).SendAsync(UserOnlineInMeetingMsg, usersInMeeting);
             if (usersInMeeting.Count == 0)
             {
+                var usersJoined = repos.Connections.GetList()
+                  .Where(e => e.MeetingId == meeting.Id)
+                  .Select(e => e.UserName).ToHashSet();
+                meeting.CountMember = 5;
+                //meeting.CountMember=usersJoined.Count;
                 meeting.End = DateTime.Now;
                 await repos.Meetings.UpdateAsync(meeting);
                 Rooms.Remove(roomId);
