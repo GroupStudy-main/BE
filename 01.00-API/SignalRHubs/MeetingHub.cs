@@ -923,7 +923,7 @@ namespace API.SignalRHub
             string username = Context.User.GetUsername();
             Rooms[roomId].Remove(username);
 
-            await Clients.Group(roomId).SendAsync("user-disconnected", peerId);
+            await Clients.GroupExcept(roomId, Context.ConnectionId).SendAsync("user-disconnected", peerId, username);
 
             //code mới xử lí db
             Meeting meeting = await RemoveConnectionFromMeeting();
