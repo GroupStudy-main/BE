@@ -26,11 +26,12 @@ namespace ServiceLayer.ClassImplement.Db
                 return repos.Accounts.GetList()
                .Include(e => e.GroupMembers).ThenInclude(e => e.Group)
                .Where(e =>
-                   !e.SupervisionsForStudent.Any(e => e.ParentId == parentId)
-                   && (EF.Functions.Like(e.Id.ToString(), search + "%")
-                   || e.Email.ToLower().Contains(search)
-                   || e.Username.ToLower().Contains(search)
-                   || e.FullName.ToLower().Contains(search))
+                    e.RoleId == (int)RoleNameEnum.Student
+                    && !e.SupervisionsForStudent.Any(e => e.ParentId == parentId)
+                    && (EF.Functions.Like(e.Id.ToString(), search + "%")
+                    || e.Email.ToLower().Contains(search)
+                    || e.Username.ToLower().Contains(search)
+                    || e.FullName.ToLower().Contains(search))
                );
             }
             if (groupId.HasValue)
@@ -47,8 +48,9 @@ namespace ServiceLayer.ClassImplement.Db
                 return repos.Accounts.GetList()
                 .Include(e=>e.GroupMembers).ThenInclude(e=>e.Group)
                 .Where(e =>
-                    !e.GroupMembers.Any(e=>e.GroupId==groupId)
-                    &&(EF.Functions.Like(e.Id.ToString(), search + "%")
+                    e.RoleId == (int)RoleNameEnum.Student
+                    && !e.GroupMembers.Any(e=>e.GroupId==groupId)
+                    && (EF.Functions.Like(e.Id.ToString(), search + "%")
                     || e.Email.ToLower().Contains(search)
                     || e.Username.ToLower().Contains(search)
                     || e.FullName.ToLower().Contains(search))
@@ -57,12 +59,13 @@ namespace ServiceLayer.ClassImplement.Db
             return repos.Accounts.GetList()
                 .Include(e=>e.GroupMembers).ThenInclude(e=>e.Group)
                 .Where(e =>
-                EF.Functions.Like(e.Id.ToString(), search+"%")
-                //e.Id.ToString().Contains(search)
+                    e.RoleId == (int)RoleNameEnum.Student
+                    && (EF.Functions.Like(e.Id.ToString(), search+"%")
+                    //e.Id.ToString().Contains(search)
                     //SqlFunctions.StringConvert((double)e.Id) 
                     || e.Email.ToLower().Contains(search)
                     || e.Username.ToLower().Contains(search)
-                    || e.FullName.ToLower().Contains(search)
+                    || e.FullName.ToLower().Contains(search))
                 );
         }
 
