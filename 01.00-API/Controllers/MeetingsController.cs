@@ -193,10 +193,10 @@ namespace API.Controllers
         public async Task<IActionResult> CreateInstantMeeting(InstantMeetingCreateDto dto)
         {
             int studentId = HttpContext.User.GetUserId();
-            bool isLeader = await services.Groups.IsStudentLeadingGroupAsync(studentId, dto.GroupId);
-            if (!isLeader)
+            bool isJoining = await services.Groups.IsStudentJoiningGroupAsync(studentId, dto.GroupId);
+            if (!isJoining)
             {
-                return Unauthorized("Bạn không phải nhóm trưởng của nhóm này");
+                return Unauthorized("Bạn không phải thành viên của nhóm này");
             }
             ValidatorResult valResult = await validators.Meetings.ValidateParams(dto, studentId);
             if (!valResult.IsValid)

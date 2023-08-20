@@ -28,9 +28,9 @@ namespace APIExtension.Validator
                 {
                     validatorResult.Failures.Add("Nhóm không tồn tại");
                 }
-                if (!await services.Groups.IsStudentLeadingGroupAsync(studentId, dto.GroupId))
+                if (!await services.Groups.IsStudentJoiningGroupAsync(studentId, dto.GroupId))
                 {
-                    validatorResult.Failures.Add("Bạn không phải nhóm trưởng của nhóm này");
+                    validatorResult.Failures.Add("Bạn không phải thành viên của nhóm này");
                 }
                 if (dto.Name.Trim().Length == 0)
                 {

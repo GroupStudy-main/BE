@@ -936,8 +936,8 @@ namespace API.SignalRHub
                 var usersJoined = repos.Connections.GetList()
                   .Where(e => e.MeetingId == meeting.Id)
                   .Select(e => e.UserName).ToHashSet();
-                meeting.CountMember = 5;
-                //meeting.CountMember=usersJoined.Count;
+                //meeting.CountMember = 5;
+                meeting.CountMember = usersJoined.Count;
                 meeting.End = DateTime.Now;
                 await repos.Meetings.UpdateAsync(meeting);
                 Rooms.Remove(roomId);
