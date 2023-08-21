@@ -153,6 +153,11 @@ namespace API.Controllers
             //{
             //     return Unauthorized("Bạn không phải nhóm trưởng của nhóm này");
             //}
+            bool isJoining = await services.Groups.IsStudentJoiningGroupAsync(studentId, id);
+            if (!isJoining)
+            {
+                return Unauthorized("Bạn không phải thành viên của nhóm này");
+            }
             Group group = await services.Groups.GetFullByIdAsync(id);
 
             if (group == null)
