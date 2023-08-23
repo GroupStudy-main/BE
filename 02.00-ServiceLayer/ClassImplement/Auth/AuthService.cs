@@ -66,7 +66,7 @@ namespace ServiceLayer.ClassImplement.Auth
                 configuration["Authentication:JwtToken:Issuer"],
                 configuration["Authentication:JwtToken:Audience"],
                 claims,
-                expires: rememberMe ? DateTime.Now.AddDays(30) : DateTime.Now.AddHours(2),
+                expires: rememberMe ? DateTime.Now.AddDays(30) : DateTime.Now.AddDays(1),
                 signingCredentials: credential
             );
             return jwtHandler.WriteToken(jwtSecurityToken);

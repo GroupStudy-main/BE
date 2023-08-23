@@ -79,7 +79,7 @@ namespace DataLayer.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("Accounts");
+                    b.ToTable("Accounts", (string)null);
 
                     b.HasData(
                         new
@@ -251,7 +251,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("MeetingId");
 
-                    b.ToTable("Chats");
+                    b.ToTable("Chats", (string)null);
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Class", b =>
@@ -267,7 +267,7 @@ namespace DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Classes");
+                    b.ToTable("Classes", (string)null);
 
                     b.HasData(
                         new
@@ -334,7 +334,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("MeetingId");
 
-                    b.ToTable("MeetingParticipations");
+                    b.ToTable("MeetingParticipations", (string)null);
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.DocumentFile", b =>
@@ -367,7 +367,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("DocumentFiles");
+                    b.ToTable("DocumentFiles", (string)null);
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Group", b =>
@@ -389,7 +389,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("ClassId");
 
-                    b.ToTable("Groups");
+                    b.ToTable("Groups", (string)null);
 
                     b.HasData(
                         new
@@ -457,7 +457,7 @@ namespace DataLayer.Migrations
                     b.HasIndex("AccountId", "GroupId")
                         .IsUnique();
 
-                    b.ToTable("GroupMembers");
+                    b.ToTable("GroupMembers", (string)null);
 
                     b.HasData(
                         new
@@ -562,7 +562,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("GroupSubjects");
+                    b.ToTable("GroupSubjects", (string)null);
 
                     b.HasData(
                         new
@@ -638,7 +638,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("JoinInvites");
+                    b.ToTable("JoinInvites", (string)null);
 
                     b.HasData(
                         new
@@ -753,7 +753,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("ScheduleId");
 
-                    b.ToTable("Meetings");
+                    b.ToTable("Meetings", (string)null);
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Request", b =>
@@ -779,7 +779,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("JoinRequests");
+                    b.ToTable("JoinRequests", (string)null);
 
                     b.HasData(
                         new
@@ -846,7 +846,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("RevieweeId");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("Reviews", (string)null);
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.ReviewDetail", b =>
@@ -876,7 +876,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("ReviewerId");
 
-                    b.ToTable("ReviewDetails");
+                    b.ToTable("ReviewDetails", (string)null);
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Role", b =>
@@ -893,7 +893,7 @@ namespace DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
 
                     b.HasData(
                         new
@@ -943,7 +943,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("Schedules");
+                    b.ToTable("Schedules", (string)null);
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Subject", b =>
@@ -960,7 +960,7 @@ namespace DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Subjects");
+                    b.ToTable("Subjects", (string)null);
 
                     b.HasData(
                         new
@@ -1028,7 +1028,7 @@ namespace DataLayer.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("Supervisions");
+                    b.ToTable("Supervisions", (string)null);
                 });
 
             modelBuilder.Entity("DataLayer.DBObject.Account", b =>

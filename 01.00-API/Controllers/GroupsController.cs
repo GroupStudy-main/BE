@@ -18,6 +18,8 @@ using ShareResource.DTO;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using APIExtension.Validator;
+using API.SignalRHub;
+using Microsoft.AspNetCore.SignalR;
 
 namespace API.Controllers
 {

@@ -1,5 +1,6 @@
 ﻿using API.SignalRHub.Tracker;
 using APIExtension.ClaimsPrinciple;
+using DataLayer.DBObject;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using ShareResource.DTO.Connection;
@@ -15,6 +16,7 @@ namespace API.SignalRHub
         //BE: SendAsync(GroupHub.CountMemberInGroupMsg, new { meetingId: int, countMember: int })
         public static string CountMemberInGroupMsg => "CountMemberInGroup";
         public static string OnLockedUserMsg => "OnLockedUser";
+        public static string OnReloadMeetingMsg => "OnReloadMeeting";
 
         private readonly PresenceTracker presenceTracker;
         public GroupHub(PresenceTracker tracker)
@@ -23,12 +25,20 @@ namespace API.SignalRHub
         }
         public override async Task OnConnectedAsync()
         {
+            HttpContext httpContext = Context.GetHttpContext();
+            string groupIdString = httpContext.Request.Query["groupId"].ToString();
+            await Groups.AddToGroupAsync(Context.ConnectionId, groupIdString);
+
             FunctionTracker.Instance().AddHubFunc("3.      Hub/Presence: OnConnectedAsync()");
             var isOnline = await presenceTracker.UserConnected(new UserConnectionSignalrDto(Context.User.GetUsername(), 0), Context.ConnectionId);
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
+            HttpContext httpContext = Context.GetHttpContext();
+            string groupIdString = httpContext.Request.Query["groupId"].ToString();
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupIdString);
+
             FunctionTracker.Instance().AddHubFunc("3.      Hub/Presence: OnDisconnectedAsync(Exception)");
             var isOffline = await presenceTracker.UserDisconnected(new UserConnectionSignalrDto(Context.User.GetUsername(), 0), Context.ConnectionId);
             await base.OnDisconnectedAsync(exception);
