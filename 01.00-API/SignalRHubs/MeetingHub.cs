@@ -272,6 +272,7 @@ namespace API.SignalRHub
                 con.End = DateTime.Now;
                 await repos.Connections.UpdateAsync(con);
             }
+            await groupHub.Clients.Group(meeting.GroupId.ToString()).SendAsync(GroupHub.OnReloadMeetingMsg);
         }
 
         #region old code
@@ -869,7 +870,6 @@ namespace API.SignalRHub
             await Clients.GroupExcept(roomId, Context.ConnectionId).SendAsync("user-joined", peer);
             await Clients.Group(roomId).SendAsync("get-users", new { roomId = roomId, participants = Rooms[roomId] });
             await Clients.Group(roomId).SendAsync("get-messages", Chats[roomId]);
-
         }
 
         public class LeaveRoomInput
@@ -960,6 +960,8 @@ namespace API.SignalRHub
                 connection.End = DateTime.Now;
                 await repos.Connections.UpdateAsync(connection);
             }
+            await groupHub.Clients.Group(meeting.GroupId.ToString()).SendAsync(GroupHub.OnReloadMeetingMsg);
+
         }
 
         public async Task SendMessage(IMessage message)
