@@ -16,9 +16,10 @@ public static class CronScheduleExpression
 
     //public const string Weekly = "0 0 0 ? * WED *";
     //public const string Weekly = "0 0 0 ? * THU *";
-    //public const string Weekly = "0 56 10 ? * THU *";
+    //public const string Weekly = "0 38 18 ? * THU *";
     //public const string Weekly = "0 0 0 ? * FRI *";
-    public const string Weekly = "0 0 0 ? * Mon *";
+    //public const string Weekly = "0 0 0 ? * Mon *";
+    public const string Weekly = "0 0 0 ? * MON,FRI *";
 
     /// <summary>
     ///     Every Day

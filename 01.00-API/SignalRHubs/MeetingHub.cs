@@ -1015,6 +1015,13 @@ namespace API.SignalRHub
 
             await Clients.GroupExcept(meetingId.ToString(), Context.ConnectionId).SendAsync("draw", prevX, prevY, currentX, currentY, color, size);
         }
+
+        public async Task LeaderEndMeeting()
+        {
+            HttpContext httpContext = Context.GetHttpContext();
+            int meetingId = int.Parse(httpContext.Request.Query["meetingId"].ToString());
+            await Clients.Group(meetingId.ToString()).SendAsync("LeaderEndMeeting", "Nhóm trưởng đã kết thúc cuộc họp");
+        }
         public static readonly Dictionary<string, List<Drawing>> Drawings = new Dictionary<string, List<Drawing>>();
         public class Drawing
         {
