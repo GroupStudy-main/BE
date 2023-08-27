@@ -12,6 +12,7 @@ using ServiceLayer.Interface;
 using ShareResource.APIModel;
 using ShareResource.DTO;
 using ShareResource.Enums;
+using ShareResource.Utils;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
@@ -103,6 +104,7 @@ namespace API.Controllers
                 return BadRequest(valResult.Failures);
             }
             Account register = mapper.Map<Account>(dto);
+            register.Password = register.Password.CustomHash();
             await services.Auth.Register(register, RoleNameEnum.Student);
             return Ok();
         }

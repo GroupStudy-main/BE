@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ShareResource.Utils;
 
 namespace ShareResource.DTO
 {
@@ -64,6 +65,8 @@ namespace ShareResource.DTO
             set { dateOfBirth = value.Value.Date; }
         }
 
+        public int ClassId { get; set; } = 6;
+        public bool IsStudent { get; set; } = true;
 
         //Role
         //[ForeignKey("RoleId")]
