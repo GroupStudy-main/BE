@@ -105,7 +105,14 @@ namespace API.Controllers
             }
             Account register = mapper.Map<Account>(dto);
             register.Password = register.Password.CustomHash();
-            await services.Auth.Register(register, RoleNameEnum.Student);
+            if (dto.IsStudent)
+            {
+                await services.Auth.Register(register, RoleNameEnum.Student);
+            }
+            else
+            {
+                await services.Auth.Register(register, RoleNameEnum.Parent);
+            }
             return Ok();
         }
 
