@@ -319,6 +319,7 @@ namespace API.Controllers
             {
                 return Unauthorized("Bạn không phải thành viên của nhóm này");
             }
+            dto.Date=dto.Date.AddDays(1);
             ValidatorResult valResult = await validators.Meetings.ValidateParams(dto, studentId);
             if (!valResult.IsValid)
             {

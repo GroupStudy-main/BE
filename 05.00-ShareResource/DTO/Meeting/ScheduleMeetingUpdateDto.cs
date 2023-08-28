@@ -18,9 +18,9 @@ namespace ShareResource.DTO
         }
         private DateTime date;
 
-        public DateTime Date
+        public DateTime Date /*{ get; set; }*/
         {
-            get { return date.Date; }
+            get { return date; }
             set { date = value.Date; }
         }
 
