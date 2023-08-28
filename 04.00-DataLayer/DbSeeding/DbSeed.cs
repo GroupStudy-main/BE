@@ -27,12 +27,13 @@ namespace DataLayer.DbSeeding
             {
                 Id = 1,
                 Username = "student1",
-                FullName = "Tran Khai Minh Khoi",
+                FullName = "Trần Khải Minh Khôi",
                 Email = "trankhaiminhkhoi10a3@gmail.com",
                 //Password = StringUtils.CustomHash("123456789"),
                 Password = StringUtils.CustomHash("123456789"),
                 Phone = "0123456789",
                 Schhool="THCS Minh Đức",
+                ClassId = 7,
                 DateOfBirth = new DateTime(2009,5, 5),
                 RoleId = 2
             },
@@ -40,112 +41,121 @@ namespace DataLayer.DbSeeding
             {
                 Id = 2,
                 Username = "student2",
-                FullName = "Dao Thi B",
+                FullName = "Đào Thị Bưởi",
                 Email = "student2@gmail.com",
                 Password = StringUtils.CustomHash("123456789"),
                 Phone = "0123456789",
                 Schhool="THCS Minh Đức",
                 DateOfBirth = new DateTime(2009,5, 5),
+                ClassId = 6,
                 RoleId = 2
             },
             new Account
             {
                 Id = 3,
                 Username = "student3",
-                FullName = "Tran Van C",
+                FullName = "Trần Văn Chình",
                 Email = "student3@gmail.com",
                 Password = StringUtils.CustomHash("123456789"),
                 Phone = "0123456789",
                 Schhool="THCS Minh Đức",
                 DateOfBirth = new DateTime(2009,5, 5),
+                ClassId = 6,
                 RoleId = 2
             },
             new Account
             {
                 Id = 4,
                 Username = "student4",
-                FullName = "Li Thi D",
+                FullName = "Lí Thị Diệu",
                 Email = "student4@gmail.com",
                 Password = StringUtils.CustomHash("123456789"),
                 Phone = "0123456789",
                 Schhool="THCS Minh Đức",
                 DateOfBirth = new DateTime(2009,5, 5),
+                ClassId = 6,
                 RoleId = 2
             },
             new Account
             {
                 Id = 5,
                 Username = "student5",
-                FullName = "Tran Van E",
+                FullName = "Trần Văn Em",
                 Email = "student5@gmail.com",
                 Password = StringUtils.CustomHash("123456789"),
                 Phone = "0123456789",
                 DateOfBirth = new DateTime(2009,5, 5),
+                ClassId = 6,
                 RoleId = 2
             },
             new Account
             {
                 Id = 6,
                 Username = "student6",
-                FullName = "Li Chinh F",
+                FullName = "Lí Chính Phúc",
                 Email = "student6@gmail.com",
                 Password = StringUtils.CustomHash("123456789"),
                 Phone = "0123456789",
                 Schhool="THCS Minh Đức",
                 DateOfBirth = new DateTime(2009,5, 5),
+                ClassId = 6,
                 RoleId = 2
             },
             new Account
             {
                 Id = 7,
                 Username = "student7",
-                FullName = "Ngo Van G",
+                FullName = "Ngô Văn Gia",
                 Email = "student7@gmail.com",
                 Password = StringUtils.CustomHash("123456789"),
                 Phone = "0123456789",
                 Schhool="THCS Minh Đức",
                 DateOfBirth = new DateTime(2009,5, 5),
+                ClassId = 6,
                 RoleId = 2
             },
             new Account
             {
                 Id = 8,
                 Username = "student8",
-                FullName = "Tran Van H",
+                FullName = "Trần Văn Hơn",
                 Email = "student8@gmail.com",
                 Password = StringUtils.CustomHash("123456789"),
                 Phone = "0123456789",
                 DateOfBirth = new DateTime(2009,5, 5),
+                ClassId = 6,
                 RoleId = 2
             }
             , new Account
             {
                 Id = 9,
                 Username = "student9",
-                FullName = "Tran Van I",
+                FullName = "Trần Văn Yến",
                 Email = "student9@gmail.com",
                 Password = StringUtils.CustomHash("123456789"),
                 Phone = "0123456789",
                 Schhool="THCS Minh Đức",
                 DateOfBirth = new DateTime(2009,5, 5),
+                ClassId = 6,
                 RoleId = 2
             }, new Account
             {
                 Id = 10,
                 Username = "student10",
-                FullName = "Tran Van J",
+                FullName = "Trần Văn Dền",
                 Email = "student10@gmail.com",
                 Password = StringUtils.CustomHash("123456789"),
                 Phone = "0123456789",
                 Schhool="THCS Minh Đức",
                 DateOfBirth = new DateTime(2009,5, 5),
+                ClassId = 6,
                 RoleId = 2
             },
             new Account
             {
                 Id = 11,
                 Username = "parent1",
-                FullName = "Tran Khoi",
+                FullName = "Trần Ba",
                 Email = "trankhaiminhkhoi@gmail.com",
                 Password = StringUtils.CustomHash("123456789"),
                 Phone = "0123456789",
@@ -156,7 +166,7 @@ namespace DataLayer.DbSeeding
             {
                 Id = 12,
                 Username = "parent2",
-                FullName = "Parent 2",
+                FullName = "Trần Văn Mạ",
                 Email = "parent2@gmail.com",
                 Password = StringUtils.CustomHash("123456789"),
                 Phone = "0123456789",
@@ -587,7 +597,31 @@ namespace DataLayer.DbSeeding
                 Id = 8,
                 GroupId = 3,
                 SubjectId = (int)SubjectEnum.Dia
-            }
+            },
+            #endregion
+            #region Subject group 4
+            new GroupSubject
+            {
+                Id = 9,
+                GroupId = 4,
+                SubjectId = (int)SubjectEnum.Su
+            },
+            #endregion
+            #region Subject group 5
+            new GroupSubject
+            {
+                Id = 10,
+                GroupId = 5,
+                SubjectId = (int)SubjectEnum.Su
+            },
+            #endregion
+            #region Subject group 6
+            new GroupSubject
+            {
+                Id = 11,
+                GroupId = 6,
+                SubjectId = (int)SubjectEnum.Su
+            },
             #endregion
         };
         public static Invite[] Invites = new Invite[]
