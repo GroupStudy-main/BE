@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using ServiceLayer.Interface;
 using ShareResource.DTO.File;
 
-
 namespace API.Controllers;
 
 [Route("api/[controller]")]
@@ -19,20 +18,25 @@ public class DocumentFileController : ControllerBase
     private readonly IMapper _mapper;
 
     //Path của thư mục chứa file
-    private const string path = "D:\\UploadFile";
+    private const string path = "UploadFile\\";
+    //private const string path = "https://ample-definitely-reptile.ngrok-free.app/";
+
+    //private const string path = "s3://arn:aws:s3:ap-southeast-1:952968050037/";
 
     // dòng này đổi thành host của máy
     // bỏ comment dòng này nếu chạy trên local
-    //private const string HostUploadFile = "http://127.0.0.1:8080/";
+    private const string HostUploadFile = "https://shin198-001-site1.ctempurl.com/uploadfile/";
+    //private const string HostUploadFile = "arn:aws:s3:ap-southeast-1:952968050037:accesspoint/group-study-storage/";
 
     // dòng này dùng với ngrok, copy link của ngrok thay biến bên dưới
     // host do ngrok thay đổi mỗi lần chạy lại ngrok
-    private const string HostUploadFile = "https://6072-118-69-233-165.ngrok-free.app/";
+    //private const string HostUploadFile = "https://ample-definitely-reptile.ngrok-free.app/";
+
 
     public DocumentFileController(IServiceWrapper services, IMapper mapper)
     {
         this._service = services;
-        this._mapper = mapper;
+        this._mapper = mapper;    
     }
 
     [HttpPost("/upload-file/{groupId}")]
@@ -76,7 +80,7 @@ public class DocumentFileController : ControllerBase
         return Ok(documentFile);
     }
 
-    
+
     [HttpGet("/get-list-file")]
     public async Task<ActionResult<DocumentFile>> GetListFile()
     {

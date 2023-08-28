@@ -26,4 +26,8 @@
     <ProjectReference Include="..\02.00-ServiceLayer\02.00-ServiceLayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UploadFile\" />
+  </ItemGroup>
+
 </Project>

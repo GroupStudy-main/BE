@@ -17,6 +17,7 @@ using ServiceLayer.Interface;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Utilities.ServiceExtensions.Scheduler;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 IConfiguration configuration = builder.Configuration;
@@ -68,6 +69,7 @@ builder.Services.AddCors(options =>
 });
 #endregion
 
+builder.Services.AddDirectoryBrowser();
 
 #region SignalR
 builder.Services.AddSignalR();
@@ -107,6 +109,7 @@ builder.Services.AddSwaggerGen(options =>
 
 
 var app = builder.Build();
+
 if (IsInMemory)
 {
     Console.WriteLine("+++++++++++++++++++++++++++++++++++++InMemory+++++++++++++++++++++++++++++++++++");
@@ -122,6 +125,14 @@ app.UseSwaggerUI(options =>
     #endregion
 });
 app.UseStaticFiles();
+
+app.UseFileServer(new FileServerOptions
+{
+    FileProvider = new PhysicalFileProvider(
+           Path.Combine(builder.Environment.ContentRootPath, "UploadFile")),
+    RequestPath = "/uploadfile",
+    EnableDirectoryBrowsing = true
+});
 
 app.UseCors("signalr");
 
