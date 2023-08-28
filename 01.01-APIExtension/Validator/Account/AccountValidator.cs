@@ -93,13 +93,13 @@ namespace APIExtension.Validator
                     }
                 }
                 //School
-                if (dto.Schhool != null)
-                {
-                    if (dto.Schhool.Trim().Length == 0)
-                    {
-                        validatorResult.Failures.Add("Thiếu tên trường");
-                    }
-                }
+                //if (dto.Schhool != null)
+                //{
+                //    if (dto.Schhool.Trim().Length == 0)
+                //    {
+                //        validatorResult.Failures.Add("Thiếu tên trường");
+                //    }
+                //}
             }
 
             catch (Exception ex)
