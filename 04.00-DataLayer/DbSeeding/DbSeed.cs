@@ -794,11 +794,11 @@ namespace DataLayer.DbSeeding
             {
                 Id = 2,
                 GroupId=1,
-                Name=$"Ended schedule past history {DateTime.Now.AddDays(-2).ToShortDateString()}",
-                ScheduleStart = DateTime.Now.AddDays(-2).AddMinutes(15),
-                ScheduleEnd = DateTime.Now.AddDays(-2).AddHours(1),
-                Start = DateTime.Now.AddDays(-2).AddMinutes(30),
-                End = DateTime.Now.AddDays(-2).AddHours(2),
+                Name=$"Ended schedule past history {DateTime.Now.AddMonths(-2).AddDays(-2).ToShortDateString()}",
+                ScheduleStart = DateTime.Now.AddMonths(-2).AddDays(-2).AddMinutes(15),
+                ScheduleEnd = DateTime.Now.AddMonths(-2).AddDays(-2).AddHours(1),
+                Start = DateTime.Now.AddMonths(-2).AddDays(-2).AddMinutes(30),
+                End = DateTime.Now.AddMonths(-2).AddDays(-2).AddHours(2),
                 CountMember = 1,
             },
             //Ended instant meeting
@@ -875,6 +875,15 @@ namespace DataLayer.DbSeeding
                 MeetingId = 2,
                 Start = DateTime.Now.AddDays(-2).AddHours(1),
                 End = DateTime.Now.AddDays(-2).AddHours(2),
+                UserName = "student1",
+            },
+             new Connection
+            {
+                Id= "Id3",
+                AccountId = 1,
+                MeetingId = 3,
+                Start = DateTime.Now.AddMonths(-2).AddDays(-2).AddHours(1),
+                End = DateTime.Now.AddMonths(-2).AddDays(-2).AddHours(2),
                 UserName = "student1",
             },
 

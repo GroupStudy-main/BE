@@ -85,7 +85,6 @@ namespace API.Controllers
         //}
         #endregion
 
-        //Get: api/Accounts/search
         [SwaggerOperation(
             Summary = $"[{Actor.Student_Parent}/{Finnished.False}/{Auth.True}] Student's stat by month"
             , Description = "lấy stat theo month" +
@@ -99,8 +98,24 @@ namespace API.Controllers
             {
                 return Unauthorized("Bạn không thể xem dữ liệu của học sinh khác");
             }
-            StatGetDto mappedStaat = await services.Stats.GetStatForStudentInMonth(studentId, month);
-            return Ok(mappedStaat);
+            StatGetDto mappedStat = await services.Stats.GetStatForStudentInMonth(studentId, month);
+            return Ok(mappedStat);
+        }
+
+        [SwaggerOperation(
+            Summary = $"[{Actor.Student_Parent}/{Finnished.False}/{Auth.True}] Student's stat by month"
+            , Description = "lấy stat cho 5 tháng gần nhất"
+        )]
+        [HttpGet("{studentId}")]
+        [Authorize(Roles = Actor.Student_Parent)]
+        public async Task<IActionResult> GetStatForStudent(int studentId)
+        {
+            if (HttpContext.User.IsInRole(Actor.Student) && HttpContext.User.GetUserId() != studentId)
+            {
+                return Unauthorized("Bạn không thể xem dữ liệu của học sinh khác");
+            }
+            IList<StatGetListDto> mappedStat = await services.Stats.GetStatsForStudent(studentId);
+            return Ok(mappedStat);
         }
     }
 }

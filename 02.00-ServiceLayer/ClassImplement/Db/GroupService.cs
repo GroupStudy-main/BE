@@ -24,7 +24,6 @@ namespace ServiceLayer.ClassImplement.Db
 
         public async Task<IQueryable<Group>> SearchGroups(string search, int studentId, bool newGroup)
         {
-            string test = new string("Má mày").ConvertToUnsign().ToLower();
             search=search.ConvertToUnsign().ToLower();
             if (newGroup)
             {
