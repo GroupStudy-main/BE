@@ -11,6 +11,7 @@ namespace DataLayer.DBObject
         public int Id { get; set; }
         [MaxLength(50)]
         public string Name { get; set; }
+        public string Content { get; set; }
         public int CountMember { get; set; }
         public DateTime? Start { get; set; } = null;
         public DateTime? End { get; set; } = null;

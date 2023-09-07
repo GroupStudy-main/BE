@@ -10,6 +10,7 @@ namespace ShareResource.DTO
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string Content { get; set; }
         public DateTime? ScheduleStart { get; set; }
         public DateTime? ScheduleEnd { get; set; }
         public DateTime Start { get; set; }

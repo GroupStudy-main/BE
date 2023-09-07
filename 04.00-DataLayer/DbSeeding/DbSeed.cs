@@ -785,7 +785,8 @@ namespace DataLayer.DbSeeding
             {
                 Id = 1,
                 GroupId=1,
-                Name=$"Forgoten past history {DateTime.Now.AddDays(-3).ToShortDateString()}",
+                Name=$"Ôn tập kiểm tra 15p",
+                Content=$"Ôn tập kiểm tra 15p {DateTime.Now.AddDays(-3).ToShortDateString()}",
                 ScheduleStart = DateTime.Now.AddDays(-3),
                 ScheduleEnd = DateTime.Now.AddDays(-3).AddHours(1),
             },
@@ -794,7 +795,8 @@ namespace DataLayer.DbSeeding
             {
                 Id = 2,
                 GroupId=1,
-                Name=$"Ended schedule past history {DateTime.Now.AddMonths(-2).AddDays(-2).ToShortDateString()}",
+                Name=$"Ôn tập kiểm tra 1 tiết",
+                Content=$"Ôn tập kiểm tra 1 tiết {DateTime.Now.AddMonths(-2).AddDays(-2).ToShortDateString()}",
                 ScheduleStart = DateTime.Now.AddMonths(-2).AddDays(-2).AddMinutes(15),
                 ScheduleEnd = DateTime.Now.AddMonths(-2).AddDays(-2).AddHours(1),
                 Start = DateTime.Now.AddMonths(-2).AddDays(-2).AddMinutes(30),
@@ -806,7 +808,8 @@ namespace DataLayer.DbSeeding
             {
                 Id = 3,
                 GroupId=1,
-                Name=$"Ended instant past history {DateTime.Now.AddDays(-2).ToShortDateString()}",
+                Name=$"Ôn tập thi toán",
+                Content=$"Ôn tập thi toán {DateTime.Now.AddDays(-2).ToShortDateString()}",
                 Start = DateTime.Now.AddDays(-2).AddMinutes(30),
                 End = DateTime.Now.AddDays(-2).AddHours(2),
                 CountMember = 1,
@@ -816,7 +819,8 @@ namespace DataLayer.DbSeeding
             {
                 Id = 4,
                 GroupId=1,
-                Name=$"Live schedule meeting {DateTime.Now.ToShortDateString()}",
+                Name=$"Ôn tập kiểm tra lí",
+                Content=$"Ôn tập kiểm tra lí {DateTime.Now.ToShortDateString()}",
                 ScheduleStart = DateTime.Now.AddMinutes(15),
                 ScheduleEnd = DateTime.Now.AddHours(1),
                 Start = DateTime.Now.AddMinutes(30),
@@ -826,7 +830,8 @@ namespace DataLayer.DbSeeding
             {
                 Id = 5,
                 GroupId=1,
-                Name=$"Live Instant meeting {DateTime.Now.ToShortDateString()}",
+                Name=$"Ôn tập kiểm tra",
+                Content=$"Ôn tập kiểm tra {DateTime.Now.ToShortDateString()}",
                 Start = DateTime.Now.AddMinutes(-30),
             },
             //Future Schedule meeting
@@ -834,7 +839,8 @@ namespace DataLayer.DbSeeding
             {
                 Id = 6,
                 GroupId=1,
-                Name=$"Today late schedule meeting {DateTime.Now.ToShortDateString()}",
+                Name=$"Ôn tập thi toán",
+                Content=$"Ôn tập thi toán {DateTime.Now.ToShortDateString()}",
                 ScheduleStart = DateTime.Now.AddMinutes(-15),
                 ScheduleEnd = DateTime.Now.AddHours(1),
             },
@@ -842,7 +848,8 @@ namespace DataLayer.DbSeeding
             {
                 Id = 7,
                 GroupId=1,
-                Name=$"Today early schedule meeting {DateTime.Now.ToShortDateString()}",
+                Name=$"Ôn tập thi lí",
+                Content=$"Ôn tập thi lí {DateTime.Now.ToShortDateString()}",
                 ScheduleStart = DateTime.Now.AddMinutes(15),
                 ScheduleEnd = DateTime.Now.AddHours(1),
             },
@@ -850,7 +857,8 @@ namespace DataLayer.DbSeeding
             {
                 Id = 8,
                 GroupId=1,
-                Name=$"Future schedule meeting {DateTime.Now.AddDays(1).ToShortDateString()}",
+                Name=$"Ôn tập thi Toán",
+                Content=$"Ôn tập thi Toán {DateTime.Now.AddDays(1).ToShortDateString()}",
                 ScheduleStart = DateTime.Now.AddDays(1).AddMinutes(15),
                 ScheduleEnd = DateTime.Now.AddDays(1).AddHours(1),
             },

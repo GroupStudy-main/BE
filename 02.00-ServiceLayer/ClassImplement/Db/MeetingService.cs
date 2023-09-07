@@ -52,6 +52,7 @@ namespace ServiceLayer.ClassImplement.Db
             List<Meeting> creatingMeetings = dates.Select(date => new Meeting
             {
                 Name = dto.Name + " " + date.ToString("d/M"),
+                Content = dto.Content,
                 GroupId = dto.GroupId,
                 ScheduleStart = date.Add(dto.ScheduleStartTime),
                 ScheduleEnd = date.Add(dto.ScheduleEndTime),
@@ -225,6 +226,7 @@ namespace ServiceLayer.ClassImplement.Db
                 Id = dto.Id,
                 GroupId = existed.GroupId,
                 Name = dto.Name,
+                Content = dto.Content,
                 ScheduleStart = dto.Date.Date.Add(dto.ScheduleStartTime),
                 ScheduleEnd = dto.Date.Date.Add(dto.ScheduleEndTime),
             };
