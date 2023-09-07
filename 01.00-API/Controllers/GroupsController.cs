@@ -58,6 +58,44 @@ namespace API.Controllers
             return Ok(mapped);
         }
 
+        [SwaggerOperation(
+          Summary = $"[{Actor.Student}/{Finnished.True}]Search list of groups by classs for student",
+          Description = "Search group theo class<br>" +
+               "newGroup thành true nếu không muốn search những nhóm cũ (nên để)"
+      )]
+        [Authorize(Roles = Actor.Student)]
+        [HttpGet("Search/Class")]
+        public async Task<IActionResult> SearchGroupByClass(string Class, bool newGroup = true)
+        {
+            int studentId = HttpContext.User.GetUserId();
+            IQueryable<Group> list = await services.Groups.SearchGroupsByClass(Class, studentId, newGroup);
+            if (list == null || !list.Any())
+            {
+                return NotFound();
+            }
+            var mapped = list.ProjectTo<GroupGetListDto>(mapper.ConfigurationProvider);
+            return Ok(mapped);
+        }
+
+        [SwaggerOperation(
+          Summary = $"[{Actor.Student}/{Finnished.True}]Search list of groups by subject for student",
+          Description = "Search group theo class<br>" +
+               "newGroup thành true nếu không muốn search những nhóm cũ (nên để)"
+      )]
+        [Authorize(Roles = Actor.Student)]
+        [HttpGet("Search/Subject")]
+        public async Task<IActionResult> SearchGroupBySubject(string subject, bool newGroup = true)
+        {
+            int studentId = HttpContext.User.GetUserId();
+            IQueryable<Group> list = await services.Groups.SearchGroupsBySubject(subject, studentId, newGroup);
+            if (list == null || !list.Any())
+            {
+                return NotFound();
+            }
+            var mapped = list.ProjectTo<GroupGetListDto>(mapper.ConfigurationProvider);
+            return Ok(mapped);
+        }
+
         // GET: api/Groups/Join
         [SwaggerOperation(
            Summary = $"[{Actor.Student}/{Finnished.True}]Get list of groups student joined",

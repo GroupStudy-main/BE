@@ -34,14 +34,16 @@ namespace ServiceLayer.ClassImplement.Db
                         !e.GroupMembers.Any(e => e.AccountId == studentId)
                         && ((EF.Functions.Like(e.Id.ToString(), search + "%"))
                         || e.Name.ConvertToUnsign().ToLower().Contains(search)
+                        || search.Contains(e.ClassId.ToString())
                         || e.GroupSubjects.Any(gs => gs.Subject.Name.ConvertToUnsign().ToLower().Contains(search))));
             }
             return repos.Groups.GetList()
                 .Include(e => e.GroupMembers)
                 .Include(e => e.GroupSubjects).ThenInclude(e => e.Subject)
-                .Where(e=>
+                .Where(e =>
                     (EF.Functions.Like(e.Id.ToString(), search + "%"))
                     || e.Name.ConvertToUnsign().ToLower().Contains(search)
+                    || search.Contains(e.ClassId.ToString())
                     || e.GroupSubjects.Any(gs=>gs.Subject.Name.ConvertToUnsign().ToLower().Contains(search)));
             //return repos.Accounts.GetList().Include(e=>e.GroupMembers)
             //    .Where(e =>
@@ -51,6 +53,40 @@ namespace ServiceLayer.ClassImplement.Db
             //        || e.Username.ToLower().Contains(search)
             //        || e.FullName.ToLower().Contains(search))
             //    );
+        }
+
+        public async Task<IQueryable<Group>> SearchGroupsBySubject(string search, int studentId, bool newGroup)
+        {
+            search = search.ConvertToUnsign().ToLower();
+            if (newGroup)
+            {
+                return repos.Groups.GetList()
+                    .Include(e => e.GroupMembers)
+                    .Include(e => e.GroupSubjects).ThenInclude(e => e.Subject)
+                    .Where(e =>!e.GroupMembers.Any(e => e.AccountId == studentId)
+                        && e.GroupSubjects.Any(gs => gs.Subject.Name.ConvertToUnsign().ToLower().Contains(search)));
+            }
+            return repos.Groups.GetList()
+                .Include(e => e.GroupMembers)
+                .Include(e => e.GroupSubjects).ThenInclude(e => e.Subject)
+                .Where(e => e.GroupSubjects.Any(gs => gs.Subject.Name.ConvertToUnsign().ToLower().Contains(search)));
+        }
+
+        public async Task<IQueryable<Group>> SearchGroupsByClass(string search, int studentId, bool newGroup)
+        {
+            search = search.ConvertToUnsign().ToLower();
+            if (newGroup)
+            {
+                return repos.Groups.GetList()
+                    .Include(e => e.GroupMembers)
+                    .Include(e => e.GroupSubjects).ThenInclude(e => e.Subject)
+                    .Where(e => !e.GroupMembers.Any(e => e.AccountId == studentId)
+                        && search.Contains(e.ClassId.ToString()));
+            }
+            return repos.Groups.GetList()
+                .Include(e => e.GroupMembers)
+                .Include(e => e.GroupSubjects).ThenInclude(e => e.Subject)
+                .Where(e => search.Contains(e.ClassId.ToString()));
         }
 
         public async Task<IQueryable<Group>> GetJoinGroupsOfStudentAsync(int studentId)
