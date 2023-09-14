@@ -87,9 +87,8 @@ namespace API.SignalRHub
         IHubContext<GroupHub> groupHub;
         PresenceTracker presenceTracker;
         IRepoWrapper repos;
-        ShareScreenTracker shareScreenTracker;
 
-        public MeetingHub(IRepoWrapper repos, ShareScreenTracker shareScreenTracker, PresenceTracker presenceTracker, IHubContext<GroupHub> presenceHubContext, IMapper mapper)
+        public MeetingHub(IRepoWrapper repos, PresenceTracker presenceTracker, IHubContext<GroupHub> presenceHubContext, IMapper mapper)
         {
             //Console.WriteLine("2.   " + new String('+', 50));
             //Console.WriteLine("2.   Hub/Chat: ctor(IUnitOfWork, UserShareScreenTracker, PresenceTracker, PresenceHub)");
@@ -97,7 +96,6 @@ namespace API.SignalRHub
             this.repos = repos;
             this.presenceTracker = presenceTracker;
             this.groupHub = presenceHubContext;
-            this.shareScreenTracker = shareScreenTracker;
             this.mapper = mapper;
         }
         //sẽ dc gọi khi FE sẽ connect qua hàm này
@@ -201,19 +199,6 @@ namespace API.SignalRHub
             await groupHub.Clients.AllExcept(currentConnectionIds).SendAsync(GroupHub.CountMemberInGroupMsg,
                    new { meetingId = meetingIdInt, countMember = currentUsersInMeeting.Length });
 
-            //share screen cho user vao sau cung
-            //step 7: Thông báo shareScreen cho user vào cuối 
-            UserConnectionSignalrDto userIsSharing = await shareScreenTracker.GetUserIsSharingScreenForMeeting(meetingIdInt);
-            if (userIsSharing != null)
-            {
-                List<string> sharingUserConnectionIds = await presenceTracker.GetConnectionIdsForUser(userIsSharing);
-                if (sharingUserConnectionIds.Count > 0)
-                {
-                    await Clients.Clients(sharingUserConnectionIds).SendAsync(OnShareScreenLastUser, new { usernameTo = username, isShare = true });
-                }
-
-                await Clients.Caller.SendAsync(OnUserIsSharingMsg, userIsSharing.Username);
-            }
             //Console.WriteLine("_+_+_+_+__+_+_+_+_+_+_+_+_+_+_+_++++++++++++++++++++++++\nConnect dc r !!!!!!!!!!!!!!!!!!!!!!!!!!");
 
             //Code xử lí db xóa duplicate connection
@@ -235,9 +220,6 @@ namespace API.SignalRHub
 
             //step 3: Xóa ContextConnectionId khỏi presenceTracker và check xem user còn connect nào khác với meeting ko
             bool isOffline = await presenceTracker.UserDisconnected(new UserConnectionSignalrDto(username, meeting.Id), Context.ConnectionId);
-
-            //step 4: Remove khỏi shareScreenTracker nếu có
-            await shareScreenTracker.RemoveUserShareScreen(username, meeting.Id);
 
             //step 5: Remove ContextConnectionId khỏi meetingHub.Group(meetingId)   chắc move ra khỏi if
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, meeting.Id.ToString());
@@ -301,24 +283,6 @@ namespace API.SignalRHub
             //step 9: Disconnect khỏi meetHub
             await base.OnDisconnectedAsync(exception);
         }
-
-        //Có trong flow người mới vào meeting và flow có người bật share screen
-        //sẽ dc gọi khi FE gọi chatHubConnection.invoke('ShareScreen', roomId, isShareScreen)
-        public async Task ShareScreen(int meetingId, bool isShareScreen)
-        {
-            if (isShareScreen)//true is doing share
-            {
-                await shareScreenTracker.AddUserSharingScreen(new UserConnectionSignalrDto(Context.User.GetUsername(), meetingId));
-                await Clients.Group(meetingId.ToString()).SendAsync(OnUserIsSharingMsg, Context.User.GetUsername());
-            }
-            else
-            {
-                await shareScreenTracker.RemoveUserShareScreen(new UserConnectionSignalrDto(Context.User.GetUsername(), meetingId));
-            }
-            await Clients.Group(meetingId.ToString()).SendAsync(OnShareScreenMsg, isShareScreen);
-            //var group = await _unitOfWork.RoomRepository.GetRoomForConnection(Context.ConnectionId);
-        }
-
         public async Task ShareScreenToUser(int meetingId, string receiverUsername, bool isShare)
         {
             var ReceiverConnectionIds = await presenceTracker.GetConnectionIdsForUser(new UserConnectionSignalrDto(receiverUsername, meetingId));
