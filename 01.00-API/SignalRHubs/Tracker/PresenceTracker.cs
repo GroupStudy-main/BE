@@ -19,27 +19,6 @@ namespace API.SignalRHub.Tracker
         /// <returns>(ko quan trọng) true nếu người đang connect vào meeting</returns>
         public Task<bool> UserConnected(UserConnectionSignalrDto userMeetConnection, string connectionId)
         {
-            #region old code
-            //FunctionTracker.Instance().AddTrackerFunc("Tracker/Presence: UserConnected(UserConnectionDto, connectionId)");
-            //bool isOnline = false;
-            //lock (OnlineUsers)
-            //{
-            //    var temp = OnlineUsers.FirstOrDefault(x => x.Key.UserName == user.UserName && x.Key.RoomId == user.RoomId);
-
-            //    if(temp.Key == null)//chua co online
-            //    {
-            //        OnlineUsers.Add(user, new List<string> { connectionId });
-            //        isOnline = true;
-            //    }
-            //    else if (OnlineUsers.ContainsKey(temp.Key))
-            //    {
-            //        OnlineUsers[temp.Key].Add(connectionId);
-            //    }
-            //}
-
-            //return Task.FromResult(isOnline);
-            #endregion
-            FunctionTracker.Instance().AddTrackerFunc("Tracker/Presence: UserConnected(UserConnectionDto, connectionId)");
             bool isOnline = false;
             lock (OnlineUsers)
             {
@@ -74,26 +53,6 @@ namespace API.SignalRHub.Tracker
         /// <returns>True nếu không còn HubConnection nào cho (username và meetingId) </returns>
         public Task<bool> UserDisconnected(UserConnectionSignalrDto userMeetConnection, string connectionId)
         {
-            #region old code
-            //FunctionTracker.Instance().AddTrackerFunc("Tracker/Presence: UserConnectionDto(UserConnectionDto, connectionId)");
-            //bool isOffline = false;
-            //lock (OnlineUsers)
-            //{
-            //    var temp = OnlineUsers.FirstOrDefault(x => x.Key.UserName == user.UserName && x.Key.RoomId == user.RoomId);
-            //    if (temp.Key == null) 
-            //        return Task.FromResult(isOffline);
-
-            //    OnlineUsers[temp.Key].Remove(connectionId);    
-            //    if (OnlineUsers[temp.Key].Count == 0)
-            //    {
-            //        OnlineUsers.Remove(temp.Key);
-            //        isOffline = true;
-            //    }
-            //}
-
-            //return Task.FromResult(isOffline);
-            #endregion
-            FunctionTracker.Instance().AddTrackerFunc("Tracker/Presence: UserDisconnected(UserConnectionDto, connectionId)");
             bool isOffline = false;
             lock (OnlineUsers)
             {
@@ -122,16 +81,6 @@ namespace API.SignalRHub.Tracker
         /// <returns></returns>
         public Task<UserConnectionSignalrDto[]> GetOnlineUsersInMeet(int meetingId)
         {
-            #region old code
-            //FunctionTracker.Instance().AddTrackerFunc("Tracker/Presence: GetOnlineUsers(roomId)");
-            //UserConnectionSignalrDto[] onlineUsers;
-            //lock (OnlineUsers)
-            //{
-            //    onlineUsers = OnlineUsers.Where(u=>u.Key.RoomId == meetingId).Select(k => k.Key).ToArray();
-            //}
-
-            //return Task.FromResult(onlineUsers);
-            #endregion
             UserConnectionSignalrDto[] userInMeet;
             lock (OnlineUsers)
             {
@@ -148,20 +97,6 @@ namespace API.SignalRHub.Tracker
         /// <returns></returns>
         public Task<List<string>> GetConnectionIdsForUser(UserConnectionSignalrDto userMeetConnection)
         {
-            #region old code
-            //FunctionTracker.Instance().AddTrackerFunc("Tracker/Presence: GetConnectionsForUser(UserConnectionDto)");
-            //List<string> connectionIds = new List<string>();
-            //lock (OnlineUsers)
-            //{                
-            //    var temp = OnlineUsers.SingleOrDefault(x => x.Key.UserName == userMeetConnection.UserName && x.Key.RoomId == userMeetConnection.RoomId);
-            //    if(temp.Key != null)
-            //    {
-            //        connectionIds = OnlineUsers.GetValueOrDefault(temp.Key);
-            //    }       
-            //}
-            //return Task.FromResult(connectionIds);
-            #endregion
-            FunctionTracker.Instance().AddTrackerFunc("Tracker/Presence: GetConnectionIdsForUser(UserConnectionDto)");
             List<string> connectionIds = new List<string>();
             lock (OnlineUsers)
             {
@@ -176,24 +111,6 @@ namespace API.SignalRHub.Tracker
 
         public Task<List<string>> GetConnectionIdsForUsername(string username)
         {
-            #region old code
-            //FunctionTracker.Instance().AddTrackerFunc("Tracker/Presence: GetConnectionsForUsername(username)");
-            //List<string> connectionIds = new List<string>();
-            //lock (OnlineUsers)
-            //{
-            //    // 1 user co nhieu lan dang nhap
-            //    var listTemp = OnlineUsers.Where(x => x.Key.UserName == username).ToList();
-            //    if (listTemp.Count > 0)
-            //    {
-            //        foreach(var user in listTemp)
-            //        {
-            //            connectionIds.AddRange(user.Value);
-            //        }
-            //    }
-            //}
-            //return Task.FromResult(connectionIds);
-            #endregion
-            FunctionTracker.Instance().AddTrackerFunc("Tracker/Presence: GetConnectionIdsForUsername(username)");
             List<string> connectionIds = new List<string>();
             lock (OnlineUsers)
             {

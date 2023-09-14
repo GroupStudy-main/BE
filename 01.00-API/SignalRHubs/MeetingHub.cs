@@ -110,7 +110,6 @@ namespace API.SignalRHub
         public override async Task OnConnectedAsync()
         {
             Console.WriteLine("\n\n===========================\nOnConnectedAsync");
-            FunctionTracker.Instance().AddHubFunc("Hub/Chat: OnConnectedAsync()");
             //Step 1: Lấy meeting Id và username
             HttpContext httpContext = Context.GetHttpContext();
             string meetingIdString = httpContext.Request.Query["meetingId"].ToString();
@@ -186,7 +185,6 @@ namespace API.SignalRHub
 
             Console.WriteLine("2.1     " + new String('+', 50));
             Console.WriteLine("2.1     Hub/ChatSend: UserOnlineInGroupMsg, MemberSignalrDto");
-            FunctionTracker.Instance().AddHubFunc("Hub/ChatSend: UserOnlineInGroupMsg, MemberSignalrDto");
 
             //Step 5: Update số người trong meeting lên db
             //UserConnectionSignalrDto[] currentUsersInMeeting = await presenceTracker.GetOnlineUsersInMeet(meetingIdInt);
@@ -200,7 +198,6 @@ namespace API.SignalRHub
             List<string> currentConnectionIds = await presenceTracker.GetConnectionIdsForUser(new UserConnectionSignalrDto(username, meetingIdInt));
             Console.WriteLine("2.1     " + new String('+', 50));
             Console.WriteLine("2.1     Hub/PresenceSend: CountMemberInGroupMsg, { meetingId, countMember }");
-            FunctionTracker.Instance().AddHubFunc("Hub/PresenceSend: CountMemberInGroupMsg, { meetingId, countMember }");
             await groupHub.Clients.AllExcept(currentConnectionIds).SendAsync(GroupHub.CountMemberInGroupMsg,
                    new { meetingId = meetingIdInt, countMember = currentUsersInMeeting.Length });
 
@@ -231,7 +228,6 @@ namespace API.SignalRHub
         }
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            FunctionTracker.Instance().AddHubFunc("Hub/Chat: OnDisconnectedAsync(Exception)");
             //step 1: Lấy username 
             string username = Context.User.GetUsername();
             //step 2: Xóa connection trong db và lấy meeting
@@ -310,7 +306,6 @@ namespace API.SignalRHub
         //sẽ dc gọi khi FE gọi chatHubConnection.invoke('ShareScreen', roomId, isShareScreen)
         public async Task ShareScreen(int meetingId, bool isShareScreen)
         {
-            FunctionTracker.Instance().AddHubFunc("Hub/Chat: ShareScreen(id, bool)");
             if (isShareScreen)//true is doing share
             {
                 await shareScreenTracker.AddUserSharingScreen(new UserConnectionSignalrDto(Context.User.GetUsername(), meetingId));
@@ -326,7 +321,6 @@ namespace API.SignalRHub
 
         public async Task ShareScreenToUser(int meetingId, string receiverUsername, bool isShare)
         {
-            FunctionTracker.Instance().AddHubFunc("Hub/Chat: ShareScreenToUser(id, username, bool)");
             var ReceiverConnectionIds = await presenceTracker.GetConnectionIdsForUser(new UserConnectionSignalrDto(receiverUsername, meetingId));
             if (ReceiverConnectionIds.Count > 0)
                 await Clients.Clients(ReceiverConnectionIds).SendAsync(OnShareScreenMsg, isShare);
@@ -335,7 +329,6 @@ namespace API.SignalRHub
         //sẽ dc gọi khi FE gọi chatHubConnection.invoke('SendMessage', { content: string })
         public async Task SendMessageOld(MessageSignalrCreateDto createMessageDto)
         {
-            FunctionTracker.Instance().AddHubFunc("Hub/Chat: SendMessage(CreateMessageDto)");
             string userName = Context.User.GetUsername();
             Account sender = await repos.Accounts.GetUserByUsernameSignalrAsync(userName);
 
@@ -368,7 +361,6 @@ namespace API.SignalRHub
         //sẽ dc gọi khi FE gọi chatHubConnection.invoke('MuteMicro', mute)
         public async Task MuteMicro(bool muteMicro)
         {
-            FunctionTracker.Instance().AddHubFunc("Hub/Chat: MuteMicro(bool)");
             Meeting meeting = await repos.Meetings.GetMeetingForConnectionSignalr(Context.ConnectionId);
             if (meeting != null)
             {
@@ -385,7 +377,6 @@ namespace API.SignalRHub
         //Thông báo cho cả meeting là có người bật tắt camera
         public async Task MuteCamera(bool muteCamera)
         {
-            FunctionTracker.Instance().AddHubFunc("Hub/Chat: MuteCamera(bool)");
             Meeting meeting = await repos.Meetings.GetMeetingForConnectionSignalr(Context.ConnectionId);
             if (meeting != null)
             {
@@ -438,7 +429,6 @@ namespace API.SignalRHub
         }
         private async Task<Meeting> RemoveConnectionFromMeeting()
         {
-            FunctionTracker.Instance().AddHubFunc("Hub/Chat: RemoveConnectionFromMeeting()");
             Meeting meeting = await repos.Meetings.GetMeetingForConnectionSignalr(Context.ConnectionId);
             if(meeting == null)
             {
