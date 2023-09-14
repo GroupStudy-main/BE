@@ -143,6 +143,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapHub<GroupHub>("hubs/grouphub");
+app.MapHub<DrawHub>("hubs/drawhub");
 app.MapHub<MeetingHub>("hubs/meetinghub");
 
 app.Run();

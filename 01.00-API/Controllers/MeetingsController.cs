@@ -364,18 +364,18 @@ namespace API.Controllers
         }
 
         [SwaggerOperation(
-           Summary = $"[{Actor.Test}/{Finnished.True}/{Auth.True}] Get all meetings"
+           Summary = $"[{Actor.Parent}/{Finnished.True}/{Auth.True}] Remove a schedule meeting"
        )]
-        // GET: api/Meetings
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Meeting>>> GetMeetings()
+        [Authorize(Roles = Actor.Parent)]
+        [HttpGet("Children")]
+        public async Task<IActionResult> GetChildrenLiveMeeting()
         {
-            if (context.Meetings == null)
-            {
-                return NotFound();
-            }
-            return await context.Meetings.ToListAsync();
+            int parentid = HttpContext.User.GetUserId();
+            var list = services.Meetings.GetChildrenLiveMeetings(parentid);
+            return Ok(list);
         }
+
+       
 
         //// GET: api/Meetings/5
         //[HttpGet("{id}")]

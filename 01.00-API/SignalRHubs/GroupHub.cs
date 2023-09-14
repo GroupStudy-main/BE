@@ -31,6 +31,7 @@ namespace API.SignalRHub
 
             FunctionTracker.Instance().AddHubFunc("3.      Hub/Presence: OnConnectedAsync()");
             var isOnline = await presenceTracker.UserConnected(new UserConnectionSignalrDto(Context.User.GetUsername(), 0), Context.ConnectionId);
+            base.OnConnectedAsync();
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)

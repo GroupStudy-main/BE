@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DataLayer.DBObject;
 using ShareResource.DTO;
+using ShareResource.DTO.Connection;
 using ShareResource.DTO.File;
 using ShareResource.Enums;
 
@@ -32,10 +33,20 @@ namespace ShareResource.Mapper
             MapDocumentFile();
 
             MapChat();
+
+            MapConnection();
             //CreateMap<MeetingRoom, MeetingDto>();
             //.ForMember(dest => dest.DisplayName, opt => opt.MapFrom(src => src.AppUser.DisplayName))
             //.ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.AppUser.UserName));
 
+        }
+
+        private void MapConnection()
+        {
+            CreateMap<Connection, UserConnectionSignalrDto>()
+                 .PreserveReferences();
+            CreateMap<Connection, TempConnectionDto>()
+                 .PreserveReferences();
         }
 
         private void MapChat()
@@ -118,6 +129,19 @@ namespace ShareResource.Mapper
             CreateMap<InstantMeetingCreateDto, Meeting>()
                 .ForMember(dest => dest.Start, opt => opt.MapFrom(
                     src => DateTime.Now));
+
+            CreateMap<Account, ChildrenLiveMeetingGetDto>()
+                .ForMember(dest => dest.ChildId, opt => opt.MapFrom(
+                    src=>src.Id))
+                .ForMember(dest => dest.ChildUsername, opt => opt.MapFrom(
+                    src => src.Username))
+                .ForMember(dest => dest.ChildFullName, opt => opt.MapFrom(
+                    src => src.FullName))
+                 .ForMember(dest => dest.LiveMeetings, opt => opt.MapFrom(
+                    src => src.Connections
+                        .Where(e => e.End == null)
+                        .Select(e => e.Meeting)))
+                .PreserveReferences();
         }
 
         private void MapDocumentFile()

@@ -22,5 +22,6 @@ namespace ServiceLayer.Interface.Db
         public Task StartScheduleMeetingAsync(Meeting meeting);
         public Task DeleteScheduleMeetingAsync(Meeting meeting);
         public IQueryable<ScheduleGetDto> GetSchedulesForGroup(int groupId);
+        public IQueryable<ChildrenLiveMeetingGetDto> GetChildrenLiveMeetings(int parentId);
     }
 }
