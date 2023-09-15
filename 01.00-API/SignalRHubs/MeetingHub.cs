@@ -87,9 +87,8 @@ namespace API.SignalRHub
         IHubContext<GroupHub> groupHub;
         PresenceTracker presenceTracker;
         IRepoWrapper repos;
-        ShareScreenTracker shareScreenTracker;
 
-        public MeetingHub(IRepoWrapper repos, ShareScreenTracker shareScreenTracker, PresenceTracker presenceTracker, IHubContext<GroupHub> presenceHubContext, IMapper mapper)
+        public MeetingHub(IRepoWrapper repos, PresenceTracker presenceTracker, IHubContext<GroupHub> presenceHubContext, IMapper mapper)
         {
             //Console.WriteLine("2.   " + new String('+', 50));
             //Console.WriteLine("2.   Hub/Chat: ctor(IUnitOfWork, UserShareScreenTracker, PresenceTracker, PresenceHub)");
@@ -97,55 +96,8 @@ namespace API.SignalRHub
             this.repos = repos;
             this.presenceTracker = presenceTracker;
             this.groupHub = presenceHubContext;
-            this.shareScreenTracker = shareScreenTracker;
             this.mapper = mapper;
         }
-        #region old code
-        /// <summary>
-        /// Connect gửi meetingIdString
-        /// Group theo meetingId  , Conne
-        /// </summary>
-        /// <returns></returns>
-        //public override async Task OnConnectedAsync()
-        //{
-        //    //Console.WriteLine("2.   " + new String('+', 50));
-        //    //Console.WriteLine("2.   Hub/Chat: OnConnectedAsync()");
-        //    FunctionTracker.Instance().AddHubFunc("Hub/Chat: OnConnectedAsync()");
-        //    var httpContext = Context.GetHttpContext();
-        //    string meetingIdString = httpContext.Request.Query["meetingIdString"].ToString();
-
-        //    int meetingIdInt = int.Parse(meetingIdString);
-        //    Meeting meeting = await repos.Meetings.GetMeetingById(meetingIdInt);
-        //    int roomIdInt = meeting.Id;
-        //    string contextUsername = Context.User.GetUsername();
-
-        //    await presenceTracker.UserConnected(new UserConnectionSignalrDto(contextUsername, roomIdInt), Context.ConnectionId);
-
-        //    await Groups.AddToGroupAsync(Context.ConnectionId, roomIdInt.ToString());//khi user click vao room se join vao
-        //    await AddConnectionToMeeting(meetingIdInt); // luu db DbSet<Connection> de khi disconnect biet
-
-        //    //Gửi lên Hub thông báo user đã online 
-        //    Account currentUser = await repos.Accounts.GetByUsernameAsync(contextUsername);
-        //    await Clients.Group(meetingIdString).SendAsync("UserOnlineInGroup", currentUser);
-
-        //    UserConnectionSignalrDto[] usersInRoom = await presenceTracker.GetOnlineUsersInMeet(roomIdInt);
-        //    await repos.Meetings.UpdateCountMember(roomIdInt, usersInRoom.Length);
-
-        //    List<string> currentConnections = await presenceTracker.GetConnectionIdsForUser(new UserConnectionSignalrDto(contextUsername, roomIdInt));
-        //    await presenceHubContext.Clients.AllExcept(currentConnections).SendAsync("CountMemberInGroup",
-        //           new { roomId = roomIdInt, countMember = usersInRoom.Length });
-
-        //    //share screen user vao sau cung
-        //    UserConnectionSignalrDto userIsSharing = await shareScreenTracker.GetUserIsSharingScreenForMeeting(roomIdInt);
-        //    if (userIsSharing != null)
-        //    {
-        //        List<string> currentBeginConnectionsUser = await presenceTracker.GetConnectionIdsForUser(userIsSharing);
-        //        if (currentBeginConnectionsUser.Count > 0)
-        //            await Clients.Clients(currentBeginConnectionsUser).SendAsync("OnShareScreenLastUser", new { usernameTo = contextUsername, isShare = true });
-        //        await Clients.Caller.SendAsync("OnUserIsSharing", userIsSharing.UserName);
-        //    }
-        //}
-        #endregion
         //sẽ dc gọi khi FE sẽ connect qua hàm này
         //sẽ dc gọi khi FE gọi:
         //this.chatHubConnection = new HubConnectionBuilder()
@@ -156,7 +108,6 @@ namespace API.SignalRHub
         public override async Task OnConnectedAsync()
         {
             Console.WriteLine("\n\n===========================\nOnConnectedAsync");
-            FunctionTracker.Instance().AddHubFunc("Hub/Chat: OnConnectedAsync()");
             //Step 1: Lấy meeting Id và username
             HttpContext httpContext = Context.GetHttpContext();
             string meetingIdString = httpContext.Request.Query["meetingId"].ToString();
@@ -232,7 +183,6 @@ namespace API.SignalRHub
 
             Console.WriteLine("2.1     " + new String('+', 50));
             Console.WriteLine("2.1     Hub/ChatSend: UserOnlineInGroupMsg, MemberSignalrDto");
-            FunctionTracker.Instance().AddHubFunc("Hub/ChatSend: UserOnlineInGroupMsg, MemberSignalrDto");
 
             //Step 5: Update số người trong meeting lên db
             //UserConnectionSignalrDto[] currentUsersInMeeting = await presenceTracker.GetOnlineUsersInMeet(meetingIdInt);
@@ -246,23 +196,9 @@ namespace API.SignalRHub
             List<string> currentConnectionIds = await presenceTracker.GetConnectionIdsForUser(new UserConnectionSignalrDto(username, meetingIdInt));
             Console.WriteLine("2.1     " + new String('+', 50));
             Console.WriteLine("2.1     Hub/PresenceSend: CountMemberInGroupMsg, { meetingId, countMember }");
-            FunctionTracker.Instance().AddHubFunc("Hub/PresenceSend: CountMemberInGroupMsg, { meetingId, countMember }");
             await groupHub.Clients.AllExcept(currentConnectionIds).SendAsync(GroupHub.CountMemberInGroupMsg,
                    new { meetingId = meetingIdInt, countMember = currentUsersInMeeting.Length });
 
-            //share screen cho user vao sau cung
-            //step 7: Thông báo shareScreen cho user vào cuối 
-            UserConnectionSignalrDto userIsSharing = await shareScreenTracker.GetUserIsSharingScreenForMeeting(meetingIdInt);
-            if (userIsSharing != null)
-            {
-                List<string> sharingUserConnectionIds = await presenceTracker.GetConnectionIdsForUser(userIsSharing);
-                if (sharingUserConnectionIds.Count > 0)
-                {
-                    await Clients.Clients(sharingUserConnectionIds).SendAsync(OnShareScreenLastUser, new { usernameTo = username, isShare = true });
-                }
-
-                await Clients.Caller.SendAsync(OnUserIsSharingMsg, userIsSharing.Username);
-            }
             //Console.WriteLine("_+_+_+_+__+_+_+_+_+_+_+_+_+_+_+_++++++++++++++++++++++++\nConnect dc r !!!!!!!!!!!!!!!!!!!!!!!!!!");
 
             //Code xử lí db xóa duplicate connection
@@ -275,37 +211,8 @@ namespace API.SignalRHub
             }
             await groupHub.Clients.Group(meeting.GroupId.ToString()).SendAsync(GroupHub.OnReloadMeetingMsg);
         }
-
-        #region old code
-        //public override async Task OnDisconnectedAsync(Exception exception)
-        //{
-        //    //Console.WriteLine("2.   " + new String('+', 50));
-        //    //Console.WriteLine("2.   Hub/Chat: OnDisconnectedAsync(Exception)");
-        //    FunctionTracker.Instance().AddHubFunc("Hub/Chat: OnDisconnectedAsync(Exception)");
-        //    string username = Context.User.GetUsername();
-        //    Meeting meeting = await RemoveConnectionFromGroup();
-        //    bool isOffline = await presenceTracker.UserDisconnected(new UserConnectionSignalrDto(username, meeting.Id), Context.ConnectionId);
-
-        //    await shareScreenTracker.RemoveUserShareScreen(username, meeting.Id);
-        //    if (isOffline)
-        //    {
-        //        await Groups.RemoveFromGroupAsync(Context.ConnectionId, meeting.Id.ToString());
-        //        Account temp = await repos.Accounts.GetByUsernameAsync(username);
-        //        await Clients.Group(meeting.Id.ToString()).SendAsync("UserOfflineInGroup", temp);
-
-        //        UserConnectionSignalrDto[] currentUsers = await presenceTracker.GetOnlineUsersInMeet(meeting.Id);
-
-        //        await repos.Meetings.UpdateCountMember(meeting.Id, currentUsers.Length);
-
-        //        await presenceHubContext.Clients.All.SendAsync("CountMemberInGroup",
-        //               new { roomId = meeting.Id, countMember = currentUsers.Length });
-        //    }
-        //    await base.OnDisconnectedAsync(exception);
-        //}
-        #endregion
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            FunctionTracker.Instance().AddHubFunc("Hub/Chat: OnDisconnectedAsync(Exception)");
             //step 1: Lấy username 
             string username = Context.User.GetUsername();
             //step 2: Xóa connection trong db và lấy meeting
@@ -314,16 +221,10 @@ namespace API.SignalRHub
             //step 3: Xóa ContextConnectionId khỏi presenceTracker và check xem user còn connect nào khác với meeting ko
             bool isOffline = await presenceTracker.UserDisconnected(new UserConnectionSignalrDto(username, meeting.Id), Context.ConnectionId);
 
-            //step 4: Remove khỏi shareScreenTracker nếu có
-            await shareScreenTracker.RemoveUserShareScreen(username, meeting.Id);
-
             //step 5: Remove ContextConnectionId khỏi meetingHub.Group(meetingId)   chắc move ra khỏi if
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, meeting.Id.ToString());
             if (isOffline)
             {
-                ////step 5: Nếu ko còn connect nào nữa thì remove ContextConnectionId khỏi meetingHub.Group(meetingId)   chắc move ra khỏi if
-                //await Groups.RemoveFromGroupAsync(Context.ConnectionId, meeting.RoomId.ToString());
-
                 //step 6: Nếu ko còn connect nào nữa thì Thông báo với meetingHub.Group(meetingId)
                 MemberSignalrDto offLineUser = await repos.Accounts.GetMemberSignalrAsync(username);
                 await Clients.Group(meeting.Id.ToString()).SendAsync(UserOfflineInMeetingMsg, offLineUser);
@@ -331,9 +232,6 @@ namespace API.SignalRHub
                 //step 7: Update lại số người trong phòng
                 UserConnectionSignalrDto[] currentUsersInMeeting = await presenceTracker.GetOnlineUsersInMeet(meeting.Id);
                 await repos.Meetings.UpdateCountMemberSignalr(meeting.Id, currentUsersInMeeting.Length);
-
-                //await presenceHub.Clients.All.SendAsync("CountMemberInGroup",
-                //       new { roomId = group.RoomId, countMember = currentUsers.Length });
 
                 //step 8: Thông báo với groupHub.Group(groupId) số người ở trong phòng
                 await groupHub.Clients.All.SendAsync(GroupHub.CountMemberInGroupMsg,
@@ -350,7 +248,6 @@ namespace API.SignalRHub
                 var usersJoined = repos.Connections.GetList()
                   .Where(e => e.MeetingId == meeting.Id)
                   .Select(e => e.UserName).ToHashSet();
-                //meeting.CountMember = 5;
                 meeting.CountMember = usersJoined.Count;
                 meeting.End = DateTime.Now;
                 await repos.Meetings.UpdateAsync(meeting);
@@ -371,10 +268,6 @@ namespace API.SignalRHub
                     .Where(e => e.AccountId == connection.AccountId && e.MeetingId == connection.MeetingId
                         && e.Start.Date == connection.Start.Date && e.Start.Hour == connection.Start.Hour
                         && e.Start.Minute == connection.Start.Minute);
-                    //if (dupConnections != null)
-                    //{
-                    //    await repos.Connections.RemoveAsync(dupConnections.Id);
-                    //}
                     foreach (var dupCon in dupConnections)
                     {
                         dupCon.End= DateTime.Now;
@@ -387,112 +280,19 @@ namespace API.SignalRHub
                 Console.WriteLine("\n\n+++++++++++++\nEnd connection fail");
             }
 
-            //try
-            //{
-            //    if (repos.Connections.GetList().Any(e => e.MeetingId == meeting.Id && e.End == null))
-            //    {
-            //        meeting.End = DateTime.Now;
-            //        repos.Meetings.UpdateAsync(meeting);
-            //        Console.WriteLine("\n\n+++++++++++++\nEnd connection fail");
-            //    }
-            //}
-            //catch
-            //{
-            //    Console.WriteLine("\n\n+++++++++++++\nEnd connection fail");
-
-            //}
-
             //step 9: Disconnect khỏi meetHub
             await base.OnDisconnectedAsync(exception);
         }
-
-        #region old code
-        //public async Task ShareScreen(int roomid, bool isShareScreen)
-        //{
-        //    //Console.WriteLine("2.   " + new String('+', 50));
-        //    //Console.WriteLine("2.   Hub/Chat: ShareScreen(id, bool)");
-        //    FunctionTracker.Instance().AddHubFunc("Hub/Chat: ShareScreen(id, bool)");
-        //    if (isShareScreen)//true is doing share
-        //    {
-        //        await shareScreenTracker.UserConnectedToShareScreen(new UserConnectionSignalrDto(Context.User.GetUsername(), roomid));
-        //        await Clients.Group(roomid.ToString()).SendAsync("OnUserIsSharing", Context.User.GetUsername());
-        //    }
-        //    else
-        //    {
-        //        await shareScreenTracker.RemoveUserShareScreen(new UserConnectionSignalrDto(Context.User.GetUsername(), roomid));
-        //    }
-        //    await Clients.Group(roomid.ToString()).SendAsync("OnShareScreen", isShareScreen);
-        //    //var meetingGroup = await _unitOfWork.Rooms.GetMeetingForConnection(Context.ConnectionId);
-        //}
-        #endregion
-        //Có trong flow người mới vào meeting và flow có người bật share screen
-        //sẽ dc gọi khi FE gọi chatHubConnection.invoke('ShareScreen', roomId, isShareScreen)
-        public async Task ShareScreen(int meetingId, bool isShareScreen)
-        {
-            FunctionTracker.Instance().AddHubFunc("Hub/Chat: ShareScreen(id, bool)");
-            if (isShareScreen)//true is doing share
-            {
-                await shareScreenTracker.AddUserSharingScreen(new UserConnectionSignalrDto(Context.User.GetUsername(), meetingId));
-                await Clients.Group(meetingId.ToString()).SendAsync(OnUserIsSharingMsg, Context.User.GetUsername());
-            }
-            else
-            {
-                await shareScreenTracker.RemoveUserShareScreen(new UserConnectionSignalrDto(Context.User.GetUsername(), meetingId));
-            }
-            await Clients.Group(meetingId.ToString()).SendAsync(OnShareScreenMsg, isShareScreen);
-            //var group = await _unitOfWork.RoomRepository.GetRoomForConnection(Context.ConnectionId);
-        }
-
-        #region old code ShareScreenToUser
-        //public async Task ShareScreenToUser(int roomid, string username, bool isShare)
-        //{
-        //    //Console.WriteLine("2.   " + new String('+', 50));
-        //    //Console.WriteLine("2.   Hub/Chat: ShareScreenToUser(id, contextUsername, bool)");
-        //    FunctionTracker.Instance().AddHubFunc("Hub/Chat: ShareScreenToUser(id, contextUsername, bool)");
-        //    List<string> currentBeginConnectionsUser = await presenceTracker.GetConnectionIdsForUser(new UserConnectionSignalrDto(username, roomid));
-        //    if (currentBeginConnectionsUser.Count > 0)
-        //        await Clients.Clients(currentBeginConnectionsUser).SendAsync("OnShareScreen", isShare);
-        //}
-        #endregion
         public async Task ShareScreenToUser(int meetingId, string receiverUsername, bool isShare)
         {
-            FunctionTracker.Instance().AddHubFunc("Hub/Chat: ShareScreenToUser(id, username, bool)");
             var ReceiverConnectionIds = await presenceTracker.GetConnectionIdsForUser(new UserConnectionSignalrDto(receiverUsername, meetingId));
             if (ReceiverConnectionIds.Count > 0)
                 await Clients.Clients(ReceiverConnectionIds).SendAsync(OnShareScreenMsg, isShare);
         }
 
-        #region old map
-        //public async Task SendMessage(MessageSignalRCreateDto createMessageDto)
-        //{
-        //    //Console.WriteLine("2.   " + new String('+', 50));
-        //    //Console.WriteLine("2.   Hub/Chat: SendMessage(CreateMessageDto)");
-        //    FunctionTracker.Instance().AddHubFunc("Hub/Chat: SendMessage(CreateMessageDto)");
-        //    string userName = Context.User.GetUsername();
-        //    Account sender = await repos.Accounts.GetByUsernameAsync(userName);
-
-        //    var meetingGroup = await repos.Meetings.GetMeetingForConnection(Context.ConnectionId);
-
-        //    if (meetingGroup != null)
-        //    {
-        //        MessageSignalrGetDto message = new MessageSignalrGetDto
-        //        {
-        //            SenderUsername = userName,
-        //            SenderDisplayName = sender.Username,
-        //            Content = createMessageDto.Content,
-        //            MessageSent = DateTime.Now
-        //        };
-        //        //Luu message vao db
-        //        //code here
-        //        //send meaasge to meetingGroup
-        //        await Clients.Group(meetingGroup.Id.ToString()).SendAsync("NewMessage", message);
-        //    }
-        //}
-        #endregion
         //sẽ dc gọi khi FE gọi chatHubConnection.invoke('SendMessage', { content: string })
         public async Task SendMessageOld(MessageSignalrCreateDto createMessageDto)
         {
-            FunctionTracker.Instance().AddHubFunc("Hub/Chat: SendMessage(CreateMessageDto)");
             string userName = Context.User.GetUsername();
             Account sender = await repos.Accounts.GetUserByUsernameSignalrAsync(userName);
 
@@ -522,27 +322,9 @@ namespace API.SignalRHub
             }
         }
 
-        #region old code
-        //public async Task MuteMicro(bool muteMicro)
-        //{
-        //    //Console.WriteLine("2.   " + new String('+', 50));
-        //    //Console.WriteLine("2.   Hub/Chat: MuteMicro(bool)");
-        //    FunctionTracker.Instance().AddHubFunc("Hub/Chat: MuteMicro(bool)");
-        //    var meetingGroup = await repos.Meetings.GetMeetingForConnection(Context.ConnectionId);
-        //    if (meetingGroup != null)
-        //    {
-        //        await Clients.Group(meetingGroup.Id.ToString()).SendAsync("OnMuteMicro", new { username = Context.User.GetUsername(), mute = muteMicro });
-        //    }
-        //    else
-        //    {
-        //        throw new HubException("meetingGroup == null");
-        //    }
-        //}
-        #endregion
         //sẽ dc gọi khi FE gọi chatHubConnection.invoke('MuteMicro', mute)
         public async Task MuteMicro(bool muteMicro)
         {
-            FunctionTracker.Instance().AddHubFunc("Hub/Chat: MuteMicro(bool)");
             Meeting meeting = await repos.Meetings.GetMeetingForConnectionSignalr(Context.ConnectionId);
             if (meeting != null)
             {
@@ -554,29 +336,11 @@ namespace API.SignalRHub
             }
         }
 
-        #region old region
-        //public async Task MuteCamera(bool muteCamera)
-        //{
-        //    //Console.WriteLine("2.   " + new String('+', 50));
-        //    //Console.WriteLine("2.   Hub/Chat: MuteCamera(bool)");
-        //    FunctionTracker.Instance().AddHubFunc("Hub/Chat: MuteCamera(bool)");
-        //    var meetingGroup = await repos.Meetings.GetMeetingForConnection(Context.ConnectionId);
-        //    if (meetingGroup != null)
-        //    {
-        //        await Clients.Group(meetingGroup.Id.ToString()).SendAsync("OnMuteCamera", new { username = Context.User.GetUsername(), mute = muteCamera });
-        //    }
-        //    else
-        //    {
-        //        throw new HubException("meetingGroup == null");
-        //    }
-        //}
-        #endregion
         //sẽ dc gọi khi người dùng muốn bật tắt cam
         //sẽ dc gọi khi FE gọi chatHubConnection.invoke('MuteCamera', mute: bool)
         //Thông báo cho cả meeting là có người bật tắt camera
         public async Task MuteCamera(bool muteCamera)
         {
-            FunctionTracker.Instance().AddHubFunc("Hub/Chat: MuteCamera(bool)");
             Meeting meeting = await repos.Meetings.GetMeetingForConnectionSignalr(Context.ConnectionId);
             if (meeting != null)
             {
@@ -592,13 +356,6 @@ namespace API.SignalRHub
         public async Task StartVote(int meetingId)
         {
             string reviewee = Context.User.GetUsername();
-            //Review newReview = new Review
-            //{
-            //    MeetingId = meetingId,
-            //    RevieweeId = Context.User.GetUserId(),
-            //};
-            //await repos.Reviews.CreateAsync(newReview);
-            //ReviewSignalrDTO mapped = mapper.Map<ReviewSignalrDTO>(newReview);
             await Clients.Group(meetingId.ToString()).SendAsync(OnStartVoteMsg, reviewee);
         }
 
@@ -606,15 +363,6 @@ namespace API.SignalRHub
         //sẽ dc gọi khi FE gọi chatHubConnection.invoke('StartVote', reviewee: username)
         public async Task EndVote(int meetingId)
         {
-            #region old code
-            //string reviewee = Context.User.GetUsername();
-            //Review endReview = await repos.Reviews.GetList()
-            //    .Include(e => e.Reviewee)
-            //    .Include(r => r.Details).ThenInclude(d => d.Reviewer)
-            //    .SingleOrDefaultAsync(e => e.Id == meetingId);
-            //ReviewSignalrDTO mapped = mapper.Map<ReviewSignalrDTO>(endReview);
-            //await Clients.Group(endReview.MeetingId.ToString()).SendAsync(OnEndVoteMsg, mapped);
-            #endregion
             int revieweeId = Context.User.GetUserId();
             Review newReview = new Review
             {
@@ -643,23 +391,8 @@ namespace API.SignalRHub
             Console.WriteLine("2.   " + meetingId);
             await Clients.Group(meetingId.ToString()).SendAsync(OnVoteChangeMsg, "new");
         }
-
-        #region old code
-        //private async Task<Meeting> RemoveConnectionFromGroup()
-        //{
-        //    //Console.WriteLine("2.   " + new String('+', 50));
-        //    //Console.WriteLine("2.   Hub/Chat: RemoveConnectionFromGroup()");
-        //    FunctionTracker.Instance().AddHubFunc("Hub/Chat: RemoveConnectionFromGroup()");
-        //    Meeting group = await repos.Meetings.GetMeetingForConnection(Context.ConnectionId);
-        //    Connection? connection = group.Connections.FirstOrDefault(x => x.Id == Context.ConnectionId);
-        //    repos.Meetings.RemoveConnection(connection);
-
-        //    return group;
-        //}
-        #endregion
         private async Task<Meeting> RemoveConnectionFromMeeting()
         {
-            FunctionTracker.Instance().AddHubFunc("Hub/Chat: RemoveConnectionFromMeeting()");
             Meeting meeting = await repos.Meetings.GetMeetingForConnectionSignalr(Context.ConnectionId);
             if(meeting == null)
             {
@@ -679,10 +412,6 @@ namespace API.SignalRHub
                 .Where(e => e.AccountId == connection.AccountId && e.MeetingId == connection.MeetingId
                     && e.Start.Date == connection.Start.Date && e.Start.Hour == connection.Start.Hour
                     && e.Start.Minute == connection.Start.Minute && e.Id != connection.Id);
-            //if (dupConnections != null)
-            //{
-            //    await repos.Connections.RemoveAsync(dupConnections.Id);
-            //}
             foreach(var dupCon in dupConnections)
             {
                 dupCon.End = DateTime.Now;
@@ -705,9 +434,6 @@ namespace API.SignalRHub
             Clients.Caller.SendAsync(OnTestReceiveInvokeMsg, "meehub invoke dc rồi ae ơi " + msg);
         }
 
-        //Huy yêu cầu
-        //Key dạng string chứa roomId do FE đẻ ra const roomId = uuidV4();
-        //Value chứa list các peerId
 
         //public static readonly Dictionary<string, List<string>> Rooms = new Dictionary<string, List<string>>();
         public class IMessage
@@ -750,74 +476,6 @@ namespace API.SignalRHub
             public string peerId { get; set; }
             public string userName { get; set; }
         }
-        #region old code
-        //public async Task JoinRoomOld(JoinRoomInput input)
-        ////public async Task JoinRoom(string json)
-        ////public async Task JoinRoom(string roomId, string peerId)
-        //{
-        //    #region old code
-        //    //var input = JsonConvert.DeserializeObject<JoinRoomInput>(json);
-        //    //string roomId = input.roomId;
-        //    //string peerId = input.peerId;
-        //    //string username = input.username;
-
-        //    //Console.WriteLine($"\n\n==++==++===+++\n JoinRoom");
-        //    //Console.WriteLine(peerId);
-        //    //Console.WriteLine(roomId);
-        //    //bool isRoomExisted = Rooms.ContainsKey(roomId);
-        //    //if (isRoomExisted)
-        //    //{
-        //    //    Rooms[roomId].Add(peerId);
-        //    //    await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
-        //    //    await Clients.GroupExcept(roomId, Context.ConnectionId).SendAsync("user-joined", new { roomId = roomId, peerId = peerId });
-        //    //    await Clients.Caller.SendAsync("get-users", new { roomId = roomId, participants = Rooms[roomId] });
-        //    //}
-        //    //else
-        //    //{
-        //    //    await CreateRoom(new CreateRoomInput {  peerId = peerId, roomId=roomId });
-        //    //}
-        //    #endregion
-
-        //    //var input = JsonConvert.DeserializeObject<JoinRoomInput>(json);
-        //    string roomId = input.roomId;
-        //    string peerId = input.peerId;
-        //    string username = input.username;
-
-        //    Console.WriteLine($"\n\n==++==++===+++\n JoinRoom");
-        //    Console.WriteLine(peerId);
-        //    Console.WriteLine(roomId);
-        //    Console.WriteLine(username);
-        //    bool isRoomExisted = Rooms.ContainsKey(roomId);
-        //    if (isRoomExisted)
-        //    {
-        //        bool isUsernameExisted = Rooms[roomId].ContainsKey(username);
-        //        if (isUsernameExisted)
-        //        {
-        //            Peer peer = new Peer();
-        //            peer.peerId = peerId;
-        //            peer.userName = username;
-        //            Rooms[roomId][username] = peer;
-        //        }
-        //        else
-        //        {
-        //            Peer peer = new Peer();
-        //            peer.peerId = peerId;
-        //            peer.userName = username;
-        //            Rooms[roomId].Add(username, peer);
-        //        }
-
-        //        await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
-        //        await Clients.GroupExcept(roomId, Context.ConnectionId).SendAsync("user-joined", new { roomId = roomId, peerId = peerId });
-        //        Console.WriteLine(Rooms[roomId]);
-        //        await Clients.Caller.SendAsync("get-users", new { roomId = roomId, participants = Rooms[roomId] });
-        //    }
-        //    else
-        //    {
-        //        await CreateRoom(new CreateRoomInput { peerId = peerId, roomId = roomId, username = username });
-        //    }
-
-        //}
-        #endregion
         public async Task JoinRoom(JoinRoomInput input)
         {
 
@@ -878,42 +536,6 @@ namespace API.SignalRHub
             public string roomId { get; set; }
             public string peerId { get; set; }
         }
-        #region old code
-        //public async Task LeaveRoomOld(LeaveRoomInput input)
-        //{
-        //    Console.WriteLine($"\n\n==++==++===+++\n LeaveRoom");
-        //    Console.WriteLine(input.peerId);
-        //    Console.WriteLine(input.roomId);
-        //    string roomId = input.roomId;
-        //    string peerId = input.peerId;
-        //    string username = Context.User.GetUsername();
-        //    Rooms[roomId].Remove(username);
-
-        //    await Clients.Group(roomId).SendAsync("user-disconnected", new { peerId = peerId });
-
-        //    //code mới xử lí db
-        //    Meeting meeting = await RemoveConnectionFromMeeting();
-        //    var usersInMeeting = repos.Connections.GetList()
-        //       .Where(e => e.MeetingId == meeting.Id && e.End == null)
-        //       .Select(e => e.UserName).ToHashSet();
-        //    await Clients.Group(meeting.Id.ToString()).SendAsync(UserOnlineInMeetingMsg, usersInMeeting);
-        //    if (usersInMeeting.Count == 0)
-        //    {
-        //        meeting.End = DateTime.Now;
-        //        await repos.Meetings.UpdateAsync(meeting);
-        //    }
-        //    Connection connection = await repos.Connections.GetList().SingleOrDefaultAsync(e => e.Id == Context.ConnectionId);
-        //    if (connection == null)
-        //    {
-        //        Console.WriteLine("\n\n+++++++++++++\nEnd connection fail");
-        //    }
-        //    else
-        //    {
-        //        connection.End = DateTime.Now;
-        //        await repos.Connections.UpdateAsync(connection);
-        //    }
-        //}
-        #endregion
         public async Task LeaveRoom(LeaveRoomInput input)
         {
             Console.WriteLine($"\n\n==++==++===+++\n LeaveRoom");
