@@ -33,7 +33,7 @@ namespace DataLayer.DbSeeding
                 Password = StringUtils.CustomHash("123456789"),
                 Phone = "0123456789",
                 Schhool="THCS Minh Đức",
-                ClassId = 7,
+                ClassId = 12,
                 DateOfBirth = new DateTime(2009,5, 5),
                 RoleId = 2
             },
@@ -47,7 +47,7 @@ namespace DataLayer.DbSeeding
                 Phone = "0123456789",
                 Schhool="THCS Minh Đức",
                 DateOfBirth = new DateTime(2009,5, 5),
-                ClassId = 6,
+                ClassId = 12,
                 RoleId = 2
             },
             new Account
@@ -60,7 +60,7 @@ namespace DataLayer.DbSeeding
                 Phone = "0123456789",
                 Schhool="THCS Minh Đức",
                 DateOfBirth = new DateTime(2009,5, 5),
-                ClassId = 6,
+                ClassId = 11,
                 RoleId = 2
             },
             new Account
@@ -73,7 +73,7 @@ namespace DataLayer.DbSeeding
                 Phone = "0123456789",
                 Schhool="THCS Minh Đức",
                 DateOfBirth = new DateTime(2009,5, 5),
-                ClassId = 6,
+                ClassId = 11,
                 RoleId = 2
             },
             new Account
@@ -85,7 +85,7 @@ namespace DataLayer.DbSeeding
                 Password = StringUtils.CustomHash("123456789"),
                 Phone = "0123456789",
                 DateOfBirth = new DateTime(2009,5, 5),
-                ClassId = 6,
+                ClassId = 10,
                 RoleId = 2
             },
             new Account
@@ -98,7 +98,7 @@ namespace DataLayer.DbSeeding
                 Phone = "0123456789",
                 Schhool="THCS Minh Đức",
                 DateOfBirth = new DateTime(2009,5, 5),
-                ClassId = 6,
+                ClassId = 12,
                 RoleId = 2
             },
             new Account
@@ -111,7 +111,7 @@ namespace DataLayer.DbSeeding
                 Phone = "0123456789",
                 Schhool="THCS Minh Đức",
                 DateOfBirth = new DateTime(2009,5, 5),
-                ClassId = 6,
+                ClassId = 12,
                 RoleId = 2
             },
             new Account
@@ -123,7 +123,7 @@ namespace DataLayer.DbSeeding
                 Password = StringUtils.CustomHash("123456789"),
                 Phone = "0123456789",
                 DateOfBirth = new DateTime(2009,5, 5),
-                ClassId = 6,
+                ClassId = 10,
                 RoleId = 2
             }
             , new Account
@@ -136,7 +136,7 @@ namespace DataLayer.DbSeeding
                 Phone = "0123456789",
                 Schhool="THCS Minh Đức",
                 DateOfBirth = new DateTime(2009,5, 5),
-                ClassId = 6,
+                ClassId = 11,
                 RoleId = 2
             }, new Account
             {
@@ -148,7 +148,7 @@ namespace DataLayer.DbSeeding
                 Phone = "0123456789",
                 Schhool="THCS Minh Đức",
                 DateOfBirth = new DateTime(2009,5, 5),
-                ClassId = 6,
+                ClassId = 11,
                 RoleId = 2
             },
             new Account
@@ -305,38 +305,38 @@ namespace DataLayer.DbSeeding
             new Group
             {
                 Id = 1,
-                Name = "Nhóm 1 của học sinh 1",
-                ClassId = 7,
+                Name = "Ôn thi đại học",
+                ClassId = 12,
             },
             new Group
             {
                 Id = 2,
-                Name = "Nhóm 2 của học sinh 1",
-                ClassId = 7,
+                Name = "Khối A1",
+                ClassId = 11,
             } ,
             new Group
             {
                 Id = 3,
-                Name = "Nhóm 3 của học sinh 2",
-                ClassId = 8,
+                Name = "Lớp 12A4",
+                ClassId = 12,
             } ,
             new Group
             {
                 Id = 4,
-                Name = "Nhóm 4 của học sinh 2",
-                ClassId = 8,
+                Name = "Chuẩn bị thi ĐH",
+                ClassId = 12,
             },
             new Group
             {
                 Id = 5,
-                Name = "Nhóm 5 của học sinh 3",
-                ClassId = 8,
+                Name = "AE 12A1",
+                ClassId = 12,
             },
             new Group
             {
                 Id = 6,
-                Name = "Nhóm 6 của học sinh 3",
-                ClassId = 8,
+                Name = "10A4",
+                ClassId = 10,
             },
         };
         public static GroupMember[] GroupMembers = new GroupMember[]
@@ -383,7 +383,7 @@ namespace DataLayer.DbSeeding
                             GroupId = 1,
                             AccountId = 5,
                             MemberRole = GroupMemberRole.Member,
-                            IsActive = false,
+                            IsActive = true,
                             //RequestMessage = "Nhóm của bạn rất hay. Bạn cho mình vô nha"
                         },
                         #endregion
@@ -936,7 +936,7 @@ namespace DataLayer.DbSeeding
             new Chat
             {
                 Id=1,
-                Content="Chào mọi người",
+                Content="Xin lỗi mình vô trễ",
                 MeetingId=2,
                 AccountId=1,
                 Time = DateTime.Now.AddDays(-2).AddHours(1).AddMinutes(1),
