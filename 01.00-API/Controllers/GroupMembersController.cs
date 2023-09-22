@@ -17,6 +17,8 @@ using APIExtension.Validator;
 using System.ComponentModel.DataAnnotations;
 using AutoMapper;
 using ShareResource.Enums;
+using API.SignalRHub;
+using Microsoft.AspNetCore.SignalR;
 
 namespace API.Controllers
 {
@@ -27,12 +29,14 @@ namespace API.Controllers
         private readonly IServiceWrapper services;
         private readonly IValidatorWrapper validators;
         private readonly IMapper mapper;
+        private readonly IHubContext<GroupHub> groupHub;
 
-        public GroupMembersController(IServiceWrapper services, IValidatorWrapper validators, IMapper mapper)
+        public GroupMembersController(IServiceWrapper services, IValidatorWrapper validators, IMapper mapper, IHubContext<GroupHub> groupHub)
         {
             this.services = services;
             this.validators = validators;
             this.mapper = mapper;
+            this.groupHub = groupHub;
         }
 
         //GET: api/GroupMember/Group/{groupId}
@@ -357,37 +361,6 @@ namespace API.Controllers
             {
                 return Unauthorized("Bạn không thể yêu cầu tham gia dùm người khác");
             }
-            #region unused code
-            //if (await services.Groups.IsStudentJoiningGroupAsync(dto.AccountId, dto.GroupId))
-            //{
-            //    //validatorResult.Failures.Add("Học sinh đã tham gia nhóm này");
-            //    return BadRequest(new { Message = "Học sinh đã tham gia nhóm này" });
-            //}
-            //if (await services.Groups.IsStudentInvitedToGroupAsync(dto.AccountId, dto.GroupId))
-            //{
-            //    //validatorResult.Failures.Add("Học sinh đã được mời tham gia nhóm này từ trước");
-            //    GroupMemberInviteGetDto inviteGetDto = mapper.Map<GroupMemberInviteGetDto>( 
-            //        await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
-            //    return BadRequest(new { Message = "Học sinh đã được mời tham gia nhóm này từ trước", Previous = inviteGetDto });
-            //}
-            //if (await services.Groups.IsStudentRequestingToGroupAsync(dto.AccountId, dto.GroupId))
-            //{
-            //    //validatorResult.Failures.Add("Học sinh đã yêu cầu tham gia nhóm này từ trước");
-            //    GroupMemberRequestGetDto requestGetDto = mapper.Map<GroupMemberRequestGetDto>(
-            //        await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
-            //    return BadRequest(new { Message = "Học sinh đã yêu cầu tham gia nhóm này từ trước", Previous = requestGetDto });
-            //}
-            //if (await services.Groups.IsStudentDeclinedToGroupAsync(dto.AccountId, dto.GroupId))
-            //{
-            //    //validatorResult.Failures.Add("Học sinh đã từ chối/bị từ chối tham gia nhóm này từ trước");
-            //    GroupMemberGetDto getDto = mapper.Map<GroupMemberGetDto>(
-            //        await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId));
-            //    return BadRequest(new { 
-            //        Message = "Học sinh đã từ chối/bị từ chối tham gia nhóm này từ trước. Hãy đợi tới tháng sau để thử lại", 
-            //        Previous = getDto 
-            //    });
-            //}
-            #endregion
             GroupMember exsitedGroupMember = await services.GroupMembers.GetGroupMemberOfStudentAndGroupAsync(dto.AccountId, dto.GroupId);
             if (exsitedGroupMember != null)
             {
@@ -465,6 +438,7 @@ namespace API.Controllers
                 return BadRequest(valResult.Failures);
             }
             await services.GroupMembers.CreateJoinRequest(dto);
+            await groupHub.Clients.Group(dto.GroupId.ToString()).SendAsync(GroupHub.OnReloadMeetingMsg);
             return Ok();
         }
 
@@ -505,26 +479,8 @@ namespace API.Controllers
             {
                 return BadRequest("Đây không phải lời mời cho bạn");
             }
-            //if (existed.State != GroupMemberState.Requesting)
-            //{
-            //    return BadRequest("Đây không phải yêu cầu");
-            //}
-            //int studentId = HttpContext.User.GetUserId();
-            //GroupMember existed = await services.GroupMembers.GetByIdAsync(inviteId);
-            //if (existed == null)
-            //{
-            //    return NotFound("Lời mời không tồn tại");
-            //}
-            //if (existed.AccountId != studentId)
-            //{
-            //    return BadRequest("Đây không phải lời mời cho bạn");
-            //}
-            ////Fix later
-            ////if (existed.State != GroupMemberState.Inviting)
-            ////{
-            ////    return BadRequest("Đây không phải lời mời");
-            ////}
             await services.GroupMembers.AcceptOrDeclineInviteAsync(existedInvite, true);
+            await groupHub.Clients.Group(existedInvite.GroupId.ToString()).SendAsync(GroupHub.OnReloadMeetingMsg);
             return Ok();
         }
 
@@ -566,20 +522,6 @@ namespace API.Controllers
             {
                 return BadRequest("Đây không phải lời mời cho bạn");
             }
-            //int studentId = HttpContext.User.GetUserId();
-            //Invite existedInvite = await services.GroupMembers.GetInviteByIdAsync(inviteId);
-            //if (existedInvite == null)
-            //{
-            //    return NotFound("Lời mời không tồn tại");
-            //}
-            //if (existedInvite.AccountId != studentId)
-            //{
-            //    return BadRequest("Đây không phải lời mời dành cho bạn");
-            //}
-            ////if (existed.State != GroupMemberState.Inviting)
-            ////{
-            ////    return BadRequest("Đây không phải lời mời");
-            ////}
             await services.GroupMembers.AcceptOrDeclineInviteAsync(existedInvite, false);
             return Ok();
         }
@@ -615,107 +557,9 @@ namespace API.Controllers
                 return BadRequest("Học sinh đã bị đuổi khỏi nhóm này");
             }
             await services.GroupMembers.BanUserFromGroupAsync(exited);
+            await groupHub.Clients.Group(groupId.ToString()).SendAsync(GroupHub.OnReloadMeetingMsg);
             return Ok();
         }
-
-
-
-        //////////////////////////////////////////////////////////////////// 
-        //// GET: api/GroupMembers
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<GroupMember>>> GetGroupMembers()
-        //{
-        //  if (services.GroupMembers == null)
-        //  {
-        //      return NotFound();
-        //  }
-        //    return await services.GroupMembers.ToListAsync();
-        //}
-
-        //// GET: api/GroupMembers/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<GroupMember>> GetGroupMember(int id)
-        //{
-        //  if (services.GroupMembers == null)
-        //  {
-        //      return NotFound();
-        //  }
-        //    var groupMember = await services.GroupMembers.FindAsync(id);
-
-        //    if (groupMember == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return groupMember;
-        //}
-
-        //// PUT: api/GroupMembers/5
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutGroupMember(int id, GroupMember groupMember)
-        //{
-        //    if (id != groupMember.Id)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    services.Entry(groupMember).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await services.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!GroupMemberExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
-
-        //// POST: api/GroupMembers
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPost]
-        //public async Task<ActionResult<GroupMember>> PostGroupMember(GroupMember groupMember)
-        //{
-        //  if (services.GroupMembers == null)
-        //  {
-        //      return Problem("Entity set 'TempContext.GroupMembers'  is null.");
-        //  }
-        //    services.GroupMembers.Add(groupMember);
-        //    await services.SaveChangesAsync();
-
-        //    return CreatedAtAction("GetGroupMember", new { id = groupMember.Id }, groupMember);
-        //}
-
-        //// DELETE: api/GroupMembers/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteGroupMember(int id)
-        //{
-        //    if (services.GroupMembers == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    var groupMember = await services.GroupMembers.FindAsync(id);
-        //    if (groupMember == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    services.GroupMembers.Remove(groupMember);
-        //    await services.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
-
         private async Task<bool> GroupMemberExists(int id)
         {
             return (await services.GroupMembers.AnyAsync(id));
