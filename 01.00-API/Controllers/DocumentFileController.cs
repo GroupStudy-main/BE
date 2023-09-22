@@ -1,10 +1,12 @@
-﻿using APIExtension.ClaimsPrinciple;
+﻿using API.SignalRHub;
+using APIExtension.ClaimsPrinciple;
 using APIExtension.Const;
 using AutoMapper;
 using DataLayer.DBObject;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using ServiceLayer.Interface;
 using ShareResource.DTO.File;
 
@@ -16,6 +18,7 @@ public class DocumentFileController : ControllerBase
 {
     private readonly IServiceWrapper _service;
     private readonly IMapper _mapper;
+    private readonly IHubContext<GroupHub> groupHub;
 
     //Path của thư mục chứa file
     private const string path = "UploadFile\\";
@@ -33,10 +36,11 @@ public class DocumentFileController : ControllerBase
     //private const string HostUploadFile = "https://ample-definitely-reptile.ngrok-free.app/";
 
 
-    public DocumentFileController(IServiceWrapper services, IMapper mapper)
+    public DocumentFileController(IServiceWrapper services, IMapper mapper, IHubContext<GroupHub> groupHub)
     {
         this._service = services;
-        this._mapper = mapper;    
+        this._mapper = mapper;
+        this.groupHub = groupHub;
     }
 
     [HttpPost("/upload-file/{groupId}")]
@@ -70,6 +74,7 @@ public class DocumentFileController : ControllerBase
                 documentFile.GroupId = groupId;
                 documentFile.CreatedDate = DateTime.Now;
                 await _service.DocumentFiles.CreateDocumentFile(documentFile);
+                await groupHub.Clients.Group(groupId.ToString()).SendAsync(GroupHub.OnReloadMeetingMsg);
             }
         }
         catch (Exception ex)
@@ -157,6 +162,7 @@ public class DocumentFileController : ControllerBase
             await _service.DocumentFiles.UpdateDocumentFile(file);
         }
 
+        await groupHub.Clients.Group(file.GroupId.ToString()).SendAsync(GroupHub.OnReloadMeetingMsg);
         return Ok("approved");
     }
 
@@ -172,6 +178,7 @@ public class DocumentFileController : ControllerBase
         }
 
         await _service.DocumentFiles.DeleteDocumentFile(id);
+        await groupHub.Clients.Group(file.GroupId.ToString()).SendAsync(GroupHub.OnReloadMeetingMsg);
         return Ok("Deleted");
     }
     

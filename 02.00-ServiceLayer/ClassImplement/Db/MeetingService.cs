@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using RepositoryLayer.Interface;
 using ServiceLayer.Interface.Db;
 using ShareResource.DTO;
+using ShareResource.Enums;
 using ShareResource.UpdateApiExtension;
 using System;
 using System.Collections;
@@ -255,7 +256,7 @@ namespace ServiceLayer.ClassImplement.Db
         public IQueryable<ChildrenLiveMeetingGetDto> GetChildrenLiveMeetings(int parentId)
         {
             IQueryable<Account> children = repos.Accounts.GetList()
-                .Where(a => a.SupervisionsForStudent.Any(su => su.ParentId == parentId))
+                .Where(a => a.SupervisionsForStudent.Any(su => su.ParentId == parentId && su.State==RequestStateEnum.Approved))
                 .Include(a => a.Connections).ThenInclude(c => c.Meeting);
             Account temp = children.FirstOrDefault();
             return children.ProjectTo<ChildrenLiveMeetingGetDto>(mapper.ConfigurationProvider);
