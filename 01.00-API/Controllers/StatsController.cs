@@ -94,6 +94,10 @@ namespace API.Controllers
         [Authorize(Roles = Actor.Student_Parent)]
         public async Task<IActionResult> GetStatForStudentInMonthNew(int studentId, DateTime month)
         {
+            if (studentId < 0)
+            {
+                return NotFound();
+            }
             if (HttpContext.User.IsInRole(Actor.Student) && HttpContext.User.GetUserId() != studentId)
             {
                 return Unauthorized("Bạn không thể xem dữ liệu của học sinh khác");
@@ -110,6 +114,10 @@ namespace API.Controllers
         [Authorize(Roles = Actor.Student_Parent)]
         public async Task<IActionResult> GetStatForStudent(int studentId)
         {
+            if (studentId < 0)
+            {
+                return NotFound();
+            }
             if (HttpContext.User.IsInRole(Actor.Student) && HttpContext.User.GetUserId() != studentId)
             {
                 return Unauthorized("Bạn không thể xem dữ liệu của học sinh khác");

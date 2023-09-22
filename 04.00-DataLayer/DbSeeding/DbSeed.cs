@@ -188,7 +188,7 @@ namespace DataLayer.DbSeeding
                 Id = 2,
                 StudentId=2,
                 ParentId=11,
-                State=RequestStateEnum.Waiting
+                State=RequestStateEnum.Approved
             },
             new Supervision
             {
