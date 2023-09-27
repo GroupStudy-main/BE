@@ -623,6 +623,12 @@ namespace DataLayer.DbSeeding
                 SubjectId = (int)SubjectEnum.Su
             },
             #endregion
+            new GroupSubject
+            {
+                Id = 12,
+                GroupId = 1,
+                SubjectId = (int)SubjectEnum.Li
+            },
         };
         public static Invite[] Invites = new Invite[]
         {
