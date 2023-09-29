@@ -15,7 +15,7 @@ namespace ShareResource.DTO
         public DateTime? ScheduleEnd { get; set; }
         public int GroupId { get; set; }
         public string GroupName { get; set; }
-        public bool CanStart => ScheduleStart.Value < DateTime.Now;
+        public bool CanStart => ScheduleStart.Value.ToUniversalTime() < DateTime.UtcNow;
 
     }
     public class ScheduleMeetingForMemberGetDto : ScheduleMeetingGetDto
@@ -27,7 +27,7 @@ namespace ShareResource.DTO
         public DateTime? ScheduleEnd { get; set; }
         public int GroupId { get; set; }
         public string GroupName { get; set; }
-        public bool CanStart => ScheduleStart.Value < DateTime.Now;
+        public bool CanStart => ScheduleStart.Value.ToUniversalTime() < DateTime.UtcNow;
 
     }
     public class ScheduleMeetingForLeaderGetDto : ScheduleMeetingGetDto
@@ -39,7 +39,7 @@ namespace ShareResource.DTO
         public DateTime? ScheduleEnd { get; set; }
         public int GroupId { get; set; }
         public string GroupName { get; set; }
-        public bool CanStart => ScheduleStart.Value < DateTime.Now.AddHours(1);
+        public bool CanStart => ScheduleStart.Value.ToUniversalTime() < DateTime.UtcNow.AddHours(1);
 
     }
 }
